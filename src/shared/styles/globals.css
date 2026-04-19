@@ -1,40 +1,40 @@
-@import "tailwindcss";
-@import "pretendard/dist/web/static/pretendard.css";
+@import 'tailwindcss';
+@import 'pretendard/dist/web/static/pretendard.css';
 
 @theme {
   /** Main Colors */
-  --color-primary: #6F9DD3;
-  --color-secondary: #81D2E2;
-  --color-white: #FFFFFF;
+  --color-primary: #6f9dd3;
+  --color-secondary: #81d2e2;
+  --color-white: #ffffff;
   --color-black: #232323;
 
   /* Gray Scale Colors */
   --color-gray-8: #232323;
   --color-gray-7: #676767;
-  --color-gray-6: #576C84;
-  --color-gray-5: #8193AE;
-  --color-gray-4: #ADB9C9;
-  --color-gray-3: #D1D3DC;
-  --color-gray-2: #D6E0F0;
-  --color-gray-1: #FAFBFF;
+  --color-gray-6: #576c84;
+  --color-gray-5: #8193ae;
+  --color-gray-4: #adb9c9;
+  --color-gray-3: #d1d3dc;
+  --color-gray-2: #d6e0f0;
+  --color-gray-1: #fafbff;
 
   /** State Colors */
-  --color-state-success: #80B2FF;
-  --color-state-info: #61E4C5;
-  --color-state-warning: #FFD465;
-  --color-state-danger: #FF9692;
+  --color-state-success: #80b2ff;
+  --color-state-info: #61e4c5;
+  --color-state-warning: #ffd465;
+  --color-state-danger: #ff9692;
 
   /** Text Colors */
   --color-text-primary: #676767;
-  --color-text-secondary: #ADB9C9;
-  --color-text-caption: #D1D3DC;
+  --color-text-secondary: #adb9c9;
+  --color-text-caption: #d1d3dc;
   --color-text-black: #232323;
-  --color-text-white: #FFFFFF;
+  --color-text-white: #ffffff;
 
   /* Border Colors */
-  --color-border-active: #6F9DD3;
-  --color-border-primary: #8193AE;
-  --color-border-secondary: #D6E0F0;
+  --color-border-active: #6f9dd3;
+  --color-border-primary: #8193ae;
+  --color-border-secondary: #d6e0f0;
 
   /** Typography */
   --text-h1: 32px;
@@ -56,20 +56,22 @@
   --breakpoint-tablet: 767px;
   --breakpoint-desktop: 1023px;
 
-  --font-sans: "Pretendard", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
+  --font-bona:
+    var(--font-bona-nova-sc), serif;
 }
 
 :root {
   line-height: 1.5;
   font-weight: 500;
-  font-family: "Pretendard", sans-serif;
+  font-family: 'Pretendard', sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   --text-primary: #676767;
-  --background: #FFFFFF;
+  --background: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {

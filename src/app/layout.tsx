@@ -1,5 +1,13 @@
 import type { Metadata } from 'next';
+import { Bona_Nova_SC } from 'next/font/google';
 import '@/shared/styles/globals.css';
+
+/** 로고용 폰트 */
+const fontBonaNova = Bona_Nova_SC({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-bona-nova-sc'
+})
 
 export const metadata: Metadata = {
   title: '매필로그: Mafilog',
@@ -12,9 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ko"
-    >
+    <html lang="ko" className={fontBonaNova.variable}>
       <body className="flex flex-col">{children}</body>
     </html>
   );
