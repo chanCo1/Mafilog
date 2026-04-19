@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Bona_Nova_SC } from 'next/font/google';
 import '@/shared/styles/globals.css';
+import DefaultLayout from '@/shared/components/layout/DefaultLayout';
 
 /** 로고용 폰트 */
 const fontBonaNova = Bona_Nova_SC({
@@ -21,7 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={fontBonaNova.variable}>
-      <body className="flex flex-col">{children}</body>
+      <body className="flex flex-col">
+        <DefaultLayout>
+          {children}
+        </DefaultLayout>
+      </body>
     </html>
   );
 }

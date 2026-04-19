@@ -16,17 +16,16 @@ const logoVariants = cva('font-bona', {
       gray: 'text-text-primary',
     },
     size: {
+      h3: 'text-h3',
       xxl: 'text-xxl',
       xl: 'text-xl',
       lg: 'text-lg',
       md: 'text-md',
-      sm: 'text-sm',
-      xs: 'text-xs',
     },
   },
   defaultVariants: {
     color: 'default',
-    size: 'xxl',
+    size: 'h3',
   },
 });
 

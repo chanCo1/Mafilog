@@ -1,7 +1,15 @@
+import {LogoText} from "@/shared/components/ui/LogoText";
+import Header from "@/shared/components/layout/Header";
+import Footer from "@/shared/components/layout/Footer";
+
 export default function Home() {
   return (
-    <div className="border-border-primary text-xxl border-2 w-full p-10 mobile:bg-secondary desktop:bg-primary">
-      Mafilog
+    <div>
+      <div>asdasdasdasd</div>asdasdasd
+      <div>asdasdasdasd</div>asdasdasd
+      <div>asdasdasdasd</div>asdasdasd
+      <div>asdasdasdasd</div>asdasdasd
+      <div>asdasdasdasd</div>asdasdasd
     </div>
   );
 }
