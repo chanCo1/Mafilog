@@ -22,7 +22,7 @@
   --color-state-success: #80b2ff;
   --color-state-info: #61e4c5;
   --color-state-warning: #ffd465;
-  --color-state-danger: #ff9692;
+  --color-state-error: #ff9692;
 
   /** Text Colors */
   --color-text-primary: #676767;
@@ -43,7 +43,7 @@
   --text-xxl: 24px;
   --text-xl: 22px;
   --text-lg: 18px;
-  --text-md: 14px;
+  --text-md: 16px;
   --text-sm: 12px;
   --text-xs: 11px;
 

@@ -29,19 +29,22 @@ const logoVariants = cva('font-bona', {
   },
 });
 
-interface ILogoText extends VariantProps<typeof logoVariants> {
+interface ILogoText
+  extends
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>,
+    VariantProps<typeof logoVariants> {
   className?: string;
 }
 
-function LogoTextInner(
+function LogoTextEntity(
   { className, color, size }: ILogoText,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   return (
-    <div ref={ref} className={cn(logoVariants({ size, color, className }))}>
+    <div ref={ref} className={cn(logoVariants({ size, color }), className)}>
       Mafilog
     </div>
   );
 }
 
-export const LogoText = React.forwardRef(LogoTextInner);
+export const LogoText = React.forwardRef(LogoTextEntity);
