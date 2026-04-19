@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
 
-const buttonVarinats = cva('flex gap-1 cursor-pointer font-medium rounded-md items-center justify-center disabled:pointer-events-none disabled:opacity-50 hover:opacity-90 text-white', {
+const buttonVariants = cva('flex gap-1 cursor-pointer font-medium rounded-md items-center justify-center disabled:pointer-events-none disabled:opacity-50 hover:opacity-90 text-white w-fit', {
   variants: {
     variant: {
       primary: 'bg-primary',
@@ -37,7 +37,7 @@ const buttonVarinats = cva('flex gap-1 cursor-pointer font-medium rounded-md ite
 interface IButton
   extends
     Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'prefix'>,
-    VariantProps<typeof buttonVarinats> {
+    VariantProps<typeof buttonVariants> {
   className?: string;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
@@ -60,7 +60,7 @@ function ButtonEntity(
 
   return (
     <button
-      className={cn(buttonVarinats({ variant, size }), className)}
+      className={cn(buttonVariants({ variant, size }), className)}
       ref={ref}
       disabled={isDisabled}
       {...props}
