@@ -27,7 +27,7 @@ const radioVariants = cva('flex gap-1 cursor-pointer items-center w-fit', {
 
 interface IRadio
   extends
-    Omit<React.HTMLAttributes<HTMLDivElement>, 'color'>,
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'color' | 'onChange'>,
     VariantProps<typeof radioVariants> {
   className?: string;
   label?: string;
@@ -38,6 +38,8 @@ interface IRadio
   description?: string;
   errorMsg?: string;
   direction?: 'vertical' | 'horizontal';
+  value: ILabelValue;
+  onChange: (value: ILabelValue) => void;
 }
 
 function RadioEntity(
@@ -52,18 +54,18 @@ function RadioEntity(
     description,
     errorMsg,
     direction = 'horizontal',
+    value,
+    onChange,
     ...props
   }: IRadio,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) {
-  const [selectedValue, setSelectedValue] = React.useState<ILabelValue | null>(
-    null,
-  );
 
+  /** 라디오 클릭 */
   const onClickRadio = (value: ILabelValue) => {
     if (disabled) return;
 
-    setSelectedValue(value);
+    if (onChange) onChange(value)
   };
 
   return (
@@ -74,6 +76,7 @@ function RadioEntity(
         disabled && 'opacity-50',
       )}
     >
+      {/* 라벨 */}
       {label && (
         <div className={cn('flex min-w-25 items-center gap-1')}>
           <span>{label}</span>
@@ -93,16 +96,20 @@ function RadioEntity(
             onClick={() => onClickRadio(option)}
             {...props}
           >
-            {selectedValue?.value === option.value ? <CircleCheck /> : <Circle />}
+            {value?.value === option.value ? <CircleCheck /> : <Circle />}
             <span className="text-text-primary">{option.label}</span>
           </div>
         ))}
       </div>
+
+      {/* 설명 */}
       {description && (
         <span className="text-text-secondary text-sm font-bold">
           {description}
         </span>
       )}
+
+      {/* 에러 메시지 */}
       {errorMsg && (
         <span className="text-state-error text-sm font-bold">{errorMsg}</span>
       )}
