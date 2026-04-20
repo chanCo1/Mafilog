@@ -17,7 +17,7 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-1 border-border-secondary rounded-md',
+        outline: 'border-1 border-border-secondary rounded-md',
         none: 'border-none',
       },
       size: {
@@ -26,7 +26,7 @@ const inputVariants = cva(
       },
     },
     defaultVariants: {
-      variant: 'default',
+      variant: 'outline',
       size: 'md',
     },
   },
@@ -37,6 +37,7 @@ interface IInput
     Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'size'>,
     VariantProps<typeof inputVariants> {
   className?: string;
+  inputClassName?: string;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
   label?: string;
@@ -49,6 +50,7 @@ interface IInput
 function InputEntity(
   {
     className,
+    inputClassName,
     prefix,
     suffix,
     label,
@@ -64,8 +66,25 @@ function InputEntity(
 ) {
   const [isFocused, setIsFocused] = React.useState(false);
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (props.disabled) return;
+
+    setIsFocused(true);
+
+    if (props.onFocus) {
+      props.onFocus(e);
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (props.disabled) return;
+
+    setIsFocused(false);
+
+    if (props.onFocus) {
+      props.onFocus(e);
+    }
+  }
 
   return (
     <div className="flex flex-col">
@@ -89,7 +108,7 @@ function InputEntity(
         >
           {prefix && <span className="mr-1">{prefix}</span>}
           <input
-            className="w-full outline-none focus:ring-0"
+            className={cn('w-full outline-none focus:ring-0', inputClassName)}
             {...props}
             onFocus={handleFocus}
             onBlur={handleBlur}
@@ -98,7 +117,9 @@ function InputEntity(
         </div>
       </div>
       {description && (
-        <span className="text-text-secondary text-sm font-bold">{description}</span>
+        <span className="text-text-secondary text-sm font-bold">
+          {description}
+        </span>
       )}
       {errorMsg && (
         <span className="text-state-error text-sm font-bold">{errorMsg}</span>

@@ -1,0 +1,115 @@
+/**
+ * @file: Selectbox.tsx
+ * @author: chad
+ * @since: 2026.04.20 ~
+ * @description: Selectbox 컴포넌트
+ */
+
+import React from 'react';
+import { cn } from '@/shared/lib/utils';
+import { Input } from '@/shared/components/ui/Input';
+import { ChevronDown } from 'lucide-react';
+import { ILabelValue } from '@/shared/interfaces';
+
+interface ISelectbox extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'prefix' | 'size'
+> {
+  className?: string;
+  label?: string;
+  labelPosition?: 'left' | 'top';
+  isRequired?: boolean;
+  description?: string;
+  errorMsg?: string;
+  options: ILabelValue[];
+  prefix?: React.ReactNode;
+  size?: 'md' | 'sm';
+  variant?: 'outline' | 'none';
+}
+
+function SelectboxEntity(
+  {
+    className,
+    label,
+    labelPosition = 'top',
+    isRequired,
+    description,
+    errorMsg,
+    options,
+    prefix,
+    size = 'md',
+    variant = 'outline',
+    ...props
+  }: ISelectbox,
+  ref: React.ForwardedRef<HTMLInputElement>,
+) {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = React.useState<ILabelValue>({
+    label: '',
+    value: '',
+  });
+
+  const handleFocus = () => {
+    // handleBlur();
+    setIsOpen(!isOpen);
+  };
+
+  const handleBlur = () => {
+    setIsOpen(false);
+  };
+
+  const onClickOption = (option: ILabelValue) => {
+    setSelectedValue(option);
+    setIsOpen(false);
+  };
+
+  return (
+    <div
+      className={cn('relative', className)}
+      ref={ref}
+    >
+      <Input
+        label={label}
+        labelPosition={labelPosition}
+        placeholder={props.placeholder}
+        prefix={prefix}
+        suffix={<ChevronDown className="h-4 w-4" />}
+        isRequired={isRequired}
+        description={description}
+        errorMsg={errorMsg}
+        readOnly
+        inputClassName="cursor-pointer"
+        value={selectedValue.label}
+        variant={variant}
+        size={size}
+        onBlur={handleBlur}
+        onClick={handleFocus}
+        {...props}
+      />
+
+      {/* 셀렉트박스 */}
+      {isOpen && (
+        <div className="absolute top-15 z-50 flex w-full flex-col gap-1 rounded-lg bg-white p-2 shadow-md">
+          {options.map((option) => (
+            <span
+              key={option.value}
+              className={cn(
+                'hover:bg-gray-1 cursor-pointer rounded-md p-1.5',
+                option.value === selectedValue.value
+                  ? 'text-text-primary'
+                  : 'text-text-secondary',
+              )}
+              onMouseDown={() => {
+                onClickOption(option);
+              }}
+            >
+              {option.label}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export const Selectbox = React.forwardRef(SelectboxEntity);
