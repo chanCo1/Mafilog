@@ -66,7 +66,7 @@ function CategoryIconEntity(
   { className, size, variant, circled, children }: ICategoryIcon,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
-  /** variant별 아이콘 */
+  /** variant별 아이콘 크기 */
   const GetIconType = React.useMemo(() => {
     const fiveSize = 'h-5 w-5';
     const fourPointFiveSize = 'h-4.5 w-4.5';
