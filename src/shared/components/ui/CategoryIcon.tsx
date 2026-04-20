@@ -1,0 +1,133 @@
+/**
+ * @file: CategoryIcon.tsx
+ * @author: chad
+ * @since: 2026.04.20 ~
+ * @description: CategoryIcon 컴포넌트
+ */
+
+import React from 'react';
+import { cn } from '@/shared/lib/utils';
+import { cva, VariantProps } from 'class-variance-authority';
+import {
+  NotebookPen,
+  Plus,
+  Plane,
+  Bus,
+  Utensils,
+  ShoppingBasket,
+  MapPin,
+  House,
+  CircleEllipsis,
+} from 'lucide-react';
+
+const categoryIconVariants = cva(
+  'rounded-full flex items-center justify-center border-primary text-primary',
+  {
+    variants: {
+      variant: {
+        memo: '',
+        plus: '',
+        plane: '',
+        bus: 'border-secondary text-secondary',
+        food: 'border-state-warning text-state-warning',
+        shopping: 'border-state-success text-state-success',
+        tour: 'border-state-error text-state-error',
+        house: 'border-state-info text-state-info',
+        etc: 'border-text-primary text-text-primary',
+      },
+      circled: {
+        outline: 'border-2',
+        none: '',
+      },
+      size: {
+        md: 'w-[30px] h-[30px]',
+        sm: 'w-[26px] h-[26px]',
+      },
+    },
+    defaultVariants: {
+      variant: 'memo',
+      circled: 'outline',
+      size: 'md',
+    },
+  },
+);
+
+type TCategoryVariant = VariantProps<typeof categoryIconVariants>['variant'];
+
+interface ICategoryIcon
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof categoryIconVariants> {
+  className?: string;
+  variant: TCategoryVariant;
+}
+
+function CategoryIconEntity(
+  { className, size, variant, circled, children }: ICategoryIcon,
+  ref: React.ForwardedRef<HTMLDivElement>,
+) {
+  /** variant별 아이콘 */
+  const GetIconType = React.useMemo(() => {
+    const fiveSize = 'h-5 w-5';
+    const fourPointFiveSize = 'h-4.5 w-4.5';
+    const fourSize = 'h-4 w-4';
+
+    switch (variant) {
+      case 'memo':
+        return (
+          <NotebookPen
+            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+          />
+        );
+      case 'plus':
+        return (
+          <Plus className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+        );
+      case 'plane':
+        return (
+          <Plane className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+        );
+      case 'bus':
+        return <Bus className={size === 'sm' ? fourPointFiveSize : fiveSize} />;
+      case 'food':
+        return (
+          <Utensils className={size === 'sm' ? fourSize : fourPointFiveSize} />
+        );
+      case 'shopping':
+        return (
+          <ShoppingBasket
+            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+          />
+        );
+      case 'tour':
+        return (
+          <MapPin className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+        );
+      case 'house':
+        return (
+          <House className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+        );
+      case 'etc':
+        return (
+          <CircleEllipsis
+            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+          />
+        );
+    }
+  }, [variant, size]);
+
+  return (
+    <div
+      className={cn(
+        categoryIconVariants({ size, circled, variant }),
+        className,
+      )}
+      ref={ref}
+    >
+      {children}
+      {GetIconType}
+    </div>
+  );
+}
+
+export const CategoryIcon = React.forwardRef(CategoryIconEntity);

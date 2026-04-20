@@ -42,11 +42,10 @@ interface IChip
   className?: string;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
-  isLoading?: boolean;
 }
 
 function ChipEntity(
-  { className, prefix, suffix, isLoading, variant, size, ...props }: IChip,
+  { className, prefix, suffix, variant, size, ...props }: IChip,
   ref: React.ForwardedRef<HTMLButtonElement>,
 ) {
   return (
