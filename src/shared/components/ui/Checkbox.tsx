@@ -1,8 +1,8 @@
 /**
- * @file: Radio.tsx
+ * @file: Checkbox.tsx
  * @author: chad
  * @since: 2026.04.20 ~
- * @description: Radio 컴포넌트
+ * @description: Checkbox 컴포넌트
  */
 
 import React from 'react';
@@ -11,14 +11,15 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { ILabelValue } from '@/shared/interfaces';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import {
-  Circle,
-  CircleCheck,
-  CircleCheckBig,
+  Square,
+  SquareSquare,
+  SquareCheck,
+  SquareCheckBig,
   User,
   UserCheck,
 } from 'lucide-react';
 
-const radioVariants = cva('flex gap-1 cursor-pointer items-center w-fit', {
+const checkboxVariants = cva('flex gap-1 cursor-pointer items-center w-fit', {
   variants: {
     color: {
       primary: 'text-primary',
@@ -31,10 +32,10 @@ const radioVariants = cva('flex gap-1 cursor-pointer items-center w-fit', {
   },
 });
 
-interface IRadio
+interface ICheckbox
   extends
     Omit<React.HTMLAttributes<HTMLDivElement>, 'color' | 'onChange'>,
-    VariantProps<typeof radioVariants> {
+    VariantProps<typeof checkboxVariants> {
   className?: string;
   label?: string;
   labelPosition?: 'top' | 'left';
@@ -44,12 +45,12 @@ interface IRadio
   description?: string;
   errorMsg?: string;
   direction?: 'vertical' | 'horizontal';
-  value: ILabelValue;
-  onChange: (value: ILabelValue) => void;
+  value: ILabelValue[];
+  onChange: (value: ILabelValue[]) => void;
   isUserIcon?: boolean;
 }
 
-function RadioEntity(
+function CheckboxEntity(
   {
     className,
     label,
@@ -65,14 +66,20 @@ function RadioEntity(
     onChange,
     isUserIcon,
     ...props
-  }: IRadio,
+  }: ICheckbox,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) {
   /** 라디오 클릭 */
-  const onClickRadio = (value: ILabelValue) => {
+  const onClickRadio = (checkedOption: ILabelValue) => {
     if (disabled) return;
 
-    if (onChange) onChange(value);
+    const isChecked = value.some((v) => v.value === checkedOption.value);
+
+    if (isChecked) {
+      onChange(value.filter((v) => v.value !== checkedOption.value));
+    } else {
+      onChange([...value, checkedOption]);
+    }
   };
 
   return (
@@ -96,38 +103,42 @@ function RadioEntity(
           direction === 'horizontal' ? 'flex-row' : 'flex-col',
         )}
       >
-        {radioOptions.map((option) => (
-          <div
-            key={option.value}
-            ref={ref}
-            className={cn(
-              radioVariants({ color }),
-              disabled && 'cursor-default',
-              className,
-            )}
-            onClick={() => onClickRadio(option)}
-            {...props}
-          >
-            {value?.value === option.value ? (
-              <>
-                {isUserIcon ? (
-                  <UserCheck className="h-5 w-5" />
-                ) : (
-                  <CircleCheckBig className="h-5 w-5" />
-                )}
-              </>
-            ) : (
-              <>
-                {isUserIcon ? (
-                  <User className="h-5 w-5" />
-                ) : (
-                  <Circle className="h-5 w-5" />
-                )}
-              </>
-            )}
-            <span className="text-text-primary">{option.label}</span>
-          </div>
-        ))}
+        {radioOptions.map((option) => {
+          const isChecked = value.some((v) => v.value === option.value);
+
+          return (
+            <div
+              key={option.value}
+              ref={ref}
+              className={cn(
+                checkboxVariants({ color }),
+                disabled && 'cursor-default',
+                className,
+              )}
+              onClick={() => onClickRadio(option)}
+              {...props}
+            >
+              {isChecked ? (
+                <>
+                  {isUserIcon ? (
+                    <UserCheck className="h-5 w-5" />
+                  ) : (
+                    <SquareCheckBig className="h-5 w-5" />
+                  )}
+                </>
+              ) : (
+                <>
+                  {isUserIcon ? (
+                    <User className="h-5 w-5" />
+                  ) : (
+                    <Square className="h-5 w-5" />
+                  )}
+                </>
+              )}
+              <span className="text-text-primary">{option.label}</span>
+            </div>
+          );
+        })}
       </div>
 
       {/* 설명 */}
@@ -145,4 +156,4 @@ function RadioEntity(
   );
 }
 
-export const Radio = React.forwardRef(RadioEntity);
+export const Checkbox = React.forwardRef(CheckboxEntity);
