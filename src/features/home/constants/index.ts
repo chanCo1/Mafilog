@@ -1,6 +1,6 @@
 import { ILabelValue } from '@/shared/interfaces';
 import { TTabTypes } from '@/features/home/types';
-import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/Enum';
+import { EXPENSES_CATEGORY_TYPE, TRAVEL_TYPE } from '@/shared/types/Enum';
 
 /** 서비스 간략 소개 탭 리스트 */
 export const TABLIST: ILabelValue<TTabTypes>[] = [
@@ -85,8 +85,30 @@ export const MEMORY_INTRODUCE_LIST: string[] = [
 
 /** 타임라인 소개 리스트 */
 export const TIMELINE_INTRODUCE_LIST: string[] = [
-  '국 · 내외 / 연도별 타임라인 필터링',
+  '국·내외 / 연도별 타임라인 필터링',
   '지금까지 여행에 대한 통계',
   '시간대별 여행 정보 확인',
-  '각 여행에 대해 카테고리별 지출 내역',
+  '각 여행에 대해 카테고리별 지출 내역 확인',
+];
+
+/** 타임라인 목업 데이터 */
+export const TIMELINE_MOCK_DATA = [
+  {
+    type: TRAVEL_TYPE.INTERNATIONAL,
+    name: '도쿄 먹방 여행',
+    partner: '연인과',
+    style: ['먹방'],
+  },
+  {
+    type: TRAVEL_TYPE.LOCAL,
+    name: '속초 겨울 바다',
+    partner: '친구와',
+    style: ['먹방', '힐링/휴식'],
+  },
+  {
+    type: TRAVEL_TYPE.LOCAL,
+    name: '부산 당일치기',
+    partner: '친구와',
+    style: ['먹방'],
+  },
 ];
