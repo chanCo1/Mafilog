@@ -12,7 +12,7 @@ import { cn } from '@/shared/lib/utils';
 import { TTabTypes } from '@/features/home/types';
 import { TABLIST } from '@/features/home/constants';
 import SchaduleBrief from '@/features/home/components/briefTab/schedule/SchaduleBrief';
-import HouseholdBrief from '@/features/home/components/briefTab/household/HouseholdBrief';
+import ExpensesBrief from '@/features/home/components/briefTab/expenses/ExpensesBrief';
 import MemoryBrief from '@/features/home/components/briefTab/memory/MemoryBrief';
 import TimelineBrief from '@/features/home/components/briefTab/timeline/TimelineBrief';
 
@@ -46,7 +46,7 @@ export default function BriefIntroduceTabs() {
       </div>
       <div className='h-75'>
         {selectedTab === 'schedule' && <SchaduleBrief />}
-        {selectedTab === 'household' && <HouseholdBrief />}
+        {selectedTab === 'expenses' && <ExpensesBrief />}
         {selectedTab === 'memory' && <MemoryBrief />}
         {selectedTab === 'timeline' && <TimelineBrief />}
       </div>

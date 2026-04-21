@@ -1,20 +1,20 @@
 /**
- * @file: HouseholdBrief.tsx
+ * @file: ExpensesBrief.tsx
  * @author: chad
  * @since: 2026.04.21 ~
- * @description: HouseholdBrief 컴포넌트
+ * @description: ExpensesBrief 컴포넌트
  */
 
 import { memo } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
-import { HOUSEHOLD_INTRODUCE_LIST } from '@/features/home/constants';
+import { EXPNESES_INTRODUCE_LIST } from '@/features/home/constants';
 import Image from 'next/image';
 import { IntroduceList } from '@/features/home/components/briefTab/IntroduceList';
-import ExpensesCard from '@/features/home/components/briefTab/household/ExpensesCard';
+import ExpensesCard from '@/features/home/components/briefTab/expenses/ExpensesCard';
 import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/Enum';
 
-const HOUSEHOLD_MOCK_DATA = [
+const EXPENSES_MOCK_DATA = [
   {
     type: EXPENSES_CATEGORY_TYPE.TRANSPORT,
     name: '비행기 예약',
@@ -33,7 +33,7 @@ const HOUSEHOLD_MOCK_DATA = [
   },
 ];
 
-function HouseholdBrief() {
+function ExpensesBrief() {
   return (
     <Card className="flex h-full gap-2.5" readonly>
       {/* 왼쪽 설명 */}
@@ -48,7 +48,7 @@ function HouseholdBrief() {
           </p>
         </div>
         <div className="flex flex-col gap-1.5">
-          {HOUSEHOLD_INTRODUCE_LIST.map((list, index) => (
+          {EXPNESES_INTRODUCE_LIST.map((list, index) => (
             <IntroduceList key={index} list={list} />
           ))}
         </div>
@@ -57,13 +57,13 @@ function HouseholdBrief() {
       {/* 오른쪽 이미지 */}
       <div className="relative w-3/5 p-4">
         <Image
-          src="/household_chart.png"
+          src="/expenses_chart.png"
           alt="가계부 차트 이미지"
           fill
           className="object-contain opacity-10"
         />
         <div className="absolute top-1/2 left-1/2 flex w-3/4 -translate-x-1/2 -translate-y-1/2 flex-col gap-1.5">
-          {HOUSEHOLD_MOCK_DATA.map((data, index) => (
+          {EXPENSES_MOCK_DATA.map((data, index) => (
             <ExpensesCard
               key={index}
               name={data.name}
@@ -80,4 +80,4 @@ function HouseholdBrief() {
   );
 }
 
-export default memo(HouseholdBrief);
+export default memo(ExpensesBrief);

@@ -1,1 +1,1 @@
-export type TTabTypes = 'schedule' | 'household' | 'memory' | 'timeline';
+export type TTabTypes = 'schedule' | 'expenses' | 'memory' | 'timeline';

@@ -4,7 +4,7 @@ import { TTabTypes } from '@/features/home/types';
 /** 서비스 간략 소개 탭 리스트 */
 export const TABLIST: ILabelValue<TTabTypes>[] = [
   {label: '일정', value: 'schedule'},
-  {label: '가계부', value: 'household'},
+  {label: '가계부', value: 'expenses'},
   {label: '추억', value: 'memory'},
   {label: '타임라인', value: 'timeline'}
 ]
@@ -20,7 +20,7 @@ export const SCHEDULE_INTRODUCE_LIST: string[] = [
 ]
 
 /** 가계부 소개 리스트 */
-export const HOUSEHOLD_INTRODUCE_LIST: string[] = [
+export const EXPNESES_INTRODUCE_LIST: string[] = [
   '상황에 맞는 지출 내역 기록',
   '환율 자동 계산으로 편안하게 사용 내역 확인',
   '한 눈에 보이는 통계',
