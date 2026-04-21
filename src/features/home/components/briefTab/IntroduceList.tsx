@@ -14,7 +14,7 @@ interface IIntroduceList {
 export const IntroduceList = ({ list }: IIntroduceList) => {
   return (
     <div className="flex items-center gap-1">
-      <Check className="text-primary h-5 w-5 shrink-0" />
+      <Check className="text-primary h-5 w-5 shrink-0" strokeWidth={4} />
       <span>{list}</span>
     </div>
   );
