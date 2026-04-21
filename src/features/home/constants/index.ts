@@ -12,7 +12,7 @@ export const TABLIST: ILabelValue<TTabTypes>[] = [
 export type TABLIST = (typeof TABLIST)[keyof typeof TABLIST];
 
 /** 일정 소개 리스트 */
-export const SCHADULE_INTRODUCE_LIST: string[] = [
+export const SCHEDULE_INTRODUCE_LIST: string[] = [
   '지구 곳곳에 있는 장소 검색',
   '여행 기간에 맞는 일정 추가/변경',
   '여행 스타일에 맞는 체크리스트',
