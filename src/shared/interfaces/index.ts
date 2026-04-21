@@ -1,4 +1,4 @@
-export interface ILabelValue {
+export interface ILabelValue<T = string | number> {
   label: string;
-  value: string | number;
+  value: T;
 }
