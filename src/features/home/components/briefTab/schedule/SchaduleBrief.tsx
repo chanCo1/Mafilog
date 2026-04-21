@@ -1,8 +1,8 @@
 /**
- * @file: SchaduleBrief.tsx
+ * @file: ScheduleBrief.tsx
  * @author: chad
  * @since: 2026.04.21 ~
- * @description: SchaduleBrief 컴포넌트
+ * @description: ScheduleBrief 컴포넌트
  */
 
 import { memo } from 'react';
@@ -11,7 +11,7 @@ import { Card } from '@/shared/components/ui/Card';
 import { SCHEDULE_INTRODUCE_LIST } from '@/features/home/constants';
 import Image from 'next/image';
 import { IntroduceList } from '@/features/home/components/briefTab/IntroduceList';
-import { ScheduleCard } from '@/features/home/components/briefTab/ScheduleCard';
+import { ScheduleCard } from '@/features/home/components/briefTab/schedule/ScheduleCard';
 
 const SCHEDULE_MOCK_DATA = [
   {
@@ -37,9 +37,9 @@ const SCHEDULE_MOCK_DATA = [
   },
 ];
 
-// interface ISchaduleBrief {}
+// interface IScheduleBrief {}
 
-function SchaduleBrief() {
+function ScheduleBrief() {
   return (
     <Card className="flex h-full gap-2.5" readonly>
       {/* 왼쪽 설명 */}
@@ -65,7 +65,7 @@ function SchaduleBrief() {
           src="/schadule_map.png"
           alt="일정 간략소개 지도 이미지"
           fill
-          className="object-cover opacity-50"
+          className="object-fill opacity-30"
         />
         <div className="absolute top-1/2 left-0 -translate-y-1/2 w-3/5">
           {SCHEDULE_MOCK_DATA.map((data, index) => (
@@ -86,4 +86,4 @@ function SchaduleBrief() {
   );
 }
 
-export default memo(SchaduleBrief);
+export default memo(ScheduleBrief);

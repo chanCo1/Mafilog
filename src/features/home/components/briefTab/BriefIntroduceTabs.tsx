@@ -11,11 +11,10 @@ import { useState, useCallback } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { TTabTypes } from '@/features/home/types';
 import { TABLIST } from '@/features/home/constants';
-import { ILabelValue } from '@/shared/interfaces';
-import SchaduleBrief from '@/features/home/components/briefTab/SchaduleBrief';
-import HouseholdBrief from '@/features/home/components/briefTab/HouseholdBrief';
-import MemoryBrief from '@/features/home/components/briefTab/MemoryBrief';
-import TimelineBrief from '@/features/home/components/briefTab/TimelineBrief';
+import SchaduleBrief from '@/features/home/components/briefTab/schedule/SchaduleBrief';
+import HouseholdBrief from '@/features/home/components/briefTab/household/HouseholdBrief';
+import MemoryBrief from '@/features/home/components/briefTab/memory/MemoryBrief';
+import TimelineBrief from '@/features/home/components/briefTab/timeline/TimelineBrief';
 
 // interface IBriefIntroduceTabs {}
 
