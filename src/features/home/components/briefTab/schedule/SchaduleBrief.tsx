@@ -2,7 +2,7 @@
  * @file: ScheduleBrief.tsx
  * @author: chad
  * @since: 2026.04.21 ~
- * @description: ScheduleBrief 컴포넌트
+ * @description: ScheduleBrief 컴포넌트, 일정 간략 소개 카드
  */
 
 import { memo } from 'react';
@@ -12,32 +12,7 @@ import { SCHEDULE_INTRODUCE_LIST } from '@/features/home/constants';
 import Image from 'next/image';
 import { IntroduceList } from '@/features/home/components/briefTab/IntroduceList';
 import { ScheduleCard } from '@/features/home/components/briefTab/schedule/ScheduleCard';
-
-const SCHEDULE_MOCK_DATA = [
-  {
-    name: '아사쿠사 규카츠',
-    type: 'location',
-    category: '음식점',
-    country: '일본',
-    city: '아사쿠사',
-  },
-  {
-    name: '중간에 약국 들려서 약 사기!',
-    type: 'memo',
-    category: '',
-    country: '',
-    city: '',
-  },
-  {
-    name: '센소지',
-    type: 'location',
-    category: '관광명소',
-    country: '일본',
-    city: '아사쿠사',
-  },
-];
-
-// interface IScheduleBrief {}
+import { SCHEDULE_MOCK_DATA } from '@/features/home/constants';
 
 function ScheduleBrief() {
   return (

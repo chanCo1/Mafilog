@@ -1,5 +1,6 @@
 import { ILabelValue } from '@/shared/interfaces';
 import { TTabTypes } from '@/features/home/types';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/Enum';
 
 /** 서비스 간략 소개 탭 리스트 */
 export const TABLIST: ILabelValue<TTabTypes>[] = [
@@ -19,6 +20,31 @@ export const SCHEDULE_INTRODUCE_LIST: string[] = [
   '환율 · 날씨 등 현지 정보 확인',
 ]
 
+/** 일정 목업 데이터 */
+export const SCHEDULE_MOCK_DATA = [
+  {
+    name: '아사쿠사 규카츠',
+    type: 'location',
+    category: '음식점',
+    country: '일본',
+    city: '아사쿠사',
+  },
+  {
+    name: '중간에 약국 들려서 약 사기!',
+    type: 'memo',
+    category: '',
+    country: '',
+    city: '',
+  },
+  {
+    name: '센소지',
+    type: 'location',
+    category: '관광명소',
+    country: '일본',
+    city: '아사쿠사',
+  },
+];
+
 /** 가계부 소개 리스트 */
 export const EXPNESES_INTRODUCE_LIST: string[] = [
   '상황에 맞는 지출 내역 기록',
@@ -27,6 +53,26 @@ export const EXPNESES_INTRODUCE_LIST: string[] = [
   '지출에 따라 정산 내역 자동 계산',
   '현지 환율 정보 확인',
 ]
+
+/** 가계부 목업 데이터 */
+export const EXPENSES_MOCK_DATA = [
+  {
+    type: EXPENSES_CATEGORY_TYPE.TRANSPORT,
+    name: '비행기 예약',
+    payer: '나',
+    spender: '나',
+    paymentMethod: '카드',
+    currency: 'KRW(원)',
+  },
+  {
+    type: EXPENSES_CATEGORY_TYPE.FOOD,
+    name: '점심값 지출',
+    payer: '나',
+    spender: '1/N',
+    paymentMethod: '현금',
+    currency: 'USD(달러)',
+  },
+];
 
 /** 추억 채우기 소개 리스트 */
 export const MEMORY_INTRODUCE_LIST: string[] = [

@@ -12,26 +12,7 @@ import { EXPNESES_INTRODUCE_LIST } from '@/features/home/constants';
 import Image from 'next/image';
 import { IntroduceList } from '@/features/home/components/briefTab/IntroduceList';
 import ExpensesCard from '@/features/home/components/briefTab/expenses/ExpensesCard';
-import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/Enum';
-
-const EXPENSES_MOCK_DATA = [
-  {
-    type: EXPENSES_CATEGORY_TYPE.TRANSPORT,
-    name: '비행기 예약',
-    payer: '나',
-    spender: '나',
-    paymentMethod: '카드',
-    currency: 'KRW(원)',
-  },
-  {
-    type: EXPENSES_CATEGORY_TYPE.FOOD,
-    name: '점심값 지출',
-    payer: '나',
-    spender: '1/N',
-    paymentMethod: '현금',
-    currency: 'USD(달러)',
-  },
-];
+import { EXPENSES_MOCK_DATA } from '@/features/home/constants';
 
 function ExpensesBrief() {
   return (
