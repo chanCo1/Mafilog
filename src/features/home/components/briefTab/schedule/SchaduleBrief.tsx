@@ -43,7 +43,7 @@ function ScheduleBrief() {
   return (
     <Card className="flex h-full gap-2.5" readonly>
       {/* 왼쪽 설명 */}
-      <div className="flex w-2/5 flex-col gap-4 p-4">
+      <div className="flex w-2/5 flex-col gap-4 p-4 bg-white rounded-md">
         <div>
           <p className="text-xl font-bold">
             내 여행의 일정을 <br /> 한 곳에서

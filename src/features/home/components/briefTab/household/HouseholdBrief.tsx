@@ -11,39 +11,33 @@ import { Card } from '@/shared/components/ui/Card';
 import { HOUSEHOLD_INTRODUCE_LIST } from '@/features/home/constants';
 import Image from 'next/image';
 import { IntroduceList } from '@/features/home/components/briefTab/IntroduceList';
-import { ScheduleCard } from '@/features/home/components/briefTab/schedule/ScheduleCard';
+import ExpensesCard from '@/features/home/components/briefTab/household/ExpensesCard';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/Enum';
 
-const SCHEDULE_MOCK_DATA = [
+const HOUSEHOLD_MOCK_DATA = [
   {
-    name: '아사쿠사 규카츠',
-    type: 'location',
-    category: '음식점',
-    country: '일본',
-    city: '아사쿠사',
+    type: EXPENSES_CATEGORY_TYPE.TRANSPORT,
+    name: '비행기 예약',
+    payer: '나',
+    spender: '나',
+    paymentMethod: '카드',
+    currency: 'KRW(원)',
   },
   {
-    name: '중간에 약국 들려서 약 사기!',
-    type: 'memo',
-    category: '',
-    country: '',
-    city: '',
-  },
-  {
-    name: '센소지',
-    type: 'location',
-    category: '관광명소',
-    country: '일본',
-    city: '아사쿠사',
+    type: EXPENSES_CATEGORY_TYPE.FOOD,
+    name: '점심값 지출',
+    payer: '나',
+    spender: '1/N',
+    paymentMethod: '현금',
+    currency: 'USD(달러)',
   },
 ];
-
-// interface IHouseholdBrief {}
 
 function HouseholdBrief() {
   return (
     <Card className="flex h-full gap-2.5" readonly>
       {/* 왼쪽 설명 */}
-      <div className="flex w-2/5 flex-col gap-4 p-4">
+      <div className="flex w-2/5 flex-col gap-4 p-4 bg-white rounded-md">
         <div>
           <p className="text-xl font-bold">
             쉽고 간편하게 지출내역을 확인할 수 있습니다
@@ -66,19 +60,18 @@ function HouseholdBrief() {
           src="/household_chart.png"
           alt="가계부 차트 이미지"
           fill
-          className="object-fill opacity-10"
+          className="object-contain opacity-10"
         />
-        <div className="absolute top-1/2 left-1/2 w-3/5 -translate-x-1/2 -translate-y-1/2">
-          {SCHEDULE_MOCK_DATA.map((data, index) => (
-            <ScheduleCard
+        <div className="absolute top-1/2 left-1/2 flex w-3/4 -translate-x-1/2 -translate-y-1/2 flex-col gap-1.5">
+          {HOUSEHOLD_MOCK_DATA.map((data, index) => (
+            <ExpensesCard
               key={index}
               name={data.name}
               type={data.type}
-              category={data.category}
-              city={data.city}
-              country={data.country}
-              count={index}
-              allSchedules={SCHEDULE_MOCK_DATA}
+              currency={data.currency}
+              payer={data.payer}
+              paymentMethod={data.paymentMethod}
+              spender={data.spender}
             />
           ))}
         </div>
