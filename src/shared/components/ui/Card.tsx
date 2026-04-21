@@ -36,10 +36,11 @@ interface ICard
     VariantProps<typeof cardVariants> {
   className?: string;
   disabled?: boolean;
+  readonly?: boolean;
 }
 
 function CardEntity(
-  { className, disabled, variant, size, ...props }: ICard,
+  { className, disabled, variant, size, readonly, ...props }: ICard,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   const [isSelected, setIsSelected] = React.useState(false);
@@ -59,7 +60,8 @@ function CardEntity(
       className={cn(
         cardVariants({ variant, size }),
         disabled && 'pointer-events-none opacity-50',
-        isSelected && 'outline outline-border-active',
+        readonly && 'pointer-events-none',
+        isSelected && 'outline-border-active outline',
         className,
       )}
       ref={ref}
