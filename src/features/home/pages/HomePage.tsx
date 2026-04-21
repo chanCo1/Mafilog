@@ -48,7 +48,7 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="pt-60">
+      <div className="pt-72">
         <div>asdasdas</div>
         <div>asdasdas</div>
         <div>asdasdas</div>
