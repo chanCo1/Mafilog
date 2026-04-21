@@ -33,7 +33,7 @@ interface ICircledNumber
     React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof circledNumberVariants> {
   className?: string;
-  number: string;
+  number: string | number;
 }
 
 function CircledNumberEntity(
