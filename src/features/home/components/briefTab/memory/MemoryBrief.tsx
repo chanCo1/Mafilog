@@ -49,7 +49,7 @@ function MemoryBrief() {
               className="opacity-20"
             />
             <div className="absolute top-1/2 left-1/2 flex w-3/4 -translate-x-1/2 -translate-y-1/2 flex-col gap-1.5 items-center">
-              <Alert type='alert' title='어디에 추억을 채울까요?' size='sm' />
+              <Alert type='alert' title='어디에 추억을 채울까요?' size='sm' okLabel='채우기' />
             </div>
           </div>
         </Card>

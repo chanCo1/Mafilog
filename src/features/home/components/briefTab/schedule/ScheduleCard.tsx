@@ -11,6 +11,7 @@ import { Card } from '@/shared/components/ui/Card';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { SCHEDULE_MOCK_DATA } from '@/features/home/constants';
 
 interface IScheduleCard {
   name: string;
@@ -20,7 +21,7 @@ interface IScheduleCard {
   city?: string;
   count?: number;
   // TODO: 타입 정의할 것
-  allSchedules: any[];
+  allSchedules: SCHEDULE_MOCK_DATA[];
 }
 
 /** 일정 카드 컴포넌트 */
@@ -37,9 +38,13 @@ export const ScheduleCard = ({
   const getDisplayCount = useMemo(() => {
     if (type !== SCHEDULE_TYPE.LOCATION) return;
 
-    return allSchedules
-      ?.slice(0, count === 0 ? count + 1 : count)
-      .filter((schedule) => schedule !== SCHEDULE_TYPE.LOCATION).length;
+    const sliced = allSchedules?.slice(0, count! + 1);
+
+    const filltered = sliced.filter((schedule) => {
+      return schedule.type === SCHEDULE_TYPE.LOCATION
+    });
+
+    return filltered.length;
   }, [type, allSchedules, count]);
 
   return (
