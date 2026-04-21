@@ -51,7 +51,7 @@ export const EXPNESES_INTRODUCE_LIST: string[] = [
   '환율 자동 계산으로 편안하게 사용 내역 확인',
   '한 눈에 보이는 통계',
   '지출에 따라 정산 내역 자동 계산',
-  '현지 환율 정보 확인',
+  // '현지 환율 정보 확인',
 ]
 
 /** 가계부 목업 데이터 */
@@ -78,7 +78,7 @@ export const EXPENSES_MOCK_DATA = [
 export const MEMORY_INTRODUCE_LIST: string[] = [
   '국내 지도와 해외 지도 어디든 원하는 곳에 기록',
   '지도에 원하는 사진 업로드',
-  '다녀온 여행 일정 연동으로 정확한 추억 회상',
+  '다녀온 여행 일정을 연동해서 추억 채우기',
 ]
 
 /** 타임라인 소개 리스트 */
