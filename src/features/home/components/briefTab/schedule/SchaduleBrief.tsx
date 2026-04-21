@@ -18,7 +18,7 @@ function ScheduleBrief() {
   return (
     <Card className="flex h-full gap-2.5" readonly>
       {/* 왼쪽 설명 */}
-      <div className="flex w-2/5 flex-col gap-4 p-4 bg-white rounded-md">
+      <div className="flex w-2/5 flex-col gap-4 p-4 bg-white rounded-md max-mobile:w-full">
         <div>
           <p className="text-xl font-bold">
             내 여행의 일정을 <br /> 한 곳에서
@@ -35,7 +35,7 @@ function ScheduleBrief() {
       </div>
 
       {/* 오른쪽 이미지 */}
-      <div className="relative w-3/5 p-4">
+      <div className="relative w-3/5 p-4 max-mobile:hidden">
         <Image
           src="/schadule_map.png"
           alt="일정 간략소개 지도 이미지"

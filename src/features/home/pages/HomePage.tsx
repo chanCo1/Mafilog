@@ -20,8 +20,8 @@ export default function HomePage() {
         <div className="bg-gray-6 relative left-1/2 -mt-7 h-87.5 w-screen -translate-x-1/2">
           <div className={cn(DEFAULT_LAYOUT_CLASSNAME, 'px-3')}>
             {/* 로고 설명 */}
-            <div className='flex flex-col gap-7.5 items-center'>
-              <div className="flex flex-col gap-3 pt-15 items-center">
+            <div className="flex flex-col items-center gap-7.5">
+              <div className="flex flex-col items-center gap-3 pt-15">
                 <div className="flex flex-col items-center">
                   <p className="text-lg text-white">
                     지도에 색칠하듯 기록하기 쉬운 여행
@@ -41,9 +41,7 @@ export default function HomePage() {
                 </div>
               </div>
               {/* 서비스 간략 소개 */}
-              <div className='w-175'>
-                <BriefIntroduceTabs />
-              </div>
+              <BriefIntroduceTabs />
             </div>
           </div>
         </div>

@@ -18,7 +18,7 @@ function ExpensesBrief() {
   return (
     <Card className="flex h-full gap-2.5" readonly>
       {/* 왼쪽 설명 */}
-      <div className="flex w-2/5 flex-col gap-4 p-4 bg-white rounded-md">
+      <div className="flex w-2/5 flex-col gap-4 p-4 bg-white rounded-md max-mobile:w-full">
         <div>
           <p className="text-xl font-bold">
             쉽고 간편하게 지출내역을 확인할 수 있습니다
@@ -36,7 +36,7 @@ function ExpensesBrief() {
       </div>
 
       {/* 오른쪽 이미지 */}
-      <div className="relative w-3/5 p-4">
+      <div className="relative w-3/5 p-4 max-mobile:hidden">
         <Image
           src="/expenses_chart.png"
           alt="가계부 차트 이미지"

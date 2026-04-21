@@ -27,7 +27,7 @@ export default function BriefIntroduceTabs() {
   // }, []);
 
   return (
-    <div className='flex flex-col gap-1'>
+    <div className='flex flex-col gap-1 w-175 h-85 max-mobile:w-full'>
       <div className="flex gap-2.5">
         {TABLIST.map((list) => (
           <div
@@ -44,7 +44,7 @@ export default function BriefIntroduceTabs() {
           </div>
         ))}
       </div>
-      <div className='h-75'>
+      <div className='h-full'>
         {selectedTab === 'schedule' && <SchaduleBrief />}
         {selectedTab === 'expenses' && <ExpensesBrief />}
         {selectedTab === 'memory' && <MemoryBrief />}
