@@ -37,6 +37,7 @@
   --color-border-secondary: #d6e0f0;
 
   /** Typography */
+  --text-logo: 48px;
   --text-h1: 32px;
   --text-h2: 30px;
   --text-h3: 28px;

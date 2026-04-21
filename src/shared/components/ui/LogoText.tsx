@@ -12,10 +12,12 @@ import { cva, VariantProps } from 'class-variance-authority';
 const logoVariants = cva('font-bona', {
   variants: {
     color: {
-      default: '!text-primary',
+      primary: '!text-primary',
       gray: 'text-text-primary',
+      white: '!text-white',
     },
     size: {
+      logo: 'text-logo',
       h3: 'text-h3',
       xxl: 'text-xxl',
       xl: 'text-xl',
@@ -24,7 +26,7 @@ const logoVariants = cva('font-bona', {
     },
   },
   defaultVariants: {
-    color: 'default',
+    color: 'primary',
     size: 'h3',
   },
 });
@@ -37,11 +39,15 @@ interface ILogoText
 }
 
 function LogoTextEntity(
-  { className, color, size }: ILogoText,
+  { className, color, size, ...props }: ILogoText,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   return (
-    <div ref={ref} className={cn(logoVariants({ size, color }), className)}>
+    <div
+      ref={ref}
+      className={cn(logoVariants({ size, color }), className)}
+      {...props}
+    >
       Mafilog
     </div>
   );
