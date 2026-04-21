@@ -5,7 +5,7 @@
  * @description: Alert 컴포넌트
  */
 
-import { forwardRef } from 'react';
+import { ForwardedRef, forwardRef } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { Button } from '@/shared/components/ui/Button';
@@ -36,22 +36,26 @@ interface IAlert extends VariantProps<typeof alertVariants> {
   cancelLabel?: string;
 }
 
-function AlertEntity({
-  size,
-  variant,
-  className,
-  title,
-  type,
-  cancelLabel = '닫기',
-  okLabel = '확인',
-}: IAlert) {
+function AlertEntity(
+  {
+    size,
+    variant,
+    className,
+    title,
+    type,
+    cancelLabel = '닫기',
+    okLabel = '확인',
+  }: IAlert,
+  ref: ForwardedRef<HTMLDivElement>,
+) {
   return (
     <div
       className={cn(
         alertVariants({ variant, size }),
-        'flex flex-col gap-2.5 rounded-lg bg-white p-2.5',
+        'flex flex-col gap-2.5 rounded-lg bg-white p-2.5 shadow-md',
         className,
       )}
+      ref={ref}
     >
       <p>{title}</p>
       <div className="flex justify-end gap-1">
