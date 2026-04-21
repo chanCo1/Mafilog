@@ -20,7 +20,7 @@ const cardVariants = cva('rounded-lg cursor-pointer', {
       white: 'bg-white',
     },
     size: {
-      md: 'px-3',
+      md: 'p-2.5',
       sm: 'p-2',
     },
   },
