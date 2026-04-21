@@ -12,13 +12,20 @@ import { LogoText } from '@/shared/components/ui/LogoText';
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
+import { cn } from '@/shared/lib/utils';
+import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 
 export default function Header() {
   const isLoggined = false;
 
   return (
     <header className="border-border-active border-b-2 bg-white">
-      <div className="desktop:w-desktop tablet:w-tablet mx-auto flex items-center justify-between px-3 py-1.5">
+      <div
+        className={cn(
+          DEFAULT_LAYOUT_CLASSNAME,
+          'flex items-center justify-between px-3 py-1.5',
+        )}
+      >
         <Link href={'/'}>
           <LogoText />
         </Link>

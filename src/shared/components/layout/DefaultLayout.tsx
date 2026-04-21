@@ -8,6 +8,8 @@
 import React from 'react';
 import Header from '@/shared/components/layout/Header';
 import Footer from '@/shared/components/layout/Footer';
+import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
+import { cn } from '@/shared/lib/utils';
 
 export default function DefaultLayout({
   children,
@@ -15,16 +17,14 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className='flex flex-col min-h-screen'>
-      <div className='sticky top-0 z-1'>
+    <div className="flex min-h-screen flex-col">
+      <div className="sticky top-0 z-1">
         <Header />
       </div>
-      <div className="flex-1 desktop:w-desktop tablet:w-tablet mx-auto px-3 py-7 w-full">
+      <div className={cn(DEFAULT_LAYOUT_CLASSNAME, 'w-full flex-1 px-3 py-7')}>
         {children}
       </div>
-      <div className='sticky bottom-0 z-1'>
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 }

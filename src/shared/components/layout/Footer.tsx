@@ -5,15 +5,18 @@
  * @description: Footer 컴포넌트
  */
 
-import React from 'react';
 import { LogoText } from '@/shared/components/ui/LogoText';
 import Link from 'next/link';
+import { cn } from '@/shared/lib/utils';
+import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 
 export default function Footer() {
   return (
-    <footer className='border-t-4 border-border-active h-48 bg-white'>
-      <div className='desktop:w-desktop tablet:w-tablet mx-auto px-3 py-5 h-full'>
-        <Link href={'/'}><LogoText color="gray" /></Link>
+    <footer className="border-border-active min-h-48 border-t-4 bg-white">
+      <div className={cn(DEFAULT_LAYOUT_CLASSNAME, 'h-full px-3 py-5')}>
+        <Link href={'/'}>
+          <LogoText color="gray" />
+        </Link>
         <p>박찬우 포트폴리오</p>
       </div>
     </footer>
