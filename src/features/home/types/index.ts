@@ -1,0 +1,1 @@
+export type TTabTypes = 'schedule' | 'household' | 'memory' | 'timeline';
