@@ -36,7 +36,7 @@ const categoryIconVariants = cva(
         etc: 'border-text-primary text-text-primary',
       },
       circled: {
-        outline: 'border-2',
+        outline: 'border-2 bg-white',
         none: '',
       },
       size: {
