@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Bona_Nova_SC } from 'next/font/google';
 import '@/shared/styles/globals.css';
 import DefaultLayout from '@/shared/components/layout/DefaultLayout';
@@ -10,9 +10,25 @@ const fontBonaNova = Bona_Nova_SC({
   variable: '--font-bona-nova-sc'
 })
 
+/** 뷰포트 설정 */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1, // 사용자 확대 제한
+  userScalable: false,
+};
+
 export const metadata: Metadata = {
   title: '매필로그: Mafilog',
   description: '지도에 색칠하듯 기록하기 쉬운 여행',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Mafilog',
+  },
+  formatDetection: {
+    telephone: false, // 숫자 클릭 시 전화걸기 팝업 방지
+  },
 };
 
 export default function RootLayout({

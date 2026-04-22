@@ -60,6 +60,7 @@ function ButtonEntity(
 
   return (
     <button
+      type='button'
       className={cn(buttonVariants({ variant, size }), className)}
       ref={ref}
       disabled={isDisabled}
