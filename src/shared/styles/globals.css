@@ -59,7 +59,7 @@
 
   --width-desktop: 1024px;
   --width-tablet: 768px;
-  --width-mobile: 540px;
+  --width-mobile: 640px;
 
   --font-sans: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
   --font-akaya: var(--font-akaya), serif;
