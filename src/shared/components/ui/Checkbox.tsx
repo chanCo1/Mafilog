@@ -40,7 +40,7 @@ interface ICheckbox
   label?: string;
   labelPosition?: 'top' | 'left';
   isRequired?: boolean;
-  radioOptions: ILabelValue[];
+  checkOptions: ILabelValue[];
   disabled?: boolean;
   description?: string;
   errorMsg?: string;
@@ -57,7 +57,7 @@ function CheckboxEntity(
     labelPosition = 'top',
     color,
     isRequired,
-    radioOptions,
+    checkOptions,
     disabled,
     description,
     errorMsg,
@@ -103,8 +103,8 @@ function CheckboxEntity(
           direction === 'horizontal' ? 'flex-row' : 'flex-col',
         )}
       >
-        {radioOptions.map((option) => {
-          const isChecked = value.some((v) => v.value === option.value);
+        {checkOptions.map((option) => {
+          const isChecked = value?.some((v) => v.value === option.value);
 
           return (
             <div
