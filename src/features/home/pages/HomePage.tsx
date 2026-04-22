@@ -12,6 +12,7 @@ import { LogoText } from '@/shared/components/ui/LogoText';
 import LogoDescription from '@/features/home/components/LogoDescription';
 import { Button } from '@/shared/components/ui/Button';
 import BriefIntroduceTabs from '@/features/home/components/briefTab/BriefIntroduceTabs';
+import MapContainer from '@/features/home/components/MapContainer';
 
 export default function HomePage() {
   return (
@@ -46,24 +47,8 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="pt-72">
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
-        <div>asdasdas</div>
+      <div className="max-mobile:pt-55 flex items-center justify-center pt-72">
+        <MapContainer />
       </div>
     </>
   );
