@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from 'next';
-import { Bona_Nova } from 'next/font/google';
+import { Akaya_Kanadaka } from 'next/font/google';
 import '@/shared/styles/globals.css';
 import DefaultLayout from '@/shared/components/layout/DefaultLayout';
 
 /** 로고용 폰트 */
-const fontBonaNova = Bona_Nova({
+const fontAkaya = Akaya_Kanadaka({
   subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-bona-nova-sc'
+  weight: '400',
+  variable: '--font-akaya'
 })
 
 /** 뷰포트 설정 */
@@ -37,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={fontBonaNova.variable}>
+    <html lang="ko" className={fontAkaya.variable}>
       <body className="flex flex-col">
         <DefaultLayout>
           {children}

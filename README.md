@@ -2,7 +2,7 @@
 여행 기록 관리 서비스
 
 ## 기술 스택
-- **Framework**: Next.js 16 (App Router)
+- **Framework**: Next.js 14 (App Router) / React 18
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS, Radix UI
 - **State Management**: Zustand, React Query

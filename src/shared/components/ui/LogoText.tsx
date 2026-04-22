@@ -9,7 +9,7 @@ import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
-const logoVariants = cva('font-bona', {
+const logoVariants = cva('font-akaya', {
   variants: {
     color: {
       primary: '!text-primary',

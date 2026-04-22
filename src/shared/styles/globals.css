@@ -62,7 +62,7 @@
   --width-mobile: 540px;
 
   --font-sans: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
-  --font-bona: var(--font-bona-nova-sc), serif;
+  --font-akaya: var(--font-akaya), serif;
 }
 
 :root {
