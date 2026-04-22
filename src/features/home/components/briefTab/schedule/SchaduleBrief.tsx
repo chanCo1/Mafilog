@@ -20,10 +20,10 @@ function ScheduleBrief() {
       {/* 왼쪽 설명 */}
       <div className="flex w-2/5 flex-col gap-4 p-4 bg-white rounded-md max-mobile:w-full">
         <div>
-          <p className="text-xl font-bold">
-            내 여행의 일정을 <br /> 한 곳에서
+          <p className="text-xl font-bold break-keep">
+            내 여행의 일정을 한 곳에서
           </p>
-          <p className="text-text-secondary">
+          <p className="text-text-secondary break-keep">
             언제든지 수정 가능한 일정을 만들고 가고 싶었던 관광지를 꼭 가보세요
           </p>
         </div>

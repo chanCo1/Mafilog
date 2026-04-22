@@ -19,8 +19,8 @@ function MemoryBrief() {
       {/* 왼쪽 설명 */}
       <div className="flex w-2/5 flex-col gap-4 rounded-md bg-white p-4 max-mobile:w-full">
         <div>
-          <p className="text-xl font-bold">
-            소중했던 순간을 <br /> 채워보세요
+          <p className="text-xl font-bold break-keep">
+            소중했던 순간을 채워보세요
           </p>
           <p className="text-text-secondary">
             추억을 남기고 싶은 사진으로 국·내외 지도를 색칠하여 기록할 수
