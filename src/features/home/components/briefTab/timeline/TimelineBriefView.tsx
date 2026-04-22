@@ -25,7 +25,7 @@ function TimelineBrief() {
       <div className="max-mobile:w-full flex w-2/5 flex-col gap-4 rounded-md bg-white p-4">
         <div>
           <p className="text-xl font-bold break-keep">
-            언제·어디서·얼마나 지출했는지 한 눈에
+            언제 · 어디서 · 얼마나 <br /> 지출했는지 한 눈에
           </p>
           <p className="text-text-secondary break-keep">
             그동안 다녔던 여행을 타임라인으로 보고, 지출내역도 확인해보세요

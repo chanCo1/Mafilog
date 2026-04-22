@@ -11,10 +11,10 @@ import { useState, useCallback } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { TTabTypes } from '@/features/home/types';
 import { TABLIST } from '@/features/home/constants';
-import SchaduleBrief from '@/features/home/components/briefTab/schedule/SchaduleBrief';
-import ExpensesBrief from '@/features/home/components/briefTab/expenses/ExpensesBrief';
-import MemoryBrief from '@/features/home/components/briefTab/memory/MemoryBrief';
-import TimelineBrief from '@/features/home/components/briefTab/timeline/TimelineBrief';
+import SchaduleBriefView from '@/features/home/components/briefTab/schedule/SchaduleBriefView';
+import ExpensesBriefView from '@/features/home/components/briefTab/expenses/ExpensesBriefView';
+import MemoryBriefView from '@/features/home/components/briefTab/memory/MemoryBriefView';
+import TimelineBriefView from '@/features/home/components/briefTab/timeline/TimelineBriefView';
 
 // interface IBriefIntroduceTabs {}
 
@@ -27,7 +27,7 @@ export default function BriefIntroduceTabs() {
   // }, []);
 
   return (
-    <div className='flex flex-col gap-1 w-175 h-85 max-mobile:w-full'>
+    <div className='flex flex-col gap-1 w-175 h-85 max-mobile:w-full max-mobile:h-76'>
       <div className="flex gap-2.5">
         {TABLIST.map((list) => (
           <div
@@ -45,10 +45,10 @@ export default function BriefIntroduceTabs() {
         ))}
       </div>
       <div className='h-full'>
-        {selectedTab === 'schedule' && <SchaduleBrief />}
-        {selectedTab === 'expenses' && <ExpensesBrief />}
-        {selectedTab === 'memory' && <MemoryBrief />}
-        {selectedTab === 'timeline' && <TimelineBrief />}
+        {selectedTab === 'schedule' && <SchaduleBriefView />}
+        {selectedTab === 'expenses' && <ExpensesBriefView />}
+        {selectedTab === 'memory' && <MemoryBriefView />}
+        {selectedTab === 'timeline' && <TimelineBriefView />}
       </div>
     </div>
   );
