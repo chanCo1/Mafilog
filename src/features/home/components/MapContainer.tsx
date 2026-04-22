@@ -8,6 +8,7 @@
  */
 
 import { useState } from 'react';
+import { cn } from '@/shared/lib/utils';
 import AmchartMap from '@/shared/components/map/AmchartMap';
 import { Selectbox } from '@/shared/components/ui/Selectbox';
 import { TRAVEL_MAP_TYPE_LIST } from '@/shared/constants';
@@ -21,8 +22,16 @@ export default function MapContainer() {
     TRAVEL_MAP_TYPE_LIST[0],
   );
 
+  const isInternational = selectedMap.value === TRAVEL_TYPE.INTERNATIONAL;
+  const isLoal = selectedMap.value === TRAVEL_TYPE.LOCAL;
+
   return (
-    <div className="max-mobile:h-50 relative flex h-100 w-full flex-col gap-1 rounded-lg">
+    <div
+      className={cn(
+        'relative flex h-100 w-full flex-col gap-1 rounded-lg',
+        isLoal ? 'max-mobile:h-80' : 'max-mobile:h-60',
+      )}
+    >
       <div className="w-25">
         <Selectbox
           variant="none"
@@ -31,10 +40,8 @@ export default function MapContainer() {
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
-      {selectedMap.value === TRAVEL_TYPE.INTERNATIONAL && (
-        <AmchartMap isWheel={false} />
-      )}
-      {selectedMap.value === TRAVEL_TYPE.LOCAL && <AmchartMap isLocal isWheel={false} />}
+      {isInternational && <AmchartMap isWheel={false} />}
+      {isLoal && <AmchartMap isLocal isWheel={false} />}
     </div>
   );
 }

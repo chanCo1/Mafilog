@@ -110,6 +110,25 @@ export default function AmchartMap({
     //   });
     // });
 
+    // // = = = = = = = = = = = = = = = = = = 지역명 넣기 = = = //
+    // const labelSeries = _mapChart.series.push(
+    //   am5map.MapPointSeries.new(root, {}),
+    // );
+
+    // labelSeries.bullets.push(function () {
+    //   return am5.Bullet.new(root, {
+    //     sprite: am5.Label.new(root, {
+    //       text: isLocal ? '{korName}' : '{name}',
+    //       centerX: am5.p50,
+    //       centerY: am5.p50,
+    //       fontSize: 12,
+    //       fontWeight: '500',
+    //       fill: am5.color(0x333333),
+    //       populateText: true,
+    //     }),
+    //   });
+    // });
+
     // = = = = = = = = = = = = = = = = = = 줌 컨트롤 = = = //
     const zoomControl = _mapChart.set(
       'zoomControl',
