@@ -8,9 +8,7 @@
  */
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
-import KoreaMap from '@/shared/components/map/KoreaMap';
-import WorldMap from '@/shared/components/map/WorldMap';
+import AmchartMap from '@/shared/components/map/AmchartMap';
 import { Selectbox } from '@/shared/components/ui/Selectbox';
 import { TRAVEL_MAP_TYPE_LIST } from '@/shared/constants';
 import { ILabelValue } from '@/shared/interfaces';
@@ -34,9 +32,9 @@ export default function MapContainer() {
         />
       </div>
       {selectedMap.value === TRAVEL_TYPE.INTERNATIONAL && (
-        <WorldMap isWheel={false} />
+        <AmchartMap isWheel={false} />
       )}
-      {selectedMap.value === TRAVEL_TYPE.LOCAL && <KoreaMap isWheel={false} />}
+      {selectedMap.value === TRAVEL_TYPE.LOCAL && <AmchartMap isLocal isWheel={false} />}
     </div>
   );
 }
