@@ -13,7 +13,7 @@ import { ILabelValue } from '@/shared/interfaces';
 
 interface ISelectbox extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  'prefix' | 'size'
+  'prefix' | 'size' | 'value' | 'onChange'
 > {
   className?: string;
   label?: string;
@@ -25,6 +25,8 @@ interface ISelectbox extends Omit<
   prefix?: React.ReactNode;
   size?: 'md' | 'sm';
   variant?: 'outline' | 'none';
+  value: ILabelValue;
+  onChange: (value: ILabelValue) => void;
 }
 
 function SelectboxEntity(
@@ -39,15 +41,13 @@ function SelectboxEntity(
     prefix,
     size = 'md',
     variant = 'outline',
+    value,
+    onChange,
     ...props
   }: ISelectbox,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState<ILabelValue>({
-    label: '',
-    value: '',
-  });
 
   const handleFocus = () => {
     // handleBlur();
@@ -59,7 +59,9 @@ function SelectboxEntity(
   };
 
   const onClickOption = (option: ILabelValue) => {
-    setSelectedValue(option);
+    if (props.disabled) return;
+
+    if (onChange) onChange(option);
     setIsOpen(false);
   };
 
@@ -79,7 +81,7 @@ function SelectboxEntity(
         errorMsg={errorMsg}
         readOnly
         inputClassName="cursor-pointer"
-        value={selectedValue.label}
+        value={value.label}
         variant={variant}
         size={size}
         onBlur={handleBlur}
@@ -89,13 +91,13 @@ function SelectboxEntity(
 
       {/* 셀렉트박스 */}
       {isOpen && (
-        <div className="absolute top-15 z-50 flex w-full flex-col gap-1 rounded-lg bg-white p-2 shadow-md">
+        <div className="absolute top-10 z-50 flex w-full flex-col gap-1 rounded-lg bg-white p-2 shadow-md">
           {options.map((option) => (
             <span
               key={option.value}
               className={cn(
                 'hover:bg-gray-1 cursor-pointer rounded-md p-1.5',
-                option.value === selectedValue.value
+                option.value === value.value
                   ? 'text-text-primary'
                   : 'text-text-secondary',
               )}
