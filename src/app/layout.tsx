@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next';
-import { Bona_Nova_SC } from 'next/font/google';
+import { Bona_Nova } from 'next/font/google';
 import '@/shared/styles/globals.css';
 import DefaultLayout from '@/shared/components/layout/DefaultLayout';
 
 /** 로고용 폰트 */
-const fontBonaNova = Bona_Nova_SC({
+const fontBonaNova = Bona_Nova({
   subsets: ['latin'],
   weight: ['400', '700'],
   variable: '--font-bona-nova-sc'
