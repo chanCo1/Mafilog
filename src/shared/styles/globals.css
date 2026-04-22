@@ -62,8 +62,7 @@
   --width-mobile: 540px;
 
   --font-sans: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
-  --font-bona:
-    var(--font-bona-nova-sc), serif;
+  --font-bona: var(--font-bona-nova-sc), serif;
 }
 
 :root {
@@ -75,7 +74,11 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* 모바일 설정 */
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
 
   --text-primary: #676767;
   --background: #ffffff;
@@ -96,4 +99,9 @@ body {
 body {
   background: var(--background);
   color: var(--text-primary);
+
+  /* 스크롤바 숨기기 */
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
