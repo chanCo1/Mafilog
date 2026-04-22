@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file: HomePage.tsx
  * @author: chad
@@ -47,8 +49,16 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="max-mobile:pt-55 flex items-center justify-center pt-72">
+      <div className="max-mobile:pt-55 max-mobile:gap-10 flex flex-col items-center justify-center gap-15 pt-72">
         <MapContainer />
+        <div className="flex flex-col items-center gap-2.5">
+          <span className="max-mobile:text-lg text-center text-lg font-bold break-keep">
+            매필로그와 함께 일정을 만들고 즐거웠던 여행을 기록해보세요
+          </span>
+          <Button variant="primaryOutline" size="sm" onClick={() => {}}>
+            로그인
+          </Button>
+        </div>
       </div>
     </>
   );
