@@ -18,11 +18,13 @@ import am5geodata_lang_ko from '@amcharts/amcharts5-geodata/lang/KO';
 interface IAmchartMap {
   isWheel?: boolean;
   isLocal?: boolean;
+  readonly?: boolean;
 }
 
 export default function AmchartMap({
   isWheel = true,
   isLocal = false,
+  readonly = false,
 }: IAmchartMap) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<am5map.MapChart | null>(null);
@@ -38,7 +40,6 @@ export default function AmchartMap({
       am5map.MapChart.new(root, {
         panX: 'translateX',
         panY: 'translateY',
-        // TODO: 나중에 스크롤 금지 옵션도 만들면 좋을듯
         wheelY: isWheel ? 'zoom' : 'none',
         projection: am5map.geoEquirectangular(),
       }),
@@ -46,11 +47,16 @@ export default function AmchartMap({
 
     // = = = = = = = = = = = = = = = = = = 세계 지도 폴리곤  = = =  //
     const polygonSeries = _mapChart.series.push(
-      am5map.MapPolygonSeries.new(root, isLocal ? {} : {
-        geoJSON: am5geodata_worldLow,
-        geodataNames: am5geodata_lang_ko,
-        exclude: ['AQ'],
-      }),
+      am5map.MapPolygonSeries.new(
+        root,
+        isLocal
+          ? {}
+          : {
+              geoJSON: am5geodata_worldLow,
+              geodataNames: am5geodata_lang_ko,
+              exclude: ['AQ'],
+            },
+      ),
     );
 
     // 국내 지도일 경우 국내 geojson 가져오기
@@ -59,7 +65,7 @@ export default function AmchartMap({
         .then((response) => response.json())
         .then((data) => {
           polygonSeries.set('geoJSON', data);
-        })
+        });
     }
 
     // 폴리곤 기본 색상
@@ -140,6 +146,39 @@ export default function AmchartMap({
       fill: am5.color(0x6f9dd3),
       fillOpacity: 0.5,
     });
+
+    // = = = = = = = = = = = = = = = = = = 폴리곤(지역) 클릭 활성화 = = = //
+    let activePolygon: am5map.MapPolygon | null = null;
+    polygonSeries.mapPolygons.template.events.on('click', (event) => {
+      const polygon = event.target;
+      const dataItem = polygon.dataItem;
+
+      // 해당 폴리곤의 데이터가 있을 경우
+      if (dataItem) {
+        // 이전 활성 폴리곤 해제
+        if (activePolygon && activePolygon !== polygon) {
+          activePolygon.set('active', false);
+        }
+
+        // 현재 폴리곤 활성화
+        polygon.set('active', true);
+        activePolygon = polygon;
+
+        polygonSeries.zoomToDataItem(
+          dataItem as am5.DataItem<am5map.IMapPolygonSeriesDataItem>,
+        );
+
+        // 선택한 폴리곤의 이름
+        // const dataContext = dataItem.dataContext as {
+        //   korName?: string;
+        //   id?: string;
+        // };
+        // setSelectedCountryName(dataContext?.korName ?? null);
+      }
+    });
+
+    // 홈 버튼 클릭 시 활성화된 폴리곤 비활성화
+    homeButton.events.on('click', () => activePolygon?.set('active', false));
 
     mapInstanceRef.current = _mapChart;
 
