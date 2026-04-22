@@ -54,7 +54,7 @@ export default function TimelineCard({
       </div>
       <div className="w-full pb-2.5">
         <Card
-          variant="shadowed"
+          variant="shadowedWhite"
           className="flex flex-col items-start justify-center"
         >
           <div className="flex items-center gap-1">

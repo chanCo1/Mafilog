@@ -18,6 +18,7 @@ const cardVariants = cva('rounded-lg cursor-pointer', {
       outline: 'border border-border-primary',
       shadowed: 'bg-gray-1 shadow-md',
       white: 'bg-white',
+      shadowedWhite: 'bg-white shadow-md',
     },
     size: {
       md: 'p-2.5',

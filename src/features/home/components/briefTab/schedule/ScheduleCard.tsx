@@ -61,7 +61,7 @@ export const ScheduleCard = ({
       </div>
       <div className="w-full pb-2.5">
         <Card
-          variant="shadowed"
+          variant="shadowedWhite"
           className="flex flex-col items-start justify-center"
         >
           <p

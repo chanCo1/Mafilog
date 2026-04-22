@@ -58,7 +58,7 @@ export default function ExpensesCard({
       </div>
       <div className="w-full">
         <Card
-          variant="shadowed"
+          variant="shadowedWhite"
           className="flex flex-col items-start justify-center"
         >
           <span className="text-sm">{currency}</span>
