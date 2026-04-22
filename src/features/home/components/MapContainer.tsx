@@ -33,8 +33,10 @@ export default function MapContainer() {
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
-      {selectedMap.value === TRAVEL_TYPE.INTERNATIONAL && <WorldMap />}
-      {selectedMap.value === TRAVEL_TYPE.LOCAL && <KoreaMap />}
+      {selectedMap.value === TRAVEL_TYPE.INTERNATIONAL && (
+        <WorldMap isWheel={false} />
+      )}
+      {selectedMap.value === TRAVEL_TYPE.LOCAL && <KoreaMap isWheel={false} />}
     </div>
   );
 }
