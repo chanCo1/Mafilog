@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next';
-import { Akaya_Kanadaka } from 'next/font/google';
+import { Akaya_Telivigala } from 'next/font/google';
 import '@/shared/styles/globals.css';
 import DefaultLayout from '@/shared/components/layout/DefaultLayout';
 
 /** 로고용 폰트 */
-const fontAkaya = Akaya_Kanadaka({
+const fontAkaya = Akaya_Telivigala({
   subsets: ['latin'],
   weight: '400',
   variable: '--font-akaya'
