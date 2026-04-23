@@ -129,6 +129,36 @@ export default function AmchartMap({
     //   });
     // });
 
+    // = = = = = = = = = = = = = = = = = = 폴리곤(지역) 클릭 활성화 = = = //
+    let activePolygon: am5map.MapPolygon | null = null;
+    polygonSeries.mapPolygons.template.events.on('click', (event) => {
+      const target = event.target;
+      const dataItem = target.dataItem;
+
+      // 해당 폴리곤의 데이터가 있을 경우
+      if (dataItem) {
+        // 이전 활성 폴리곤 해제
+        if (activePolygon && activePolygon !== target) {
+          activePolygon.set('active', false);
+        }
+
+        // 현재 폴리곤 활성화
+        target.set('active', true);
+        activePolygon = target;
+
+        polygonSeries.zoomToDataItem(
+          dataItem as am5.DataItem<am5map.IMapPolygonSeriesDataItem>,
+        );
+
+        // 선택한 폴리곤의 이름
+        // const dataContext = dataItem.dataContext as {
+        //   korName?: string;
+        //   id?: string;
+        // };
+        // setSelectedCountryName(dataContext?.korName ?? null);
+      }
+    });
+
     // = = = = = = = = = = = = = = = = = = 줌 컨트롤 = = = //
     const zoomControl = _mapChart.set(
       'zoomControl',
@@ -164,36 +194,6 @@ export default function AmchartMap({
     homeBackground?.states.create('hover', {
       fill: am5.color(0x6f9dd3),
       fillOpacity: 0.5,
-    });
-
-    // = = = = = = = = = = = = = = = = = = 폴리곤(지역) 클릭 활성화 = = = //
-    let activePolygon: am5map.MapPolygon | null = null;
-    polygonSeries.mapPolygons.template.events.on('click', (event) => {
-      const polygon = event.target;
-      const dataItem = polygon.dataItem;
-
-      // 해당 폴리곤의 데이터가 있을 경우
-      if (dataItem) {
-        // 이전 활성 폴리곤 해제
-        if (activePolygon && activePolygon !== polygon) {
-          activePolygon.set('active', false);
-        }
-
-        // 현재 폴리곤 활성화
-        polygon.set('active', true);
-        activePolygon = polygon;
-
-        polygonSeries.zoomToDataItem(
-          dataItem as am5.DataItem<am5map.IMapPolygonSeriesDataItem>,
-        );
-
-        // 선택한 폴리곤의 이름
-        // const dataContext = dataItem.dataContext as {
-        //   korName?: string;
-        //   id?: string;
-        // };
-        // setSelectedCountryName(dataContext?.korName ?? null);
-      }
     });
 
     // 홈 버튼 클릭 시 활성화된 폴리곤 비활성화
