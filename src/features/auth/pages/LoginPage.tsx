@@ -10,7 +10,7 @@
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/Input';
-import PageTemplate from '@/features/login/components/PageTemplate';
+import PageTemplate from '@/features/auth/components/PageTemplate';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
 import { Button } from '@/shared/components/ui/Button';
 import Image from 'next/image';
