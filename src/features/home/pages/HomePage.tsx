@@ -15,8 +15,11 @@ import LogoDescription from '@/features/home/components/LogoDescription';
 import { Button } from '@/shared/components/ui/Button';
 import BriefIntroduceTabs from '@/features/home/components/briefTab/BriefIntroduceTabs';
 import MapContainer from '@/features/home/components/MapContainer';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
+  const router = useRouter();
+
   return (
     <>
       <div className="h-auto">
@@ -55,7 +58,11 @@ export default function HomePage() {
           <span className="max-mobile:text-lg text-center text-lg font-bold break-keep">
             매필로그와 함께 일정을 만들고 즐거웠던 여행을 기록해보세요
           </span>
-          <Button variant="primaryOutline" size="sm" onClick={() => {}}>
+          <Button
+            variant="primaryOutline"
+            size="sm"
+            onClick={() => router.push('/login')}
+          >
             로그인
           </Button>
         </div>

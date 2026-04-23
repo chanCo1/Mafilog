@@ -14,8 +14,11 @@ import { Menu } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/utils';
 import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
+  const router = useRouter();
+
   const isLoggined = false;
 
   return (
@@ -42,7 +45,9 @@ export default function Header() {
             <Menu className="text-primary h-7 w-7 cursor-pointer" />
           </div>
         ) : (
-          <Button size="sm">로그인/회원가입</Button>
+          <Button size="sm" onClick={() => router.push('/login')}>
+            로그인/회원가입
+          </Button>
         )}
       </div>
     </header>

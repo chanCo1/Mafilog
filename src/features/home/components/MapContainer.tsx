@@ -40,8 +40,8 @@ export default function MapContainer() {
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
-      {isInternational && <AmchartMap isWheel={false} />}
-      {isLoal && <AmchartMap isLocal isWheel={false} />}
+      {isInternational && <AmchartMap />}
+      {isLoal && <AmchartMap isLocal />}
     </div>
   );
 }
