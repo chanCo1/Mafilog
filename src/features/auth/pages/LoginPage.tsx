@@ -15,41 +15,68 @@ import { Checkbox } from '@/shared/components/ui/Checkbox';
 import { Button } from '@/shared/components/ui/Button';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginSchema, loginSchemaType } from '@/features/auth/lib/loginSchema';
 
 interface ILoginPage {}
 
 export default function LoginPage() {
   const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<loginSchemaType>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
   const [saveEmail, setSaveEmail] = useState([{ label: '', value: '' }]);
 
+  /** 로그인 */
+  const onSubmit = () => {
+    router.push('/');
+  };
+
   return (
     <PageTemplate title="로그인" backBtnLabel="홈으로" path="/">
-      <div className="flex flex-col gap-2">
-        <Input
-          label="이메일"
-          isRequired
-          placeholder="이메일을 입력해주세요"
-          errorMsg=""
-          description="example@example.com"
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
+          <Input
+            label="이메일"
+            isRequired
+            placeholder="이메일을 입력해주세요"
+            errorMsg={errors.email?.message}
+            description="example@example.com"
+            {...register('email')}
+          />
+          <Input
+            type="password"
+            label="비밀번호"
+            isRequired
+            placeholder="비밀번호를 입력해주세요"
+            errorMsg={errors.password?.message}
+            description="영문 + 숫자 + 특수문자 조합"
+            isPassword
+            {...register('password')}
+          />
+        </div>
+        {/* TODO: 체크박스 단일로 사용할 경우도 만들어야할듯... */}
+        <Checkbox
+          checkOptions={[{ label: '이메일 저장', value: 'yes' }]}
+          value={saveEmail}
+          onChange={(v) => setSaveEmail(v)}
         />
-        <Input
-          label="비밀번호"
-          isRequired
-          placeholder="비밀번호를 입력해주세요"
-          errorMsg=""
-          description="영문 + 숫자 + 특수문자 조합"
-        />
-      </div>
-      {/* TODO: 체크박스 단일로 사용할 경우도 만들어야할듯... */}
-      <Checkbox
-        checkOptions={[{ label: '이메일 저장', value: 'yes' }]}
-        value={saveEmail}
-        onChange={(v) => setSaveEmail(v)}
-      />
-      <Button className="w-full" size="lg">
-        로그인
-      </Button>
+        <Button type="submit" className="w-full" size="lg">
+          로그인
+        </Button>
+      </form>
+
       <div className="flex flex-col items-center gap-1">
         <span className="text-text-secondary">
           SNS 계정으로 로그인 / 회원가입
