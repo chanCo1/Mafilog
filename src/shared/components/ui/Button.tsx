@@ -52,6 +52,7 @@ function ButtonEntity(
     isLoading = false,
     size,
     variant,
+    type = 'button',
     ...props
   }: IButton,
   ref: React.ForwardedRef<HTMLButtonElement>,
@@ -60,7 +61,7 @@ function ButtonEntity(
 
   return (
     <button
-      type='button'
+      type={type}
       className={cn(buttonVariants({ variant, size }), className)}
       ref={ref}
       disabled={isDisabled}
