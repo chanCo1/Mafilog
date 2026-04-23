@@ -12,7 +12,7 @@ import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
-import { IButton, Button } from '@/shared/components/ui/Button';
+import { Button } from '@/shared/components/ui/Button';
 
 const returnButtonVariants = cva('flex items-center gap-1', {
   variants: {
@@ -61,7 +61,7 @@ function ReturnButtonEntity({
 
   /** 사이즈에 따른 아이콘 크기 */
   const getIconSize = useMemo(
-    () => (size: IButton['size']) => {
+    () => (size: VariantProps<typeof returnButtonVariants>['size']) => {
       switch (size) {
         case 'sm':
           return 'h-4 w-4';
