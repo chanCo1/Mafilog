@@ -12,10 +12,10 @@ export type SCHEDULE_TYPE = (typeof SCHEDULE_TYPE)[keyof typeof SCHEDULE_TYPE];
 
 /** 여행 타입 */
 export const TRAVEL_TYPE = {
-  /** 해외 */
-  INTERNATIONAL: 'international',
+  /** 세계 */
+  WORLD: 'world',
   /** 국내 */
-  LOCAL: 'local',
+  DOMESTIC: 'domestic',
 };
 export type TRAVEL_TYPE = (typeof TRAVEL_TYPE)[keyof typeof TRAVEL_TYPE];
 

@@ -7,8 +7,8 @@ export const DEFAULT_LAYOUT_CLASSNAME =
 
 /** 여행 지도 타입 */
 export const TRAVEL_MAP_TYPE_LIST: ILabelValue[] = [
-  { label: '해외지도', value: TRAVEL_TYPE.INTERNATIONAL },
-  { label: '국내지도', value: TRAVEL_TYPE.LOCAL },
+  { label: '세계', value: TRAVEL_TYPE.WORLD },
+  { label: '국내', value: TRAVEL_TYPE.DOMESTIC },
 ];
 export type TRAVEL_MAP_TYPE_LIST =
   (typeof TRAVEL_MAP_TYPE_LIST)[keyof typeof TRAVEL_MAP_TYPE_LIST];

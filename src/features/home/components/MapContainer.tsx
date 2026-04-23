@@ -22,14 +22,14 @@ export default function MapContainer() {
     TRAVEL_MAP_TYPE_LIST[0],
   );
 
-  const isInternational = selectedMap.value === TRAVEL_TYPE.INTERNATIONAL;
-  const isLoal = selectedMap.value === TRAVEL_TYPE.LOCAL;
+  const isWorld = selectedMap.value === TRAVEL_TYPE.WORLD;
+  const isDomestic = selectedMap.value === TRAVEL_TYPE.DOMESTIC;
 
   return (
     <div
       className={cn(
         'relative flex h-100 w-full flex-col gap-1 rounded-lg',
-        isLoal ? 'max-mobile:h-80' : 'max-mobile:h-60',
+        isDomestic ? 'max-mobile:h-80' : 'max-mobile:h-60',
       )}
     >
       <div className="w-25">
@@ -40,8 +40,8 @@ export default function MapContainer() {
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
-      {isInternational && <AmchartMap />}
-      {isLoal && <AmchartMap isLocal />}
+      {isWorld && <AmchartMap />}
+      {isDomestic && <AmchartMap isDomestic />}
     </div>
   );
 }
