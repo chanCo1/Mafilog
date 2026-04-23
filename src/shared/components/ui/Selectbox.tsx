@@ -26,6 +26,7 @@ interface ISelectbox extends Omit<
   size?: 'md' | 'sm';
   variant?: 'outline' | 'none';
   value: ILabelValue;
+  addValueText?: string;
   onChange: (value: ILabelValue) => void;
 }
 
@@ -43,6 +44,7 @@ function SelectboxEntity(
     variant = 'outline',
     value,
     onChange,
+    addValueText,
     ...props
   }: ISelectbox,
   ref: React.ForwardedRef<HTMLInputElement>,
@@ -81,7 +83,7 @@ function SelectboxEntity(
         errorMsg={errorMsg}
         readOnly
         inputClassName="cursor-pointer"
-        value={value.label}
+        value={`${value.label} ${addValueText}`}
         variant={variant}
         size={size}
         onBlur={handleBlur}

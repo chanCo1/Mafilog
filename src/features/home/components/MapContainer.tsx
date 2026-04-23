@@ -37,6 +37,7 @@ export default function MapContainer() {
           variant="none"
           options={TRAVEL_MAP_TYPE_LIST}
           value={selectedMap}
+          addValueText='지도'
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
