@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file: HomePage.tsx
  * @author: chad
@@ -14,8 +16,11 @@ import { Button } from '@/shared/components/ui/Button';
 import BriefIntroduceTabs from '@/features/home/components/briefTab/BriefIntroduceTabs';
 import MapContainer from '@/features/home/components/MapContainer';
 import UpcomingContainer from '@/features/home/components/UpcomingContainer';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
+  const router = useRouter();
+
   return (
     <>
       <div className="h-auto">
@@ -36,7 +41,9 @@ export default function HomePage() {
                   </div>
                 </div>
                 <div className="flex gap-2.5">
-                  <Button size="lg">내 여행</Button>
+                  <Button size="lg" onClick={() => router.push('/my-travel')}>
+                    내 여행
+                  </Button>
                   <Button variant="secondary" size="lg">
                     추억 채우기
                   </Button>

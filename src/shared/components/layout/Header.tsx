@@ -14,14 +14,17 @@ import { Menu } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/utils';
 import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
 
 export default function Header() {
   const router = useRouter();
-  const { isLoggedIn } = useAuthManagerStore();
+  const path = usePathname();
 
-  const isLoggined = false;
+  const isMyTravelPage = path.includes('my-travel');
+  const isMyMapPage = path.includes('my-map');
+
+  const { isLoggedIn } = useAuthManagerStore();
 
   return (
     <header className="border-border-active border-b-2 bg-white">
@@ -36,11 +39,17 @@ export default function Header() {
         </Link>
         {isLoggedIn ? (
           <div className="flex items-center justify-between gap-3">
-            <div className="max-mobile:hidden flex items-center justify-between gap-3">
-              <Link href="/" className="text-text-secondary">
+            <div className="max-mobile:hidden text-text-secondary flex items-center justify-between gap-3">
+              <Link
+                href="/my-travel"
+                className={cn(isMyTravelPage && 'text-text-primary font-bold')}
+              >
                 내 여행
               </Link>
-              <Link href="/" className="text-text-secondary">
+              <Link
+                href="/my-map"
+                className={cn(isMyMapPage && 'text-text-primary font-bold')}
+              >
                 추억 채우기
               </Link>
             </div>
