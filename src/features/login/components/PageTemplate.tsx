@@ -6,6 +6,7 @@
  */
 
 import { ReactNode } from 'react';
+import { ReturnButton } from '@/shared/components/ui/ReturnButton';
 
 interface IPageTemplate {
   title: string;
@@ -14,8 +15,9 @@ interface IPageTemplate {
 
 export default function PageTemplate({ title, children }: IPageTemplate) {
   return (
-    <div className="mx-auto flex justify-center">
+    <div className="mx-auto flex flex-col items-center">
       <div className="flex w-90 flex-col gap-4">
+        <ReturnButton label='홈으로' size="sm" path='/' />
         <h1 className="text-xxl p-4 text-center font-bold">{title}</h1>
         {children}
       </div>
