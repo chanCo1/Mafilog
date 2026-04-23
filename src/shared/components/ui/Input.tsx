@@ -117,7 +117,7 @@ function InputEntity(
         </div>
       </div>
       {description && (
-        <span className="text-text-secondary text-sm font-bold">
+        <span className="text-text-secondary text-sm">
           {description}
         </span>
       )}
