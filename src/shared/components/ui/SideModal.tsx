@@ -10,7 +10,6 @@ import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import Dimmed from '@/shared/components/ui/Dimmed';
 import { ReturnButton } from '@/shared/components/ui/ReturnButton';
-import { Button } from '@/shared/components/ui/Button';
 
 const sideModalVariants = cva(
   'h-dvh fixed top-0 right-0 z-50 transform bg-white shadow-2xl transition-transform duration-800 ease p-4 flex flex-col gap-3 rounded-l-xl',
@@ -31,22 +30,18 @@ const sideModalVariants = cva(
 interface ISideModal extends VariantProps<typeof sideModalVariants> {
   isOpen: boolean;
   handleClose?: () => void;
-  handleOk?: () => void;
   children: ReactNode;
-  okLabel: string;
-  cancelLabel: string;
   title?: string;
+  footer?: ReactNode;
 }
 
 function SideModalEntity({
   isOpen,
   size,
   children,
-  okLabel,
-  cancelLabel,
   title,
   handleClose,
-  handleOk,
+  footer,
 }: ISideModal) {
   return (
     <>
@@ -62,18 +57,12 @@ function SideModalEntity({
         )}
       >
         <ReturnButton label={title} size="lg" onClick={handleClose} />
-        <div className="flex h-full flex-col gap-3 overflow-auto scrollbar-hide">
+        <div className="scrollbar-hide flex h-full flex-col gap-3 overflow-auto">
           {children}
         </div>
-        <div className="flex items-center justify-end">
-          <div className="flex gap-1">
-            {cancelLabel && (
-              <Button variant="gray" onClick={handleClose}>
-                {cancelLabel}
-              </Button>
-            )}
-            {okLabel && <Button onClick={handleOk}>{okLabel}</Button>}
-          </div>
+        <div className="flex items-center justify-end gap-1">
+          {/* 커스텀 푸터 */}
+          {footer}
         </div>
       </div>
     </>
