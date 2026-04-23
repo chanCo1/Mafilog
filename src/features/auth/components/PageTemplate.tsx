@@ -11,13 +11,20 @@ import { ReturnButton } from '@/shared/components/ui/ReturnButton';
 interface IPageTemplate {
   title: string;
   children: ReactNode;
+  backBtnLabel?: string;
+  path?: string;
 }
 
-export default function PageTemplate({ title, children }: IPageTemplate) {
+export default function PageTemplate({
+  title,
+  children,
+  backBtnLabel = '뒤로가기',
+  path,
+}: IPageTemplate) {
   return (
     <div className="mx-auto flex flex-col items-center">
       <div className="flex w-90 flex-col gap-4">
-        <ReturnButton label='홈으로' size="sm" path='/' />
+        <ReturnButton label={backBtnLabel} size="sm" path={path} />
         <h1 className="text-xxl p-4 text-center font-bold">{title}</h1>
         {children}
       </div>
