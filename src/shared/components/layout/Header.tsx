@@ -15,9 +15,11 @@ import { Button } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/utils';
 import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 import { useRouter } from 'next/navigation';
+import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
 
 export default function Header() {
   const router = useRouter();
+  const { isLoggedIn } = useAuthManagerStore();
 
   const isLoggined = false;
 
@@ -32,13 +34,13 @@ export default function Header() {
         <Link href={'/'}>
           <LogoText />
         </Link>
-        {isLoggined ? (
+        {isLoggedIn ? (
           <div className="flex items-center justify-between gap-3">
             <div className="max-mobile:hidden flex items-center justify-between gap-3">
-              <Link href="/" className="">
+              <Link href="/" className="text-text-secondary">
                 내 여행
               </Link>
-              <Link href="/" className="">
+              <Link href="/" className="text-text-secondary">
                 추억 채우기
               </Link>
             </div>

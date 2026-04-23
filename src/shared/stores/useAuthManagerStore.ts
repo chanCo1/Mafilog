@@ -1,13 +1,19 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface IAuthManager {
-  isLogin: boolean;
+  isLoggedIn: boolean;
   login: () => void;
   logout: () => void;
 }
 
-export const useAuthManagerStore = create<IAuthManager>((set) => ({
-  isLogin: false,
-  login: () => set({ isLogin: true }),
-  logout: () => set({ isLogin: false }),
-}));
+export const useAuthManagerStore = create<IAuthManager>()(
+  persist(
+    (set) => ({
+      isLoggedIn: false,
+      login: () => set({ isLoggedIn: true }),
+      logout: () => set({ isLoggedIn: false }),
+    }),
+    { name: 'auth-storage' },
+  ),
+);

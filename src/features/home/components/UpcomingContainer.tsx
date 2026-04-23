@@ -25,7 +25,7 @@ export default function UpcomingContainer() {
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <p className="text-xl font-bold">다가오는 여행</p>
-            <Button size="xs" onClick={() => router.push('/')}>
+            <Button size="sm" onClick={() => router.push('/')}>
               여행 만들기
             </Button>
           </div>
