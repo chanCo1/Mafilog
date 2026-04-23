@@ -12,8 +12,6 @@ import { ILabelValue } from '@/shared/interfaces';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import {
   Square,
-  SquareSquare,
-  SquareCheck,
   SquareCheckBig,
   User,
   UserCheck,
@@ -40,20 +38,22 @@ interface ICheckbox
   label?: string;
   labelPosition?: 'top' | 'left';
   isRequired?: boolean;
-  checkOptions: ILabelValue[];
+  checkOptions?: ILabelValue[];
   disabled?: boolean;
   description?: string;
   errorMsg?: string;
   direction?: 'vertical' | 'horizontal';
-  value: ILabelValue[];
-  onChange: (value: ILabelValue[]) => void;
+  value: ILabelValue[] | boolean;
+  onChange: (value: ILabelValue[] | boolean) => void;
   isUserIcon?: boolean;
+  checkboxLabel?: string;
 }
 
 function CheckboxEntity(
   {
     className,
     label,
+    checkboxLabel,
     labelPosition = 'top',
     color,
     isRequired,
@@ -69,17 +69,24 @@ function CheckboxEntity(
   }: ICheckbox,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) {
-  /** 라디오 클릭 */
-  const onClickRadio = (checkedOption: ILabelValue) => {
+  /** 체크박스 클릭 */
+  const onClickMultipleCheckbox = (_checkedOption: ILabelValue) => {
     if (disabled) return;
+    const _checkValue = value as ILabelValue[];
 
-    const isChecked = value.some((v) => v.value === checkedOption.value);
+    const isChecked = _checkValue.some((v) => v.value === _checkedOption.value);
 
     if (isChecked) {
-      onChange(value.filter((v) => v.value !== checkedOption.value));
+      onChange(_checkValue.filter((v) => v.value !== _checkedOption.value));
     } else {
-      onChange([...value, checkedOption]);
+      onChange([..._checkValue, _checkedOption]);
     }
+  };
+
+  /** 단일 체크박스 클릭 */
+  const onClickSingleCheckbox = (value: boolean) => {
+    if (disabled) return;
+    onChange(value);
   };
 
   return (
@@ -89,6 +96,7 @@ function CheckboxEntity(
         labelPosition === 'top' ? 'flex-col' : '',
         disabled && 'opacity-50',
       )}
+      ref={ref}
     >
       {/* 라벨 */}
       {label && (
@@ -103,42 +111,40 @@ function CheckboxEntity(
           direction === 'horizontal' ? 'flex-row' : 'flex-col',
         )}
       >
-        {checkOptions.map((option) => {
-          const isChecked = value?.some((v) => v.value === option.value);
+        {checkOptions?.length &&
+          checkOptions.map((option) => {
+            const isChecked = (value as ILabelValue[])?.some(
+              (v) => v.value === option.value,
+            );
 
-          return (
-            <div
-              key={option.value}
-              ref={ref}
-              className={cn(
-                checkboxVariants({ color }),
-                disabled && 'cursor-default',
-                className,
-              )}
-              onClick={() => onClickRadio(option)}
-              {...props}
-            >
-              {isChecked ? (
-                <>
-                  {isUserIcon ? (
-                    <UserCheck className="h-5 w-5" />
-                  ) : (
-                    <SquareCheckBig className="h-5 w-5" />
-                  )}
-                </>
-              ) : (
-                <>
-                  {isUserIcon ? (
-                    <User className="h-5 w-5" />
-                  ) : (
-                    <Square className="h-5 w-5" />
-                  )}
-                </>
-              )}
-              <span className="text-text-primary">{option.label}</span>
-            </div>
-          );
-        })}
+            return (
+              <SingleCheckbox
+                key={option.value}
+                className={cn(
+                  checkboxVariants({ color }),
+                  disabled && 'cursor-default',
+                  className,
+                )}
+                isChecked={isChecked}
+                label={option.label}
+                onClick={() => onClickMultipleCheckbox(option)}
+                {...props}
+              />
+            );
+          })}
+        {!checkOptions?.length && checkboxLabel && (
+          <SingleCheckbox
+            className={cn(
+              checkboxVariants({ color }),
+              disabled && 'cursor-default',
+              className,
+            )}
+            isChecked={value as boolean}
+            label={checkboxLabel}
+            onClick={() => onClickSingleCheckbox(!value)}
+            {...props}
+          />
+        )}
       </div>
 
       {/* 설명 */}
@@ -157,3 +163,44 @@ function CheckboxEntity(
 }
 
 export const Checkbox = React.forwardRef(CheckboxEntity);
+
+/** 싱글 체크박스 컴포넌트 */
+interface ISingleCheckbox extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+  disabled?: boolean;
+  // onChange?: () => void;
+  isUserIcon?: boolean;
+  isChecked?: boolean;
+  label: string;
+}
+export const SingleCheckbox = ({
+  className,
+  disabled,
+  isUserIcon,
+  isChecked,
+  label,
+  ...props
+}: ISingleCheckbox) => {
+  return (
+    <div className={className} {...props}>
+      {isChecked ? (
+        <>
+          {isUserIcon ? (
+            <UserCheck className="h-5 w-5" />
+          ) : (
+            <SquareCheckBig className="h-5 w-5" />
+          )}
+        </>
+      ) : (
+        <>
+          {isUserIcon ? (
+            <User className="h-5 w-5" />
+          ) : (
+            <Square className="h-5 w-5" />
+          )}
+        </>
+      )}
+      <span className="text-text-primary">{label}</span>
+    </div>
+  );
+};

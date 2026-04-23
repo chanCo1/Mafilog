@@ -119,6 +119,7 @@ function InputEntity(
             onFocus={handleFocus}
             onBlur={handleBlur}
           />
+          {/* 패스워드 사용시 아이콘 노출 */}
           {isPassword && (
             <div className='cursor-pointer'>
               {passwordType === 'password' ? (

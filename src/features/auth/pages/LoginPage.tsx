@@ -36,7 +36,7 @@ export default function LoginPage() {
     },
   });
 
-  const [saveEmail, setSaveEmail] = useState([{ label: '', value: '' }]);
+  const [saveEmail, setSaveEmail] = useState(false);
 
   /** 로그인 */
   const onSubmit = () => {
@@ -68,9 +68,9 @@ export default function LoginPage() {
         </div>
         {/* TODO: 체크박스 단일로 사용할 경우도 만들어야할듯... */}
         <Checkbox
-          checkOptions={[{ label: '이메일 저장', value: 'yes' }]}
+          checkboxLabel="이메일 저장"
           value={saveEmail}
-          onChange={(v) => setSaveEmail(v)}
+          onChange={(v) => setSaveEmail(v as boolean)}
         />
         <Button type="submit" className="w-full" size="lg">
           로그인

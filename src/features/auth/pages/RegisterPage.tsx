@@ -62,7 +62,7 @@ export default function RegisterPage() {
           <Input
             label="이름(아이디)"
             isRequired
-            placeholder="이름(아이디)를 입력해주세요"
+            placeholder="이름(아이디)을 입력해주세요"
             errorMsg={errors.name?.message}
             description="한글, 영문, 숫자, 최대 10글자 입력 가능"
             {...register('name')}
