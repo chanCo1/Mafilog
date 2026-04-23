@@ -103,7 +103,7 @@
 
   /* Success */
   [data-sonner-toast][data-type='success'] {
-    --success-bg: #6f9dd3;
+    --success-bg: #80B2FF;
     --success-border: none;
     --success-text: #fff;
   }
@@ -127,6 +127,17 @@
     --error-bg: #FF9692;
     --error-border: none;
     --error-text: #fff;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 }
 
