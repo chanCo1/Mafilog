@@ -14,14 +14,17 @@ import PageTemplate from '@/features/auth/components/PageTemplate';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
 import { Button } from '@/shared/components/ui/Button';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 interface ILoginPage {}
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [saveEmail, setSaveEmail] = useState([{ label: '', value: '' }]);
 
   return (
-    <PageTemplate title="로그인">
+    <PageTemplate title="로그인" backBtnLabel="홈으로" path="/">
       <div className="flex flex-col gap-2">
         <Input
           label="이메일"
@@ -44,7 +47,9 @@ export default function LoginPage() {
         value={saveEmail}
         onChange={(v) => setSaveEmail(v)}
       />
-      <Button className="w-full">로그인</Button>
+      <Button className="w-full" size="lg">
+        로그인
+      </Button>
       <div className="flex flex-col items-center gap-1">
         <span className="text-text-secondary">
           SNS 계정으로 로그인 / 회원가입
@@ -55,27 +60,33 @@ export default function LoginPage() {
             alt="구글 소셜 로그인 이미지"
             width={36}
             height={36}
-            className="rounded-full object-contain cursor-pointer"
+            className="cursor-pointer rounded-full object-contain"
           />
           <Image
             src={'/kakao.png'}
             alt="구글 소셜 로그인 이미지"
             width={36}
             height={36}
-            className="rounded-full object-contain cursor-pointer"
+            className="cursor-pointer rounded-full object-contain"
           />
           <Image
             src={'/naver.png'}
             alt="구글 소셜 로그인 이미지"
             width={36}
             height={36}
-            className="rounded-full object-contain cursor-pointer"
+            className="cursor-pointer rounded-full object-contain"
           />
         </div>
       </div>
-      <div className='flex gap-1 flex-col items-center justify-center'>
-        <span className='text-text-secondary text-sm'>계정이 없으신가요?</span>
-        <Button size='xs' variant='primaryOutline'>회원가입</Button>
+      <div className="flex flex-col items-center justify-center gap-1">
+        <span className="text-text-secondary text-sm">계정이 없으신가요?</span>
+        <Button
+          size="xs"
+          variant="primaryOutline"
+          onClick={() => router.push('register')}
+        >
+          회원가입
+        </Button>
       </div>
     </PageTemplate>
   );
