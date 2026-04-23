@@ -90,15 +90,45 @@
   }
 }
 
-/* @layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+@layer base {
+  /* 공통 토스트 스타일 */
+  [data-sonner-toast] {
+    border-radius: 12px !important;
+    font-size: 14px !important;
+    display: flex !important;
+    justify-content: center !important; /* 가로 중앙 */
+    align-items: center !important;     /* 세로 중앙 */
+    text-align: center !important;
   }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+
+  /* Success */
+  [data-sonner-toast][data-type='success'] {
+    --success-bg: #6f9dd3;
+    --success-border: none;
+    --success-text: #fff;
   }
-} */
+
+  /* Info */
+  [data-sonner-toast][data-type='info'] {
+    --info-bg: #61E4C5;
+    --info-border: none;
+    --info-text: #fff;
+  }
+
+  /* Warning */
+  [data-sonner-toast][data-type='warning'] {
+    --warning-bg: #FFDB81;
+    --warning-border: none;
+    --warning-text: #fff;
+  }
+
+  /* Error */
+  [data-sonner-toast][data-type='error'] {
+    --error-bg: #FF9692;
+    --error-border: none;
+    --error-text: #fff;
+  }
+}
 
 html,
 body {
@@ -119,19 +149,3 @@ body {
   background: var(--background);
   color: var(--text-primary);
 }
-
-/* 스크롤바 숨기기 */
-/* ::-webkit-scrollbar {
-  display: none;
-} */
-
-/* .no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  
-  -webkit-overflow-scrolling: touch;
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-} */

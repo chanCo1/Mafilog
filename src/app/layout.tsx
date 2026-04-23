@@ -2,13 +2,14 @@ import type { Metadata, Viewport } from 'next';
 import { Akaya_Telivigala } from 'next/font/google';
 import '@/shared/styles/globals.css';
 import DefaultLayout from '@/shared/components/layout/DefaultLayout';
+import Toast from '@/shared/components/ui/Toast';
 
 /** 로고용 폰트 */
 const fontAkaya = Akaya_Telivigala({
   subsets: ['latin'],
   weight: '400',
-  variable: '--font-akaya'
-})
+  variable: '--font-akaya',
+});
 
 /** 뷰포트 설정 */
 export const viewport: Viewport = {
@@ -39,9 +40,8 @@ export default function RootLayout({
   return (
     <html lang="ko" className={fontAkaya.variable}>
       <body className="flex flex-col">
-        <DefaultLayout>
-          {children}
-        </DefaultLayout>
+        <DefaultLayout>{children}</DefaultLayout>
+        <Toast />
       </body>
     </html>
   );
