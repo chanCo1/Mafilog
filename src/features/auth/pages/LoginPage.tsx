@@ -8,7 +8,6 @@
  */
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/Input';
 import PageTemplate from '@/features/auth/components/PageTemplate';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
@@ -18,11 +17,14 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, loginSchemaType } from '@/features/auth/lib/loginSchema';
+import { toast } from 'sonner';
+import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
 
 interface ILoginPage {}
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuthManagerStore();
   const {
     register,
     handleSubmit,
@@ -40,7 +42,9 @@ export default function LoginPage() {
 
   /** 로그인 */
   const onSubmit = () => {
+    login();
     router.push('/');
+    toast.success('로그인에 성공했어요');
   };
 
   return (
