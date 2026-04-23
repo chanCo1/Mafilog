@@ -73,6 +73,7 @@ export default function RegisterPage() {
             isRequired
             placeholder="비밀번호를 입력해주세요"
             errorMsg={errors.password?.message}
+            isPassword
             description="영문 + 숫자 + 특수문자 조합, 최대 20자 입력 가능"
             {...register('password')}
           />
@@ -82,6 +83,7 @@ export default function RegisterPage() {
             isRequired
             placeholder="비밀번호를 다시 입력해주세요"
             errorMsg={errors.passwordConfirm?.message}
+            isPassword
             {...register('passwordConfirm')}
           />
         </div>

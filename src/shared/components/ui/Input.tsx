@@ -7,10 +7,11 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import RequireDot from '@/shared/components/ui/RequireDot';
+import { Eye, EyeClosed } from 'lucide-react';
 
 const inputVariants = cva(
   'flex items-center w-full transition-colors placeholder:text-text-caption disabled:opacity-50 disabled:bg-gray-2',
@@ -45,6 +46,7 @@ interface IInput
   isRequired?: boolean;
   description?: string;
   errorMsg?: string;
+  isPassword?: boolean;
 }
 
 function InputEntity(
@@ -60,11 +62,14 @@ function InputEntity(
     isRequired = false,
     description,
     errorMsg,
+    type = 'text',
+    isPassword,
     ...props
   }: IInput,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) {
-  const [isFocused, setIsFocused] = React.useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [passwordType, setPassowrdType] = useState('password');
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     if (props.disabled) return;
@@ -84,7 +89,7 @@ function InputEntity(
     if (props.onFocus) {
       props.onFocus(e);
     }
-  }
+  };
 
   return (
     <div className="flex flex-col">
@@ -108,18 +113,32 @@ function InputEntity(
         >
           {prefix && <span className="mr-1">{prefix}</span>}
           <input
+            type={isPassword ? passwordType : type}
             className={cn('w-full outline-none focus:ring-0', inputClassName)}
             {...props}
             onFocus={handleFocus}
             onBlur={handleBlur}
           />
+          {isPassword && (
+            <div className='cursor-pointer'>
+              {passwordType === 'password' ? (
+                <Eye
+                  className="text-gray-7 h-4 w-4"
+                  onClick={() => setPassowrdType('text')}
+                />
+              ) : (
+                <EyeClosed
+                  className="text-gray-7 h-4 w-4"
+                  onClick={() => setPassowrdType('password')}
+                />
+              )}
+            </div>
+          )}
           {suffix && <span className="ml-1">{suffix}</span>}
         </div>
       </div>
       {description && (
-        <span className="text-text-secondary text-sm">
-          {description}
-        </span>
+        <span className="text-text-secondary text-sm">{description}</span>
       )}
       {errorMsg && (
         <span className="text-state-error text-sm font-bold">{errorMsg}</span>
