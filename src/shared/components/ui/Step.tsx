@@ -40,7 +40,7 @@ export default function Step({
         const isDisabled = completeSteps.length < index;
 
         return (
-          <div className="flex items-center">
+          <div key={index} className="flex items-center">
             <Button
               variant="ghost"
               disabled={isDisabled}

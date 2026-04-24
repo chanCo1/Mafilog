@@ -10,7 +10,7 @@
 import { useState } from 'react';
 import PageHeader from '@/shared/components/ui/PageHeader';
 import { Button } from '@/shared/components/ui/Button';
-import { SideModal } from '@/shared/components/ui/SideModal';
+import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 
 interface IMyTravelMainPage {}
 
@@ -28,20 +28,19 @@ export default function MyTravelMainPage() {
           <p className="text-text-secondary text-center text-lg break-keep">
             아직 다녀온 여행이 없어요. 첫 번째 여행지는 어디인가요?
           </p>
-          <Button variant="secondary" size="lg" onClick={() => setIsOpenModal(true)}>
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => setIsOpenModal(true)}
+          >
             새 여행 만들기
           </Button>
         </div>
       </div>
-      <SideModal
+      <CreateNewTravelModal
         isOpen={isOpenModal}
-        title='새 여행 만들기'
         handleClose={() => setIsOpenModal(false)}
-        okLabel="다음"
-        cancelLabel="닫기"
-      >
-        asd
-      </SideModal>
+      />
     </>
   );
 }
