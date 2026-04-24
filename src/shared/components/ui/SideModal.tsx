@@ -47,7 +47,7 @@ function SideModalEntity({
     <>
       <Dimmed
         className={cn(isOpen ? 'visible opacity-100' : 'invisible opacity-0')}
-        onClick={handleClose}
+        // onClick={handleClose}
       />
       <div
         className={cn(
