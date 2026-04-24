@@ -1,0 +1,166 @@
+/**
+ * @file: CreateNewTravelStep1.tsx
+ * @author: chad
+ * @since: 2026.04.25 ~
+ * @description: CreateNewTravelStep1 컴포넌트, 새 여행 만들기 - 여행지 선택
+ */
+
+import {
+  Dispatch,
+  SetStateAction,
+  useState,
+} from 'react';
+import { Chip } from '@/shared/components/ui/Chip';
+import { Input } from '@/shared/components/ui/Input';
+import { IGetGooglePlaces, ICityList } from '@/features/myTravel/interfaces';
+import { Search, X } from 'lucide-react';
+
+interface ICreateNewTravelStep1 {
+  selectedCities: ICityList[];
+  setSelectedCities: Dispatch<SetStateAction<ICityList[]>>;
+}
+
+export default function CreateNewTravelStep1({
+  selectedCities,
+  setSelectedCities,
+}: ICreateNewTravelStep1) {
+  const [searchCity, setSearchCity] = useState<string | null>(null);
+  const [cityList, setCityList] = useState<ICityList[]>([]);
+
+  const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+  const url = 'https://places.googleapis.com/v1/places:searchText';
+
+  const body = {
+    textQuery: `${searchCity}`,
+    languageCode: 'ko',
+    includedType: 'locality',
+    maxResultCount: 50,
+  };
+
+  // TODO: 테스트
+  const handleSearch = async () => {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': GOOGLE_API_KEY as string,
+          'X-Goog-FieldMask':
+            'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
+        },
+        body: JSON.stringify(body),
+      });
+
+      const data: IGetGooglePlaces = await res.json();
+
+      if (data.places?.length) {
+        /** 도시 필터링 */
+        const filteredCities = data.places.filter((place) =>
+          ['locality', 'administrative_area_level_1'].some((value) =>
+            place.types.includes(value),
+          ),
+        );
+
+        /** 도시 정보 추출 */
+        const getCityData = filteredCities.map((place) => {
+          const getCountryCode = place.addressComponents.find((comp) =>
+            comp.types.includes('country'),
+          );
+
+          const country = getCountryCode
+            ? {
+                name: getCountryCode.longText,
+                code: getCountryCode.shortText,
+              }
+            : null;
+
+          return {
+            id: place.id,
+            name: place.displayName.text,
+            address: place.formattedAddress,
+            country,
+            location: place.location,
+          };
+        });
+
+        setCityList(getCityData);
+      } else {
+        setCityList([]);
+      }
+    } catch (error) {
+      console.error('GeoNames 검색 에러:', error);
+    }
+  };
+
+  /** 선택한 도시 제거 */
+  const deleteSelectedCity = (_id: string) => {
+    const filtered = selectedCities.filter((city) => city.id !== _id);
+    setSelectedCities(filtered);
+  };
+
+  return (
+    <div className="flex h-full flex-col justify-between">
+      <div className="flex flex-col gap-2">
+        <Input
+          label="도시 검색"
+          placeholder="도시명을 검색해주세요"
+          isRequired
+          onChange={(e) => setSearchCity(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.nativeEvent.isComposing) return;
+            e.key === 'Enter' && handleSearch();
+          }}
+          suffix={
+            <Search className="h-4 w-4 cursor-pointer" onClick={handleSearch} />
+          }
+        />
+        {cityList.length ? (
+          cityList.map((list) => (
+            <div key={list.id} className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <p className="text-lg">{list.name}</p>
+                <span className="text-text-secondary text-sm">
+                  {list.address}
+                </span>
+              </div>
+              {selectedCities.find((city) => city.id === list.id) ? (
+                <Chip
+                  variant="redOutline"
+                  onClick={() => deleteSelectedCity(list.id)}
+                >
+                  취소
+                </Chip>
+              ) : (
+                <Chip
+                  variant="gray"
+                  onClick={() => setSelectedCities([...selectedCities, list])}
+                >
+                  선택
+                </Chip>
+              )}
+            </div>
+          ))
+        ) : (
+          <>
+            {searchCity !== null || cityList.length ? (
+              <span className="text-text-secondary">검색된 도시가 없어요</span>
+            ) : null}
+          </>
+        )}
+      </div>
+      <div className="scrollbar-hide flex gap-1 overflow-x-auto pb-3">
+        {selectedCities.map((city) => (
+          <Chip
+            key={city.id}
+            className="shrink-0"
+            variant="gray"
+            suffix={<X className="h-4 w-4" />}
+            onClick={() => deleteSelectedCity(city.id)}
+          >
+            {city.name}
+          </Chip>
+        ))}
+      </div>
+    </div>
+  );
+}
