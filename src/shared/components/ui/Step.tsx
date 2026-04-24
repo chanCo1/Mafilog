@@ -28,7 +28,6 @@ export default function Step({
   currentStep,
   onClickStep,
 }: IStep) {
-  // debugger;
   const completeSteps = stepOptions.filter((options) => options.isComplete);
 
   return (
