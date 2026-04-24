@@ -18,6 +18,7 @@ import {
   MapPin,
   House,
   CircleEllipsis,
+  Check,
 } from 'lucide-react';
 
 const categoryIconVariants = cva(
@@ -25,6 +26,7 @@ const categoryIconVariants = cva(
   {
     variants: {
       variant: {
+        check: '',
         memo: '',
         plus: '',
         plane: '',
@@ -73,6 +75,12 @@ function CategoryIconEntity(
     const fourSize = 'h-4 w-4';
 
     switch (variant) {
+      case 'check':
+        return (
+          <Check
+            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+          />
+        );
       case 'memo':
         return (
           <NotebookPen
