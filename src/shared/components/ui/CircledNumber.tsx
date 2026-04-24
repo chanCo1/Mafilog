@@ -19,7 +19,7 @@ const circledNumberVariants = cva('rounded-full flex items-center justify-center
     },
     size: {
       md: 'w-[30px] h-[30px] text-lg',
-      sm: 'w-[26px] h-[26px]',
+      sm: 'w-[24px] h-[24px]',
     },
   },
   defaultVariants: {

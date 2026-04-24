@@ -43,7 +43,7 @@ const categoryIconVariants = cva(
       },
       size: {
         md: 'w-[30px] h-[30px]',
-        sm: 'w-[26px] h-[26px]',
+        sm: 'w-[24px] h-[24px]',
       },
     },
     defaultVariants: {
