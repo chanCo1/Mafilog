@@ -31,8 +31,6 @@ export interface ICityList {
 }
 
 interface ILocation {
-  location: {
-    latitude: number;
-    longitude: number;
-  };
+  latitude: number;
+  longitude: number;
 }

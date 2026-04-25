@@ -5,15 +5,12 @@
  * @description: CreateNewTravelStep1 컴포넌트, 새 여행 만들기 - 여행지 선택
  */
 
-import {
-  Dispatch,
-  SetStateAction,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Chip } from '@/shared/components/ui/Chip';
 import { Input } from '@/shared/components/ui/Input';
-import { IGetGooglePlaces, ICityList } from '@/features/myTravel/interfaces';
+import { ICityList } from '@/features/myTravel/interfaces';
 import { Search, X } from 'lucide-react';
+import { CITY_DATA } from '@/features/myTravel/data';
 
 interface ICreateNewTravelStep1 {
   selectedCities: ICityList[];
@@ -40,22 +37,22 @@ export default function CreateNewTravelStep1({
   // TODO: 테스트
   const handleSearch = async () => {
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Goog-Api-Key': GOOGLE_API_KEY as string,
-          'X-Goog-FieldMask':
-            'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
-        },
-        body: JSON.stringify(body),
-      });
+      // const res = await fetch(url, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'X-Goog-Api-Key': GOOGLE_API_KEY as string,
+      //     'X-Goog-FieldMask':
+      //       'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
+      //   },
+      //   body: JSON.stringify(body),
+      // });
 
-      const data: IGetGooglePlaces = await res.json();
+      // const data: IGetGooglePlaces = await res.json();
 
-      if (data.places?.length) {
+      if (CITY_DATA.places?.length) {
         /** 도시 필터링 */
-        const filteredCities = data.places.filter((place) =>
+        const filteredCities = CITY_DATA.places.filter((place) =>
           ['locality', 'administrative_area_level_1'].some((value) =>
             place.types.includes(value),
           ),
