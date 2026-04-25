@@ -10,8 +10,7 @@ import { Input } from '@/shared/components/ui/Input';
 import { Calendar } from 'lucide-react';
 import DatePicker from '@/shared/components/ui/DatePicker';
 import { DateRange } from 'react-day-picker';
-import { formatDate, differenceInDays } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { convertFormattedDate, getDay, getTravelDay } from '@/shared/lib/utils';
 
 interface ICreateNewTravelStep2 {
   selectedDate: DateRange | undefined;
@@ -22,18 +21,15 @@ export default function CreateNewTravelStep2({
   selectedDate,
   setSeletedDate,
 }: ICreateNewTravelStep2) {
-
   /** 여행 기간 날짜 포멧 */
   const formattedValue = useMemo(() => {
     if (!selectedDate?.from || !selectedDate?.to) return '';
 
-    const travelDay = differenceInDays(selectedDate.to, selectedDate.from) + 1;
-
     if (selectedDate.from === selectedDate.to) {
-      return `${formatDate(selectedDate.from, 'yyyy.MM.dd', { locale: ko })} (${travelDay}일)`;
+      return `${convertFormattedDate(selectedDate.from)} (${getDay(selectedDate.from)}) (${getTravelDay(selectedDate.from, selectedDate.to)}일)`;
     }
 
-    return `${formatDate(selectedDate.from, 'yyyy.MM.dd', { locale: ko })} ~ ${formatDate(selectedDate.to, 'yyyy.MM.dd', { locale: ko })} (${travelDay}일)`;
+    return `${convertFormattedDate(selectedDate.from)} (${getDay(selectedDate.from)}) ~ ${convertFormattedDate(selectedDate.to)} (${getDay(selectedDate.to)}) (${getTravelDay(selectedDate.from, selectedDate.to)}일)`;
   }, [selectedDate]);
 
   return (
