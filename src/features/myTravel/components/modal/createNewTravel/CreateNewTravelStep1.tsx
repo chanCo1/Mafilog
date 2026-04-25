@@ -145,19 +145,26 @@ export default function CreateNewTravelStep1({
           </>
         )}
       </div>
-      <div className="scrollbar-hide flex gap-1 overflow-x-auto pb-3">
-        {selectedCities.map((city) => (
-          <Chip
-            key={city.id}
-            className="shrink-0"
-            variant="gray"
-            suffix={<X className="h-4 w-4" />}
-            onClick={() => deleteSelectedCity(city.id)}
-          >
-            {city.name}
-          </Chip>
-        ))}
-      </div>
+      {selectedCities.length ? (
+        <div className="flex flex-col">
+          <div className="p-1">
+            <p className="text-text-secondary">선택된 도시</p>
+          </div>
+          <div className="scrollbar-hide flex gap-1 overflow-x-auto pb-3">
+            {selectedCities.map((city) => (
+              <Chip
+                key={city.id}
+                className="shrink-0"
+                variant="gray"
+                suffix={<X className="h-4 w-4" />}
+                onClick={() => deleteSelectedCity(city.id)}
+              >
+                {city.name}
+              </Chip>
+            ))}
+          </div>
+        </div>
+      ): null}
     </div>
   );
 }
