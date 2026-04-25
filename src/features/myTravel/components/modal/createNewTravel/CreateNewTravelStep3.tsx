@@ -31,7 +31,17 @@ export default function CreateNewTravelStep3({
   travelConpanion,
   travelStyle,
 }: ICreateNewTravelStep3) {
-  console.log(' >> ', travelConpanion);
+  /** 여행 스타일 핸들링 */
+  const handleTravelStyle = (value: string) => {
+    const isChecked = travelStyle.some((_value) => _value === value);
+
+    if (isChecked) {
+      setTravelStyle(travelStyle.filter((_value) => _value !== value));
+    } else {
+      setTravelStyle([...travelStyle, value]);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-3">
       <Input
@@ -51,9 +61,7 @@ export default function CreateNewTravelStep3({
             <Chip
               key={list.value}
               variant={
-                list.value == travelConpanion
-                  ? 'primary'
-                  : 'primaryOutline'
+                list.value == travelConpanion ? 'primary' : 'primaryOutline'
               }
               onClick={() => setTravelCompanion(list.value)}
             >
@@ -75,7 +83,7 @@ export default function CreateNewTravelStep3({
                   ? 'primary'
                   : 'primaryOutline'
               }
-              onClick={() => setTravelStyle([...travelStyle, list.value])}
+              onClick={() => handleTravelStyle(list.value)}
             >
               {list.label}
             </Chip>

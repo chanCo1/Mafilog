@@ -12,18 +12,22 @@ export const TRAVEL_COMPANION_LIST = [
   { label: '연인과', value: 'lover' },
   { label: '배우자와', value: 'spouse' },
   { label: '아이와', value: 'child' },
-  { label: '직장동료', value: 'colleagues' },
+  { label: '직장동료와', value: 'colleagues' },
   { label: '가족과', value: 'family' },
   { label: '부모님과', value: 'parents' },
   { label: '기타', value: 'etc' },
 ];
+export type TRAVEL_COMPANION_LIST =
+  (typeof TRAVEL_COMPANION_LIST)[keyof typeof TRAVEL_COMPANION_LIST];
 
 /** 여행 스타일 리스트 */
 export const TRAVEL_STYLE_LIST = [
-  {label: '힐링/휴식', value: 'heal'},
-  {label: '먹방', value: 'food'},
-  {label: '액티비티', value: 'Activity'},
-  {label: '문화/예술', value: 'culture'},
-  {label: '이색/체험', value: 'experience'},
+  { label: '힐링/휴식', value: 'heal' },
+  { label: '먹방', value: 'food' },
+  { label: '액티비티', value: 'Activity' },
+  { label: '문화/예술', value: 'culture' },
+  { label: '이색/체험', value: 'experience' },
   { label: '기타', value: 'etc' },
 ];
+export type TRAVEL_STYLE_LIST =
+  (typeof TRAVEL_STYLE_LIST)[keyof typeof TRAVEL_STYLE_LIST];
