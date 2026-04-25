@@ -11,8 +11,9 @@ import { Button } from '@/shared/components/ui/Button';
 import Step from '@/shared/components/ui/Step';
 import CreateNewTravelStep1 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep1';
 import { ICityList } from '@/features/myTravel/interfaces';
-import { createNewTravelStepList } from '@/features/myTravel/lib';
+import { CREATE_TRAVEL_STEP_LIST } from '@/features/myTravel/constants';
 import CreateNewTravelStep2 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep2';
+import CreateNewTravelStep3 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep3';
 import { ChevronLeft } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 
@@ -27,7 +28,7 @@ export default function CreateNewTravelModal({
   handleClose,
   isModify = false,
 }: ICreateNewTravelModal) {
-  const [stepData, setStepData] = useState(createNewTravelStepList);
+  const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedCities, setSelectedCities] = useState<ICityList[]>([]);
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
@@ -144,6 +145,12 @@ export default function CreateNewTravelModal({
         <CreateNewTravelStep2
         selectedDate={selectedDate}
         setSeletedDate={setSeletedDate}
+        />
+      )}
+      {currentStep === 3 && (
+        <CreateNewTravelStep3
+        // selectedDate={selectedDate}
+        // setSeletedDate={setSeletedDate}
         />
       )}
     </SideModal>
