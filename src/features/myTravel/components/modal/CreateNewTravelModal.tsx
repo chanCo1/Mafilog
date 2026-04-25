@@ -11,6 +11,10 @@ import { Button } from '@/shared/components/ui/Button';
 import Step from '@/shared/components/ui/Step';
 import CreateNewTravelStep1 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep1';
 import { ICityList } from '@/features/myTravel/interfaces';
+import { createNewTravelStepList } from '@/features/myTravel/lib';
+import CreateNewTravelStep2 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep2';
+import { ChevronLeft } from 'lucide-react';
+import { DateRange } from 'react-day-picker';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -18,20 +22,17 @@ interface ICreateNewTravelModal {
   isModify?: false;
 }
 
-const STEP_DATA = [
-  { id: 1, label: '여행지 선택', isComplete: false },
-  { id: 2, label: '날짜 선택', isComplete: false },
-  { id: 3, label: '여행 정보', isComplete: false },
-];
-
 export default function CreateNewTravelModal({
   isOpen,
   handleClose,
   isModify = false,
 }: ICreateNewTravelModal) {
-  const [stepData, setStepData] = useState(STEP_DATA);
+  const [stepData, setStepData] = useState(createNewTravelStepList);
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedCities, setSelectedCities] = useState<ICityList[]>([]);
+  const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
+    undefined,
+  );
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -70,12 +71,23 @@ export default function CreateNewTravelModal({
     /** 여행지 선택 완료 후 다 지웠을 경우 */
     if (stepData[0].isComplete && !selectedCities.length) {
       setStepData((prev) =>
-      prev.map((step, index) =>
-        index === 0 ? { ...step, isComplete: false } : step,
-      ),
-    );
+        prev.map((step, index) =>
+          index === 0 ? { ...step, isComplete: false } : step,
+        ),
+      );
     }
   }, [selectedCities]);
+
+  useEffect(() => {
+    /** 날짜 선택 완료 후 지웠을 경우 */
+    if (stepData[1].isComplete && !selectedDate) {
+      setStepData((prev) =>
+        prev.map((step, index) =>
+          index === 1 ? { ...step, isComplete: false } : step,
+        ),
+      );
+    }
+  }, [selectedDate]);
 
   return (
     <SideModal
@@ -99,11 +111,15 @@ export default function CreateNewTravelModal({
           )}
           {currentStep === 2 && (
             <>
-              <Button variant="gray" onClick={handlePrevStep}>
+              <Button
+                variant="gray"
+                onClick={handlePrevStep}
+                prefix={<ChevronLeft className="h-4 w-4" />}
+              >
                 이전
               </Button>
               <Button
-                disabled={!selectedCities.length}
+                disabled={!selectedDate}
                 onClick={handelNextStep}
               >
                 다음
@@ -122,6 +138,12 @@ export default function CreateNewTravelModal({
         <CreateNewTravelStep1
           selectedCities={selectedCities}
           setSelectedCities={setSelectedCities}
+        />
+      )}
+      {currentStep === 2 && (
+        <CreateNewTravelStep2
+        selectedDate={selectedDate}
+        setSeletedDate={setSeletedDate}
         />
       )}
     </SideModal>
