@@ -14,7 +14,7 @@ import {
   TRAVEL_COMPANION_LIST,
   TRAVEL_STYLE_LIST,
 } from '@/features/myTravel/constants';
-import { ILabelValue } from '@/shared/interfaces';
+import RequireDot from '@/shared/components/ui/RequireDot';
 
 interface ICreateNewTravelStep3 {
   title: string;
@@ -55,7 +55,10 @@ export default function CreateNewTravelStep3({
       <FileUpload label="대표 이미지" description="필수는 아니에요" />
 
       <div className="flex flex-col gap-1">
-        <span>누구와 여행인가요?</span>
+        <div className="flex min-w-25 items-center gap-1">
+          <span>누구와 여행인가요?</span>
+          <RequireDot />
+        </div>
         <div className="flex flex-wrap gap-1 p-1">
           {TRAVEL_COMPANION_LIST.map((list) => (
             <Chip

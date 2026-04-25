@@ -16,6 +16,7 @@ import CreateNewTravelStep2 from '@/features/myTravel/components/modal/createNew
 import CreateNewTravelStep3 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep3';
 import { ChevronLeft } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
+import { toast } from 'sonner';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -34,6 +35,9 @@ export default function CreateNewTravelModal({
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
   );
+  const [travelTitle, setTravelTitle] = useState('');
+  const [travelConpanion, setTravelCompanion] = useState('alone');
+  const [travelStyle, setTravelStyle] = useState<string[]>([]);
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -43,7 +47,9 @@ export default function CreateNewTravelModal({
       ),
     );
 
-    setCurrentStep(currentStep + 1);
+    if (currentStep !== stepData.length) {
+      setCurrentStep(currentStep + 1);
+    }
   };
 
   /** 이전 핸들링 */
@@ -66,6 +72,24 @@ export default function CreateNewTravelModal({
     });
     setCurrentStep(1);
     setSelectedCities([]);
+    setSeletedDate(undefined);
+  };
+
+  /** 새 여행 만들기 */
+  const createNewTravel = () => {
+    const falseComplete = stepData.filter((step, index) => {
+      if (stepData.length - 1 > index + 1) {
+        return !step.isComplete;
+      }
+    });
+
+    if (falseComplete.length) {
+      toast.error('입력되지 않은 항목이 있습니다');
+      return;
+    }
+
+    onClickCloseBtn();
+    toast.success('새 여행을 만들었어요');
   };
 
   useEffect(() => {
@@ -119,12 +143,21 @@ export default function CreateNewTravelModal({
               >
                 이전
               </Button>
-              <Button
-                disabled={!selectedDate}
-                onClick={handelNextStep}
-              >
+              <Button disabled={!selectedDate} onClick={handelNextStep}>
                 다음
               </Button>
+            </>
+          )}
+          {currentStep === 3 && (
+            <>
+              <Button
+                variant="gray"
+                onClick={handlePrevStep}
+                prefix={<ChevronLeft className="h-4 w-4" />}
+              >
+                이전
+              </Button>
+              <Button onClick={createNewTravel}>여행 만들기</Button>
             </>
           )}
         </div>
@@ -143,14 +176,17 @@ export default function CreateNewTravelModal({
       )}
       {currentStep === 2 && (
         <CreateNewTravelStep2
-        selectedDate={selectedDate}
-        setSeletedDate={setSeletedDate}
+          selectedDate={selectedDate}
+          setSeletedDate={setSeletedDate}
         />
       )}
       {currentStep === 3 && (
         <CreateNewTravelStep3
-        // selectedDate={selectedDate}
-        // setSeletedDate={setSeletedDate}
+          title={travelTitle}
+          travelConpanion={travelConpanion}
+          setTravelCompanion={setTravelCompanion}
+          travelStyle={travelStyle}
+          setTravelStyle={setTravelStyle}
         />
       )}
     </SideModal>
