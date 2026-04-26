@@ -19,6 +19,7 @@ import {
   House,
   CircleEllipsis,
   Check,
+  X,
 } from 'lucide-react';
 
 const categoryIconVariants = cva(
@@ -26,6 +27,7 @@ const categoryIconVariants = cva(
   {
     variants: {
       variant: {
+        x: '',
         check: '',
         memo: '',
         plus: '',
@@ -65,7 +67,7 @@ interface ICategoryIcon
 }
 
 function CategoryIconEntity(
-  { className, size, variant, circled, children }: ICategoryIcon,
+  { className, size, variant, circled, children, ...props }: ICategoryIcon,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   /** variant별 아이콘 크기 */
@@ -77,9 +79,7 @@ function CategoryIconEntity(
     switch (variant) {
       case 'check':
         return (
-          <Check
-            className={size === 'sm' ? fourPointFiveSize : fiveSize}
-          />
+          <Check className={size === 'sm' ? fourPointFiveSize : fiveSize} />
         );
       case 'memo':
         return (
@@ -121,6 +121,10 @@ function CategoryIconEntity(
             className={size === 'sm' ? fourPointFiveSize : fiveSize}
           />
         );
+      case 'x':
+        return (
+          <X className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+        );
     }
   }, [variant, size]);
 
@@ -131,6 +135,7 @@ function CategoryIconEntity(
         className,
       )}
       ref={ref}
+      onClick={props.onClick}
     >
       {children}
       {GetIconType}
