@@ -96,7 +96,7 @@ export default function CreateNewTravelStep1({
   };
 
   return (
-    <div className="flex h-full flex-col justify-between">
+    <div className="flex h-full flex-col gap-3">
       <div className="flex flex-col gap-2">
         <Input
           label="도시 검색"

@@ -149,7 +149,7 @@ export default function FileUpload({
                 className="rounded-lg object-cover"
               />
               <div className="absolute flex w-full justify-between p-2">
-                <div className="bg-gray-8 rounded-md p-1 text-sm text-white">
+                <div className="bg-gray-8 rounded-md p-2 text-sm text-white">
                   대표
                 </div>
                 <CategoryIcon
@@ -163,7 +163,7 @@ export default function FileUpload({
           ) : (
             <div className="border-border-primary flex h-full items-center justify-center rounded-lg border border-dashed">
               <span className="text-text-secondary text-sm">
-                대표 이미지를 선택해주세요
+                이미지를 선택해주세요
               </span>
             </div>
           )}
