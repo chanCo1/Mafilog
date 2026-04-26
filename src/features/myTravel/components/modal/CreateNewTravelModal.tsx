@@ -19,6 +19,7 @@ import CreateNewTravelStep3 from '@/features/myTravel/components/modal/createNew
 import { ChevronLeft } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
+import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -31,6 +32,8 @@ export default function CreateNewTravelModal({
   handleClose,
   isModify = false,
 }: ICreateNewTravelModal) {
+  const { setUpcomingTravel } = useMyTravelListStore();
+
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedCities, setSelectedCities] = useState<ICityList[]>([]);
@@ -80,14 +83,30 @@ export default function CreateNewTravelModal({
       return;
     }
 
+    // 여행 이름 구하기
+    const getTravelName = () => {
+      if (travelTitle) return travelTitle;
+
+      let cityName: string[] = [];
+      selectedCities.forEach((city) => {
+        cityName.push(city.name);
+      });
+
+      return `${cityName.join(', ')} 여행`
+    };
+
     const params = {
       cities: selectedCities,
       from: selectedDate?.from,
       to: selectedDate?.to,
-      title: travelTitle,
+      title: getTravelName(),
       companion: travelCompanion,
       travelStyle: travelStyle,
-    }
+      image: selectedImage,
+    };
+
+    // TODO: 임시
+    setUpcomingTravel(params);
 
     onClickCloseBtn();
     toast.success('새 여행을 만들었어요');
@@ -104,8 +123,8 @@ export default function CreateNewTravelModal({
     setSelectedCities([]);
     setSeletedDate(undefined);
     setTravelTitle('');
-    setSelectedImage([])
-    setTravelCompanion('alone')
+    setSelectedImage([]);
+    setTravelCompanion('alone');
     setTravelStyle([]);
   };
 
