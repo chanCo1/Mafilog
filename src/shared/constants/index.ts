@@ -12,3 +12,7 @@ export const TRAVEL_TYPE_LIST: ILabelValue[] = [
 ];
 export type TRAVEL_TYPE_LIST =
   (typeof TRAVEL_TYPE_LIST)[keyof typeof TRAVEL_TYPE_LIST];
+
+/** 사진 업로드 수 */
+export const SINGLE_COUNT = 1;
+export const MULTIPLE_COUNT = 10;
