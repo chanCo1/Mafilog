@@ -1,0 +1,4348 @@
+[
+  {
+    "code": "GH",
+    "korName": "가나",
+    "engName": "Ghana",
+    "flagEmoji": "🇬🇭",
+    "latlng": [
+      8,
+      -2
+    ],
+    "region": "Africa",
+    "currency": {
+      "GHS": {
+        "name": "Ghanaian cedi",
+        "symbol": "₵"
+      }
+    }
+  },
+  {
+    "code": "GA",
+    "korName": "가봉",
+    "engName": "Gabon",
+    "flagEmoji": "🇬🇦",
+    "latlng": [
+      -1,
+      11.75
+    ],
+    "region": "Africa",
+    "currency": {
+      "XAF": {
+        "name": "Central African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "GY",
+    "korName": "가이아나",
+    "engName": "Guyana",
+    "flagEmoji": "🇬🇾",
+    "latlng": [
+      5,
+      -59
+    ],
+    "region": "Americas",
+    "currency": {
+      "GYD": {
+        "name": "Guyanese dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "GM",
+    "korName": "감비아",
+    "engName": "Gambia",
+    "flagEmoji": "🇬🇲",
+    "latlng": [
+      13.46666666,
+      -16.56666666
+    ],
+    "region": "Africa",
+    "currency": {
+      "GMD": {
+        "name": "dalasi",
+        "symbol": "D"
+      }
+    }
+  },
+  {
+    "code": "GG",
+    "korName": "건지 섬",
+    "engName": "Guernsey",
+    "flagEmoji": "🇬🇬",
+    "latlng": [
+      49.46666666,
+      -2.58333333
+    ],
+    "region": "Europe",
+    "currency": {
+      "GBP": {
+        "name": "British pound",
+        "symbol": "£"
+      },
+      "GGP": {
+        "name": "Guernsey pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "GP",
+    "korName": "과들루프",
+    "engName": "Guadeloupe",
+    "flagEmoji": "🇬🇵",
+    "latlng": [
+      16.25,
+      -61.583333
+    ],
+    "region": "Americas",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "GT",
+    "korName": "과테말라",
+    "engName": "Guatemala",
+    "flagEmoji": "🇬🇹",
+    "latlng": [
+      15.5,
+      -90.25
+    ],
+    "region": "Americas",
+    "currency": {
+      "GTQ": {
+        "name": "Guatemalan quetzal",
+        "symbol": "Q"
+      }
+    }
+  },
+  {
+    "code": "GU",
+    "korName": "괌",
+    "engName": "Guam",
+    "flagEmoji": "🇬🇺",
+    "latlng": [
+      13.46666666,
+      144.78333333
+    ],
+    "region": "Oceania",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "GD",
+    "korName": "그레나다",
+    "engName": "Grenada",
+    "flagEmoji": "🇬🇩",
+    "latlng": [
+      12.11666666,
+      -61.66666666
+    ],
+    "region": "Americas",
+    "currency": {
+      "XCD": {
+        "name": "Eastern Caribbean dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "GR",
+    "korName": "그리스",
+    "engName": "Greece",
+    "flagEmoji": "🇬🇷",
+    "latlng": [
+      39,
+      22
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "GL",
+    "korName": "그린란드",
+    "engName": "Greenland",
+    "flagEmoji": "🇬🇱",
+    "latlng": [
+      72,
+      -40
+    ],
+    "region": "Americas",
+    "currency": {
+      "DKK": {
+        "name": "krone",
+        "symbol": "kr."
+      }
+    }
+  },
+  {
+    "code": "GN",
+    "korName": "기니",
+    "engName": "Guinea",
+    "flagEmoji": "🇬🇳",
+    "latlng": [
+      11,
+      -10
+    ],
+    "region": "Africa",
+    "currency": {
+      "GNF": {
+        "name": "Guinean franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "GW",
+    "korName": "기니비사우",
+    "engName": "Guinea-Bissau",
+    "flagEmoji": "🇬🇼",
+    "latlng": [
+      12,
+      -15
+    ],
+    "region": "Africa",
+    "currency": {
+      "XOF": {
+        "name": "West African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "NA",
+    "korName": "나미비아",
+    "engName": "Namibia",
+    "flagEmoji": "🇳🇦",
+    "latlng": [
+      -22,
+      17
+    ],
+    "region": "Africa",
+    "currency": {
+      "NAD": {
+        "name": "Namibian dollar",
+        "symbol": "$"
+      },
+      "ZAR": {
+        "name": "South African rand",
+        "symbol": "R"
+      }
+    }
+  },
+  {
+    "code": "NR",
+    "korName": "나우루",
+    "engName": "Nauru",
+    "flagEmoji": "🇳🇷",
+    "latlng": [
+      -0.53333333,
+      166.91666666
+    ],
+    "region": "Oceania",
+    "currency": {
+      "AUD": {
+        "name": "Australian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "NG",
+    "korName": "나이지리아",
+    "engName": "Nigeria",
+    "flagEmoji": "🇳🇬",
+    "latlng": [
+      10,
+      8
+    ],
+    "region": "Africa",
+    "currency": {
+      "NGN": {
+        "name": "Nigerian naira",
+        "symbol": "₦"
+      }
+    }
+  },
+  {
+    "code": "AQ",
+    "korName": "남극",
+    "engName": "Antarctica",
+    "flagEmoji": "🇦🇶",
+    "latlng": [
+      -90,
+      0
+    ],
+    "region": "Antarctic",
+    "currency": {}
+  },
+  {
+    "code": "SS",
+    "korName": "남수단",
+    "engName": "South Sudan",
+    "flagEmoji": "🇸🇸",
+    "latlng": [
+      7,
+      30
+    ],
+    "region": "Africa",
+    "currency": {
+      "SSP": {
+        "name": "South Sudanese pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "ZA",
+    "korName": "남아프리카",
+    "engName": "South Africa",
+    "flagEmoji": "🇿🇦",
+    "latlng": [
+      -29,
+      24
+    ],
+    "region": "Africa",
+    "currency": {
+      "ZAR": {
+        "name": "South African rand",
+        "symbol": "R"
+      }
+    }
+  },
+  {
+    "code": "NL",
+    "korName": "네덜란드",
+    "engName": "Netherlands",
+    "flagEmoji": "🇳🇱",
+    "latlng": [
+      52.5,
+      5.75
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "NP",
+    "korName": "네팔",
+    "engName": "Nepal",
+    "flagEmoji": "🇳🇵",
+    "latlng": [
+      28,
+      84
+    ],
+    "region": "Asia",
+    "currency": {
+      "NPR": {
+        "name": "Nepalese rupee",
+        "symbol": "₨"
+      }
+    }
+  },
+  {
+    "code": "NO",
+    "korName": "노르웨이",
+    "engName": "Norway",
+    "flagEmoji": "🇳🇴",
+    "latlng": [
+      62,
+      10
+    ],
+    "region": "Europe",
+    "currency": {
+      "NOK": {
+        "name": "Norwegian krone",
+        "symbol": "kr"
+      }
+    }
+  },
+  {
+    "code": "NF",
+    "korName": "노퍽 섬",
+    "engName": "Norfolk Island",
+    "flagEmoji": "🇳🇫",
+    "latlng": [
+      -29.03333333,
+      167.95
+    ],
+    "region": "Oceania",
+    "currency": {
+      "AUD": {
+        "name": "Australian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "NC",
+    "korName": "누벨칼레도니",
+    "engName": "New Caledonia",
+    "flagEmoji": "🇳🇨",
+    "latlng": [
+      -21.5,
+      165.5
+    ],
+    "region": "Oceania",
+    "currency": {
+      "XPF": {
+        "name": "CFP franc",
+        "symbol": "₣"
+      }
+    }
+  },
+  {
+    "code": "NZ",
+    "korName": "뉴질랜드",
+    "engName": "New Zealand",
+    "flagEmoji": "🇳🇿",
+    "latlng": [
+      -41,
+      174
+    ],
+    "region": "Oceania",
+    "currency": {
+      "NZD": {
+        "name": "New Zealand dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "NU",
+    "korName": "니우에",
+    "engName": "Niue",
+    "flagEmoji": "🇳🇺",
+    "latlng": [
+      -19.03333333,
+      -169.86666666
+    ],
+    "region": "Oceania",
+    "currency": {
+      "NZD": {
+        "name": "New Zealand dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "NE",
+    "korName": "니제르",
+    "engName": "Niger",
+    "flagEmoji": "🇳🇪",
+    "latlng": [
+      16,
+      8
+    ],
+    "region": "Africa",
+    "currency": {
+      "XOF": {
+        "name": "West African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "NI",
+    "korName": "니카라과",
+    "engName": "Nicaragua",
+    "flagEmoji": "🇳🇮",
+    "latlng": [
+      13,
+      -85
+    ],
+    "region": "Americas",
+    "currency": {
+      "NIO": {
+        "name": "Nicaraguan córdoba",
+        "symbol": "C$"
+      }
+    }
+  },
+  {
+    "code": "TW",
+    "korName": "대만",
+    "engName": "Taiwan",
+    "flagEmoji": "🇹🇼",
+    "latlng": [
+      23.5,
+      121
+    ],
+    "region": "Asia",
+    "currency": {
+      "TWD": {
+        "name": "New Taiwan dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "DK",
+    "korName": "덴마크",
+    "engName": "Denmark",
+    "flagEmoji": "🇩🇰",
+    "latlng": [
+      56,
+      10
+    ],
+    "region": "Europe",
+    "currency": {
+      "DKK": {
+        "name": "Danish krone",
+        "symbol": "kr"
+      }
+    }
+  },
+  {
+    "code": "DM",
+    "korName": "도미니카 공화국",
+    "engName": "Dominica",
+    "flagEmoji": "🇩🇲",
+    "latlng": [
+      15.41666666,
+      -61.33333333
+    ],
+    "region": "Americas",
+    "currency": {
+      "XCD": {
+        "name": "Eastern Caribbean dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "DO",
+    "korName": "도미니카 공화국",
+    "engName": "Dominican Republic",
+    "flagEmoji": "🇩🇴",
+    "latlng": [
+      19,
+      -70.66666666
+    ],
+    "region": "Americas",
+    "currency": {
+      "DOP": {
+        "name": "Dominican peso",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "DE",
+    "korName": "독일",
+    "engName": "Germany",
+    "flagEmoji": "🇩🇪",
+    "latlng": [
+      51,
+      9
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "TL",
+    "korName": "동티모르",
+    "engName": "Timor-Leste",
+    "flagEmoji": "🇹🇱",
+    "latlng": [
+      -8.83333333,
+      125.91666666
+    ],
+    "region": "Asia",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "LA",
+    "korName": "라오스",
+    "engName": "Laos",
+    "flagEmoji": "🇱🇦",
+    "latlng": [
+      18,
+      105
+    ],
+    "region": "Asia",
+    "currency": {
+      "LAK": {
+        "name": "Lao kip",
+        "symbol": "₭"
+      }
+    }
+  },
+  {
+    "code": "LR",
+    "korName": "라이베리아",
+    "engName": "Liberia",
+    "flagEmoji": "🇱🇷",
+    "latlng": [
+      6.5,
+      -9.5
+    ],
+    "region": "Africa",
+    "currency": {
+      "LRD": {
+        "name": "Liberian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "LV",
+    "korName": "라트비아",
+    "engName": "Latvia",
+    "flagEmoji": "🇱🇻",
+    "latlng": [
+      57,
+      25
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "RU",
+    "korName": "러시아",
+    "engName": "Russia",
+    "flagEmoji": "🇷🇺",
+    "latlng": [
+      60,
+      100
+    ],
+    "region": "Europe",
+    "currency": {
+      "RUB": {
+        "name": "Russian ruble",
+        "symbol": "₽"
+      }
+    }
+  },
+  {
+    "code": "LB",
+    "korName": "레바논",
+    "engName": "Lebanon",
+    "flagEmoji": "🇱🇧",
+    "latlng": [
+      33.83333333,
+      35.83333333
+    ],
+    "region": "Asia",
+    "currency": {
+      "LBP": {
+        "name": "Lebanese pound",
+        "symbol": "ل.ل"
+      }
+    }
+  },
+  {
+    "code": "LS",
+    "korName": "레소토",
+    "engName": "Lesotho",
+    "flagEmoji": "🇱🇸",
+    "latlng": [
+      -29.5,
+      28.5
+    ],
+    "region": "Africa",
+    "currency": {
+      "LSL": {
+        "name": "Lesotho loti",
+        "symbol": "L"
+      },
+      "ZAR": {
+        "name": "South African rand",
+        "symbol": "R"
+      }
+    }
+  },
+  {
+    "code": "RE",
+    "korName": "레위니옹",
+    "engName": "Réunion",
+    "flagEmoji": "🇷🇪",
+    "latlng": [
+      -21.15,
+      55.5
+    ],
+    "region": "Africa",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "RO",
+    "korName": "루마니아",
+    "engName": "Romania",
+    "flagEmoji": "🇷🇴",
+    "latlng": [
+      46,
+      25
+    ],
+    "region": "Europe",
+    "currency": {
+      "RON": {
+        "name": "Romanian leu",
+        "symbol": "lei"
+      }
+    }
+  },
+  {
+    "code": "LU",
+    "korName": "룩셈부르크",
+    "engName": "Luxembourg",
+    "flagEmoji": "🇱🇺",
+    "latlng": [
+      49.75,
+      6.16666666
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "RW",
+    "korName": "르완다",
+    "engName": "Rwanda",
+    "flagEmoji": "🇷🇼",
+    "latlng": [
+      -2,
+      30
+    ],
+    "region": "Africa",
+    "currency": {
+      "RWF": {
+        "name": "Rwandan franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "LY",
+    "korName": "리비아",
+    "engName": "Libya",
+    "flagEmoji": "🇱🇾",
+    "latlng": [
+      25,
+      17
+    ],
+    "region": "Africa",
+    "currency": {
+      "LYD": {
+        "name": "Libyan dinar",
+        "symbol": "ل.د"
+      }
+    }
+  },
+  {
+    "code": "LT",
+    "korName": "리투아니아",
+    "engName": "Lithuania",
+    "flagEmoji": "🇱🇹",
+    "latlng": [
+      56,
+      24
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "LI",
+    "korName": "리히텐슈타인",
+    "engName": "Liechtenstein",
+    "flagEmoji": "🇱🇮",
+    "latlng": [
+      47.26666666,
+      9.53333333
+    ],
+    "region": "Europe",
+    "currency": {
+      "CHF": {
+        "name": "Swiss franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "MG",
+    "korName": "마다가스카르",
+    "engName": "Madagascar",
+    "flagEmoji": "🇲🇬",
+    "latlng": [
+      -20,
+      47
+    ],
+    "region": "Africa",
+    "currency": {
+      "MGA": {
+        "name": "Malagasy ariary",
+        "symbol": "Ar"
+      }
+    }
+  },
+  {
+    "code": "MQ",
+    "korName": "마르티니크",
+    "engName": "Martinique",
+    "flagEmoji": "🇲🇶",
+    "latlng": [
+      14.666667,
+      -61
+    ],
+    "region": "Americas",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "MH",
+    "korName": "마셜 제도",
+    "engName": "Marshall Islands",
+    "flagEmoji": "🇲🇭",
+    "latlng": [
+      9,
+      168
+    ],
+    "region": "Oceania",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "YT",
+    "korName": "마요트",
+    "engName": "Mayotte",
+    "flagEmoji": "🇾🇹",
+    "latlng": [
+      -12.83333333,
+      45.16666666
+    ],
+    "region": "Africa",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "MO",
+    "korName": "마카오",
+    "engName": "Macau",
+    "flagEmoji": "🇲🇴",
+    "latlng": [
+      22.16666666,
+      113.55
+    ],
+    "region": "Asia",
+    "currency": {
+      "MOP": {
+        "name": "Macanese pataca",
+        "symbol": "P"
+      }
+    }
+  },
+  {
+    "code": "MW",
+    "korName": "말라위",
+    "engName": "Malawi",
+    "flagEmoji": "🇲🇼",
+    "latlng": [
+      -13.5,
+      34
+    ],
+    "region": "Africa",
+    "currency": {
+      "MWK": {
+        "name": "Malawian kwacha",
+        "symbol": "MK"
+      }
+    }
+  },
+  {
+    "code": "MY",
+    "korName": "말레이시아",
+    "engName": "Malaysia",
+    "flagEmoji": "🇲🇾",
+    "latlng": [
+      2.5,
+      112.5
+    ],
+    "region": "Asia",
+    "currency": {
+      "MYR": {
+        "name": "Malaysian ringgit",
+        "symbol": "RM"
+      }
+    }
+  },
+  {
+    "code": "ML",
+    "korName": "말리",
+    "engName": "Mali",
+    "flagEmoji": "🇲🇱",
+    "latlng": [
+      17,
+      -4
+    ],
+    "region": "Africa",
+    "currency": {
+      "XOF": {
+        "name": "West African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "IM",
+    "korName": "맨섬",
+    "engName": "Isle of Man",
+    "flagEmoji": "🇮🇲",
+    "latlng": [
+      54.25,
+      -4.5
+    ],
+    "region": "Europe",
+    "currency": {
+      "GBP": {
+        "name": "British pound",
+        "symbol": "£"
+      },
+      "IMP": {
+        "name": "Manx pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "MX",
+    "korName": "멕시코",
+    "engName": "Mexico",
+    "flagEmoji": "🇲🇽",
+    "latlng": [
+      23,
+      -102
+    ],
+    "region": "Americas",
+    "currency": {
+      "MXN": {
+        "name": "Mexican peso",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "MC",
+    "korName": "모나코",
+    "engName": "Monaco",
+    "flagEmoji": "🇲🇨",
+    "latlng": [
+      43.73333333,
+      7.4
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "MA",
+    "korName": "모로코",
+    "engName": "Morocco",
+    "flagEmoji": "🇲🇦",
+    "latlng": [
+      32,
+      -5
+    ],
+    "region": "Africa",
+    "currency": {
+      "MAD": {
+        "name": "Moroccan dirham",
+        "symbol": "د.م."
+      }
+    }
+  },
+  {
+    "code": "MU",
+    "korName": "모리셔스",
+    "engName": "Mauritius",
+    "flagEmoji": "🇲🇺",
+    "latlng": [
+      -20.28333333,
+      57.55
+    ],
+    "region": "Africa",
+    "currency": {
+      "MUR": {
+        "name": "Mauritian rupee",
+        "symbol": "₨"
+      }
+    }
+  },
+  {
+    "code": "MR",
+    "korName": "모리타니",
+    "engName": "Mauritania",
+    "flagEmoji": "🇲🇷",
+    "latlng": [
+      20,
+      -12
+    ],
+    "region": "Africa",
+    "currency": {
+      "MRU": {
+        "name": "Mauritanian ouguiya",
+        "symbol": "UM"
+      }
+    }
+  },
+  {
+    "code": "MZ",
+    "korName": "모잠비크",
+    "engName": "Mozambique",
+    "flagEmoji": "🇲🇿",
+    "latlng": [
+      -18.25,
+      35
+    ],
+    "region": "Africa",
+    "currency": {
+      "MZN": {
+        "name": "Mozambican metical",
+        "symbol": "MT"
+      }
+    }
+  },
+  {
+    "code": "ME",
+    "korName": "몬테네그로",
+    "engName": "Montenegro",
+    "flagEmoji": "🇲🇪",
+    "latlng": [
+      42.5,
+      19.3
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "MS",
+    "korName": "몬트세랫",
+    "engName": "Montserrat",
+    "flagEmoji": "🇲🇸",
+    "latlng": [
+      16.75,
+      -62.2
+    ],
+    "region": "Americas",
+    "currency": {
+      "XCD": {
+        "name": "Eastern Caribbean dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "MD",
+    "korName": "몰도바",
+    "engName": "Moldova",
+    "flagEmoji": "🇲🇩",
+    "latlng": [
+      47,
+      29
+    ],
+    "region": "Europe",
+    "currency": {
+      "MDL": {
+        "name": "Moldovan leu",
+        "symbol": "L"
+      }
+    }
+  },
+  {
+    "code": "MV",
+    "korName": "몰디브",
+    "engName": "Maldives",
+    "flagEmoji": "🇲🇻",
+    "latlng": [
+      3.25,
+      73
+    ],
+    "region": "Asia",
+    "currency": {
+      "MVR": {
+        "name": "Maldivian rufiyaa",
+        "symbol": ".ރ"
+      }
+    }
+  },
+  {
+    "code": "MT",
+    "korName": "몰타",
+    "engName": "Malta",
+    "flagEmoji": "🇲🇹",
+    "latlng": [
+      35.83333333,
+      14.58333333
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "MN",
+    "korName": "몽골국",
+    "engName": "Mongolia",
+    "flagEmoji": "🇲🇳",
+    "latlng": [
+      46,
+      105
+    ],
+    "region": "Asia",
+    "currency": {
+      "MNT": {
+        "name": "Mongolian tögrög",
+        "symbol": "₮"
+      }
+    }
+  },
+  {
+    "code": "US",
+    "korName": "미국",
+    "engName": "United States",
+    "flagEmoji": "🇺🇸",
+    "latlng": [
+      38,
+      -97
+    ],
+    "region": "Americas",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "UM",
+    "korName": "미국령 군소 제도",
+    "engName": "United States Minor Outlying Islands",
+    "flagEmoji": "🇺🇲",
+    "latlng": [
+      19.3,
+      166.633333
+    ],
+    "region": "Americas",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "VI",
+    "korName": "미국령 버진아일랜드",
+    "engName": "United States Virgin Islands",
+    "flagEmoji": "🇻🇮",
+    "latlng": [
+      18.35,
+      -64.933333
+    ],
+    "region": "Americas",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "MM",
+    "korName": "미얀마",
+    "engName": "Myanmar",
+    "flagEmoji": "🇲🇲",
+    "latlng": [
+      22,
+      98
+    ],
+    "region": "Asia",
+    "currency": {
+      "MMK": {
+        "name": "Burmese kyat",
+        "symbol": "Ks"
+      }
+    }
+  },
+  {
+    "code": "FM",
+    "korName": "미크로네시아",
+    "engName": "Micronesia",
+    "flagEmoji": "🇫🇲",
+    "latlng": [
+      6.91666666,
+      158.25
+    ],
+    "region": "Oceania",
+    "currency": {}
+  },
+  {
+    "code": "VU",
+    "korName": "바누아투",
+    "engName": "Vanuatu",
+    "flagEmoji": "🇻🇺",
+    "latlng": [
+      -16,
+      167
+    ],
+    "region": "Oceania",
+    "currency": {
+      "VUV": {
+        "name": "Vanuatu vatu",
+        "symbol": "Vt"
+      }
+    }
+  },
+  {
+    "code": "BH",
+    "korName": "바레인",
+    "engName": "Bahrain",
+    "flagEmoji": "🇧🇭",
+    "latlng": [
+      26,
+      50.55
+    ],
+    "region": "Asia",
+    "currency": {
+      "BHD": {
+        "name": "Bahraini dinar",
+        "symbol": ".د.ب"
+      }
+    }
+  },
+  {
+    "code": "BB",
+    "korName": "바베이도스",
+    "engName": "Barbados",
+    "flagEmoji": "🇧🇧",
+    "latlng": [
+      13.16666666,
+      -59.53333333
+    ],
+    "region": "Americas",
+    "currency": {
+      "BBD": {
+        "name": "Barbadian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "VA",
+    "korName": "바티칸",
+    "engName": "Vatican City",
+    "flagEmoji": "🇻🇦",
+    "latlng": [
+      41.9,
+      12.45
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "BS",
+    "korName": "바하마",
+    "engName": "Bahamas",
+    "flagEmoji": "🇧🇸",
+    "latlng": [
+      24.25,
+      -76
+    ],
+    "region": "Americas",
+    "currency": {
+      "BSD": {
+        "name": "Bahamian dollar",
+        "symbol": "$"
+      },
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "BD",
+    "korName": "방글라데시",
+    "engName": "Bangladesh",
+    "flagEmoji": "🇧🇩",
+    "latlng": [
+      24,
+      90
+    ],
+    "region": "Asia",
+    "currency": {
+      "BDT": {
+        "name": "Bangladeshi taka",
+        "symbol": "৳"
+      }
+    }
+  },
+  {
+    "code": "BM",
+    "korName": "버뮤다",
+    "engName": "Bermuda",
+    "flagEmoji": "🇧🇲",
+    "latlng": [
+      32.33333333,
+      -64.75
+    ],
+    "region": "Americas",
+    "currency": {
+      "BMD": {
+        "name": "Bermudian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "BJ",
+    "korName": "베냉",
+    "engName": "Benin",
+    "flagEmoji": "🇧🇯",
+    "latlng": [
+      9.5,
+      2.25
+    ],
+    "region": "Africa",
+    "currency": {
+      "XOF": {
+        "name": "West African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "VE",
+    "korName": "베네수엘라",
+    "engName": "Venezuela",
+    "flagEmoji": "🇻🇪",
+    "latlng": [
+      8,
+      -66
+    ],
+    "region": "Americas",
+    "currency": {
+      "VES": {
+        "name": "Venezuelan bolívar soberano",
+        "symbol": "Bs.S."
+      }
+    }
+  },
+  {
+    "code": "VN",
+    "korName": "베트남",
+    "engName": "Vietnam",
+    "flagEmoji": "🇻🇳",
+    "latlng": [
+      16.16666666,
+      107.83333333
+    ],
+    "region": "Asia",
+    "currency": {
+      "VND": {
+        "name": "Vietnamese đồng",
+        "symbol": "₫"
+      }
+    }
+  },
+  {
+    "code": "BE",
+    "korName": "벨기에",
+    "engName": "Belgium",
+    "flagEmoji": "🇧🇪",
+    "latlng": [
+      50.83333333,
+      4
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "BY",
+    "korName": "벨라루스",
+    "engName": "Belarus",
+    "flagEmoji": "🇧🇾",
+    "latlng": [
+      53,
+      28
+    ],
+    "region": "Europe",
+    "currency": {
+      "BYN": {
+        "name": "Belarusian ruble",
+        "symbol": "Br"
+      }
+    }
+  },
+  {
+    "code": "BZ",
+    "korName": "벨리즈",
+    "engName": "Belize",
+    "flagEmoji": "🇧🇿",
+    "latlng": [
+      17.25,
+      -88.75
+    ],
+    "region": "Americas",
+    "currency": {
+      "BZD": {
+        "name": "Belize dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "BA",
+    "korName": "보스니아 헤르체고비나",
+    "engName": "Bosnia and Herzegovina",
+    "flagEmoji": "🇧🇦",
+    "latlng": [
+      44,
+      18
+    ],
+    "region": "Europe",
+    "currency": {
+      "BAM": {
+        "name": "Bosnia and Herzegovina convertible mark",
+        "symbol": "KM"
+      }
+    }
+  },
+  {
+    "code": "BW",
+    "korName": "보츠와나",
+    "engName": "Botswana",
+    "flagEmoji": "🇧🇼",
+    "latlng": [
+      -22,
+      24
+    ],
+    "region": "Africa",
+    "currency": {
+      "BWP": {
+        "name": "Botswana pula",
+        "symbol": "P"
+      }
+    }
+  },
+  {
+    "code": "BO",
+    "korName": "볼리비아",
+    "engName": "Bolivia",
+    "flagEmoji": "🇧🇴",
+    "latlng": [
+      -17,
+      -65
+    ],
+    "region": "Americas",
+    "currency": {
+      "BOB": {
+        "name": "Bolivian boliviano",
+        "symbol": "Bs."
+      }
+    }
+  },
+  {
+    "code": "BI",
+    "korName": "부룬디",
+    "engName": "Burundi",
+    "flagEmoji": "🇧🇮",
+    "latlng": [
+      -3.5,
+      30
+    ],
+    "region": "Africa",
+    "currency": {
+      "BIF": {
+        "name": "Burundian franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "BF",
+    "korName": "부르키나파소",
+    "engName": "Burkina Faso",
+    "flagEmoji": "🇧🇫",
+    "latlng": [
+      13,
+      -2
+    ],
+    "region": "Africa",
+    "currency": {
+      "XOF": {
+        "name": "West African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "BV",
+    "korName": "부베 섬",
+    "engName": "Bouvet Island",
+    "flagEmoji": "🇧🇻",
+    "latlng": [
+      -54.43333333,
+      3.4
+    ],
+    "region": "Antarctic",
+    "currency": {}
+  },
+  {
+    "code": "BT",
+    "korName": "부탄",
+    "engName": "Bhutan",
+    "flagEmoji": "🇧🇹",
+    "latlng": [
+      27.5,
+      90.5
+    ],
+    "region": "Asia",
+    "currency": {
+      "BTN": {
+        "name": "Bhutanese ngultrum",
+        "symbol": "Nu."
+      },
+      "INR": {
+        "name": "Indian rupee",
+        "symbol": "₹"
+      }
+    }
+  },
+  {
+    "code": "MP",
+    "korName": "북마리아나 제도",
+    "engName": "Northern Mariana Islands",
+    "flagEmoji": "🇲🇵",
+    "latlng": [
+      15.2,
+      145.75
+    ],
+    "region": "Oceania",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "MK",
+    "korName": "북마케도니아",
+    "engName": "North Macedonia",
+    "flagEmoji": "🇲🇰",
+    "latlng": [
+      41.83333333,
+      22
+    ],
+    "region": "Europe",
+    "currency": {
+      "MKD": {
+        "name": "denar",
+        "symbol": "den"
+      }
+    }
+  },
+  {
+    "code": "BG",
+    "korName": "불가리아",
+    "engName": "Bulgaria",
+    "flagEmoji": "🇧🇬",
+    "latlng": [
+      43,
+      25
+    ],
+    "region": "Europe",
+    "currency": {
+      "BGN": {
+        "name": "Bulgarian lev",
+        "symbol": "лв"
+      }
+    }
+  },
+  {
+    "code": "BR",
+    "korName": "브라질",
+    "engName": "Brazil",
+    "flagEmoji": "🇧🇷",
+    "latlng": [
+      -10,
+      -55
+    ],
+    "region": "Americas",
+    "currency": {
+      "BRL": {
+        "name": "Brazilian real",
+        "symbol": "R$"
+      }
+    }
+  },
+  {
+    "code": "BN",
+    "korName": "브루나이",
+    "engName": "Brunei",
+    "flagEmoji": "🇧🇳",
+    "latlng": [
+      4.5,
+      114.66666666
+    ],
+    "region": "Asia",
+    "currency": {
+      "BND": {
+        "name": "Brunei dollar",
+        "symbol": "$"
+      },
+      "SGD": {
+        "name": "Singapore dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "WS",
+    "korName": "사모아",
+    "engName": "Samoa",
+    "flagEmoji": "🇼🇸",
+    "latlng": [
+      -13.58333333,
+      -172.33333333
+    ],
+    "region": "Oceania",
+    "currency": {
+      "WST": {
+        "name": "Samoan tālā",
+        "symbol": "T"
+      }
+    }
+  },
+  {
+    "code": "SA",
+    "korName": "사우디아라비아",
+    "engName": "Saudi Arabia",
+    "flagEmoji": "🇸🇦",
+    "latlng": [
+      25,
+      45
+    ],
+    "region": "Asia",
+    "currency": {
+      "SAR": {
+        "name": "Saudi riyal",
+        "symbol": "ر.س"
+      }
+    }
+  },
+  {
+    "code": "SM",
+    "korName": "산마리노",
+    "engName": "San Marino",
+    "flagEmoji": "🇸🇲",
+    "latlng": [
+      43.76666666,
+      12.41666666
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "ST",
+    "korName": "상투메 프린시페",
+    "engName": "São Tomé and Príncipe",
+    "flagEmoji": "🇸🇹",
+    "latlng": [
+      1,
+      7
+    ],
+    "region": "Africa",
+    "currency": {
+      "STN": {
+        "name": "São Tomé and Príncipe dobra",
+        "symbol": "Db"
+      }
+    }
+  },
+  {
+    "code": "MF",
+    "korName": "생마르탱",
+    "engName": "Saint Martin",
+    "flagEmoji": "🇲🇫",
+    "latlng": [
+      18.08333333,
+      -63.95
+    ],
+    "region": "Americas",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "BL",
+    "korName": "생바르텔레미",
+    "engName": "Saint Barthélemy",
+    "flagEmoji": "🇧🇱",
+    "latlng": [
+      18.5,
+      -63.41666666
+    ],
+    "region": "Americas",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "PM",
+    "korName": "생피에르 미클롱",
+    "engName": "Saint Pierre and Miquelon",
+    "flagEmoji": "🇵🇲",
+    "latlng": [
+      46.83333333,
+      -56.33333333
+    ],
+    "region": "Americas",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "EH",
+    "korName": "서사하라",
+    "engName": "Western Sahara",
+    "flagEmoji": "🇪🇭",
+    "latlng": [
+      24.5,
+      -13
+    ],
+    "region": "Africa",
+    "currency": {
+      "DZD": {
+        "name": "Algerian dinar",
+        "symbol": "دج"
+      },
+      "MAD": {
+        "name": "Moroccan dirham",
+        "symbol": "DH"
+      },
+      "MRU": {
+        "name": "Mauritanian ouguiya",
+        "symbol": "UM"
+      }
+    }
+  },
+  {
+    "code": "SN",
+    "korName": "세네갈",
+    "engName": "Senegal",
+    "flagEmoji": "🇸🇳",
+    "latlng": [
+      14,
+      -14
+    ],
+    "region": "Africa",
+    "currency": {
+      "XOF": {
+        "name": "West African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "RS",
+    "korName": "세르비아",
+    "engName": "Serbia",
+    "flagEmoji": "🇷🇸",
+    "latlng": [
+      44,
+      21
+    ],
+    "region": "Europe",
+    "currency": {
+      "RSD": {
+        "name": "Serbian dinar",
+        "symbol": "дин."
+      }
+    }
+  },
+  {
+    "code": "SC",
+    "korName": "세이셸",
+    "engName": "Seychelles",
+    "flagEmoji": "🇸🇨",
+    "latlng": [
+      -4.58333333,
+      55.66666666
+    ],
+    "region": "Africa",
+    "currency": {
+      "SCR": {
+        "name": "Seychellois rupee",
+        "symbol": "₨"
+      }
+    }
+  },
+  {
+    "code": "LC",
+    "korName": "세인트루시아",
+    "engName": "Saint Lucia",
+    "flagEmoji": "🇱🇨",
+    "latlng": [
+      13.88333333,
+      -60.96666666
+    ],
+    "region": "Americas",
+    "currency": {
+      "XCD": {
+        "name": "Eastern Caribbean dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "VC",
+    "korName": "세인트빈센트 그레나딘",
+    "engName": "Saint Vincent and the Grenadines",
+    "flagEmoji": "🇻🇨",
+    "latlng": [
+      13.25,
+      -61.2
+    ],
+    "region": "Americas",
+    "currency": {
+      "XCD": {
+        "name": "Eastern Caribbean dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "KN",
+    "korName": "세인트키츠 네비스",
+    "engName": "Saint Kitts and Nevis",
+    "flagEmoji": "🇰🇳",
+    "latlng": [
+      17.33333333,
+      -62.75
+    ],
+    "region": "Americas",
+    "currency": {
+      "XCD": {
+        "name": "Eastern Caribbean dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "SH",
+    "korName": "세인트헬레나",
+    "engName": "Saint Helena, Ascension and Tristan da Cunha",
+    "flagEmoji": "🇸🇭",
+    "latlng": [
+      -15.95,
+      -5.72
+    ],
+    "region": "Africa",
+    "currency": {
+      "GBP": {
+        "name": "Pound sterling",
+        "symbol": "£"
+      },
+      "SHP": {
+        "name": "Saint Helena pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "SO",
+    "korName": "소말리아",
+    "engName": "Somalia",
+    "flagEmoji": "🇸🇴",
+    "latlng": [
+      10,
+      49
+    ],
+    "region": "Africa",
+    "currency": {
+      "SOS": {
+        "name": "Somali shilling",
+        "symbol": "Sh"
+      }
+    }
+  },
+  {
+    "code": "SB",
+    "korName": "솔로몬 제도",
+    "engName": "Solomon Islands",
+    "flagEmoji": "🇸🇧",
+    "latlng": [
+      -8,
+      159
+    ],
+    "region": "Oceania",
+    "currency": {
+      "SBD": {
+        "name": "Solomon Islands dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "SD",
+    "korName": "수단",
+    "engName": "Sudan",
+    "flagEmoji": "🇸🇩",
+    "latlng": [
+      15,
+      30
+    ],
+    "region": "Africa",
+    "currency": {
+      "SDG": {
+        "name": "Sudanese pound",
+        "symbol": "PT"
+      }
+    }
+  },
+  {
+    "code": "SR",
+    "korName": "수리남",
+    "engName": "Suriname",
+    "flagEmoji": "🇸🇷",
+    "latlng": [
+      4,
+      -56
+    ],
+    "region": "Americas",
+    "currency": {
+      "SRD": {
+        "name": "Surinamese dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "LK",
+    "korName": "스리랑카",
+    "engName": "Sri Lanka",
+    "flagEmoji": "🇱🇰",
+    "latlng": [
+      7,
+      81
+    ],
+    "region": "Asia",
+    "currency": {
+      "LKR": {
+        "name": "Sri Lankan rupee",
+        "symbol": "Rs  රු"
+      }
+    }
+  },
+  {
+    "code": "SJ",
+    "korName": "스발바르 얀마옌 제도",
+    "engName": "Svalbard and Jan Mayen",
+    "flagEmoji": "🇸🇯",
+    "latlng": [
+      78,
+      20
+    ],
+    "region": "Europe",
+    "currency": {
+      "NOK": {
+        "name": "krone",
+        "symbol": "kr"
+      }
+    }
+  },
+  {
+    "code": "SE",
+    "korName": "스웨덴",
+    "engName": "Sweden",
+    "flagEmoji": "🇸🇪",
+    "latlng": [
+      62,
+      15
+    ],
+    "region": "Europe",
+    "currency": {
+      "SEK": {
+        "name": "Swedish krona",
+        "symbol": "kr"
+      }
+    }
+  },
+  {
+    "code": "CH",
+    "korName": "스위스",
+    "engName": "Switzerland",
+    "flagEmoji": "🇨🇭",
+    "latlng": [
+      47,
+      8
+    ],
+    "region": "Europe",
+    "currency": {
+      "CHF": {
+        "name": "Swiss franc",
+        "symbol": "Fr."
+      }
+    }
+  },
+  {
+    "code": "ES",
+    "korName": "스페인",
+    "engName": "Spain",
+    "flagEmoji": "🇪🇸",
+    "latlng": [
+      40,
+      -4
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "SK",
+    "korName": "슬로바키아",
+    "engName": "Slovakia",
+    "flagEmoji": "🇸🇰",
+    "latlng": [
+      48.66666666,
+      19.5
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "SI",
+    "korName": "슬로베니아",
+    "engName": "Slovenia",
+    "flagEmoji": "🇸🇮",
+    "latlng": [
+      46.11666666,
+      14.81666666
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "SY",
+    "korName": "시리아",
+    "engName": "Syria",
+    "flagEmoji": "🇸🇾",
+    "latlng": [
+      35,
+      38
+    ],
+    "region": "Asia",
+    "currency": {
+      "SYP": {
+        "name": "Syrian pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "SL",
+    "korName": "시에라리온",
+    "engName": "Sierra Leone",
+    "flagEmoji": "🇸🇱",
+    "latlng": [
+      8.5,
+      -11.5
+    ],
+    "region": "Africa",
+    "currency": {
+      "SLL": {
+        "name": "Sierra Leonean leone",
+        "symbol": "Le"
+      }
+    }
+  },
+  {
+    "code": "SX",
+    "korName": "신트마르턴",
+    "engName": "Sint Maarten",
+    "flagEmoji": "🇸🇽",
+    "latlng": [
+      18.033333,
+      -63.05
+    ],
+    "region": "Americas",
+    "currency": {
+      "ANG": {
+        "name": "Netherlands Antillean guilder",
+        "symbol": "ƒ"
+      }
+    }
+  },
+  {
+    "code": "SG",
+    "korName": "싱가포르",
+    "engName": "Singapore",
+    "flagEmoji": "🇸🇬",
+    "latlng": [
+      1.36666666,
+      103.8
+    ],
+    "region": "Asia",
+    "currency": {
+      "SGD": {
+        "name": "Singapore dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "AE",
+    "korName": "아랍에미리트",
+    "engName": "United Arab Emirates",
+    "flagEmoji": "🇦🇪",
+    "latlng": [
+      24,
+      54
+    ],
+    "region": "Asia",
+    "currency": {
+      "AED": {
+        "name": "United Arab Emirates dirham",
+        "symbol": "د.إ"
+      }
+    }
+  },
+  {
+    "code": "AW",
+    "korName": "아루바",
+    "engName": "Aruba",
+    "flagEmoji": "🇦🇼",
+    "latlng": [
+      12.5,
+      -69.96666666
+    ],
+    "region": "Americas",
+    "currency": {
+      "AWG": {
+        "name": "Aruban florin",
+        "symbol": "ƒ"
+      }
+    }
+  },
+  {
+    "code": "AM",
+    "korName": "아르메니아",
+    "engName": "Armenia",
+    "flagEmoji": "🇦🇲",
+    "latlng": [
+      40,
+      45
+    ],
+    "region": "Asia",
+    "currency": {
+      "AMD": {
+        "name": "Armenian dram",
+        "symbol": "֏"
+      }
+    }
+  },
+  {
+    "code": "AR",
+    "korName": "아르헨티나",
+    "engName": "Argentina",
+    "flagEmoji": "🇦🇷",
+    "latlng": [
+      -34,
+      -64
+    ],
+    "region": "Americas",
+    "currency": {
+      "ARS": {
+        "name": "Argentine peso",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "AS",
+    "korName": "아메리칸사모아",
+    "engName": "American Samoa",
+    "flagEmoji": "🇦🇸",
+    "latlng": [
+      -14.33333333,
+      -170
+    ],
+    "region": "Oceania",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "IS",
+    "korName": "아이슬란드",
+    "engName": "Iceland",
+    "flagEmoji": "🇮🇸",
+    "latlng": [
+      65,
+      -18
+    ],
+    "region": "Europe",
+    "currency": {
+      "ISK": {
+        "name": "Icelandic króna",
+        "symbol": "kr"
+      }
+    }
+  },
+  {
+    "code": "HT",
+    "korName": "아이티",
+    "engName": "Haiti",
+    "flagEmoji": "🇭🇹",
+    "latlng": [
+      19,
+      -72.41666666
+    ],
+    "region": "Americas",
+    "currency": {
+      "HTG": {
+        "name": "Haitian gourde",
+        "symbol": "G"
+      }
+    }
+  },
+  {
+    "code": "IE",
+    "korName": "아일랜드",
+    "engName": "Ireland",
+    "flagEmoji": "🇮🇪",
+    "latlng": [
+      53,
+      -8
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "AZ",
+    "korName": "아제르바이잔",
+    "engName": "Azerbaijan",
+    "flagEmoji": "🇦🇿",
+    "latlng": [
+      40.5,
+      47.5
+    ],
+    "region": "Asia",
+    "currency": {
+      "AZN": {
+        "name": "Azerbaijani manat",
+        "symbol": "₼"
+      }
+    }
+  },
+  {
+    "code": "AF",
+    "korName": "아프가니스탄",
+    "engName": "Afghanistan",
+    "flagEmoji": "🇦🇫",
+    "latlng": [
+      33,
+      65
+    ],
+    "region": "Asia",
+    "currency": {
+      "AFN": {
+        "name": "Afghan afghani",
+        "symbol": "؋"
+      }
+    }
+  },
+  {
+    "code": "AD",
+    "korName": "안도라",
+    "engName": "Andorra",
+    "flagEmoji": "🇦🇩",
+    "latlng": [
+      42.5,
+      1.5
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "AL",
+    "korName": "알바니아",
+    "engName": "Albania",
+    "flagEmoji": "🇦🇱",
+    "latlng": [
+      41,
+      20
+    ],
+    "region": "Europe",
+    "currency": {
+      "ALL": {
+        "name": "Albanian lek",
+        "symbol": "L"
+      }
+    }
+  },
+  {
+    "code": "DZ",
+    "korName": "알제리",
+    "engName": "Algeria",
+    "flagEmoji": "🇩🇿",
+    "latlng": [
+      28,
+      3
+    ],
+    "region": "Africa",
+    "currency": {
+      "DZD": {
+        "name": "Algerian dinar",
+        "symbol": "د.ج"
+      }
+    }
+  },
+  {
+    "code": "AO",
+    "korName": "앙골라",
+    "engName": "Angola",
+    "flagEmoji": "🇦🇴",
+    "latlng": [
+      -12.5,
+      18.5
+    ],
+    "region": "Africa",
+    "currency": {
+      "AOA": {
+        "name": "Angolan kwanza",
+        "symbol": "Kz"
+      }
+    }
+  },
+  {
+    "code": "AG",
+    "korName": "앤티가 바부다",
+    "engName": "Antigua and Barbuda",
+    "flagEmoji": "🇦🇬",
+    "latlng": [
+      17.05,
+      -61.8
+    ],
+    "region": "Americas",
+    "currency": {
+      "XCD": {
+        "name": "Eastern Caribbean dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "AI",
+    "korName": "앵귈라",
+    "engName": "Anguilla",
+    "flagEmoji": "🇦🇮",
+    "latlng": [
+      18.25,
+      -63.16666666
+    ],
+    "region": "Americas",
+    "currency": {
+      "XCD": {
+        "name": "Eastern Caribbean dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "ER",
+    "korName": "에리트레아",
+    "engName": "Eritrea",
+    "flagEmoji": "🇪🇷",
+    "latlng": [
+      15,
+      39
+    ],
+    "region": "Africa",
+    "currency": {
+      "ERN": {
+        "name": "Eritrean nakfa",
+        "symbol": "Nfk"
+      }
+    }
+  },
+  {
+    "code": "SZ",
+    "korName": "에스와티니",
+    "engName": "Eswatini",
+    "flagEmoji": "🇸🇿",
+    "latlng": [
+      -26.5,
+      31.5
+    ],
+    "region": "Africa",
+    "currency": {
+      "SZL": {
+        "name": "Swazi lilangeni",
+        "symbol": "L"
+      },
+      "ZAR": {
+        "name": "South African rand",
+        "symbol": "R"
+      }
+    }
+  },
+  {
+    "code": "EE",
+    "korName": "에스토니아",
+    "engName": "Estonia",
+    "flagEmoji": "🇪🇪",
+    "latlng": [
+      59,
+      26
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "EC",
+    "korName": "에콰도르",
+    "engName": "Ecuador",
+    "flagEmoji": "🇪🇨",
+    "latlng": [
+      -2,
+      -77.5
+    ],
+    "region": "Americas",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "ET",
+    "korName": "에티오피아",
+    "engName": "Ethiopia",
+    "flagEmoji": "🇪🇹",
+    "latlng": [
+      8,
+      38
+    ],
+    "region": "Africa",
+    "currency": {
+      "ETB": {
+        "name": "Ethiopian birr",
+        "symbol": "Br"
+      }
+    }
+  },
+  {
+    "code": "SV",
+    "korName": "엘살바도르",
+    "engName": "El Salvador",
+    "flagEmoji": "🇸🇻",
+    "latlng": [
+      13.83333333,
+      -88.91666666
+    ],
+    "region": "Americas",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "GB",
+    "korName": "영국",
+    "engName": "United Kingdom",
+    "flagEmoji": "🇬🇧",
+    "latlng": [
+      54,
+      -2
+    ],
+    "region": "Europe",
+    "currency": {
+      "GBP": {
+        "name": "British pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "VG",
+    "korName": "영국령 버진아일랜드",
+    "engName": "British Virgin Islands",
+    "flagEmoji": "🇻🇬",
+    "latlng": [
+      18.431383,
+      -64.62305
+    ],
+    "region": "Americas",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "YE",
+    "korName": "예멘",
+    "engName": "Yemen",
+    "flagEmoji": "🇾🇪",
+    "latlng": [
+      15,
+      48
+    ],
+    "region": "Asia",
+    "currency": {
+      "YER": {
+        "name": "Yemeni rial",
+        "symbol": "﷼"
+      }
+    }
+  },
+  {
+    "code": "OM",
+    "korName": "오만",
+    "engName": "Oman",
+    "flagEmoji": "🇴🇲",
+    "latlng": [
+      21,
+      57
+    ],
+    "region": "Asia",
+    "currency": {
+      "OMR": {
+        "name": "Omani rial",
+        "symbol": "ر.ع."
+      }
+    }
+  },
+  {
+    "code": "AT",
+    "korName": "오스트리아",
+    "engName": "Austria",
+    "flagEmoji": "🇦🇹",
+    "latlng": [
+      47.33333333,
+      13.33333333
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "HN",
+    "korName": "온두라스",
+    "engName": "Honduras",
+    "flagEmoji": "🇭🇳",
+    "latlng": [
+      15,
+      -86.5
+    ],
+    "region": "Americas",
+    "currency": {
+      "HNL": {
+        "name": "Honduran lempira",
+        "symbol": "L"
+      }
+    }
+  },
+  {
+    "code": "AX",
+    "korName": "올란드 제도",
+    "engName": "Åland Islands",
+    "flagEmoji": "🇦🇽",
+    "latlng": [
+      60.116667,
+      19.9
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "WF",
+    "korName": "왈리스 퓌튀나",
+    "engName": "Wallis and Futuna",
+    "flagEmoji": "🇼🇫",
+    "latlng": [
+      -13.3,
+      -176.2
+    ],
+    "region": "Oceania",
+    "currency": {
+      "XPF": {
+        "name": "CFP franc",
+        "symbol": "₣"
+      }
+    }
+  },
+  {
+    "code": "JO",
+    "korName": "요르단",
+    "engName": "Jordan",
+    "flagEmoji": "🇯🇴",
+    "latlng": [
+      31,
+      36
+    ],
+    "region": "Asia",
+    "currency": {
+      "JOD": {
+        "name": "Jordanian dinar",
+        "symbol": "د.ا"
+      }
+    }
+  },
+  {
+    "code": "UG",
+    "korName": "우간다",
+    "engName": "Uganda",
+    "flagEmoji": "🇺🇬",
+    "latlng": [
+      1,
+      32
+    ],
+    "region": "Africa",
+    "currency": {
+      "UGX": {
+        "name": "Ugandan shilling",
+        "symbol": "Sh"
+      }
+    }
+  },
+  {
+    "code": "UY",
+    "korName": "우루과이",
+    "engName": "Uruguay",
+    "flagEmoji": "🇺🇾",
+    "latlng": [
+      -33,
+      -56
+    ],
+    "region": "Americas",
+    "currency": {
+      "UYU": {
+        "name": "Uruguayan peso",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "UZ",
+    "korName": "우즈베키스탄",
+    "engName": "Uzbekistan",
+    "flagEmoji": "🇺🇿",
+    "latlng": [
+      41,
+      64
+    ],
+    "region": "Asia",
+    "currency": {
+      "UZS": {
+        "name": "Uzbekistani soʻm",
+        "symbol": "so'm"
+      }
+    }
+  },
+  {
+    "code": "UA",
+    "korName": "우크라이나",
+    "engName": "Ukraine",
+    "flagEmoji": "🇺🇦",
+    "latlng": [
+      49,
+      32
+    ],
+    "region": "Europe",
+    "currency": {
+      "UAH": {
+        "name": "Ukrainian hryvnia",
+        "symbol": "₴"
+      }
+    }
+  },
+  {
+    "code": "IQ",
+    "korName": "이라크",
+    "engName": "Iraq",
+    "flagEmoji": "🇮🇶",
+    "latlng": [
+      33,
+      44
+    ],
+    "region": "Asia",
+    "currency": {
+      "IQD": {
+        "name": "Iraqi dinar",
+        "symbol": "ع.د"
+      }
+    }
+  },
+  {
+    "code": "IR",
+    "korName": "이란",
+    "engName": "Iran",
+    "flagEmoji": "🇮🇷",
+    "latlng": [
+      32,
+      53
+    ],
+    "region": "Asia",
+    "currency": {
+      "IRR": {
+        "name": "Iranian rial",
+        "symbol": "﷼"
+      }
+    }
+  },
+  {
+    "code": "IL",
+    "korName": "이스라엘",
+    "engName": "Israel",
+    "flagEmoji": "🇮🇱",
+    "latlng": [
+      31.47,
+      35.13
+    ],
+    "region": "Asia",
+    "currency": {
+      "ILS": {
+        "name": "Israeli new shekel",
+        "symbol": "₪"
+      }
+    }
+  },
+  {
+    "code": "EG",
+    "korName": "이집트",
+    "engName": "Egypt",
+    "flagEmoji": "🇪🇬",
+    "latlng": [
+      27,
+      30
+    ],
+    "region": "Africa",
+    "currency": {
+      "EGP": {
+        "name": "Egyptian pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "IT",
+    "korName": "이탈리아",
+    "engName": "Italy",
+    "flagEmoji": "🇮🇹",
+    "latlng": [
+      42.83333333,
+      12.83333333
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "IN",
+    "korName": "인도",
+    "engName": "India",
+    "flagEmoji": "🇮🇳",
+    "latlng": [
+      20,
+      77
+    ],
+    "region": "Asia",
+    "currency": {
+      "INR": {
+        "name": "Indian rupee",
+        "symbol": "₹"
+      }
+    }
+  },
+  {
+    "code": "IO",
+    "korName": "인도",
+    "engName": "British Indian Ocean Territory",
+    "flagEmoji": "🇮🇴",
+    "latlng": [
+      -6,
+      71.5
+    ],
+    "region": "Africa",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "ID",
+    "korName": "인도네시아",
+    "engName": "Indonesia",
+    "flagEmoji": "🇮🇩",
+    "latlng": [
+      -5,
+      120
+    ],
+    "region": "Asia",
+    "currency": {
+      "IDR": {
+        "name": "Indonesian rupiah",
+        "symbol": "Rp"
+      }
+    }
+  },
+  {
+    "code": "JP",
+    "korName": "일본",
+    "engName": "Japan",
+    "flagEmoji": "🇯🇵",
+    "latlng": [
+      36,
+      138
+    ],
+    "region": "Asia",
+    "currency": {
+      "JPY": {
+        "name": "Japanese yen",
+        "symbol": "¥"
+      }
+    }
+  },
+  {
+    "code": "JM",
+    "korName": "자메이카",
+    "engName": "Jamaica",
+    "flagEmoji": "🇯🇲",
+    "latlng": [
+      18.25,
+      -77.5
+    ],
+    "region": "Americas",
+    "currency": {
+      "JMD": {
+        "name": "Jamaican dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "ZM",
+    "korName": "잠비아",
+    "engName": "Zambia",
+    "flagEmoji": "🇿🇲",
+    "latlng": [
+      -15,
+      30
+    ],
+    "region": "Africa",
+    "currency": {
+      "ZMW": {
+        "name": "Zambian kwacha",
+        "symbol": "ZK"
+      }
+    }
+  },
+  {
+    "code": "JE",
+    "korName": "저지 섬",
+    "engName": "Jersey",
+    "flagEmoji": "🇯🇪",
+    "latlng": [
+      49.25,
+      -2.16666666
+    ],
+    "region": "Europe",
+    "currency": {
+      "GBP": {
+        "name": "British pound",
+        "symbol": "£"
+      },
+      "JEP": {
+        "name": "Jersey pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "GQ",
+    "korName": "적도 기니",
+    "engName": "Equatorial Guinea",
+    "flagEmoji": "🇬🇶",
+    "latlng": [
+      2,
+      10
+    ],
+    "region": "Africa",
+    "currency": {
+      "XAF": {
+        "name": "Central African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "KP",
+    "korName": "조선",
+    "engName": "North Korea",
+    "flagEmoji": "🇰🇵",
+    "latlng": [
+      40,
+      127
+    ],
+    "region": "Asia",
+    "currency": {
+      "KPW": {
+        "name": "North Korean won",
+        "symbol": "₩"
+      }
+    }
+  },
+  {
+    "code": "GE",
+    "korName": "조지아",
+    "engName": "Georgia",
+    "flagEmoji": "🇬🇪",
+    "latlng": [
+      42,
+      43.5
+    ],
+    "region": "Asia",
+    "currency": {
+      "GEL": {
+        "name": "lari",
+        "symbol": "₾"
+      }
+    }
+  },
+  {
+    "code": "GS",
+    "korName": "조지아",
+    "engName": "South Georgia",
+    "flagEmoji": "🇬🇸",
+    "latlng": [
+      -54.5,
+      -37
+    ],
+    "region": "Antarctic",
+    "currency": {
+      "SHP": {
+        "name": "Saint Helena pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "CN",
+    "korName": "중국",
+    "engName": "China",
+    "flagEmoji": "🇨🇳",
+    "latlng": [
+      35,
+      105
+    ],
+    "region": "Asia",
+    "currency": {
+      "CNY": {
+        "name": "Chinese yuan",
+        "symbol": "¥"
+      }
+    }
+  },
+  {
+    "code": "CF",
+    "korName": "중앙아프리카 공화국",
+    "engName": "Central African Republic",
+    "flagEmoji": "🇨🇫",
+    "latlng": [
+      7,
+      21
+    ],
+    "region": "Africa",
+    "currency": {
+      "XAF": {
+        "name": "Central African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "DJ",
+    "korName": "지부티",
+    "engName": "Djibouti",
+    "flagEmoji": "🇩🇯",
+    "latlng": [
+      11.5,
+      43
+    ],
+    "region": "Africa",
+    "currency": {
+      "DJF": {
+        "name": "Djiboutian franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "GI",
+    "korName": "지브롤터",
+    "engName": "Gibraltar",
+    "flagEmoji": "🇬🇮",
+    "latlng": [
+      36.13333333,
+      -5.35
+    ],
+    "region": "Europe",
+    "currency": {
+      "GIP": {
+        "name": "Gibraltar pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "ZW",
+    "korName": "짐바브웨",
+    "engName": "Zimbabwe",
+    "flagEmoji": "🇿🇼",
+    "latlng": [
+      -20,
+      30
+    ],
+    "region": "Africa",
+    "currency": {
+      "BWP": {
+        "name": "Botswana pula",
+        "symbol": "P"
+      },
+      "CNY": {
+        "name": "Chinese yuan",
+        "symbol": "¥"
+      },
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      },
+      "GBP": {
+        "name": "British pound",
+        "symbol": "£"
+      },
+      "INR": {
+        "name": "Indian rupee",
+        "symbol": "₹"
+      },
+      "JPY": {
+        "name": "Japanese yen",
+        "symbol": "¥"
+      },
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      },
+      "ZAR": {
+        "name": "South African rand",
+        "symbol": "Rs"
+      },
+      "ZWB": {
+        "name": "Zimbabwean bonds",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "TD",
+    "korName": "차드",
+    "engName": "Chad",
+    "flagEmoji": "🇹🇩",
+    "latlng": [
+      15,
+      19
+    ],
+    "region": "Africa",
+    "currency": {
+      "XAF": {
+        "name": "Central African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "CZ",
+    "korName": "체코",
+    "engName": "Czechia",
+    "flagEmoji": "🇨🇿",
+    "latlng": [
+      49.75,
+      15.5
+    ],
+    "region": "Europe",
+    "currency": {
+      "CZK": {
+        "name": "Czech koruna",
+        "symbol": "Kč"
+      }
+    }
+  },
+  {
+    "code": "CL",
+    "korName": "칠레",
+    "engName": "Chile",
+    "flagEmoji": "🇨🇱",
+    "latlng": [
+      -30,
+      -71
+    ],
+    "region": "Americas",
+    "currency": {
+      "CLP": {
+        "name": "Chilean peso",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "BQ",
+    "korName": "카리브 네덜란드",
+    "engName": "Caribbean Netherlands",
+    "flagEmoji": "",
+    "latlng": [
+      12.18,
+      -68.25
+    ],
+    "region": "Americas",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "CM",
+    "korName": "카메룬",
+    "engName": "Cameroon",
+    "flagEmoji": "🇨🇲",
+    "latlng": [
+      6,
+      12
+    ],
+    "region": "Africa",
+    "currency": {
+      "XAF": {
+        "name": "Central African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "CV",
+    "korName": "카보베르데",
+    "engName": "Cape Verde",
+    "flagEmoji": "🇨🇻",
+    "latlng": [
+      16,
+      -24
+    ],
+    "region": "Africa",
+    "currency": {
+      "CVE": {
+        "name": "Cape Verdean escudo",
+        "symbol": "Esc"
+      }
+    }
+  },
+  {
+    "code": "KZ",
+    "korName": "카자흐스탄",
+    "engName": "Kazakhstan",
+    "flagEmoji": "🇰🇿",
+    "latlng": [
+      48,
+      68
+    ],
+    "region": "Asia",
+    "currency": {
+      "KZT": {
+        "name": "Kazakhstani tenge",
+        "symbol": "₸"
+      }
+    }
+  },
+  {
+    "code": "QA",
+    "korName": "카타르",
+    "engName": "Qatar",
+    "flagEmoji": "🇶🇦",
+    "latlng": [
+      25.5,
+      51.25
+    ],
+    "region": "Asia",
+    "currency": {
+      "QAR": {
+        "name": "Qatari riyal",
+        "symbol": "ر.ق"
+      }
+    }
+  },
+  {
+    "code": "KH",
+    "korName": "캄보디아",
+    "engName": "Cambodia",
+    "flagEmoji": "🇰🇭",
+    "latlng": [
+      13,
+      105
+    ],
+    "region": "Asia",
+    "currency": {
+      "KHR": {
+        "name": "Cambodian riel",
+        "symbol": "៛"
+      },
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "CA",
+    "korName": "캐나다",
+    "engName": "Canada",
+    "flagEmoji": "🇨🇦",
+    "latlng": [
+      60,
+      -95
+    ],
+    "region": "Americas",
+    "currency": {
+      "CAD": {
+        "name": "Canadian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "KE",
+    "korName": "케냐",
+    "engName": "Kenya",
+    "flagEmoji": "🇰🇪",
+    "latlng": [
+      1,
+      38
+    ],
+    "region": "Africa",
+    "currency": {
+      "KES": {
+        "name": "Kenyan shilling",
+        "symbol": "Sh"
+      }
+    }
+  },
+  {
+    "code": "KY",
+    "korName": "케이맨 제도",
+    "engName": "Cayman Islands",
+    "flagEmoji": "🇰🇾",
+    "latlng": [
+      19.5,
+      -80.5
+    ],
+    "region": "Americas",
+    "currency": {
+      "KYD": {
+        "name": "Cayman Islands dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "KM",
+    "korName": "코모로",
+    "engName": "Comoros",
+    "flagEmoji": "🇰🇲",
+    "latlng": [
+      -12.16666666,
+      44.25
+    ],
+    "region": "Africa",
+    "currency": {
+      "KMF": {
+        "name": "Comorian franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "XK",
+    "korName": "코소보",
+    "engName": "Kosovo",
+    "flagEmoji": "🇽🇰",
+    "latlng": [
+      42.666667,
+      21.166667
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "CR",
+    "korName": "코스타리카",
+    "engName": "Costa Rica",
+    "flagEmoji": "🇨🇷",
+    "latlng": [
+      10,
+      -84
+    ],
+    "region": "Americas",
+    "currency": {
+      "CRC": {
+        "name": "Costa Rican colón",
+        "symbol": "₡"
+      }
+    }
+  },
+  {
+    "code": "CC",
+    "korName": "코코스 제도",
+    "engName": "Cocos (Keeling) Islands",
+    "flagEmoji": "🇨🇨",
+    "latlng": [
+      -12.5,
+      96.83333333
+    ],
+    "region": "Oceania",
+    "currency": {
+      "AUD": {
+        "name": "Australian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "CI",
+    "korName": "코트디부아르",
+    "engName": "Ivory Coast",
+    "flagEmoji": "🇨🇮",
+    "latlng": [
+      8,
+      -5
+    ],
+    "region": "Africa",
+    "currency": {
+      "XOF": {
+        "name": "West African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "CO",
+    "korName": "콜롬비아",
+    "engName": "Colombia",
+    "flagEmoji": "🇨🇴",
+    "latlng": [
+      4,
+      -72
+    ],
+    "region": "Americas",
+    "currency": {
+      "COP": {
+        "name": "Colombian peso",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "CG",
+    "korName": "콩고",
+    "engName": "Republic of the Congo",
+    "flagEmoji": "🇨🇬",
+    "latlng": [
+      -1,
+      15
+    ],
+    "region": "Africa",
+    "currency": {
+      "XAF": {
+        "name": "Central African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "CD",
+    "korName": "콩고 민주 공화국",
+    "engName": "DR Congo",
+    "flagEmoji": "🇨🇩",
+    "latlng": [
+      0,
+      25
+    ],
+    "region": "Africa",
+    "currency": {
+      "CDF": {
+        "name": "Congolese franc",
+        "symbol": "FC"
+      }
+    }
+  },
+  {
+    "code": "CU",
+    "korName": "쿠바",
+    "engName": "Cuba",
+    "flagEmoji": "🇨🇺",
+    "latlng": [
+      21.5,
+      -80
+    ],
+    "region": "Americas",
+    "currency": {
+      "CUC": {
+        "name": "Cuban convertible peso",
+        "symbol": "$"
+      },
+      "CUP": {
+        "name": "Cuban peso",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "KW",
+    "korName": "쿠웨이트",
+    "engName": "Kuwait",
+    "flagEmoji": "🇰🇼",
+    "latlng": [
+      29.5,
+      45.75
+    ],
+    "region": "Asia",
+    "currency": {
+      "KWD": {
+        "name": "Kuwaiti dinar",
+        "symbol": "د.ك"
+      }
+    }
+  },
+  {
+    "code": "CK",
+    "korName": "쿡 제도",
+    "engName": "Cook Islands",
+    "flagEmoji": "🇨🇰",
+    "latlng": [
+      -21.23333333,
+      -159.76666666
+    ],
+    "region": "Oceania",
+    "currency": {
+      "CKD": {
+        "name": "Cook Islands dollar",
+        "symbol": "$"
+      },
+      "NZD": {
+        "name": "New Zealand dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "CW",
+    "korName": "퀴라소",
+    "engName": "Curaçao",
+    "flagEmoji": "🇨🇼",
+    "latlng": [
+      12.116667,
+      -68.933333
+    ],
+    "region": "Americas",
+    "currency": {
+      "ANG": {
+        "name": "Netherlands Antillean guilder",
+        "symbol": "ƒ"
+      }
+    }
+  },
+  {
+    "code": "HR",
+    "korName": "크로아티아",
+    "engName": "Croatia",
+    "flagEmoji": "🇭🇷",
+    "latlng": [
+      45.16666666,
+      15.5
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "CX",
+    "korName": "크리스마스 섬",
+    "engName": "Christmas Island",
+    "flagEmoji": "🇨🇽",
+    "latlng": [
+      -10.5,
+      105.66666666
+    ],
+    "region": "Oceania",
+    "currency": {
+      "AUD": {
+        "name": "Australian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "KG",
+    "korName": "키르기스스탄",
+    "engName": "Kyrgyzstan",
+    "flagEmoji": "🇰🇬",
+    "latlng": [
+      41,
+      75
+    ],
+    "region": "Asia",
+    "currency": {
+      "KGS": {
+        "name": "Kyrgyzstani som",
+        "symbol": "с"
+      }
+    }
+  },
+  {
+    "code": "KI",
+    "korName": "키리바시",
+    "engName": "Kiribati",
+    "flagEmoji": "🇰🇮",
+    "latlng": [
+      1.41666666,
+      173
+    ],
+    "region": "Oceania",
+    "currency": {
+      "AUD": {
+        "name": "Australian dollar",
+        "symbol": "$"
+      },
+      "KID": {
+        "name": "Kiribati dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "CY",
+    "korName": "키프로스",
+    "engName": "Cyprus",
+    "flagEmoji": "🇨🇾",
+    "latlng": [
+      35,
+      33
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "TJ",
+    "korName": "타지키스탄",
+    "engName": "Tajikistan",
+    "flagEmoji": "🇹🇯",
+    "latlng": [
+      39,
+      71
+    ],
+    "region": "Asia",
+    "currency": {
+      "TJS": {
+        "name": "Tajikistani somoni",
+        "symbol": "ЅМ"
+      }
+    }
+  },
+  {
+    "code": "TZ",
+    "korName": "탄자니아",
+    "engName": "Tanzania",
+    "flagEmoji": "🇹🇿",
+    "latlng": [
+      -6,
+      35
+    ],
+    "region": "Africa",
+    "currency": {
+      "TZS": {
+        "name": "Tanzanian shilling",
+        "symbol": "Sh"
+      }
+    }
+  },
+  {
+    "code": "TH",
+    "korName": "태국",
+    "engName": "Thailand",
+    "flagEmoji": "🇹🇭",
+    "latlng": [
+      15,
+      100
+    ],
+    "region": "Asia",
+    "currency": {
+      "THB": {
+        "name": "Thai baht",
+        "symbol": "฿"
+      }
+    }
+  },
+  {
+    "code": "TC",
+    "korName": "터크스 케이커스 제도",
+    "engName": "Turks and Caicos Islands",
+    "flagEmoji": "🇹🇨",
+    "latlng": [
+      21.75,
+      -71.58333333
+    ],
+    "region": "Americas",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "TR",
+    "korName": "터키",
+    "engName": "Türkiye",
+    "flagEmoji": "🇹🇷",
+    "latlng": [
+      39,
+      35
+    ],
+    "region": "Asia",
+    "currency": {
+      "TRY": {
+        "name": "Turkish lira",
+        "symbol": "₺"
+      }
+    }
+  },
+  {
+    "code": "TG",
+    "korName": "토고",
+    "engName": "Togo",
+    "flagEmoji": "🇹🇬",
+    "latlng": [
+      8,
+      1.16666666
+    ],
+    "region": "Africa",
+    "currency": {
+      "XOF": {
+        "name": "West African CFA franc",
+        "symbol": "Fr"
+      }
+    }
+  },
+  {
+    "code": "TK",
+    "korName": "토켈라우",
+    "engName": "Tokelau",
+    "flagEmoji": "🇹🇰",
+    "latlng": [
+      -9,
+      -172
+    ],
+    "region": "Oceania",
+    "currency": {
+      "NZD": {
+        "name": "New Zealand dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "TO",
+    "korName": "통가",
+    "engName": "Tonga",
+    "flagEmoji": "🇹🇴",
+    "latlng": [
+      -20,
+      -175
+    ],
+    "region": "Oceania",
+    "currency": {
+      "TOP": {
+        "name": "Tongan paʻanga",
+        "symbol": "T$"
+      }
+    }
+  },
+  {
+    "code": "TM",
+    "korName": "투르크메니스탄",
+    "engName": "Turkmenistan",
+    "flagEmoji": "🇹🇲",
+    "latlng": [
+      40,
+      60
+    ],
+    "region": "Asia",
+    "currency": {
+      "TMT": {
+        "name": "Turkmenistan manat",
+        "symbol": "m"
+      }
+    }
+  },
+  {
+    "code": "TV",
+    "korName": "투발루",
+    "engName": "Tuvalu",
+    "flagEmoji": "🇹🇻",
+    "latlng": [
+      -8,
+      178
+    ],
+    "region": "Oceania",
+    "currency": {
+      "AUD": {
+        "name": "Australian dollar",
+        "symbol": "$"
+      },
+      "TVD": {
+        "name": "Tuvaluan dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "TN",
+    "korName": "튀니지",
+    "engName": "Tunisia",
+    "flagEmoji": "🇹🇳",
+    "latlng": [
+      34,
+      9
+    ],
+    "region": "Africa",
+    "currency": {
+      "TND": {
+        "name": "Tunisian dinar",
+        "symbol": "د.ت"
+      }
+    }
+  },
+  {
+    "code": "TT",
+    "korName": "트리니다드 토바고",
+    "engName": "Trinidad and Tobago",
+    "flagEmoji": "🇹🇹",
+    "latlng": [
+      11,
+      -61
+    ],
+    "region": "Americas",
+    "currency": {
+      "TTD": {
+        "name": "Trinidad and Tobago dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "PA",
+    "korName": "파나마",
+    "engName": "Panama",
+    "flagEmoji": "🇵🇦",
+    "latlng": [
+      9,
+      -80
+    ],
+    "region": "Americas",
+    "currency": {
+      "PAB": {
+        "name": "Panamanian balboa",
+        "symbol": "B/."
+      },
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "PY",
+    "korName": "파라과이",
+    "engName": "Paraguay",
+    "flagEmoji": "🇵🇾",
+    "latlng": [
+      -23,
+      -58
+    ],
+    "region": "Americas",
+    "currency": {
+      "PYG": {
+        "name": "Paraguayan guaraní",
+        "symbol": "₲"
+      }
+    }
+  },
+  {
+    "code": "PK",
+    "korName": "파키스탄",
+    "engName": "Pakistan",
+    "flagEmoji": "🇵🇰",
+    "latlng": [
+      30,
+      70
+    ],
+    "region": "Asia",
+    "currency": {
+      "PKR": {
+        "name": "Pakistani rupee",
+        "symbol": "₨"
+      }
+    }
+  },
+  {
+    "code": "PG",
+    "korName": "파푸아뉴기니",
+    "engName": "Papua New Guinea",
+    "flagEmoji": "🇵🇬",
+    "latlng": [
+      -6,
+      147
+    ],
+    "region": "Oceania",
+    "currency": {
+      "PGK": {
+        "name": "Papua New Guinean kina",
+        "symbol": "K"
+      }
+    }
+  },
+  {
+    "code": "PW",
+    "korName": "팔라우",
+    "engName": "Palau",
+    "flagEmoji": "🇵🇼",
+    "latlng": [
+      7.5,
+      134.5
+    ],
+    "region": "Oceania",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "PS",
+    "korName": "팔레스타인",
+    "engName": "Palestine",
+    "flagEmoji": "🇵🇸",
+    "latlng": [
+      31.9,
+      35.2
+    ],
+    "region": "Asia",
+    "currency": {
+      "EGP": {
+        "name": "Egyptian pound",
+        "symbol": "E£"
+      },
+      "ILS": {
+        "name": "Israeli new shekel",
+        "symbol": "₪"
+      },
+      "JOD": {
+        "name": "Jordanian dinar",
+        "symbol": "JD"
+      }
+    }
+  },
+  {
+    "code": "FO",
+    "korName": "페로 제도",
+    "engName": "Faroe Islands",
+    "flagEmoji": "🇫🇴",
+    "latlng": [
+      62,
+      -7
+    ],
+    "region": "Europe",
+    "currency": {
+      "DKK": {
+        "name": "Danish krone",
+        "symbol": "kr"
+      },
+      "FOK": {
+        "name": "Faroese króna",
+        "symbol": "kr"
+      }
+    }
+  },
+  {
+    "code": "PE",
+    "korName": "페루",
+    "engName": "Peru",
+    "flagEmoji": "🇵🇪",
+    "latlng": [
+      -10,
+      -76
+    ],
+    "region": "Americas",
+    "currency": {
+      "PEN": {
+        "name": "Peruvian sol",
+        "symbol": "S/."
+      }
+    }
+  },
+  {
+    "code": "PT",
+    "korName": "포르투갈",
+    "engName": "Portugal",
+    "flagEmoji": "🇵🇹",
+    "latlng": [
+      39.5,
+      -8
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "FK",
+    "korName": "포클랜드 제도",
+    "engName": "Falkland Islands",
+    "flagEmoji": "🇫🇰",
+    "latlng": [
+      -51.75,
+      -59
+    ],
+    "region": "Americas",
+    "currency": {
+      "FKP": {
+        "name": "Falkland Islands pound",
+        "symbol": "£"
+      }
+    }
+  },
+  {
+    "code": "PL",
+    "korName": "폴란드",
+    "engName": "Poland",
+    "flagEmoji": "🇵🇱",
+    "latlng": [
+      52,
+      20
+    ],
+    "region": "Europe",
+    "currency": {
+      "PLN": {
+        "name": "Polish złoty",
+        "symbol": "zł"
+      }
+    }
+  },
+  {
+    "code": "PR",
+    "korName": "푸에르토리코",
+    "engName": "Puerto Rico",
+    "flagEmoji": "🇵🇷",
+    "latlng": [
+      18.25,
+      -66.5
+    ],
+    "region": "Americas",
+    "currency": {
+      "USD": {
+        "name": "United States dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "FR",
+    "korName": "프랑스",
+    "engName": "France",
+    "flagEmoji": "🇫🇷",
+    "latlng": [
+      46,
+      2
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "GF",
+    "korName": "프랑스령 기아나",
+    "engName": "French Guiana",
+    "flagEmoji": "🇬🇫",
+    "latlng": [
+      4,
+      -53
+    ],
+    "region": "Americas",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "TF",
+    "korName": "프랑스령 남부와 남극 지역",
+    "engName": "French Southern and Antarctic Lands",
+    "flagEmoji": "🇹🇫",
+    "latlng": [
+      -49.25,
+      69.167
+    ],
+    "region": "Antarctic",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "PF",
+    "korName": "프랑스령 폴리네시아",
+    "engName": "French Polynesia",
+    "flagEmoji": "🇵🇫",
+    "latlng": [
+      -15,
+      -140
+    ],
+    "region": "Oceania",
+    "currency": {
+      "XPF": {
+        "name": "CFP franc",
+        "symbol": "₣"
+      }
+    }
+  },
+  {
+    "code": "FJ",
+    "korName": "피지",
+    "engName": "Fiji",
+    "flagEmoji": "🇫🇯",
+    "latlng": [
+      -18,
+      175
+    ],
+    "region": "Oceania",
+    "currency": {
+      "FJD": {
+        "name": "Fijian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "FI",
+    "korName": "핀란드",
+    "engName": "Finland",
+    "flagEmoji": "🇫🇮",
+    "latlng": [
+      64,
+      26
+    ],
+    "region": "Europe",
+    "currency": {
+      "EUR": {
+        "name": "Euro",
+        "symbol": "€"
+      }
+    }
+  },
+  {
+    "code": "PH",
+    "korName": "필리핀",
+    "engName": "Philippines",
+    "flagEmoji": "🇵🇭",
+    "latlng": [
+      13,
+      122
+    ],
+    "region": "Asia",
+    "currency": {
+      "PHP": {
+        "name": "Philippine peso",
+        "symbol": "₱"
+      }
+    }
+  },
+  {
+    "code": "PN",
+    "korName": "핏케언 제도",
+    "engName": "Pitcairn Islands",
+    "flagEmoji": "🇵🇳",
+    "latlng": [
+      -25.06666666,
+      -130.1
+    ],
+    "region": "Oceania",
+    "currency": {
+      "NZD": {
+        "name": "New Zealand dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "KR",
+    "korName": "한국",
+    "engName": "South Korea",
+    "flagEmoji": "🇰🇷",
+    "latlng": [
+      37,
+      127.5
+    ],
+    "region": "Asia",
+    "currency": {
+      "KRW": {
+        "name": "South Korean won",
+        "symbol": "₩"
+      }
+    }
+  },
+  {
+    "code": "HM",
+    "korName": "허드 맥도널드 제도",
+    "engName": "Heard Island and McDonald Islands",
+    "flagEmoji": "🇭🇲",
+    "latlng": [
+      -53.1,
+      72.51666666
+    ],
+    "region": "Antarctic",
+    "currency": {}
+  },
+  {
+    "code": "HU",
+    "korName": "헝가리",
+    "engName": "Hungary",
+    "flagEmoji": "🇭🇺",
+    "latlng": [
+      47,
+      20
+    ],
+    "region": "Europe",
+    "currency": {
+      "HUF": {
+        "name": "Hungarian forint",
+        "symbol": "Ft"
+      }
+    }
+  },
+  {
+    "code": "AU",
+    "korName": "호주",
+    "engName": "Australia",
+    "flagEmoji": "🇦🇺",
+    "latlng": [
+      -27,
+      133
+    ],
+    "region": "Oceania",
+    "currency": {
+      "AUD": {
+        "name": "Australian dollar",
+        "symbol": "$"
+      }
+    }
+  },
+  {
+    "code": "HK",
+    "korName": "홍콩",
+    "engName": "Hong Kong",
+    "flagEmoji": "🇭🇰",
+    "latlng": [
+      22.267,
+      114.188
+    ],
+    "region": "Asia",
+    "currency": {
+      "HKD": {
+        "name": "Hong Kong dollar",
+        "symbol": "$"
+      }
+    }
+  }
+]
