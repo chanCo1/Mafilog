@@ -20,5 +20,12 @@ export const getDay = (date: Date) => {
 
 /** 여행 기간 구하기 */
 export const getTravelDay = (from: Date, to: Date) => {
-  return (differenceInDays(to, from) + 1);
+  return differenceInDays(to, from) + 1;
+};
+
+/** 여행 디데이 계산 */
+export const calcDDay = (from: Date) => {
+  // const upcomingDay = differenceInDays(from, new Date()) + 1;
+  // return Math.max(0, upcomingDay);
+  return differenceInDays(from, new Date()) + 1;
 };
