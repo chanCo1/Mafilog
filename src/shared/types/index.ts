@@ -7,4 +7,6 @@ export type TIconList =
   | 'shopping'
   | 'tour'
   | 'house'
-  | 'etc';
+  | 'etc'
+  | 'check'
+  | 'x'
