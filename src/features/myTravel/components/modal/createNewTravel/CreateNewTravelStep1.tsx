@@ -100,7 +100,7 @@ export default function CreateNewTravelStep1({
       <div className="flex flex-col gap-2">
         <Input
           label="도시 검색"
-          placeholder="도시명을 검색해주세요"
+          placeholder="도시명으로 검색"
           isRequired
           onChange={(e) => setSearchCity(e.target.value)}
           onKeyDown={(e) => {
@@ -110,6 +110,7 @@ export default function CreateNewTravelStep1({
           suffix={
             <Search className="h-4 w-4 cursor-pointer" onClick={handleSearch} />
           }
+          description='여행하고 싶은 도시를 검색해주세요.'
         />
         {cityList.length ? (
           cityList.map((list) => (

@@ -26,10 +26,10 @@ export default function CreateNewTravelStep2({
     if (!selectedDate?.from || !selectedDate?.to) return '';
 
     if (selectedDate.from === selectedDate.to) {
-      return `${convertFormattedDate(selectedDate.from)} (${getDay(selectedDate.from)}) (${getTravelDay(selectedDate.from, selectedDate.to)}일)`;
+      return `${convertFormattedDate(selectedDate.from)}(${getDay(selectedDate.from)}) (${getTravelDay(selectedDate.from, selectedDate.to)}일)`;
     }
 
-    return `${convertFormattedDate(selectedDate.from)} (${getDay(selectedDate.from)}) ~ ${convertFormattedDate(selectedDate.to)} (${getDay(selectedDate.to)}) (${getTravelDay(selectedDate.from, selectedDate.to)}일)`;
+    return `${convertFormattedDate(selectedDate.from)}(${getDay(selectedDate.from)}) ~ ${convertFormattedDate(selectedDate.to)}(${getDay(selectedDate.to)}) (${getTravelDay(selectedDate.from, selectedDate.to)}일)`;
   }, [selectedDate]);
 
   return (
@@ -37,7 +37,7 @@ export default function CreateNewTravelStep2({
       <Input
         label="여행기간"
         placeholder="ex) 2026-01-01 ~ 2026-01-02"
-        description="아래 달력에서 여행기간을 선택해주세요"
+        description="아래 달력에서 여행기간을 선택해주세요."
         isRequired
         readOnly
         value={formattedValue}
