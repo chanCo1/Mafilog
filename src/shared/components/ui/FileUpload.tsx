@@ -21,6 +21,7 @@ import { ImagePlus } from 'lucide-react';
 import Image from 'next/image';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { toast } from 'sonner';
+import { Button } from '@/shared/components/ui/Button';
 
 interface IFileUpload {
   className?: string;
@@ -76,7 +77,7 @@ export default function FileUpload({
       _targetFiles.length > MULTIPLE_COUNT ||
       selectedImage.length + _targetFiles.length > MULTIPLE_COUNT
     ) {
-      toast.error('이미지는 10개까지 선택할 수 있습니다')
+      toast.error('이미지는 10개까지 선택할 수 있습니다');
       return;
     }
 
@@ -138,8 +139,8 @@ export default function FileUpload({
           className="hidden"
         />
         <div className="relative h-40 w-full">
-          {selectedImage.length ? (
-            <div className="">
+          {previewImage.length ? (
+            <div className="relative h-full">
               {/* 0번 인덱스를 대표 이미지로 지정 */}
               <Image
                 src={previewImage[0]}
@@ -167,18 +168,12 @@ export default function FileUpload({
             </div>
           )}
         </div>
-        <div
-          className={cn(
-            'bg-gray-1 flex h-15 w-15 shrink-0 items-center justify-center rounded-lg',
-            isDisabled ? 'opacity-50' : 'cursor-pointer',
-          )}
-          onClick={onClickFileSelect}
-        >
-          <div className="flex flex-col items-center">
+        <Button disabled={isDisabled} onClick={onClickFileSelect}>
+          <div className="flex flex-col items-center text-white">
             <ImagePlus />
-            <span className="text-text-secondary text-xs">{`${selectedImage.length}/${isMultiple ? '10' : '1'}`}</span>
+            <span className="text-xs">{`${selectedImage.length}/${isMultiple ? '10' : '1'}`}</span>
           </div>
-        </div>
+        </Button>
       </div>
       {selectedImage.length > 1 && (
         <div className="scrollbar-hide flex gap-3 overflow-x-auto pt-2">
