@@ -18,7 +18,10 @@ import RequireDot from '@/shared/components/ui/RequireDot';
 
 interface ICreateNewTravelStep3 {
   title: string;
-  travelConpanion: string;
+  setTravelTitle: Dispatch<SetStateAction<string>>;
+  selectedImage: File[];
+  setSelectedImage: Dispatch<SetStateAction<File[]>>;
+  travelCompanion: string;
   setTravelCompanion: Dispatch<SetStateAction<string>>;
   travelStyle: string[];
   setTravelStyle: Dispatch<SetStateAction<string[]>>;
@@ -26,10 +29,13 @@ interface ICreateNewTravelStep3 {
 
 export default function CreateNewTravelStep3({
   title,
+  setTravelTitle,
+  selectedImage,
+  setSelectedImage,
+  travelCompanion,
   setTravelCompanion,
-  setTravelStyle,
-  travelConpanion,
   travelStyle,
+  setTravelStyle,
 }: ICreateNewTravelStep3) {
   /** 여행 스타일 핸들링 */
   const handleTravelStyle = (value: string) => {
@@ -47,12 +53,18 @@ export default function CreateNewTravelStep3({
       <Input
         label="제목 입력"
         placeholder="여행 제목을 입력해주세요"
-        description="필수는 아니에요. 최대 20자까지 입력가능해요"
+        description="필수는 아니에요. 최대 20자까지 입력가능해요."
         maxLength={20}
         value={title}
+        onChange={(e) => setTravelTitle(e.target.value)}
       />
 
-      <FileUpload label="대표 이미지" description="필수는 아니에요" />
+      <FileUpload
+        label="대표 이미지"
+        description="필수는 아니에요."
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+      />
 
       <div className="flex flex-col gap-1">
         <div className="flex min-w-25 items-center gap-1">
@@ -64,7 +76,7 @@ export default function CreateNewTravelStep3({
             <Chip
               key={list.value}
               variant={
-                list.value == travelConpanion ? 'primary' : 'primaryOutline'
+                list.value == travelCompanion ? 'primary' : 'primaryOutline'
               }
               onClick={() => setTravelCompanion(list.value)}
             >
@@ -72,7 +84,9 @@ export default function CreateNewTravelStep3({
             </Chip>
           ))}
         </div>
-        <span className="text-text-secondary text-sm">1개만 선택 가능해요</span>
+        <span className="text-text-secondary text-sm">
+          1개만 선택 가능해요.
+        </span>
       </div>
 
       <div className="flex flex-col gap-1 p-1">
@@ -93,7 +107,7 @@ export default function CreateNewTravelStep3({
           ))}
         </div>
         <span className="text-text-secondary text-sm">
-          여러개 선택 가능해요
+          여러개 선택 가능해요.
         </span>
       </div>
     </div>

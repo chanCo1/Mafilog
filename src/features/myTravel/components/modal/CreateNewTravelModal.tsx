@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * @file: CreateNewTravelModal.tsx
  * @author: chad
@@ -36,7 +38,8 @@ export default function CreateNewTravelModal({
     undefined,
   );
   const [travelTitle, setTravelTitle] = useState('');
-  const [travelConpanion, setTravelCompanion] = useState('alone');
+  const [selectedImage, setSelectedImage] = useState<File[]>([]);
+  const [travelCompanion, setTravelCompanion] = useState('alone');
   const [travelStyle, setTravelStyle] = useState<string[]>([]);
 
   /** 다음 핸들링 */
@@ -63,21 +66,10 @@ export default function CreateNewTravelModal({
     dataReset();
   };
 
-  /** 데이터 초기화 */
-  const dataReset = () => {
-    if (isModify) return;
-
-    stepData.forEach((data) => {
-      data.isComplete = false;
-    });
-    setCurrentStep(1);
-    setSelectedCities([]);
-    setSeletedDate(undefined);
-  };
-
   /** 새 여행 만들기 */
   const createNewTravel = () => {
     const falseComplete = stepData.filter((step, index) => {
+      // 완료되지 않은 스텝이 있을 경우
       if (stepData.length - 1 > index + 1) {
         return !step.isComplete;
       }
@@ -88,8 +80,33 @@ export default function CreateNewTravelModal({
       return;
     }
 
+    const params = {
+      cities: selectedCities,
+      from: selectedDate?.from,
+      to: selectedDate?.to,
+      title: travelTitle,
+      companion: travelCompanion,
+      travelStyle: travelStyle,
+    }
+
     onClickCloseBtn();
     toast.success('새 여행을 만들었어요');
+  };
+
+  /** 데이터 초기화 */
+  const dataReset = () => {
+    if (isModify) return;
+
+    stepData.forEach((data) => {
+      data.isComplete = false;
+    });
+    setCurrentStep(1);
+    setSelectedCities([]);
+    setSeletedDate(undefined);
+    setTravelTitle('');
+    setSelectedImage([])
+    setTravelCompanion('alone')
+    setTravelStyle([]);
   };
 
   useEffect(() => {
@@ -183,10 +200,13 @@ export default function CreateNewTravelModal({
       {currentStep === 3 && (
         <CreateNewTravelStep3
           title={travelTitle}
-          travelConpanion={travelConpanion}
+          setTravelTitle={setTravelTitle}
+          travelCompanion={travelCompanion}
           setTravelCompanion={setTravelCompanion}
           travelStyle={travelStyle}
           setTravelStyle={setTravelStyle}
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
         />
       )}
     </SideModal>
