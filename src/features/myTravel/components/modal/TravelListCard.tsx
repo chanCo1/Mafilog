@@ -73,10 +73,10 @@ export default function TravelListCard({
       <p className="text-text-primary">{getFormattedDay()}</p>
       <div className="flex flex-col">
         {Object.entries(groupedTravelCity).map(([code, cities]) => (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 justify-center">
             <span className="">{countryData[code].flagEmoji}</span>
             {cities.map((city, index) => (
-              <span className="text-sm text-text-secondary">
+              <span key={`${city.name} ${index}`} className="text-sm text-text-secondary">
                 {city.name}
                 {index !== cities.length - 1 && ','}
               </span>

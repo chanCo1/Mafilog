@@ -22,7 +22,7 @@ export default function CreateNewTravelStep1({
   selectedCities,
   setSelectedCities,
 }: ICreateNewTravelStep1) {
-  const [searchCity, setSearchCity] = useState<string | null>(null);
+  const [searchCity, setSearchCity] = useState<string>('');
   const [cityList, setCityList] = useState<ICityList[]>([]);
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
@@ -90,6 +90,12 @@ export default function CreateNewTravelStep1({
     }
   };
 
+  /** 도시 선택 */
+  const selectCity = (list: ICityList) => {
+    setSelectedCities([...selectedCities, list]);
+    setSearchCity('');
+  };
+
   /** 선택한 도시 제거 */
   const deleteSelectedCity = (_id: string) => {
     const filtered = selectedCities.filter((city) => city.id !== _id);
@@ -104,6 +110,7 @@ export default function CreateNewTravelStep1({
           placeholder="도시명으로 검색"
           isRequired
           onChange={(e) => setSearchCity(e.target.value)}
+          value={searchCity}
           onKeyDown={(e) => {
             if (e.nativeEvent.isComposing) return;
             e.key === 'Enter' && handleSearch();
@@ -111,7 +118,7 @@ export default function CreateNewTravelStep1({
           suffix={
             <Search className="h-4 w-4 cursor-pointer" onClick={handleSearch} />
           }
-          description='여행하고 싶은 도시를 검색해주세요.'
+          description="여행하고 싶은 도시를 검색해주세요."
         />
         {cityList.length ? (
           cityList.map((list) => (
@@ -130,10 +137,7 @@ export default function CreateNewTravelStep1({
                   취소
                 </Chip>
               ) : (
-                <Chip
-                  variant="gray"
-                  onClick={() => setSelectedCities([...selectedCities, list])}
-                >
+                <Chip variant="gray" onClick={() => selectCity(list)}>
                   선택
                 </Chip>
               )}
@@ -141,7 +145,7 @@ export default function CreateNewTravelStep1({
           ))
         ) : (
           <>
-            {searchCity !== null || cityList.length ? (
+            {!cityList.length ? (
               <span className="text-text-secondary">검색된 도시가 없어요</span>
             ) : null}
           </>
@@ -149,9 +153,7 @@ export default function CreateNewTravelStep1({
       </div>
       {selectedCities.length ? (
         <div className="flex flex-col">
-          <div className="p-1">
-            <p className="text-text-secondary">선택된 도시</p>
-          </div>
+          <p className="text-text-secondary pb-1 text-sm">선택된 도시</p>
           <div className="scrollbar-hide flex gap-1 overflow-x-auto pb-3">
             {selectedCities.map((city) => (
               <Chip
@@ -166,7 +168,7 @@ export default function CreateNewTravelStep1({
             ))}
           </div>
         </div>
-      ): null}
+      ) : null}
     </div>
   );
 }
