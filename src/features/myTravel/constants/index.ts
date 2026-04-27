@@ -24,10 +24,19 @@ export type TRAVEL_COMPANION_LIST =
 export const TRAVEL_STYLE_LIST = [
   { label: '힐링/휴식', value: 'heal' },
   { label: '먹방', value: 'food' },
-  { label: '액티비티', value: 'Activity' },
+  { label: '액티비티', value: 'activity' },
   { label: '문화/예술', value: 'culture' },
   { label: '이색/체험', value: 'experience' },
   { label: '기타', value: 'etc' },
 ];
 export type TRAVEL_STYLE_LIST =
   (typeof TRAVEL_STYLE_LIST)[keyof typeof TRAVEL_STYLE_LIST];
+
+/** 여행 상태 */
+export const TRAVEL_STATUS = [
+  { lavel: '진행중인', value: 'progress' },
+  { lavel: '다가오는', value: 'upcoming' },
+  { lavel: '지난', value: 'last' },
+];
+export type TRAVEL_STATUS =
+  (typeof TRAVEL_STATUS)[keyof typeof TRAVEL_STATUS];
