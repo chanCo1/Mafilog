@@ -84,3 +84,4 @@ function ButtonEntity(
 }
 
 export const Button = React.forwardRef(ButtonEntity);
+Button.displayName = 'Button';
