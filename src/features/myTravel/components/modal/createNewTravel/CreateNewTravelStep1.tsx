@@ -12,6 +12,7 @@ import { ICityList } from '@/features/myTravel/interfaces';
 import { Search, X } from 'lucide-react';
 import { CITY_DATA } from '@/features/myTravel/data';
 import { IGetGooglePlaces } from '@/features/myTravel/interfaces';
+import { Loading } from '@/shared/components/ui/Loading';
 
 interface ICreateNewTravelStep1 {
   selectedCities: ICityList[];
@@ -24,6 +25,8 @@ export default function CreateNewTravelStep1({
 }: ICreateNewTravelStep1) {
   const [searchCity, setSearchCity] = useState<string>('');
   const [cityList, setCityList] = useState<ICityList[]>([]);
+  const [resultMsg, setResultMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const url = 'https://places.googleapis.com/v1/places:searchText';
@@ -37,20 +40,28 @@ export default function CreateNewTravelStep1({
 
   // TODO: 테스트
   const handleSearch = async () => {
+    setIsLoading(true);
     try {
-      // const res = await fetch(url, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'X-Goog-Api-Key': GOOGLE_API_KEY as string,
-      //     'X-Goog-FieldMask':
-      //       'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
-      //   },
-      //   body: JSON.stringify(body),
-      // });
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Goog-Api-Key': GOOGLE_API_KEY as string,
+          'X-Goog-FieldMask':
+            'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
+        },
+        body: JSON.stringify(body),
+      });
 
-      // const data: IGetGooglePlaces = await res.json();
+      const data: IGetGooglePlaces = await res.json();
 
+      // if (data.places?.length) {
+      //   /** 도시 필터링 */
+      //   const filteredCities = data.places.filter((place) =>
+      //     ['locality', 'administrative_area_level_1'].some((value) =>
+      //       place.types.includes(value),
+      //     ),
+      //   );
       if (CITY_DATA.places?.length) {
         /** 도시 필터링 */
         const filteredCities = CITY_DATA.places.filter((place) =>
@@ -84,9 +95,12 @@ export default function CreateNewTravelStep1({
         setCityList(getCityData);
       } else {
         setCityList([]);
+        setResultMsg('검색된 도시가 없어요');
       }
     } catch (error) {
       console.error('GeoNames 검색 에러:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -116,7 +130,16 @@ export default function CreateNewTravelStep1({
             e.key === 'Enter' && handleSearch();
           }}
           suffix={
-            <Search className="h-4 w-4 cursor-pointer" onClick={handleSearch} />
+            <>
+              {isLoading ? (
+                <Loading size="sm" />
+              ) : (
+                <Search
+                  className="h-4 w-4 cursor-pointer"
+                  onClick={handleSearch}
+                />
+              )}
+            </>
           }
           description="여행하고 싶은 도시를 검색해주세요."
         />
@@ -145,8 +168,8 @@ export default function CreateNewTravelStep1({
           ))
         ) : (
           <>
-            {!cityList.length ? (
-              <span className="text-text-secondary">검색된 도시가 없어요</span>
+            {!cityList.length && resultMsg ? (
+              <span className="text-text-secondary">{resultMsg}</span>
             ) : null}
           </>
         )}
