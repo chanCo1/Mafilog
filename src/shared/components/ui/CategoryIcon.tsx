@@ -18,6 +18,8 @@ import {
   MapPin,
   House,
   CircleEllipsis,
+  Check,
+  X,
 } from 'lucide-react';
 
 const categoryIconVariants = cva(
@@ -25,6 +27,8 @@ const categoryIconVariants = cva(
   {
     variants: {
       variant: {
+        x: '',
+        check: '',
         memo: '',
         plus: '',
         plane: '',
@@ -41,7 +45,7 @@ const categoryIconVariants = cva(
       },
       size: {
         md: 'w-[30px] h-[30px]',
-        sm: 'w-[26px] h-[26px]',
+        sm: 'w-[24px] h-[24px]',
       },
     },
     defaultVariants: {
@@ -63,7 +67,7 @@ interface ICategoryIcon
 }
 
 function CategoryIconEntity(
-  { className, size, variant, circled, children }: ICategoryIcon,
+  { className, size, variant, circled, children, ...props }: ICategoryIcon,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   /** variant별 아이콘 크기 */
@@ -73,6 +77,10 @@ function CategoryIconEntity(
     const fourSize = 'h-4 w-4';
 
     switch (variant) {
+      case 'check':
+        return (
+          <Check className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+        );
       case 'memo':
         return (
           <NotebookPen
@@ -113,6 +121,10 @@ function CategoryIconEntity(
             className={size === 'sm' ? fourPointFiveSize : fiveSize}
           />
         );
+      case 'x':
+        return (
+          <X className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+        );
     }
   }, [variant, size]);
 
@@ -123,6 +135,7 @@ function CategoryIconEntity(
         className,
       )}
       ref={ref}
+      onClick={props.onClick}
     >
       {children}
       {GetIconType}

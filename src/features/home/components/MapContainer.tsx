@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import AmchartMap from '@/shared/components/map/AmchartMap';
 import { Selectbox } from '@/shared/components/ui/Selectbox';
-import { TRAVEL_MAP_TYPE_LIST } from '@/shared/constants';
+import { TRAVEL_TYPE_LIST } from '@/shared/constants';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
 
@@ -19,29 +19,30 @@ import { TRAVEL_TYPE } from '@/shared/types/Enum';
 
 export default function MapContainer() {
   const [selectedMap, setSelectedMap] = useState<ILabelValue>(
-    TRAVEL_MAP_TYPE_LIST[0],
+    TRAVEL_TYPE_LIST[0],
   );
 
-  const isInternational = selectedMap.value === TRAVEL_TYPE.INTERNATIONAL;
-  const isLoal = selectedMap.value === TRAVEL_TYPE.LOCAL;
+  const isWorld = selectedMap.value === TRAVEL_TYPE.WORLD;
+  const isDomestic = selectedMap.value === TRAVEL_TYPE.DOMESTIC;
 
   return (
     <div
       className={cn(
         'relative flex h-100 w-full flex-col gap-1 rounded-lg',
-        isLoal ? 'max-mobile:h-80' : 'max-mobile:h-60',
+        isDomestic ? 'max-mobile:h-80' : 'max-mobile:h-60',
       )}
     >
       <div className="w-25">
         <Selectbox
           variant="none"
-          options={TRAVEL_MAP_TYPE_LIST}
+          options={TRAVEL_TYPE_LIST}
           value={selectedMap}
+          addValueText='지도'
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
-      {isInternational && <AmchartMap />}
-      {isLoal && <AmchartMap isLocal />}
+      {isWorld && <AmchartMap />}
+      {isDomestic && <AmchartMap isDomestic />}
     </div>
   );
 }

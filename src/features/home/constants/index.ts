@@ -94,19 +94,19 @@ export const TIMELINE_INTRODUCE_LIST: string[] = [
 /** 타임라인 목업 데이터 */
 export const TIMELINE_MOCK_DATA = [
   {
-    type: TRAVEL_TYPE.INTERNATIONAL,
+    type: TRAVEL_TYPE.WORLD,
     name: '도쿄 먹방 여행',
     partner: '연인과',
     style: ['먹방'],
   },
   {
-    type: TRAVEL_TYPE.LOCAL,
+    type: TRAVEL_TYPE.DOMESTIC,
     name: '속초 겨울 바다',
     partner: '친구와',
     style: ['먹방', '힐링/휴식'],
   },
   {
-    type: TRAVEL_TYPE.LOCAL,
+    type: TRAVEL_TYPE.DOMESTIC,
     name: '부산 당일치기',
     partner: '친구와',
     style: ['먹방'],

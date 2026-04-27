@@ -12,7 +12,7 @@ export default function Toast() {
     <Toaster
       position="top-center"
       richColors
-      duration={3500}
+      duration={5000}
       icons={{
         success: null,
         info: null,

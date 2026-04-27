@@ -95,6 +95,7 @@
   [data-sonner-toast] {
     border-radius: 12px !important;
     font-size: 14px !important;
+    font-weight: 700 !important;
     display: flex !important;
     justify-content: center !important; /* 가로 중앙 */
     align-items: center !important;     /* 세로 중앙 */
@@ -103,30 +104,41 @@
 
   /* Success */
   [data-sonner-toast][data-type='success'] {
-    --success-bg: #6f9dd3;
-    --success-border: none;
+    --success-bg: #80B2FF;
+    --success-border: #80B2FF;
     --success-text: #fff;
   }
 
   /* Info */
   [data-sonner-toast][data-type='info'] {
     --info-bg: #61E4C5;
-    --info-border: none;
+    --info-border: #61E4C5;
     --info-text: #fff;
   }
 
   /* Warning */
   [data-sonner-toast][data-type='warning'] {
     --warning-bg: #FFDB81;
-    --warning-border: none;
+    --warning-border: #FFDB81;
     --warning-text: #fff;
   }
 
   /* Error */
   [data-sonner-toast][data-type='error'] {
     --error-bg: #FF9692;
-    --error-border: none;
+    --error-border: #FF9692;
     --error-text: #fff;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 }
 

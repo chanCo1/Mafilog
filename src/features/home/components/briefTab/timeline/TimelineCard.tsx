@@ -30,9 +30,9 @@ export default function TimelineCard({
 }: ITimelineCard) {
   const getTravelType = useMemo(() => {
     switch (type) {
-      case TRAVEL_TYPE.INTERNATIONAL:
+      case TRAVEL_TYPE.WORLD:
         return ICON_TYPE.PLANE;
-      case TRAVEL_TYPE.INTERNATIONAL:
+      case TRAVEL_TYPE.DOMESTIC:
         return ICON_TYPE.BUS;
       default:
         return ICON_TYPE.BUS;

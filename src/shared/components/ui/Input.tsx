@@ -72,7 +72,7 @@ function InputEntity(
   const [passwordType, setPassowrdType] = useState('password');
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (props.disabled) return;
+    if (props.disabled || props.readOnly) return;
 
     setIsFocused(true);
 
@@ -82,7 +82,7 @@ function InputEntity(
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (props.disabled) return;
+    if (props.disabled || props.readOnly) return;
 
     setIsFocused(false);
 
