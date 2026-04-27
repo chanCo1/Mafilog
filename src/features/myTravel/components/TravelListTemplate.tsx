@@ -32,7 +32,7 @@ export default function TravelListTemplate({
       <div className="mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 grid gap-4">
         {list.map((travel, index) => (
           <TravelListCard
-            key={`${travel.title} ${index}`}
+            key={`${travel.title}-${index}`}
             name={travel.title}
             from={travel.from}
             to={travel.to}

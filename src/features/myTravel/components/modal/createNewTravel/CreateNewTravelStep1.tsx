@@ -48,7 +48,7 @@ export default function CreateNewTravelStep1({
       //     'Content-Type': 'application/json',
       //     'X-Goog-Api-Key': GOOGLE_API_KEY as string,
       //     'X-Goog-FieldMask':
-      //       'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
+      //       'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types,places.rating,places.user_ratings_total',
       //   },
       //   body: JSON.stringify(body),
       // });

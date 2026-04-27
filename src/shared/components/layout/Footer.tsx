@@ -12,7 +12,7 @@ import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 
 export default function Footer() {
   return (
-    <footer className="border-border-active min-h-48 border-t-4 bg-white">
+    <footer className="border-border-active min-h-40 border-t-4 bg-white">
       <div className={cn(DEFAULT_LAYOUT_CLASSNAME, 'h-full px-3 py-5')}>
         <Link href={'/'}>
           <LogoText color="gray" />
