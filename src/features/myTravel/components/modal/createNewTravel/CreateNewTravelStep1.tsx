@@ -42,18 +42,18 @@ export default function CreateNewTravelStep1({
   const handleSearch = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Goog-Api-Key': GOOGLE_API_KEY as string,
-          'X-Goog-FieldMask':
-            'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
-        },
-        body: JSON.stringify(body),
-      });
+      // const res = await fetch(url, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'X-Goog-Api-Key': GOOGLE_API_KEY as string,
+      //     'X-Goog-FieldMask':
+      //       'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
+      //   },
+      //   body: JSON.stringify(body),
+      // });
 
-      const data: IGetGooglePlaces = await res.json();
+      // const data: IGetGooglePlaces = await res.json();
 
       // if (data.places?.length) {
       //   /** 도시 필터링 */
