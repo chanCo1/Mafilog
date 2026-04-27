@@ -100,8 +100,8 @@ export const CITY_DATA = {
 export const TRAVEL_DETAIL_MOCK_DATA = {
   id: 1,
   title: '부산광역시, 도쿄도, 오사카시 여행',
-  from: 'Mon May 04 2026 00:00:00 GMT+0900',
-  to: 'Sat May 07 2026 00:00:00 GMT+0900',
+  from: new Date('Mon May 04 2026 00:00:00 GMT+0900'),
+  to: new Date('Sat May 07 2026 00:00:00 GMT+0900'),
   status: 'upcoming',
   companion: 'lover',
   style: ['heal', 'food', 'activity'],

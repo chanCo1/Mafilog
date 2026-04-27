@@ -1,3 +1,10 @@
+import {
+  TRAVEL_STATUS,
+  TRAVEL_COMPANION,
+  TRAVEL_STYLE,
+  TRAVEL_TAB,
+} from '@/shared/types/Enum';
+
 /** 여행 생성 스텝 리스트 */
 export const CREATE_TRAVEL_STEP_LIST = [
   { id: 1, label: '여행지 선택', isComplete: false },
@@ -7,36 +14,36 @@ export const CREATE_TRAVEL_STEP_LIST = [
 
 /** 여행 동반자 리스트 */
 export const TRAVEL_COMPANION_LIST = [
-  { label: '혼자', value: 'alone' },
-  { label: '친구와', value: 'friend' },
-  { label: '연인과', value: 'lover' },
-  { label: '배우자와', value: 'spouse' },
-  { label: '아이와', value: 'child' },
-  { label: '직장동료와', value: 'colleagues' },
-  { label: '가족과', value: 'family' },
-  { label: '부모님과', value: 'parents' },
-  { label: '기타', value: 'etc' },
+  { label: '혼자', value: TRAVEL_COMPANION.ALONE },
+  { label: '친구와', value: TRAVEL_COMPANION.FRIEND },
+  { label: '연인과', value: TRAVEL_COMPANION.LOVER },
+  { label: '배우자와', value: TRAVEL_COMPANION.SPOUSE },
+  { label: '아이와', value: TRAVEL_COMPANION.CHILD },
+  { label: '직장동료와', value: TRAVEL_COMPANION.COLLEAGUES },
+  { label: '가족과', value: TRAVEL_COMPANION.FAMILY },
+  { label: '부모님과', value: TRAVEL_COMPANION.PARENTS },
+  { label: '기타', value: TRAVEL_COMPANION.ETC },
 ];
-export type TRAVEL_COMPANION_LIST =
-  (typeof TRAVEL_COMPANION_LIST)[keyof typeof TRAVEL_COMPANION_LIST];
 
 /** 여행 스타일 리스트 */
 export const TRAVEL_STYLE_LIST = [
-  { label: '힐링/휴식', value: 'heal' },
-  { label: '먹방', value: 'food' },
-  { label: '액티비티', value: 'activity' },
-  { label: '문화/예술', value: 'culture' },
-  { label: '이색/체험', value: 'experience' },
-  { label: '기타', value: 'etc' },
+  { label: '힐링/휴식', value: TRAVEL_STYLE.HEAL },
+  { label: '먹방', value: TRAVEL_STYLE.FOOD },
+  { label: '액티비티', value: TRAVEL_STYLE.ACTIVITY },
+  { label: '문화/예술', value: TRAVEL_STYLE.CULTURE },
+  { label: '이색/체험', value: TRAVEL_STYLE.EXPERIENCE },
+  { label: '기타', value: TRAVEL_STYLE.ETC },
 ];
-export type TRAVEL_STYLE_LIST =
-  (typeof TRAVEL_STYLE_LIST)[keyof typeof TRAVEL_STYLE_LIST];
 
-/** 여행 상태 */
-export const TRAVEL_STATUS = [
-  { lavel: '진행중인', value: 'progress' },
-  { lavel: '다가오는', value: 'upcoming' },
-  { lavel: '지난', value: 'last' },
+/** 여행 상태 리스트 */
+export const TRAVEL_STATUS_LIST = [
+  { label: '진행중인', value: TRAVEL_STATUS.PROGRESS },
+  { label: '다가오는', value: TRAVEL_STATUS.UPCOMING },
+  { label: '지난', value: TRAVEL_STATUS.LAST },
 ];
-export type TRAVEL_STATUS =
-  (typeof TRAVEL_STATUS)[keyof typeof TRAVEL_STATUS];
+
+/** 여행 상세 탭 */
+export const TRAVEL_TAB_LIST = [
+  { label: '일정', value: TRAVEL_TAB.SCHEDULE },
+  { label: '가계부', value: TRAVEL_TAB.EXPENSES },
+];
