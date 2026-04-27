@@ -27,7 +27,7 @@ export interface ICityList {
   country: {
     code: string;
     name: string;
-  } | null;
+  };
 }
 
 interface ILocation {
