@@ -7,7 +7,8 @@
 
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
-import TravelListCard from '@/features/myTravel/components/modal/TravelListCard';
+import TravelListCard from '@/features/myTravel/components/TravelListCard';
+import { useRouter } from 'next/navigation';
 
 interface ITravelListTemplate {
   title: '진행중인' | '다가오는' | '지난';
@@ -18,6 +19,8 @@ export default function TravelListTemplate({
   title,
   list,
 }: ITravelListTemplate) {
+  const router = useRouter();
+
   const isPrgess = title === '진행중인';
 
   return (
@@ -29,11 +32,12 @@ export default function TravelListTemplate({
       <div className="mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 grid gap-4">
         {list.map((travel, index) => (
           <TravelListCard
-            key={index}
+            key={`${travel.title} ${index}`}
             name={travel.title}
             from={travel.from}
             to={travel.to}
             cities={travel.cities}
+            onClick={() => router.push(`/my-travel/${index}`)}
           />
         ))}
       </div>

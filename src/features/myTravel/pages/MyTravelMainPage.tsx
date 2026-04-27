@@ -13,7 +13,7 @@ import PageHeader from '@/shared/components/ui/PageHeader';
 import { Button } from '@/shared/components/ui/Button';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
-import TravelListCard from '@/features/myTravel/components/modal/TravelListCard';
+import TravelListCard from '@/features/myTravel/components/TravelListCard';
 import TravelListTemplate from '@/features/myTravel/components/TravelListTemplate';
 
 export default function MyTravelMainPage() {

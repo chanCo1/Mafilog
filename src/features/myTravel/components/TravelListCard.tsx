@@ -18,6 +18,7 @@ interface ITravelListCard {
   from: Date;
   to: Date;
   cities: ICityList[];
+  onClick?: () => void;
 }
 
 export default function TravelListCard({
@@ -26,6 +27,7 @@ export default function TravelListCard({
   from,
   to,
   name,
+  onClick,
 }: ITravelListCard) {
   const { countryData } = useCountriesDataStore();
 
@@ -63,6 +65,7 @@ export default function TravelListCard({
         'bg-gray-1 relative flex h-45 cursor-pointer flex-col items-center justify-center rounded-lg p-2.5',
         className,
       )}
+      onClick={onClick}
     >
       {calcDDay(from) > 0 ? (
         <div className="absolute top-0 right-0 p-2">
