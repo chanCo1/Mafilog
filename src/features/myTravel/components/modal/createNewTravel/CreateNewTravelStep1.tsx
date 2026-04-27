@@ -11,6 +11,7 @@ import { Input } from '@/shared/components/ui/Input';
 import { ICityList } from '@/features/myTravel/interfaces';
 import { Search, X } from 'lucide-react';
 import { CITY_DATA } from '@/features/myTravel/data';
+import { IGetGooglePlaces } from '@/features/myTravel/interfaces';
 
 interface ICreateNewTravelStep1 {
   selectedCities: ICityList[];

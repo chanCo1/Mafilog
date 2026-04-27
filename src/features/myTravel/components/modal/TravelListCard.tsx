@@ -33,12 +33,29 @@ export default function TravelListCard({
   const getFormattedDay = () => {
     if (!from || !to) return '';
 
+    // 시작,끝이 같을 경우 당일로 간주
     if (from === to) {
       return `${convertFormattedDate(from)} (${getTravelDay(from, to)}일)`;
     }
 
     return `${convertFormattedDate(from)} ~ ${convertFormattedDate(to)} (${getTravelDay(from, to)}일)`;
   };
+
+  /** 여행 도시 그룹화 [key]: value */
+  const groupedTravelCity = cities.reduce(
+    (acc, cur) => {
+      const countryCode = cur.country.code;
+
+      if (!acc[countryCode]) {
+        acc[countryCode] = [];
+      }
+
+      acc[countryCode].push(cur);
+
+      return acc;
+    },
+    {} as Record<string, ICityList[]>,
+  );
 
   return (
     <div
@@ -54,6 +71,19 @@ export default function TravelListCard({
       ) : null}
       <p className="text-lg font-bold text-black">{name}</p>
       <p className="text-text-primary">{getFormattedDay()}</p>
+      <div className="flex flex-col">
+        {Object.entries(groupedTravelCity).map(([code, cities]) => (
+          <div className="flex items-center gap-1">
+            <span className="">{countryData[code].flagEmoji}</span>
+            {cities.map((city, index) => (
+              <span className="text-sm text-text-secondary">
+                {city.name}
+                {index !== cities.length - 1 && ','}
+              </span>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

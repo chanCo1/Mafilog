@@ -7,7 +7,7 @@ import { create } from 'zustand';
 import { ICountriesData } from '@/shared/interfaces';
 
 interface ICountriesDataStore {
-  countryData: {};
+  countryData: Record<string, any>;
   fetchCountires: () => void;
 }
 
