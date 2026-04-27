@@ -52,6 +52,10 @@ export type EXPENSES_PAYMENT_TYPE =
 
 /** 아이콘 타입 */
 export const ICON_TYPE = {
+  /** X */
+  X: 'x',
+  /** 체크 */
+  CHECK: 'check',
   /** 메모 */
   MEMO: 'memo',
   /** 추가 */
