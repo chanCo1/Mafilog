@@ -5,26 +5,32 @@
 
 import { create } from 'zustand';
 import { ICountriesData } from '@/shared/interfaces';
+import { persist } from 'zustand/middleware';
 
 interface ICountriesDataStore {
   countryData: Record<string, any>;
   fetchCountires: () => void;
 }
 
-export const useCountriesDataStore = create<ICountriesDataStore>((set) => ({
-  countryData: {},
-  fetchCountires: async () => {
-    const res = await fetch('/data/countries_data.json');
-    const data: ICountriesData[] = await res.json();
+export const useCountriesDataStore = create<ICountriesDataStore>()(
+  persist(
+    (set) => ({
+      countryData: {},
+      fetchCountires: async () => {
+        const res = await fetch('/data/countries_data.json');
+        const data: ICountriesData[] = await res.json();
 
-    const formatted = data.reduce<Record<string, ICountriesData>>(
-      (acc, cur) => {
-        acc[cur.code] = cur;
-        return acc;
+        const formatted = data.reduce<Record<string, ICountriesData>>(
+          (acc, cur) => {
+            acc[cur.code] = cur;
+            return acc;
+          },
+          {},
+        );
+
+        set({ countryData: formatted });
       },
-      {},
-    );
-
-    set({ countryData: formatted });
-  },
-}));
+    }),
+    { name: 'countryData' },
+  ),
+);
