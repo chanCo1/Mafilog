@@ -125,6 +125,7 @@ export default function CreateNewTravelStep1({
           isRequired
           onChange={(e) => setSearchCity(e.target.value)}
           value={searchCity}
+          disabled={isLoading}
           onKeyDown={(e) => {
             if (e.nativeEvent.isComposing) return;
             e.key === 'Enter' && handleSearch();
