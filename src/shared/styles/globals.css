@@ -52,7 +52,8 @@
   --font-weight-medium: 500;
   --font-weight-regular: 400;
 
-  /** Responsive layout */
+  /** 브레이크 포인트는 기본 min으로 작동 */
+  /** 브레이크 포인트 안에서 작업 필요시 max- 붙여야 함 ex)max-mobile: */
   --breakpoint-mobile: 639px;
   --breakpoint-tablet: 767px;
   --breakpoint-desktop: 1023px;

@@ -1,6 +1,6 @@
 import {
   TRAVEL_STATUS,
-  TRAVEL_COMPANION,
+  TRAVEL_PARTNER,
   TRAVEL_STYLE,
   TRAVEL_TAB,
 } from '@/shared/types/Enum';
@@ -13,16 +13,16 @@ export const CREATE_TRAVEL_STEP_LIST = [
 ];
 
 /** 여행 동반자 리스트 */
-export const TRAVEL_COMPANION_LIST = [
-  { label: '혼자', value: TRAVEL_COMPANION.ALONE },
-  { label: '친구와', value: TRAVEL_COMPANION.FRIEND },
-  { label: '연인과', value: TRAVEL_COMPANION.LOVER },
-  { label: '배우자와', value: TRAVEL_COMPANION.SPOUSE },
-  { label: '아이와', value: TRAVEL_COMPANION.CHILD },
-  { label: '직장동료와', value: TRAVEL_COMPANION.COLLEAGUES },
-  { label: '가족과', value: TRAVEL_COMPANION.FAMILY },
-  { label: '부모님과', value: TRAVEL_COMPANION.PARENTS },
-  { label: '기타', value: TRAVEL_COMPANION.ETC },
+export const TRAVEL_PARTNER_LIST = [
+  { label: '혼자', value: TRAVEL_PARTNER.ALONE },
+  { label: '친구와', value: TRAVEL_PARTNER.FRIEND },
+  { label: '연인과', value: TRAVEL_PARTNER.LOVER },
+  { label: '배우자와', value: TRAVEL_PARTNER.SPOUSE },
+  { label: '아이와', value: TRAVEL_PARTNER.CHILD },
+  { label: '직장동료와', value: TRAVEL_PARTNER.COLLEAGUES },
+  { label: '가족과', value: TRAVEL_PARTNER.FAMILY },
+  { label: '부모님과', value: TRAVEL_PARTNER.PARENTS },
+  { label: '기타', value: TRAVEL_PARTNER.ETC },
 ];
 
 /** 여행 스타일 리스트 */

@@ -44,6 +44,7 @@ export default function TravelStatus({ status, from, to }: ITravelStatus) {
     }
   }, [status]);
 
+  /** 상태에 따른 추가 문구 */
   const getStatusBadge = useMemo(() => {
     switch (status) {
       case TRAVEL_STATUS.PROGRESS:
@@ -58,9 +59,9 @@ export default function TravelStatus({ status, from, to }: ITravelStatus) {
   }, [status]);
 
   return (
-    <div className="flex gap-0.5">
-      <p className={cn(getStatusColor, 'font-bold')}>{getStatusLabel}</p>
-      <span className="text-text-secondary text-sm font-bold">
+    <div className="flex gap-0.5 font-bold">
+      <p className={cn(getStatusColor)}>{getStatusLabel}</p>
+      <span className="text-text-secondary">
         {getStatusBadge}
       </span>
     </div>

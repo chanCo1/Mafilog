@@ -86,7 +86,7 @@ export const TRAVEL_STATUS = {
 export type TRAVEL_STATUS = (typeof TRAVEL_STATUS)[keyof typeof TRAVEL_STATUS];
 
 /** 여행 동반자 */
-export const TRAVEL_COMPANION = {
+export const TRAVEL_PARTNER = {
   ALONE: 'alone', // 혼자
   FRIEND: 'friend', // 친구와
   LOVER: 'lover', // 연인과
@@ -97,7 +97,7 @@ export const TRAVEL_COMPANION = {
   PARENTS: 'parents', // 부모님과
   ETC: 'etc', // 기타
 };
-export type TRAVEL_COMPANION = (typeof TRAVEL_COMPANION)[keyof typeof TRAVEL_COMPANION];
+export type TRAVEL_PARTNER = (typeof TRAVEL_PARTNER)[keyof typeof TRAVEL_PARTNER];
 
 /** 여행 스타일 */
 export const TRAVEL_STYLE = {
