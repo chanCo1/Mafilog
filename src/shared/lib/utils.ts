@@ -25,7 +25,37 @@ export const getTravelDay = (from: Date, to: Date) => {
 
 /** 여행 디데이 계산 */
 export const calcDDay = (from: Date) => {
-  // const upcomingDay = differenceInDays(from, new Date()) + 1;
-  // return Math.max(0, upcomingDay);
-  return differenceInDays(from, new Date()) + 1;
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const startDate = new Date(from);
+  startDate.setHours(0,0,0,0);
+
+  const diffTime = startDate.getTime() - today.getTime();
+  // 일수로 변환
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  return diffDays;
 };
+
+/** 여행 일차 계산 */
+export const getTravelCurrentDay = (from: Date, to: Date) => {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const startDate = new Date(from);
+  startDate.setHours(0,0,0,0);
+
+  const endDate = new Date(to);
+  endDate.setHours(0,0,0,0);
+
+  const diffTime = today.getTime() - startDate.getTime();
+  // 일수로 변환
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+  if (today.getTime() === endDate.getTime()) {
+    return '마지막 날';
+  }
+
+  return `${diffDays}일차!`
+} 

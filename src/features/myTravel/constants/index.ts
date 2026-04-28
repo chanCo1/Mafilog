@@ -37,7 +37,7 @@ export const TRAVEL_STYLE_LIST = [
 
 /** 여행 상태 리스트 */
 export const TRAVEL_STATUS_LIST = [
-  { label: '진행중인', value: TRAVEL_STATUS.PROGRESS },
+  { label: '여행중', value: TRAVEL_STATUS.PROGRESS },
   { label: '다가오는', value: TRAVEL_STATUS.UPCOMING },
   { label: '지난', value: TRAVEL_STATUS.LAST },
 ];
