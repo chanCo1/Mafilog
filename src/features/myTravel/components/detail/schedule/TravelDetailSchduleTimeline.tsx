@@ -1,0 +1,102 @@
+/**
+ * @file: TravelDetailTimeline.tsx
+ * @author: chad
+ * @since: 2026.04.28 ~
+ * @description: TravelDetailTimeline 컴포넌트, 여행 일정/지출 타임라인
+ */
+
+import { useState, useMemo } from 'react';
+import { cn } from '@/shared/lib/utils';
+import { Card } from '@/shared/components/ui/Card';
+import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
+import { SCHEDULE_TYPE, ICON_TYPE } from '@/shared/types/Enum';
+import { CircledNumber } from '@/shared/components/ui/CircledNumber';
+import { Button } from '@/shared/components/ui/Button';
+
+interface ITravelDetailTimeline {
+  type?: SCHEDULE_TYPE;
+  // icon: ICON_TYPE;
+}
+
+export default function TravelDetailTimeline({ type }: ITravelDetailTimeline) {
+  /** 메모를 제외한 일정 카운트 */
+  // const getDisplayCount = useMemo(() => {
+  //   if (type !== SCHEDULE_TYPE.LOCATION) return;
+
+  //   const sliced = allSchedules?.slice(0, count! + 1);
+
+  //   const filltered = sliced.filter((schedule) => {
+  //     return schedule.type === SCHEDULE_TYPE.LOCATION
+  //   });
+
+  //   return filltered.length;
+  // }, [type, allSchedules, count]);
+
+  return (
+    <div className="flex w-full gap-3">
+      <div className="flex flex-col items-center">
+        <div className="shrink-0">
+          {type &&
+            (type === SCHEDULE_TYPE.LOCATION ? (
+              <CircledNumber number="1" />
+            ) : (
+              <CategoryIcon variant="memo" />
+            ))}
+          {!type && <CategoryIcon variant="plus" />}
+        </div>
+        <div className="border-border-primary w-px flex-1 border border-dashed" />
+      </div>
+      <div className="w-full pb-2.5">
+        {type ? (
+          <>
+            {type === SCHEDULE_TYPE.LOCATION ? (
+              <div>
+                <span className="text-sm font-bold">HH:mm</span>
+                <Card>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex flex-col">
+                      <span className="text-lg font-bold">아사쿠사 규카츠</span>
+                      <span className="text-text-secondary text-sm">
+                        아사쿠사아~~
+                      </span>
+                    </div>
+                    <Button className="shrink-0" variant="redOutline" size="xs">
+                      삭제
+                    </Button>
+                  </div>
+                </Card>
+                <div className="flex justify-end">
+                  <span className="text-text-secondary text-sm">메모~</span>
+                </div>
+              </div>
+            ) : (
+              <Card>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-text-secondary">
+                    메모가 입력되었습니다. 메모가 입력되었습니다. 메모가
+                    입력되었습니다. 메모가 입력되었습니다.
+                  </span>
+                  <Button className="shrink-0" variant="redOutline" size="xs">
+                    삭제
+                  </Button>
+                </div>
+              </Card>
+            )}
+          </>
+        ) : (
+          <Card
+            variant="dashed"
+            className="flex flex-col items-start justify-center"
+            disabled
+          >
+            <div className="text-text-primary w-full text-center text-sm">
+              일정이 없습니다.
+              <br />
+              장소를 추가하고 멋진 여행을 해보세요!
+            </div>
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+}

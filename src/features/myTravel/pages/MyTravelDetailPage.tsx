@@ -22,7 +22,7 @@ import { Chip } from '@/shared/components/ui/Chip';
 import { TRAVEL_TAB_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_TAB } from '@/shared/types/Enum';
 import { Button } from '@/shared/components/ui/Button';
-import TravelDetailDay from '@/features/myTravel/components/TravelDetailDay';
+import TravelDetailDay from '@/features/myTravel/components/detail/schedule/TravelDetailSchduleDay';
 
 // interface IMyTravelDetailPage {}
 

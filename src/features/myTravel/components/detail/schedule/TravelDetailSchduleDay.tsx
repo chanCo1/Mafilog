@@ -7,7 +7,7 @@
 
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
-import TravelDetailTimeline from '@/features/myTravel/components/TravelDetailTimeline';
+import TravelDetailTimeline from '@/features/myTravel/components/detail/schedule/TravelDetailSchduleTimeline';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
 
 interface ITravelDetailDay {
@@ -24,7 +24,11 @@ export default function TravelDetailDay({ day, date }: ITravelDetailDay) {
           {convertFormattedDate(date, 'MM월 dd일')} {getDay(date)}
         </span>
       </div>
-      <TravelDetailTimeline type={'location'} />
+      <div className='flex flex-col'>
+        <TravelDetailTimeline type={'location'} />
+        <TravelDetailTimeline type={'memo'} />
+        <TravelDetailTimeline />
+      </div>
     </div>
   );
 }
