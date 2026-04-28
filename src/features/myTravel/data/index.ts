@@ -101,7 +101,7 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
   id: 1,
   title: '부산광역시, 도쿄도, 오사카시 여행',
   from: new Date('Mon Apr 27 2026 11:56:35 GMT+0900'),
-  to: new Date('Wed Apr 29 2026 00:00:00 GMT+0900'),
+  to: new Date('Sun may 3 2026 00:00:00 GMT+0900'),
   status: 'progress',
   partner: 'lover',
   styles: ['heal', 'food', 'activity'],

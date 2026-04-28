@@ -7,7 +7,7 @@ export const SCHEDULE_TYPE = {
   LOCATION: 'location',
   /** 메모 */
   MEMO: 'memo',
-};
+} as const;
 export type SCHEDULE_TYPE = (typeof SCHEDULE_TYPE)[keyof typeof SCHEDULE_TYPE];
 
 /** 여행 타입 */
@@ -16,7 +16,7 @@ export const TRAVEL_TYPE = {
   WORLD: 'world',
   /** 국내 */
   DOMESTIC: 'domestic',
-};
+} as const;
 export type TRAVEL_TYPE = (typeof TRAVEL_TYPE)[keyof typeof TRAVEL_TYPE];
 
 /**
@@ -36,7 +36,7 @@ export const EXPENSES_CATEGORY_TYPE = {
   HOUSE: 'house',
   /** 기타 */
   ETC: 'etc',
-};
+} as const;
 export type EXPENSES_CATEGORY_TYPE =
   (typeof EXPENSES_CATEGORY_TYPE)[keyof typeof EXPENSES_CATEGORY_TYPE];
 
@@ -46,7 +46,7 @@ export const EXPENSES_PAYMENT_TYPE = {
   CARD: 'card',
   /** 현금 */
   CASH: 'cash',
-};
+} as const;
 export type EXPENSES_PAYMENT_TYPE =
   (typeof EXPENSES_PAYMENT_TYPE)[keyof typeof EXPENSES_PAYMENT_TYPE];
 
@@ -74,7 +74,7 @@ export const ICON_TYPE = {
   HOUSE: 'house',
   /** 기타 */
   ETC: 'etc',
-};
+} as const;
 export type ICON_TYPE = (typeof ICON_TYPE)[keyof typeof ICON_TYPE];
 
 /** 여행 상태 */
@@ -82,7 +82,7 @@ export const TRAVEL_STATUS = {
   PROGRESS: 'progress', // 진행중인
   UPCOMING: 'upcoming', // 다가오는
   LAST: 'last', // 지난
-};
+} as const;
 export type TRAVEL_STATUS = (typeof TRAVEL_STATUS)[keyof typeof TRAVEL_STATUS];
 
 /** 여행 동반자 */
@@ -96,8 +96,9 @@ export const TRAVEL_PARTNER = {
   FAMILY: 'family', // 가족과
   PARENTS: 'parents', // 부모님과
   ETC: 'etc', // 기타
-};
-export type TRAVEL_PARTNER = (typeof TRAVEL_PARTNER)[keyof typeof TRAVEL_PARTNER];
+} as const;
+export type TRAVEL_PARTNER =
+  (typeof TRAVEL_PARTNER)[keyof typeof TRAVEL_PARTNER];
 
 /** 여행 스타일 */
 export const TRAVEL_STYLE = {
@@ -107,12 +108,12 @@ export const TRAVEL_STYLE = {
   CULTURE: 'culture', // 문화/예술
   EXPERIENCE: 'experience', // 이색/체험
   ETC: 'etc', // 기타
-};
+} as const;
 export type TRAVEL_STYLE = (typeof TRAVEL_STYLE)[keyof typeof TRAVEL_STYLE];
 
 /** 여행 상세 탭 */
 export const TRAVEL_TAB = {
   SCHEDULE: 'schedule', // 일정
-  EXPENSES: 'expenses' // 가계부(지출)
-}
+  EXPENSES: 'expenses', // 가계부(지출)
+} as const;
 export type TRAVEL_TAB = (typeof TRAVEL_TAB)[keyof typeof TRAVEL_TAB];
