@@ -16,7 +16,7 @@ const chipVariants = cva(
       variant: {
         primary: 'bg-primary',
         secondary: 'bg-secondary',
-        gray: 'bg-gray-2 text-text-primary',
+        gray: 'bg-gray-1 text-text-primary',
         ghost: 'hover:bg-gray-1 text-text-primary',
         primaryOutline: 'border border-priamry text-primary',
         redOutline: 'border border-state-error text-state-error',
