@@ -10,7 +10,7 @@ import { ReactNode } from 'react';
 interface IPageHeader {
   ruby?: ReactNode;
   title: string;
-  description?: string;
+  description?: ReactNode;
   titleBtn?: ReactNode;
 }
 

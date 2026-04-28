@@ -8,11 +8,16 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { cn, convertTravelStyle } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
 import { TRAVEL_DETAIL_MOCK_DATA } from '@/features/myTravel/data';
 import TravelStatus from '@/features/myTravel/components/TravelStatus';
-import { convertFormattedDate, getDay, getTravelDay } from '@/shared/lib/utils';
+import {
+  convertFormattedDate,
+  getDay,
+  getTravelDay,
+  convertTravelPartner,
+} from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import { TRAVEL_TAB_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_TAB } from '@/shared/types/Enum';
@@ -27,8 +32,8 @@ export default function MyTravelDetailPage() {
     from,
     to,
     status,
-    style,
-    companion,
+    styles,
+    partner,
     image,
     schedule,
     cities,
@@ -57,12 +62,24 @@ export default function MyTravelDetailPage() {
             수정
           </div>
         }
-        description={`${formattedValue} | `}
+        description={
+          <div className='flex max-mobile:flex-col mobile:gap-1 items-center max-mobile:items-start'>
+            <span>{formattedValue}</span>
+            <span className="max-mobile:hidden">|</span>
+            <div className="text-md flex gap-1">
+              <div>{convertTravelPartner(partner)}</div>
+              {styles.length &&
+                styles.map((style) => <div>#{convertTravelStyle(style)}</div>)}
+              여행
+            </div>
+          </div>
+        }
       />
-      <div className='flex items-center justify-between'>
+      <div className="flex items-end justify-between">
         <div className="flex items-center gap-1">
-          {TRAVEL_TAB_LIST.map((list) => (
+          {TRAVEL_TAB_LIST.map((list, index) => (
             <Chip
+              key={`${list.label}-${index}`}
               variant={selectedTab === list.value ? 'primary' : 'gray'}
               size="lg"
               onClick={() => setSelectedTab(list.value)}
@@ -71,9 +88,24 @@ export default function MyTravelDetailPage() {
             </Chip>
           ))}
         </div>
-        <div className='flex gap-1'>
-          <Button variant='gray' size='sm'>체크리스트</Button>
-          <Button variant='gray' size='sm'>현지정보</Button>
+        <div className="flex gap-1">
+          {selectedTab === TRAVEL_TAB.SCHEDULE ? (
+            <Button variant="gray" size="xs">
+              체크리스트
+            </Button>
+          ) : (
+            <div className="flex gap-1">
+              <Button variant="gray" size="xs">
+                통계
+              </Button>
+              <Button variant="gray" size="xs">
+                정산
+              </Button>
+            </div>
+          )}
+          <Button variant="gray" size="xs">
+            현지정보
+          </Button>
         </div>
       </div>
     </div>
