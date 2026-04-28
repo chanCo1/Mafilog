@@ -63,7 +63,7 @@ function CardEntity(
         cardVariants({ variant, size }),
         disabled && 'pointer-events-none opacity-50',
         readonly && 'pointer-events-none',
-        isSelected && 'outline-border-active outline',
+        isSelected && 'border-border-active border-2',
         className,
       )}
       ref={ref}
