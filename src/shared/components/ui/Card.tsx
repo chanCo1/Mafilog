@@ -11,14 +11,15 @@ import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
-const cardVariants = cva('rounded-lg cursor-pointer', {
+const cardVariants = cva('rounded-lg cursor-pointer bg-white', {
   variants: {
     variant: {
       default: 'bg-gray-1',
       outline: 'border border-border-primary',
       shadowed: 'bg-gray-1 shadow-md',
-      white: 'bg-white',
-      shadowedWhite: 'bg-white shadow-md',
+      white: '',
+      shadowedWhite: 'shadow-md',
+      dashed: 'border border-dashed border-border-primary'
     },
     size: {
       md: 'p-2.5',
