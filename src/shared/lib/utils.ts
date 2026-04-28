@@ -3,7 +3,10 @@ import { clsx, ClassValue } from 'clsx';
 import { formatDate, differenceInDays } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
-import { TRAVEL_PARTNER_LIST, TRAVEL_STYLE_LIST } from '@/features/myTravel/constants';
+import {
+  TRAVEL_PARTNER_LIST,
+  TRAVEL_STYLE_LIST,
+} from '@/features/myTravel/constants';
 
 /** 조건부로 클래스 사용(clsx) + props로 받은 스타일이 기본 스타일을 덮어쓰기(twMerge) */
 export function cn(...inputs: ClassValue[]) {
@@ -20,18 +23,26 @@ export const getDay = (date: Date) => {
   return formatDate(date, 'E', { locale: ko });
 };
 
+/** 시간을 0시 0분 0초로 초기화 */
+const setResetHour = (date: Date): Date => {
+  const _date = new Date(date);
+  _date.setHours(0, 0, 0, 0);
+
+  return _date;
+};
+
 /** 여행 기간 구하기 */
 export const getTravelDay = (from: Date, to: Date) => {
-  return differenceInDays(to, from) + 1;
+  const startDate = setResetHour(from);
+  const endDate = setResetHour(to);
+
+  return differenceInDays(endDate, startDate) + 1;
 };
 
 /** 여행 디데이 계산 */
 export const calcDDay = (from: Date) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const startDate = new Date(from);
-  startDate.setHours(0, 0, 0, 0);
+  const today = setResetHour(new Date());
+  const startDate = setResetHour(from);
 
   const diffTime = startDate.getTime() - today.getTime();
   // 일수로 변환
@@ -42,14 +53,9 @@ export const calcDDay = (from: Date) => {
 
 /** 여행 일차 계산 */
 export const getTravelCurrentDay = (from: Date, to: Date) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const startDate = new Date(from);
-  startDate.setHours(0, 0, 0, 0);
-
-  const endDate = new Date(to);
-  endDate.setHours(0, 0, 0, 0);
+  const today = setResetHour(new Date());
+  const startDate = setResetHour(from);
+  const endDate = setResetHour(to);
 
   const diffTime = today.getTime() - startDate.getTime();
   // 일수로 변환
@@ -70,4 +76,4 @@ export const convertTravelPartner = (partner: TRAVEL_PARTNER) => {
 /** 여행 스타일 */
 export const convertTravelStyle = (style: TRAVEL_STYLE) => {
   return TRAVEL_STYLE_LIST.find((list) => list.value === style)?.label;
-}
+};
