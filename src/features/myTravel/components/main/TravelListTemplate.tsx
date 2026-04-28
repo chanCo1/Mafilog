@@ -7,7 +7,7 @@
 
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
-import TravelListCard from '@/features/myTravel/components/TravelListCard';
+import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
 import { useRouter } from 'next/navigation';
 
 interface ITravelListTemplate {
