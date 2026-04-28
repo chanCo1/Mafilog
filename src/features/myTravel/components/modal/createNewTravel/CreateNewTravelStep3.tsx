@@ -11,7 +11,7 @@ import { Input } from '@/shared/components/ui/Input';
 import FileUpload from '@/shared/components/ui/FileUpload';
 import { Chip } from '@/shared/components/ui/Chip';
 import {
-  TRAVEL_COMPANION_LIST,
+  TRAVEL_PARTNER_LIST,
   TRAVEL_STYLE_LIST,
 } from '@/features/myTravel/constants';
 import RequireDot from '@/shared/components/ui/RequireDot';
@@ -72,7 +72,7 @@ export default function CreateNewTravelStep3({
           <RequireDot />
         </div>
         <div className="flex flex-wrap gap-1 p-1">
-          {TRAVEL_COMPANION_LIST.map((list) => (
+          {TRAVEL_PARTNER_LIST.map((list) => (
             <Chip
               key={list.value}
               variant={

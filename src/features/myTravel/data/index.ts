@@ -103,8 +103,8 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
   from: new Date('Mon Apr 27 2026 11:56:35 GMT+0900'),
   to: new Date('Wed Apr 29 2026 00:00:00 GMT+0900'),
   status: 'progress',
-  companion: 'lover',
-  style: ['heal', 'food', 'activity'],
+  partner: 'lover',
+  styles: ['heal', 'food', 'activity'],
   cities: [
     {
       id: 'ChIJAWZKutdIZTURtdOKmJ3WltE',
