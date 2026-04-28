@@ -1,3 +1,5 @@
+import { TRAVEL_TAB, TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
+
 export const CITY_DATA = {
   places: [
     {
@@ -103,8 +105,8 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
   from: new Date('Mon Apr 27 2026 11:56:35 GMT+0900'),
   to: new Date('Sun may 3 2026 00:00:00 GMT+0900'),
   status: 'progress',
-  partner: 'lover',
-  styles: ['heal', 'food', 'activity'],
+  partner: 'lover' as TRAVEL_PARTNER,
+  styles: ['heal', 'food', 'activity'] as TRAVEL_STYLE[],
   cities: [
     {
       id: 'ChIJAWZKutdIZTURtdOKmJ3WltE',
