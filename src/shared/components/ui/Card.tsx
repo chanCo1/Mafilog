@@ -11,7 +11,7 @@ import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
-const cardVariants = cva('rounded-lg cursor-pointer bg-white', {
+const cardVariants = cva('rounded-lg bg-white', {
   variants: {
     variant: {
       default: 'bg-gray-1',
@@ -39,16 +39,17 @@ interface ICard
   className?: string;
   disabled?: boolean;
   readonly?: boolean;
+  select?: boolean;
 }
 
 function CardEntity(
-  { className, disabled, variant, size, readonly, ...props }: ICard,
+  { className, disabled, variant, size, readonly, select, ...props }: ICard,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   const [isSelected, setIsSelected] = React.useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (disabled) return;
+    if (disabled || !select) return;
 
     if (props.onClick) {
       props.onClick(e);
@@ -61,6 +62,7 @@ function CardEntity(
     <div
       className={cn(
         cardVariants({ variant, size }),
+        select ? 'cursor-pointer' : '',
         disabled && 'pointer-events-none opacity-50',
         readonly && 'pointer-events-none',
         isSelected && 'border-border-active border-2',
