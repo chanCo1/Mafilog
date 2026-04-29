@@ -194,6 +194,17 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
           placeMemo: null,
           time: null,
         },
+        {
+          id: 3,
+          type: 'place',
+          name: '센소지',
+          latlng: {
+            lat: 0,
+            lng: 0,
+          },
+          placeMemo: null,
+          time: null,
+        },
       ],
     },
     {
