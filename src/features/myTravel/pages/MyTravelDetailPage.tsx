@@ -23,7 +23,7 @@ import { TRAVEL_TAB_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_TAB } from '@/shared/types/Enum';
 import { Button } from '@/shared/components/ui/Button';
 import TravelSchedule from '@/features/myTravel/components/detail/schedule/TravelSchedule';
-import TravelExpneses from '@/features/myTravel/components/detail/expneses/TravelExpneses';
+import TravelExpenses from '@/features/myTravel/components/detail/expneses/TravelExpenses';
 
 // interface IMyTravelDetailPage {}
 
@@ -117,7 +117,7 @@ export default function MyTravelDetailPage() {
       {selectedTab === TRAVEL_TAB.SCHEDULE ? (
         <TravelSchedule from={from} to={to} />
       ) : (
-        <TravelExpneses from={from} to={to} />
+        <TravelExpenses from={from} to={to} />
       )}
     </div>
   );
