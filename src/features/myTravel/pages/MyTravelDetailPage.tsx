@@ -22,7 +22,7 @@ import { Chip } from '@/shared/components/ui/Chip';
 import { TRAVEL_TAB_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_TAB } from '@/shared/types/Enum';
 import { Button } from '@/shared/components/ui/Button';
-import TravelDetailDay from '@/features/myTravel/components/detail/schedule/TravelDetailSchduleDay';
+import TravelDetailScheduleDay from '@/features/myTravel/components/detail/schedule/TravelDetailScheduleDay';
 
 // interface IMyTravelDetailPage {}
 
@@ -113,9 +113,9 @@ export default function MyTravelDetailPage() {
         </div>
       </div>
       <div className="max-mobile:flex-col-reverse flex gap-4">
-        <div className="max-mobile:w-full flex w-1/2 flex-col gap-4">
+        <div className="max-mobile:w-full flex w-1/2 flex-col">
           {/* 상단 버튼 */}
-          <div className="flex justify-between">
+          <div className="flex justify-between sticky top-12 bg-white py-2 z-1 [mask:linear-gradient(to_bottom,black_90%,transparent)]">
             <Button variant="gray" size="sm">
               선택 수정
             </Button>
@@ -128,15 +128,14 @@ export default function MyTravelDetailPage() {
               </Button>
             </div>
           </div>
-          <div className="scrollbar-hide max-h-200 overflow-y-auto">
-            {/* [mask:linear-gradient(to_bottom,black_90%,transparent)] */}
+          <div className="">
             {Array.from({ length: getTravelDay(from, to) }).map((_, index) => {
               const _day = index + 1;
               const dupDate = new Date(from);
               dupDate.setDate(from.getDate() + index);
 
               return (
-                <TravelDetailDay
+                <TravelDetailScheduleDay
                   key={`${dupDate}-${index}`}
                   day={_day}
                   date={dupDate}
@@ -145,8 +144,8 @@ export default function MyTravelDetailPage() {
             })}
           </div>
         </div>
-        <div className="max-mobile:w-full flex w-1/2 flex-col gap-4">
-          <div className="scrollbar-hide flex gap-1 overflow-x-auto">
+        <div className="max-mobile:w-full flex w-1/2 flex-col">
+          <div className="scrollbar-hide flex gap-1 overflow-x-auto sticky top-12 py-2 bg-white">
             {Array.from({ length: getTravelDay(from, to) }).map((_, index) => (
               <Chip
                 key={index}
@@ -159,7 +158,7 @@ export default function MyTravelDetailPage() {
               >{`${index + 1}일차`}</Chip>
             ))}
           </div>
-          <div className="max-mobile:h-60 h-110 w-full rounded-lg bg-red-50"></div>
+          <div className="max-mobile:h-60 h-110 w-full rounded-lg bg-red-100 sticky top-25"></div>
         </div>
       </div>
     </div>
