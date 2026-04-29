@@ -1,11 +1,11 @@
 /**
- * @file: TravelDetailTimeline.tsx
+ * @file: TravelDetailScheduleTimeline.tsx
  * @author: chad
  * @since: 2026.04.28 ~
- * @description: TravelDetailTimeline 컴포넌트, 여행 일정/지출 타임라인
+ * @description: TravelDetailScheduleTimeline 컴포넌트, 여행 일정/지출 타임라인
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, MouseEvent } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
@@ -13,12 +13,13 @@ import { SCHEDULE_TYPE, ICON_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { Button } from '@/shared/components/ui/Button';
 
-interface ITravelDetailTimeline {
+interface ITravelDetailScheduleTimeline {
   type?: SCHEDULE_TYPE;
   // icon: ICON_TYPE;
+  isSelect?: boolean;
 }
 
-export default function TravelDetailTimeline({ type }: ITravelDetailTimeline) {
+export default function TravelDetailScheduleTimeline({ type }: ITravelDetailScheduleTimeline) {
   /** 메모를 제외한 일정 카운트 */
   // const getDisplayCount = useMemo(() => {
   //   if (type !== SCHEDULE_TYPE.LOCATION) return;
@@ -31,6 +32,13 @@ export default function TravelDetailTimeline({ type }: ITravelDetailTimeline) {
 
   //   return filltered.length;
   // }, [type, allSchedules, count]);
+
+  /** 일정 삭제 핸들러 */
+  const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('삭제!!!');
+  };
 
   return (
     <div className="flex w-full gap-3">
@@ -60,7 +68,12 @@ export default function TravelDetailTimeline({ type }: ITravelDetailTimeline) {
                         아사쿠사아~~
                       </span>
                     </div>
-                    <Button className="shrink-0" variant="redOutline" size="xs">
+                    <Button
+                      className="shrink-0"
+                      variant="redOutline"
+                      size="xs"
+                      onClick={(e) => handleDeleteSchedule(e)}
+                    >
                       삭제
                     </Button>
                   </div>
@@ -76,7 +89,12 @@ export default function TravelDetailTimeline({ type }: ITravelDetailTimeline) {
                     메모가 입력되었습니다. 메모가 입력되었습니다. 메모가
                     입력되었습니다. 메모가 입력되었습니다.
                   </span>
-                  <Button className="shrink-0" variant="redOutline" size="xs">
+                  <Button
+                    className="shrink-0"
+                    variant="redOutline"
+                    size="xs"
+                    onClick={(e) => handleDeleteSchedule(e)}
+                  >
                     삭제
                   </Button>
                 </div>
