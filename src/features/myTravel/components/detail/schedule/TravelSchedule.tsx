@@ -69,7 +69,7 @@ export default function TravelSchedule({ from, to }: ITravelSchedule) {
           ))}
         </>
       }
-      stautsArea={<>asd</>}
+      stautsArea={<div className="max-mobile:h-60 max-h-110 bg-red-100"></div>}
     />
   );
 }
