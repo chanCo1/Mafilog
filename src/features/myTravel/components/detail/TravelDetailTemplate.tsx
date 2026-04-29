@@ -32,11 +32,11 @@ export default function TravelDetailTemplate({
       </div>
       <div className="max-mobile:w-full flex w-1/2 flex-col">
         {/* 일차 선택 버튼 */}
-        <div className="scrollbar-hide sticky top-11.5 flex gap-1 overflow-x-auto bg-white py-2">
+        <div className="scrollbar-hide sticky max-mobile:relative top-11.5 max-mobile:top-0 flex gap-1 overflow-x-auto bg-white py-2">
           {dayButtons}
         </div>
         {/* 변경사항 상태 반영 일정 - 지도 / 가계부 - 지출금액 */}
-        <div className="max-mobile:h-60 sticky top-25 max-h-110 w-full rounded-lg">
+        <div className="sticky top-25 w-full">
           {stautsArea}
         </div>
       </div>
