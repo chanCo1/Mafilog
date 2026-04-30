@@ -14,22 +14,47 @@ import { Loading } from '@/shared/components/ui/Loading';
 import { Search, X, Star, UserStar } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { IGetGooglePlaces, IPlaceList } from '@/features/myTravel/interfaces';
-import { convertComma, getPlaceCategory } from '@/shared/lib/utils';
+import {
+  convertComma,
+  getPlaceCategory,
+  getTravelDayOfWeek,
+  convertFormattedDate,
+  getDay,
+} from '@/shared/lib/utils';
 import { Selectbox } from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 
 interface IAddPlaceModal {
   isOpen: boolean;
   handleClose: () => void;
+  from: Date;
+  to: Date;
 }
 
-export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
+export default function AddPlaceModal({
+  isOpen,
+  handleClose,
+  from,
+  to,
+}: IAddPlaceModal) {
+  /** 일정 선택 옵션 */
+  const travelDaysOptions = () => {
+    return getTravelDayOfWeek(from, to).map((_day) => {
+      return {
+        label: `${_day.day}일차 ${convertFormattedDate(_day.date, 'MM월 dd일')} (${getDay(_day.date)})`,
+        value: _day.day,
+      };
+    });
+  };
+
   const [searchPlace, setSearchPlace] = useState<string>('');
   const [placeList, setPlaceList] = useState<IPlaceList[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedplaces, setSelectedplaces] = useState<any[]>([]);
   const [resultMsg, setResultMsg] = useState('');
-  const [selectedDay, setSelectedDay] = useState<ILabelValue>();
+  const [selectedDay, setSelectedDay] = useState<ILabelValue>(
+    travelDaysOptions()[0],
+  );
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const url = 'https://places.googleapis.com/v1/places:searchText';
@@ -139,11 +164,11 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
     >
       <div className="flex h-full flex-col gap-2">
         <Selectbox
-          label='일정 선택'
-          options={[{ label: '1일차', value: 1 }]}
+          label="일정 선택"
+          options={travelDaysOptions()}
           value={selectedDay}
           onChange={(value) => setSelectedDay(value)}
-          placeholder='여행 일정을 선택해주세요'
+          placeholder="여행 일정을 선택해주세요"
           isRequired
         />
         <Input
