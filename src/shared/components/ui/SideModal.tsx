@@ -5,7 +5,8 @@
  * @description: SideModal 컴포넌트, 오른쪽에서 슬라이드로 노출되는 모달
  */
 
-import { forwardRef, ReactNode } from 'react';
+import { forwardRef, ReactNode, useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import Dimmed from '@/shared/components/ui/Dimmed';
@@ -43,7 +44,24 @@ function SideModalEntity({
   handleClose,
   footer,
 }: ISideModal) {
-  return (
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // SSR 에러 방지
+    setMounted(true);
+    if (isOpen)
+      // 뒷 화면 스크롤 제거
+      document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'unset';
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <>
       <Dimmed
         className={cn(isOpen ? 'visible opacity-100' : 'invisible opacity-0')}
@@ -56,8 +74,8 @@ function SideModalEntity({
           `${isOpen ? 'translate-x-0' : 'translate-x-full'}`,
         )}
       >
-        <div className='flex item-center justify-between'>
-          <span className='text-lg font-bold'>{title}</span>
+        <div className="item-center flex justify-between">
+          <span className="text-lg font-bold">{title}</span>
           <ReturnButton size="lg" onClick={handleClose} />
         </div>
         <div className="scrollbar-hide flex h-full flex-col gap-3 overflow-auto">
@@ -68,7 +86,8 @@ function SideModalEntity({
           {footer}
         </div>
       </div>
-    </>
+    </>,
+    document.body,
   );
 }
 
