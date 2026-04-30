@@ -22,12 +22,12 @@ interface ITravelScheduleTimeline {
 export default function TravelScheduleTimeline({ type }: ITravelScheduleTimeline) {
   /** 메모를 제외한 일정 카운트 */
   // const getDisplayCount = useMemo(() => {
-  //   if (type !== SCHEDULE_TYPE.LOCATION) return;
+  //   if (type !== SCHEDULE_TYPE.PLACE) return;
 
   //   const sliced = allSchedules?.slice(0, count! + 1);
 
   //   const filltered = sliced.filter((schedule) => {
-  //     return schedule.type === SCHEDULE_TYPE.LOCATION
+  //     return schedule.type === SCHEDULE_TYPE.PLACE
   //   });
 
   //   return filltered.length;
@@ -45,7 +45,7 @@ export default function TravelScheduleTimeline({ type }: ITravelScheduleTimeline
       <div className="flex flex-col items-center">
         <div className="shrink-0">
           {type &&
-            (type === SCHEDULE_TYPE.LOCATION ? (
+            (type === SCHEDULE_TYPE.PLACE ? (
               <CircledNumber number="1" />
             ) : (
               <CategoryIcon variant="memo" />
@@ -57,7 +57,7 @@ export default function TravelScheduleTimeline({ type }: ITravelScheduleTimeline
       <div className="w-full pb-2.5">
         {type ? (
           <>
-            {type === SCHEDULE_TYPE.LOCATION ? (
+            {type === SCHEDULE_TYPE.PLACE ? (
               <div>
                 <span className="text-sm font-bold">HH:mm</span>
                 <Card>

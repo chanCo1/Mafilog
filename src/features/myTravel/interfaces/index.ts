@@ -13,7 +13,7 @@ export interface IGetGooglePlaces {
     };
     formattedAddress: string;
     id: string;
-    location: ILocation;
+    place: IPlace;
     types: string[];
   }[];
 }
@@ -22,7 +22,7 @@ export interface IGetGooglePlaces {
 export interface ICityList {
   id: string;
   name: string;
-  location: ILocation;
+  place: IPlace;
   address: string;
   country: {
     code: string;
@@ -30,7 +30,7 @@ export interface ICityList {
   };
 }
 
-interface ILocation {
+interface IPlace {
   latitude: number;
   longitude: number;
 }

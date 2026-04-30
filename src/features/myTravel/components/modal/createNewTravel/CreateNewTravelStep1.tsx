@@ -88,7 +88,7 @@ export default function CreateNewTravelStep1({
             name: place.displayName.text,
             address: place.formattedAddress,
             country,
-            location: place.location,
+            place: place.location,
           };
         });
 

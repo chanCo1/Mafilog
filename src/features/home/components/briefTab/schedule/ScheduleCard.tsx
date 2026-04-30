@@ -36,12 +36,12 @@ export const ScheduleCard = ({
 }: IScheduleCard) => {
   /** 메모를 제외한 일정 카운트 */
   const getDisplayCount = useMemo(() => {
-    if (type !== SCHEDULE_TYPE.LOCATION) return;
+    if (type !== SCHEDULE_TYPE.PLACE) return;
 
     const sliced = allSchedules?.slice(0, count! + 1);
 
     const filltered = sliced.filter((schedule) => {
-      return schedule.type === SCHEDULE_TYPE.LOCATION
+      return schedule.type === SCHEDULE_TYPE.PLACE
     });
 
     return filltered.length;
@@ -51,7 +51,7 @@ export const ScheduleCard = ({
     <div className="flex w-full gap-3">
       <div className="flex flex-col items-center">
         <div className="shrink-0">
-          {type === SCHEDULE_TYPE.LOCATION ? (
+          {type === SCHEDULE_TYPE.PLACE ? (
             <CircledNumber number={getDisplayCount!} />
           ) : (
             <CategoryIcon variant="memo" />
@@ -66,7 +66,7 @@ export const ScheduleCard = ({
         >
           <p
             className={cn(
-              type === SCHEDULE_TYPE.LOCATION
+              type === SCHEDULE_TYPE.PLACE
                 ? 'text-lg font-bold'
                 : 'text-text-secondary text-sm',
             )}

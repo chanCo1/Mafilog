@@ -24,7 +24,7 @@ export const SCHEDULE_INTRODUCE_LIST: string[] = [
 export const SCHEDULE_MOCK_DATA = [
   {
     name: '아사쿠사 규카츠',
-    type: 'location',
+    type: 'place',
     category: '음식점',
     country: '일본',
     city: '아사쿠사',
@@ -38,7 +38,7 @@ export const SCHEDULE_MOCK_DATA = [
   },
   {
     name: '센소지',
-    type: 'location',
+    type: 'place',
     category: '관광명소',
     country: '일본',
     city: '아사쿠사',

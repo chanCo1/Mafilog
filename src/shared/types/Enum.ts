@@ -4,7 +4,7 @@
 /** 일정 타입 */
 export const SCHEDULE_TYPE = {
   /** 장소 */
-  LOCATION: 'location',
+  PLACE: 'place',
   /** 메모 */
   MEMO: 'memo',
 } as const;
