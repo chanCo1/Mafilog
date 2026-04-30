@@ -43,17 +43,19 @@ export type EXPENSES_CATEGORY_TYPE =
 export const PLACE_CATEGORY_TYPE = {
   /** 교통 */
   TRANSPORT: ['transportation_service', 'airport', 'transit_station', 'subway_station', 'bus_stop', 'bus_station'],
-  /** 음식 */
+  /** 음식점 */
   FOOD: ['food', 'restaurant', 'cafe'],
   /** 쇼핑 */
   SHOPPING: ['store', 'shopping_mall', 'department_store'],
-  /** 관광 */
+  /** 관광명소 */
   TOUR: ['tourist_attraction', 'park', 'garden'],
-  /** 숙소 */
+  /** 숙박시설 */
   HOUSE: ['lodging', 'hotel'],
   /** 기타 */
-  ETC: '',
+  ETC: [''],
 } as const;
+export type PLACE_CATEGORY_TYPE =
+  (typeof PLACE_CATEGORY_TYPE)[keyof typeof PLACE_CATEGORY_TYPE];
 
 /** 가계부 지출 타입 */
 export const EXPENSES_PAYMENT_TYPE = {
