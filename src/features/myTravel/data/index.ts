@@ -1,6 +1,6 @@
 import { TRAVEL_TAB, TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
 
-export const CITY_DATA = {
+export const CITY_MOCK_DATA = {
   places: [
     {
       id: 'ChIJAWZKutdIZTURtdOKmJ3WltE',

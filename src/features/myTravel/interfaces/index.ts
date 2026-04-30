@@ -13,8 +13,14 @@ export interface IGetGooglePlaces {
     };
     formattedAddress: string;
     id: string;
-    place: IPlace;
+    location: ILocation;
     types: string[];
+    primaryTypeDisplayName: {
+      languageCode: string;
+      text: string;
+    };
+    rating: number;
+    userRatingCount: number;
   }[];
 }
 
@@ -22,15 +28,30 @@ export interface IGetGooglePlaces {
 export interface ICityList {
   id: string;
   name: string;
-  place: IPlace;
+  location: ILocation;
   address: string;
   country: {
-    code: string;
-    name: string;
+    code: string | undefined;
+    name: string | undefined;
   };
 }
 
-interface IPlace {
-  latitude: number;
-  longitude: number;
+interface ILocation {
+  latitude: number | null;
+  longitude: number | null;
+}
+
+/** 장소 정보 */
+export interface IPlaceList {
+  id: string;
+  name: string;
+  location: ILocation;
+  address: string;
+  country: {
+    code: string | undefined;
+    name: string | undefined;
+  };
+  displayName: string;
+  rating: number;
+  userRatingCount: number;
 }

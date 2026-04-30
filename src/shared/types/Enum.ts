@@ -40,6 +40,21 @@ export const EXPENSES_CATEGORY_TYPE = {
 export type EXPENSES_CATEGORY_TYPE =
   (typeof EXPENSES_CATEGORY_TYPE)[keyof typeof EXPENSES_CATEGORY_TYPE];
 
+export const PLACE_CATEGORY_TYPE = {
+  /** 교통 */
+  TRANSPORT: ['transportation_service', 'airport', 'transit_station', 'subway_station', 'bus_stop', 'bus_station'],
+  /** 음식 */
+  FOOD: ['food', 'restaurant', 'cafe'],
+  /** 쇼핑 */
+  SHOPPING: ['store', 'shopping_mall', 'department_store'],
+  /** 관광 */
+  TOUR: ['tourist_attraction', 'park', 'garden'],
+  /** 숙소 */
+  HOUSE: ['lodging', 'hotel'],
+  /** 기타 */
+  ETC: '',
+} as const;
+
 /** 가계부 지출 타입 */
 export const EXPENSES_PAYMENT_TYPE = {
   /** 카드 */
