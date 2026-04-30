@@ -74,7 +74,7 @@ function ButtonEntity(
           <span className="flex items-center">{prefix}</span>
         )}
       {/* 버튼안에 내용 노출 */}
-      {props.children && <span>{props.children}</span>}
+      {props.children && <>{props.children}</>}
       {/* suffix 있고 로딩 상태가 아닐 때 노출 */}
       {suffix && !isLoading && (
           <span className="flex items-center">{suffix}</span>
