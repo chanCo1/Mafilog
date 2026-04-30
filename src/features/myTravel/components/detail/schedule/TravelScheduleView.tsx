@@ -5,7 +5,7 @@
  * @description: TravelScheduleView 컴포넌트, 여행 일정탭 하위 내용
  */
 
-import { memo, useState } from 'react';
+import { memo, useMemo, useState } from 'react';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
 import { getTravelDay } from '@/shared/lib/utils';
@@ -13,6 +13,7 @@ import TravelScheduleDay from '@/features/myTravel/components/detail/schedule/Tr
 import { Chip } from '@/shared/components/ui/Chip';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
+import { getTravelDayOfWeek } from '@/shared/lib/utils';
 
 interface ITravelScheduleView {
   from: Date;
@@ -22,6 +23,11 @@ interface ITravelScheduleView {
 function TravelScheduleView({ from, to }: ITravelScheduleView) {
   const [selectedDay, setSelectedDay] = useState(1);
   const [isOpenAddPlaceModel, setIsOpenAddPlaceModal] = useState(false);
+
+  /** 여행 일수 */
+  const travelDays = useMemo(() => {
+    return getTravelDay(from, to);
+  }, [from, to]);
 
   return (
     <>
@@ -47,16 +53,12 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
         }
         dayTimelines={
           <>
-            {Array.from({ length: getTravelDay(from, to) }).map((_, index) => {
-              const _day = index + 1;
-              const dupDate = new Date(from);
-              dupDate.setDate(from.getDate() + index);
-
+            {getTravelDayOfWeek(from, to).map((_day, index) => {
               return (
                 <TravelScheduleDay
-                  key={`${dupDate}-${index}`}
-                  day={_day}
-                  date={dupDate}
+                  key={`${_day.day}-${index}`}
+                  day={_day.day}
+                  date={_day.date}
                   // schedule={TRAVEL_DETAIL_MOCK_DATA.schedule}
                 />
               );
@@ -65,28 +67,30 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
         }
         dayButtons={
           <>
-            {Array.from({ length: getTravelDay(from, to) }).map((_, index) => (
+            {getTravelDayOfWeek(from, to).map((_day, index) => (
               <Chip
-                key={index}
+                key={`${_day.day}-${index}`}
                 size="md"
                 className="shrink-0"
                 variant={
-                  selectedDay === index + 1 ? 'primary' : 'primaryOutline'
+                  selectedDay === _day.day ? 'primary' : 'primaryOutline'
                 }
-                onClick={() => setSelectedDay(index + 1)}
-              >{`${index + 1}일차`}</Chip>
+                onClick={() => setSelectedDay(_day.day)}
+              >{`${_day.day}일차`}</Chip>
             ))}
           </>
         }
         stautsArea={
           <div className="max-mobile:h-60 h-110">
-            <div className='w-full h-full bg-red-50' /> 
+            <div className="h-full w-full bg-red-50" />
             {/* <GoogleMap /> */}
           </div>
         }
       />
       <AddPlaceModal
         isOpen={isOpenAddPlaceModel}
+        from={from}
+        to={to}
         handleClose={() => setIsOpenAddPlaceModal(false)}
       />
     </>
