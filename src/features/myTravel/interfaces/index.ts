@@ -54,4 +54,5 @@ export interface IPlaceList {
   displayName: string;
   rating: number;
   userRatingCount: number;
+  types: string[];
 }

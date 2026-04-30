@@ -10,7 +10,7 @@ import { Chip } from '@/shared/components/ui/Chip';
 import { Input } from '@/shared/components/ui/Input';
 import { ICityList } from '@/features/myTravel/interfaces';
 import { Search, X } from 'lucide-react';
-import { CITY_DATA } from '@/features/myTravel/data';
+import { CITY_MOCK_DATA } from '@/features/myTravel/data';
 import { IGetGooglePlaces } from '@/features/myTravel/interfaces';
 import { Loading } from '@/shared/components/ui/Loading';
 
@@ -62,9 +62,9 @@ export default function CreateNewTravelStep1({
       //       place.types.includes(value),
       //     ),
       //   );
-      if (CITY_DATA.places?.length) {
+      if (CITY_MOCK_DATA.places?.length) {
         /** 도시 필터링 */
-        const filteredCities = CITY_DATA.places.filter((place) =>
+        const filteredCities = CITY_MOCK_DATA.places.filter((place) =>
           ['locality', 'administrative_area_level_1'].some((value) =>
             place.types.includes(value),
           ),
@@ -73,22 +73,20 @@ export default function CreateNewTravelStep1({
         /** 도시 정보 추출 */
         const getCityData = filteredCities.map((place) => {
           const getCountryCode = place.addressComponents.find((comp) =>
-            comp.types.includes('country'),
+            comp?.types?.includes('country'),
           );
 
-          const country = getCountryCode
-            ? {
-                name: getCountryCode.longText,
-                code: getCountryCode.shortText,
-              }
-            : null;
+          const country = {
+            name: getCountryCode?.longText,
+            code: getCountryCode?.shortText,
+          };
 
           return {
             id: place.id,
             name: place.displayName.text,
             address: place.formattedAddress,
             country,
-            place: place.location,
+            location: place.location,
           };
         });
 
@@ -146,25 +144,27 @@ export default function CreateNewTravelStep1({
         />
         {cityList.length ? (
           cityList.map((list) => (
-            <div key={list.id} className="flex items-center justify-between">
+            <div key={list.id} className="flex items-center justify-between gap-1">
               <div className="flex flex-col">
                 <p className="text-lg">{list.name}</p>
                 <span className="text-text-secondary text-sm">
                   {list.address}
                 </span>
               </div>
-              {selectedCities.find((city) => city.id === list.id) ? (
-                <Chip
-                  variant="redOutline"
-                  onClick={() => deleteSelectedCity(list.id)}
-                >
-                  취소
-                </Chip>
-              ) : (
-                <Chip variant="gray" onClick={() => selectCity(list)}>
-                  선택
-                </Chip>
-              )}
+              <div className='shrink-0'>
+                {selectedCities.find((city) => city.id === list.id) ? (
+                  <Chip
+                    variant="redOutline"
+                    onClick={() => deleteSelectedCity(list.id)}
+                  >
+                    취소
+                  </Chip>
+                ) : (
+                  <Chip variant="gray" onClick={() => selectCity(list)}>
+                    선택
+                  </Chip>
+                )}
+              </div>
             </div>
           ))
         ) : (

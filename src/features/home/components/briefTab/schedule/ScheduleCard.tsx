@@ -74,16 +74,8 @@ export const ScheduleCard = ({
             {name}
           </p>
           <div className="text-text-secondary text-sm">
-            {category && (
-              <>
-                <span>{category}</span>&nbsp;&#8226;&nbsp;
-              </>
-            )}
-            {city && (
-              <>
-                <span>{city}</span>&nbsp;&#8226;&nbsp;
-              </>
-            )}
+            <span>{category}</span>&nbsp;&#8226;&nbsp;
+            <span>{city}</span>&nbsp;&#8226;&nbsp;
             {country && <span>{country}</span>}
           </div>
         </Card>

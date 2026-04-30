@@ -13,7 +13,7 @@ import Dimmed from '@/shared/components/ui/Dimmed';
 import { ReturnButton } from '@/shared/components/ui/ReturnButton';
 
 const sideModalVariants = cva(
-  'h-dvh fixed top-0 right-0 z-50 transform bg-white shadow-2xl transition-transform duration-800 ease p-4 flex flex-col gap-3 rounded-l-xl',
+  'h-dvh fixed top-0 right-0 z-50 transform bg-white shadow-2xl transition-transform duration-800 ease p-4 flex flex-col gap-3 rounded-l-xl justify-between',
   {
     variants: {
       size: {
@@ -78,7 +78,7 @@ function SideModalEntity({
           <span className="text-lg font-bold">{title}</span>
           <ReturnButton size="lg" onClick={handleClose} />
         </div>
-        <div className="scrollbar-hide flex h-full flex-col gap-3 overflow-auto">
+        <div className="h-full">
           {children}
         </div>
         <div className="flex items-center justify-end gap-1">
