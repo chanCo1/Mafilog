@@ -2,11 +2,17 @@ import { twMerge } from 'tailwind-merge';
 import { clsx, ClassValue } from 'clsx';
 import { formatDate, differenceInDays } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
+import {
+  TRAVEL_PARTNER,
+  TRAVEL_STYLE,
+  PLACE_CATEGORY_TYPE,
+  EXPENSES_CATEGORY_TYPE,
+} from '@/shared/types/Enum';
 import {
   TRAVEL_PARTNER_LIST,
   TRAVEL_STYLE_LIST,
 } from '@/features/myTravel/constants';
+import { IPlaceList } from '@/features/myTravel/interfaces';
 
 /** 조건부로 클래스 사용(clsx) + props로 받은 스타일이 기본 스타일을 덮어쓰기(twMerge) */
 export function cn(...inputs: ClassValue[]) {
@@ -76,4 +82,49 @@ export const convertTravelPartner = (partner: TRAVEL_PARTNER) => {
 /** 여행 스타일 */
 export const convertTravelStyle = (style: TRAVEL_STYLE) => {
   return TRAVEL_STYLE_LIST.find((list) => list.value === style)?.label;
+};
+
+/** 숫자에 1,000 단위 콤마를 추가하는 함수 */
+export const convertComma = (value: number | string): string => {
+  if (!value && value !== 0) return '0';
+
+  const num = typeof value === 'string' ? Number(value) : value;
+
+  if (isNaN(num)) return '';
+
+  return new Intl.NumberFormat('ko-KR').format(num);
+};
+
+/** 장소 카테고리 가져오기 */
+export const getPlaceCategory = (types: IPlaceList['types']) => {
+  const findCategory = Object.entries(PLACE_CATEGORY_TYPE).find(
+    ([key, value]) => {
+      if (key === 'ETC') return false;
+      return value.some((category) => types.includes(category));
+    },
+  );
+
+  const resultCategory = findCategory ? findCategory[0] : 'ETC';
+
+  return convertCategory(resultCategory as EXPENSES_CATEGORY_TYPE);
+};
+
+/** 장소/지출 카테고리 한글로 변환 */
+export const convertCategory = (category: EXPENSES_CATEGORY_TYPE) => {
+  switch (category.toLocaleLowerCase()) {
+    case EXPENSES_CATEGORY_TYPE.TRANSPORT:
+      return '교통';
+    case EXPENSES_CATEGORY_TYPE.TOUR:
+      return '관광명소';
+    case EXPENSES_CATEGORY_TYPE.SHOPPING:
+      return '쇼핑';
+    case EXPENSES_CATEGORY_TYPE.HOUSE:
+      return '숙박시설';
+    case EXPENSES_CATEGORY_TYPE.FOOD:
+      return '음식점';
+    case EXPENSES_CATEGORY_TYPE.ETC:
+      return '기타';
+    default:
+      return '기타';
+  }
 };
