@@ -78,7 +78,7 @@ function SideModalEntity({
           <span className="text-lg font-bold">{title}</span>
           <ReturnButton size="lg" onClick={handleClose} />
         </div>
-        <div className="h-full">
+        <div className="flex-1 min-h-0">
           {children}
         </div>
         <div className="flex items-center justify-end gap-1">
