@@ -5,20 +5,21 @@
  * @description: TravelSchedule 컴포넌트, 여행 일정탭 하위 내용
  */
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
 import { getTravelDay } from '@/shared/lib/utils';
 import TravelDetailScheduleDay from '@/features/myTravel/components/detail/schedule/TravelDetailScheduleDay';
 import { Chip } from '@/shared/components/ui/Chip';
+import GoogleMap from '@/shared/components/map/GoogleMap';
 
 interface ITravelSchedule {
   from: Date;
   to: Date;
 }
 
-export default function TravelSchedule({ from, to }: ITravelSchedule) {
+function TravelSchedule({ from, to }: ITravelSchedule) {
   const [selectedDay, setSelectedDay] = useState(1);
 
   return (
@@ -69,7 +70,13 @@ export default function TravelSchedule({ from, to }: ITravelSchedule) {
           ))}
         </>
       }
-      stautsArea={<div className="max-mobile:h-60 max-h-110 bg-red-100"></div>}
+      stautsArea={
+        <div className="max-mobile:h-60 h-110">
+          <GoogleMap />
+        </div>
+      }
     />
   );
 }
+
+export default memo(TravelSchedule);

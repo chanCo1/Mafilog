@@ -5,7 +5,7 @@
  * @description: TravelExpenses 컴포넌트, 여행 가계부탭 하위 내용
  */
 
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
 import { getTravelDay } from '@/shared/lib/utils';
@@ -24,7 +24,7 @@ const TRAVEL_EXPENSES_BEFORE_LIST = [
   { label: '여행전', value: 'before' },
 ];
 
-export default function TravelExpenses({ from, to }: ITravelExpenses) {
+function TravelExpenses({ from, to }: ITravelExpenses) {
   const [selectedDay, setSelectedDay] = useState<string | number>(
     TRAVEL_EXPENSES_BEFORE_LIST[0].value,
   );
@@ -100,12 +100,14 @@ export default function TravelExpenses({ from, to }: ITravelExpenses) {
               </div>
             </div>
             <div className="flex justify-end">
-              <div className='flex flex-col items-end'>
-                <div className="flex gap-2 items-end">
+              <div className="flex flex-col items-end">
+                <div className="flex items-end gap-2">
                   <p>KRW</p>
-                  <span className="text-state-error text-lg font-bold">{0}원</span>
+                  <span className="text-state-error text-lg font-bold">
+                    {0}원
+                  </span>
                 </div>
-                <span className='text-sm text-text-secondary'>{0}원</span>
+                <span className="text-text-secondary text-sm">{0}원</span>
               </div>
             </div>
           </Card>
@@ -114,3 +116,5 @@ export default function TravelExpenses({ from, to }: ITravelExpenses) {
     />
   );
 }
+
+export default memo(TravelExpenses);
