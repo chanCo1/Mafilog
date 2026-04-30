@@ -86,7 +86,10 @@ export default function CreateNewTravelStep1({
             name: place.displayName.text,
             address: place.formattedAddress,
             country,
-            location: place.location,
+            location: {
+              lat: place.location.latitude,
+              lng: place.location.longitude,
+            },
           };
         });
 
@@ -115,7 +118,7 @@ export default function CreateNewTravelStep1({
   };
 
   return (
-    <div className="flex flex-col gap-2 h-full">
+    <div className="flex h-full flex-col gap-2">
       <Input
         label="도시 검색"
         placeholder="도시명으로 검색"
@@ -125,7 +128,7 @@ export default function CreateNewTravelStep1({
         disabled={isLoading}
         onKeyDown={(e) => {
           if (e.nativeEvent.isComposing) return;
-          e.key === 'Enter' && handleSearch();
+          if (e.key === 'Enter') handleSearch();
         }}
         suffix={
           <>
@@ -141,7 +144,7 @@ export default function CreateNewTravelStep1({
         }
         description="여행하고 싶은 도시를 검색해주세요."
       />
-      <div className="scrollbar-hide overflow-auto flex-1 flex flex-col gap-2">
+      <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
         {cityList.length ? (
           cityList.map((list) => (
             <div

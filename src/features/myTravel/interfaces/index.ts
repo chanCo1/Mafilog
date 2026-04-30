@@ -13,7 +13,10 @@ export interface IGetGooglePlaces {
     };
     formattedAddress: string;
     id: string;
-    location: ILocation;
+    location: {
+      latitude: number;
+      longitude: number;
+    };
     types: string[];
     primaryTypeDisplayName: {
       languageCode: string;
@@ -37,8 +40,8 @@ export interface ICityList {
 }
 
 interface ILocation {
-  latitude: number | null;
-  longitude: number | null;
+  lat: number;
+  lng: number;
 }
 
 /** 장소 정보 */
