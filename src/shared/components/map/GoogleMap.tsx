@@ -19,9 +19,10 @@ const GoogleMap = () => {
       <Map
         defaultCenter={position}
         defaultZoom={13}
-        mapId="YOUR_MAP_ID" // 구글 클라우드 콘솔에서 발급받은 ID
-        gestureHandling={'greedy'} // 스크롤 시 바로 지도 조작 가능하게
-        disableDefaultUI={true} // 기본 UI 버튼들 제거 (깔끔하게)
+        mapId={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID}
+        gestureHandling={'greedy'}
+        disableDefaultUI={true}
+        keyboardShortcuts={false}
       >
         {/* 기본 핀 마커 */}
         <AdvancedMarker position={position}>
