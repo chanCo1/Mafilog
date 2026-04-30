@@ -25,7 +25,7 @@ interface ISelectbox extends Omit<
   prefix?: React.ReactNode;
   size?: 'md' | 'sm';
   variant?: 'outline' | 'none';
-  value: ILabelValue;
+  value: ILabelValue | undefined;
   addValueText?: string;
   onChange: (value: ILabelValue) => void;
 }
@@ -68,10 +68,7 @@ function SelectboxEntity(
   };
 
   return (
-    <div
-      className={cn('relative', className)}
-      ref={ref}
-    >
+    <div className={cn('relative', className)} ref={ref}>
       <Input
         label={label}
         labelPosition={labelPosition}
@@ -83,7 +80,9 @@ function SelectboxEntity(
         errorMsg={errorMsg}
         readOnly
         inputClassName="cursor-pointer"
-        value={`${value.label} ${addValueText}`}
+        value={
+          value?.label ? `${value?.label ?? ''} ${addValueText ?? ''}` : ''
+        }
         variant={variant}
         size={size}
         onBlur={handleBlur}
@@ -93,13 +92,13 @@ function SelectboxEntity(
 
       {/* 셀렉트박스 */}
       {isOpen && (
-        <div className="absolute top-10 z-50 flex w-full flex-col gap-1 rounded-lg bg-white p-2 shadow-md">
+        <div className={cn("absolute z-50 flex w-full flex-col gap-1 rounded-lg bg-white p-2 shadow-md", label ? 'top-15' : 'top-10')}>
           {options.map((option) => (
             <span
               key={option.value}
               className={cn(
                 'hover:bg-gray-1 cursor-pointer rounded-md p-1.5',
-                option.value === value.value
+                option.value === value?.value
                   ? 'text-text-primary'
                   : 'text-text-secondary',
               )}
@@ -107,7 +106,7 @@ function SelectboxEntity(
                 onClickOption(option);
               }}
             >
-              {option.label}
+              {option.label} {addValueText ?? ''}
             </span>
           ))}
         </div>
