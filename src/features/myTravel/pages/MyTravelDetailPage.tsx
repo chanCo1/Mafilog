@@ -25,6 +25,7 @@ import { Button } from '@/shared/components/ui/Button';
 import TravelScheduleView from '@/features/myTravel/components/detail/schedule/TravelScheduleView';
 import TravelExpensesView from '@/features/myTravel/components/detail/expneses/TravelExpensesView';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
+import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 
 // interface IMyTravelDetailPage {}
 
@@ -42,6 +43,7 @@ export default function MyTravelDetailPage() {
     cities,
   } = TRAVEL_DETAIL_MOCK_DATA;
 
+  const [isOpenTravelModify, setIsOpenTravelModify] = useState(false);
   const [selectedTab, setSelectedTab] = useState<TRAVEL_TAB>(
     TRAVEL_TAB.SCHEDULE,
   );
@@ -63,7 +65,10 @@ export default function MyTravelDetailPage() {
         title={title}
         ruby={<TravelStatus status={status} from={from} to={to} />}
         titleBtn={
-          <div className="text-text-secondary shrink-0 cursor-pointer font-bold">
+          <div
+            className="text-text-secondary shrink-0 cursor-pointer font-bold"
+            onClick={() => setIsOpenTravelModify(true)}
+          >
             수정
           </div>
         }
@@ -123,6 +128,11 @@ export default function MyTravelDetailPage() {
           <TravelExpensesView from={from} to={to} />
         </FadeInOutStyled>
       </div>
+      <CreateNewTravelModal
+        isOpen={isOpenTravelModify}
+        isModify
+        handleClose={() => setIsOpenTravelModify(false)}
+      />
     </div>
   );
 }
