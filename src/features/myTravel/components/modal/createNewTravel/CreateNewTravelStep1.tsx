@@ -178,8 +178,8 @@ export default function CreateNewTravelStep1({
           </>
         )}
       </div>
-      <div className="flex flex-col">
-        <p className="shrink-0">선택된 장소</p>
+      <div className="flex flex-col gap-1">
+        <p className="text-primary">선택된 장소</p>
         {selectedCities.length ? (
           <div className="scrollbar-hide flex gap-1 overflow-x-auto">
             {selectedCities.map((city) => (

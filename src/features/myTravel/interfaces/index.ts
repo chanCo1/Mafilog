@@ -51,8 +51,8 @@ export interface IPlaceList {
     code: string | undefined;
     name: string | undefined;
   };
-  displayName: string;
-  rating: number;
-  userRatingCount: number;
+  // displayName: string;
+  // rating: number;
+  // userRatingCount: number;
   types: string[];
 }
