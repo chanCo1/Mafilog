@@ -115,43 +115,46 @@ export default function CreateNewTravelStep1({
   };
 
   return (
-    <div className="flex h-full flex-col gap-3">
-      <div className="flex flex-col gap-2">
-        <Input
-          label="도시 검색"
-          placeholder="도시명으로 검색"
-          isRequired
-          onChange={(e) => setSearchCity(e.target.value)}
-          value={searchCity}
-          disabled={isLoading}
-          onKeyDown={(e) => {
-            if (e.nativeEvent.isComposing) return;
-            e.key === 'Enter' && handleSearch();
-          }}
-          suffix={
-            <>
-              {isLoading ? (
-                <Loading size="sm" />
-              ) : (
-                <Search
-                  className="h-4 w-4 cursor-pointer"
-                  onClick={handleSearch}
-                />
-              )}
-            </>
-          }
-          description="여행하고 싶은 도시를 검색해주세요."
-        />
+    <div className="flex flex-col gap-2 h-full">
+      <Input
+        label="도시 검색"
+        placeholder="도시명으로 검색"
+        isRequired
+        onChange={(e) => setSearchCity(e.target.value)}
+        value={searchCity}
+        disabled={isLoading}
+        onKeyDown={(e) => {
+          if (e.nativeEvent.isComposing) return;
+          e.key === 'Enter' && handleSearch();
+        }}
+        suffix={
+          <>
+            {isLoading ? (
+              <Loading size="sm" />
+            ) : (
+              <Search
+                className="h-4 w-4 cursor-pointer"
+                onClick={handleSearch}
+              />
+            )}
+          </>
+        }
+        description="여행하고 싶은 도시를 검색해주세요."
+      />
+      <div className="scrollbar-hide overflow-auto flex-1 flex flex-col gap-2">
         {cityList.length ? (
           cityList.map((list) => (
-            <div key={list.id} className="flex items-center justify-between gap-1">
+            <div
+              key={list.id}
+              className="flex items-center justify-between gap-1"
+            >
               <div className="flex flex-col">
                 <p className="text-lg">{list.name}</p>
                 <span className="text-text-secondary text-sm">
                   {list.address}
                 </span>
               </div>
-              <div className='shrink-0'>
+              <div className="shrink-0">
                 {selectedCities.find((city) => city.id === list.id) ? (
                   <Chip
                     variant="redOutline"
@@ -175,10 +178,10 @@ export default function CreateNewTravelStep1({
           </>
         )}
       </div>
-      {selectedCities.length ? (
-        <div className="flex flex-col">
-          <p className="text-text-secondary pb-1 text-sm">선택된 도시</p>
-          <div className="scrollbar-hide flex gap-1 overflow-x-auto pb-3">
+      <div className="flex flex-col">
+        <p className="shrink-0">선택된 장소</p>
+        {selectedCities.length ? (
+          <div className="scrollbar-hide flex gap-1 overflow-x-auto">
             {selectedCities.map((city) => (
               <Chip
                 key={city.id}
@@ -191,8 +194,12 @@ export default function CreateNewTravelStep1({
               </Chip>
             ))}
           </div>
-        </div>
-      ) : null}
+        ) : (
+          <span className="text-text-secondary text-sm">
+            선택된 장소가 없어요
+          </span>
+        )}
+      </div>
     </div>
   );
 }

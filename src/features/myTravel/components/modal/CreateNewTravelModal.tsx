@@ -205,7 +205,7 @@ export default function CreateNewTravelModal({
         currentStep={currentStep}
         onClickStep={setCurrentStep}
       />
-      <div className="relative">
+      <div className="relative h-[calc(100%-65px)]">
         <FadeInOutStyled isShow={currentStep === 1}>
           <CreateNewTravelStep1
             selectedCities={selectedCities}
@@ -230,30 +230,6 @@ export default function CreateNewTravelModal({
             setSelectedImage={setSelectedImage}
           />
         </FadeInOutStyled>
-        {/* {currentStep === 1 && (
-          <CreateNewTravelStep1
-            selectedCities={selectedCities}
-            setSelectedCities={setSelectedCities}
-          />
-        )} */}
-        {/* {currentStep === 2 && (
-          <CreateNewTravelStep2
-            selectedDate={selectedDate}
-            setSeletedDate={setSeletedDate}
-          />
-        )} */}
-        {/* {currentStep === 3 && (
-          <CreateNewTravelStep3
-            title={travelTitle}
-            setTravelTitle={setTravelTitle}
-            travelCompanion={travelCompanion}
-            setTravelCompanion={setTravelCompanion}
-            travelStyle={travelStyle}
-            setTravelStyle={setTravelStyle}
-            selectedImage={selectedImage}
-            setSelectedImage={setSelectedImage}
-          />
-        )} */}
       </div>
     </SideModal>
   );
