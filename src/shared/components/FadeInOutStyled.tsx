@@ -23,7 +23,7 @@ export default function FadeInOutStyled({
   return (
     <div
       className={cn(
-        'transition-all duration-300 ease-in-out',
+        'h-full w-full transition-all duration-500 ease-in-out',
         isShow
           ? 'visible relative translate-y-0 opacity-100'
           : 'pointer-events-none invisible absolute top-0 left-0 w-full translate-y-4 opacity-0',

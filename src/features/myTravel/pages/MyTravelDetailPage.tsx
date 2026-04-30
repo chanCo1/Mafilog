@@ -24,6 +24,7 @@ import { TRAVEL_TAB } from '@/shared/types/Enum';
 import { Button } from '@/shared/components/ui/Button';
 import TravelSchedule from '@/features/myTravel/components/detail/schedule/TravelSchedule';
 import TravelExpenses from '@/features/myTravel/components/detail/expneses/TravelExpenses';
+import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 
 // interface IMyTravelDetailPage {}
 
@@ -115,26 +116,12 @@ export default function MyTravelDetailPage() {
         </div>
       </div>
       <div className="relative">
-        <div
-          className={cn(
-            'transition-all duration-300 ease-in-out',
-            selectedTab === TRAVEL_TAB.SCHEDULE
-              ? 'visible relative translate-y-0 opacity-100'
-              : 'pointer-events-none invisible absolute top-0 left-0 w-full translate-y-4 opacity-0',
-          )}
-        >
+        <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.SCHEDULE}>
           <TravelSchedule from={from} to={to} />
-        </div>
-        <div
-          className={cn(
-            'transition-all duration-300 ease-in-out',
-            selectedTab === TRAVEL_TAB.EXPENSES
-              ? 'visible relative translate-y-0 opacity-100'
-              : 'pointer-events-none invisible absolute top-0 left-0 w-full translate-y-4 opacity-0',
-          )}
-        >
+        </FadeInOutStyled>
+        <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.EXPENSES}>
           <TravelExpenses from={from} to={to} />
-        </div>
+        </FadeInOutStyled>
       </div>
     </div>
   );
