@@ -74,6 +74,21 @@ export const getTravelCurrentDay = (from: Date, to: Date) => {
   return `${diffDays}일차`;
 };
 
+/** 여행 기간에 따른 일차 & 날짜 구하기 */
+export const getTravelDayOfWeek = (from: Date, to: Date) => {
+  const travelDays = Array.from({ length: getTravelDay(from, to) }).map(
+    (_, index) => {
+      const _day = index + 1;
+      const dupDate = new Date(from);
+      dupDate.setDate(from.getDate() + index);
+
+      return { day: _day, date: dupDate };
+    },
+  );
+
+  return travelDays;
+};
+
 /** 여행 동반자 변환 */
 export const convertTravelPartner = (partner: TRAVEL_PARTNER) => {
   return TRAVEL_PARTNER_LIST.find((list) => list.value === partner)?.label;
