@@ -1,8 +1,8 @@
 /**
- * @file: TravelDetailScheduleTimeline.tsx
+ * @file: TravelScheduleTimeline.tsx
  * @author: chad
  * @since: 2026.04.28 ~
- * @description: TravelDetailScheduleTimeline 컴포넌트, 여행 일정/지출 타임라인
+ * @description: TravelScheduleTimeline 컴포넌트, 여행 일정/지출 타임라인
  */
 
 import { useState, useMemo, MouseEvent } from 'react';
@@ -13,13 +13,13 @@ import { SCHEDULE_TYPE, ICON_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { Button } from '@/shared/components/ui/Button';
 
-interface ITravelDetailScheduleTimeline {
+interface ITravelScheduleTimeline {
   type?: SCHEDULE_TYPE;
   // icon: ICON_TYPE;
   isSelect?: boolean;
 }
 
-export default function TravelDetailScheduleTimeline({ type }: ITravelDetailScheduleTimeline) {
+export default function TravelScheduleTimeline({ type }: ITravelScheduleTimeline) {
   /** 메모를 제외한 일정 카운트 */
   // const getDisplayCount = useMemo(() => {
   //   if (type !== SCHEDULE_TYPE.LOCATION) return;

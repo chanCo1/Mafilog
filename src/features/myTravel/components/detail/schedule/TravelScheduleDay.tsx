@@ -1,24 +1,24 @@
 /**
- * @file: TravelDetailScheduleDay.tsx
+ * @file: TravelScheduleDay.tsx
  * @author: chad
  * @since: 2026.04.28 ~
- * @description: TravelDetailScheduleDay 컴포넌트, 일차 컴포넌트
+ * @description: TravelScheduleDay 컴포넌트, 일차 컴포넌트
  */
 
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
-import TravelDetailScheduleTimeline from '@/features/myTravel/components/detail/schedule/TravelDetailScheduleTimeline';
+import TravelScheduleTimeline from '@/features/myTravel/components/detail/schedule/TravelScheduleTimeline';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
 
-interface ITravelDetailScheduleDay {
+interface ITravelScheduleDay {
   day: number;
   date: Date;
 }
 
-export default function TravelDetailScheduleDay({
+export default function TravelScheduleDay({
   day,
   date,
-}: ITravelDetailScheduleDay) {
+}: ITravelScheduleDay) {
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-center gap-1">
@@ -28,7 +28,7 @@ export default function TravelDetailScheduleDay({
         </span>
       </div>
       <div className="flex flex-col">
-        <TravelDetailScheduleTimeline />
+        <TravelScheduleTimeline />
       </div>
     </div>
   );

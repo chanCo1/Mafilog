@@ -22,8 +22,8 @@ import { Chip } from '@/shared/components/ui/Chip';
 import { TRAVEL_TAB_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_TAB } from '@/shared/types/Enum';
 import { Button } from '@/shared/components/ui/Button';
-import TravelSchedule from '@/features/myTravel/components/detail/schedule/TravelSchedule';
-import TravelExpenses from '@/features/myTravel/components/detail/expneses/TravelExpenses';
+import TravelScheduleView from '@/features/myTravel/components/detail/schedule/TravelScheduleView';
+import TravelExpensesView from '@/features/myTravel/components/detail/expneses/TravelExpensesView';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 
 // interface IMyTravelDetailPage {}
@@ -117,10 +117,10 @@ export default function MyTravelDetailPage() {
       </div>
       <div className="relative">
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.SCHEDULE}>
-          <TravelSchedule from={from} to={to} />
+          <TravelScheduleView from={from} to={to} />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.EXPENSES}>
-          <TravelExpenses from={from} to={to} />
+          <TravelExpensesView from={from} to={to} />
         </FadeInOutStyled>
       </div>
     </div>

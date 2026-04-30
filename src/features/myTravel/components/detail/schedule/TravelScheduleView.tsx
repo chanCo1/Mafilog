@@ -1,25 +1,24 @@
 /**
- * @file: TravelSchedule.tsx
+ * @file: TravelScheduleView.tsx
  * @author: chad
  * @since: 2026.04.29 ~
- * @description: TravelSchedule 컴포넌트, 여행 일정탭 하위 내용
+ * @description: TravelScheduleView 컴포넌트, 여행 일정탭 하위 내용
  */
 
 import { memo, useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
 import { getTravelDay } from '@/shared/lib/utils';
-import TravelDetailScheduleDay from '@/features/myTravel/components/detail/schedule/TravelDetailScheduleDay';
+import TravelScheduleDay from '@/features/myTravel/components/detail/schedule/TravelScheduleDay';
 import { Chip } from '@/shared/components/ui/Chip';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 
-interface ITravelSchedule {
+interface ITravelScheduleView {
   from: Date;
   to: Date;
 }
 
-function TravelSchedule({ from, to }: ITravelSchedule) {
+function TravelScheduleView({ from, to }: ITravelScheduleView) {
   const [selectedDay, setSelectedDay] = useState(1);
 
   return (
@@ -47,7 +46,7 @@ function TravelSchedule({ from, to }: ITravelSchedule) {
             dupDate.setDate(from.getDate() + index);
 
             return (
-              <TravelDetailScheduleDay
+              <TravelScheduleDay
                 key={`${dupDate}-${index}`}
                 day={_day}
                 date={dupDate}
@@ -79,4 +78,4 @@ function TravelSchedule({ from, to }: ITravelSchedule) {
   );
 }
 
-export default memo(TravelSchedule);
+export default memo(TravelScheduleView);

@@ -14,7 +14,7 @@ import TravelExpensesDay from '@/features/myTravel/components/detail/expneses/Tr
 import { Card } from '@/shared/components/ui/Card';
 import TravelExpensesSpendCard from '@/features/myTravel/components/detail/expneses/TravelExpensesSpendCard';
 
-interface ITravelExpenses {
+interface ITravelExpensesView {
   from: Date;
   to: Date;
 }
@@ -24,7 +24,7 @@ const TRAVEL_EXPENSES_BEFORE_LIST = [
   { label: '여행전', value: 'before' },
 ];
 
-function TravelExpenses({ from, to }: ITravelExpenses) {
+function TravelExpensesView({ from, to }: ITravelExpensesView) {
   const [selectedDay, setSelectedDay] = useState<string | number>(
     TRAVEL_EXPENSES_BEFORE_LIST[0].value,
   );
@@ -117,4 +117,4 @@ function TravelExpenses({ from, to }: ITravelExpenses) {
   );
 }
 
-export default memo(TravelExpenses);
+export default memo(TravelExpensesView);
