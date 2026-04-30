@@ -5,8 +5,7 @@
  * @description: AddPlaceModal 컴포넌트, 여행 장소 추가 모달
  */
 
-import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { useState, useMemo } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Chip } from '@/shared/components/ui/Chip';
 import { Input } from '@/shared/components/ui/Input';
@@ -23,6 +22,7 @@ import {
 } from '@/shared/lib/utils';
 import { Selectbox } from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
+import GoogleMap from '@/shared/components/map/GoogleMap';
 
 interface IAddPlaceModal {
   isOpen: boolean;
@@ -47,14 +47,22 @@ export default function AddPlaceModal({
     });
   };
 
+  /** 장소 검색 */
   const [searchPlace, setSearchPlace] = useState<string>('');
+  /** 검색된 장소 리스트 */
   const [placeList, setPlaceList] = useState<IPlaceList[]>([]);
+  /** 로딩 여부 */
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedplaces, setSelectedplaces] = useState<any[]>([]);
+  /** 장소 선택 */
+  const [selectedPlaces, setSelectedPlaces] = useState<IPlaceList[]>([]);
+  /** 검색 결과 메시지 */
   const [resultMsg, setResultMsg] = useState('');
+  /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>(
     travelDaysOptions()[0],
   );
+  /** 클릭한 장소 정보 */
+  const [clickPlaceData, setClickPlaceData] = useState<IPlaceList>();
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const url = 'https://places.googleapis.com/v1/places:searchText';
@@ -77,8 +85,11 @@ export default function AddPlaceModal({
           'Content-Type': 'application/json',
           'X-Goog-Api-Key': GOOGLE_API_KEY as string,
           'X-Goog-FieldMask':
-            'places.id,places.displayName,places.addressComponents,places.formattedAddress,places.location,places.rating,places.userRatingCount,places.types,places.primaryTypeDisplayName',
+            'places.id,places.displayName,places.addressComponents,places.formattedAddress,places.location,places.types',
         },
+        // places.primaryTypeDisplayName
+        // places.rating
+        // places.userRatingCount
         body: JSON.stringify(body),
       });
 
@@ -101,11 +112,14 @@ export default function AddPlaceModal({
             name: place.displayName.text,
             address: place.formattedAddress,
             country,
-            location: place.location,
+            location: {
+              lat: place.location.latitude,
+              lng: place.location.longitude,
+            },
             types: place.types,
-            rating: place.rating,
-            displayName: place?.primaryTypeDisplayName?.text || '',
-            userRatingCount: place.userRatingCount,
+            // rating: place.rating,
+            // displayName: place?.primaryTypeDisplayName?.text || '',
+            // userRatingCount: place.userRatingCount,
           };
         });
 
@@ -123,14 +137,14 @@ export default function AddPlaceModal({
 
   /** 장소 선택 */
   const selectPlace = (list: any) => {
-    setSelectedplaces([...selectedplaces, list]);
+    setSelectedPlaces([...selectedPlaces, list]);
     setSearchPlace('');
   };
 
   /** 선택한 도시 제거 */
   const deleteSelectedPlace = (_id: string) => {
-    const filtered = selectedplaces.filter((place) => place.id !== _id);
-    setSelectedplaces(filtered);
+    const filtered = selectedPlaces.filter((place) => place.id !== _id);
+    setSelectedPlaces(filtered);
   };
 
   /** 닫기 버튼 클릭 */
@@ -143,8 +157,13 @@ export default function AddPlaceModal({
   const dataReset = () => {
     setSearchPlace('');
     setPlaceList([]);
-    setSelectedplaces([]);
+    setSelectedPlaces([]);
+    setSelectedDay(travelDaysOptions()[0]);
   };
+
+  const clickedPlace = useMemo(() => {
+  return clickPlaceData ? [clickPlaceData] : [];
+}, [clickPlaceData]);
 
   return (
     <SideModal
@@ -156,7 +175,7 @@ export default function AddPlaceModal({
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={!selectedplaces.length} onClick={onClickCloseBtn}>
+          <Button disabled={!selectedPlaces.length} onClick={onClickCloseBtn}>
             장소 추가
           </Button>
         </>
@@ -180,7 +199,7 @@ export default function AddPlaceModal({
           disabled={isLoading}
           onKeyDown={(e) => {
             if (e.nativeEvent.isComposing) return;
-            e.key === 'Enter' && handleSearch();
+            if (e.key === 'Enter') handleSearch();
           }}
           suffix={
             <>
@@ -195,6 +214,9 @@ export default function AddPlaceModal({
             </>
           }
         />
+        <div className="max-mobile:h-40 h-60">
+          <GoogleMap places={clickedPlace} />
+        </div>
         <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
           {placeList.length ? (
             placeList.map((list) => (
@@ -202,7 +224,10 @@ export default function AddPlaceModal({
                 key={list.id}
                 className="flex items-center justify-between gap-1"
               >
-                <div className="flex cursor-pointer flex-col">
+                <div
+                  className="flex cursor-pointer flex-col"
+                  onClick={() => setClickPlaceData(list)}
+                >
                   <p className="text-lg">{list.name}</p>
                   <span className="text-text-secondary text-sm">
                     {list.address}
@@ -212,11 +237,11 @@ export default function AddPlaceModal({
                     {list.country.name && (
                       <>&nbsp;&#8226;&nbsp;{list.country.name}</>
                     )}
-                    {list.displayName && (
+                    {/* {list.displayName && (
                       <>&nbsp;&#8226;&nbsp;{list.displayName}</>
-                    )}
+                    )} */}
                   </span>
-                  <div className="flex items-center gap-1">
+                  {/* <div className="flex items-center gap-1">
                     <div className="flex items-center gap-1">
                       <Star className="text-state-warning h-4 w-4 fill-current" />
                       <span className="text-text-secondary text-sm">
@@ -229,10 +254,10 @@ export default function AddPlaceModal({
                         {convertComma(list.userRatingCount)}명
                       </span>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="shrink-0">
-                  {selectedplaces.find((city) => city.id === list.id) ? (
+                  {selectedPlaces.find((city) => city.id === list.id) ? (
                     <Chip
                       variant="redOutline"
                       onClick={() => deleteSelectedPlace(list.id)}
@@ -255,11 +280,11 @@ export default function AddPlaceModal({
             </>
           )}
         </div>
-        <div className="flex flex-col">
-          <p className="shrink-0">선택된 장소</p>
-          {selectedplaces.length ? (
+        <div className="flex flex-col gap-1">
+          <p className="text-primary">선택된 장소</p>
+          {selectedPlaces.length ? (
             <div className="scrollbar-hide flex gap-1 overflow-x-auto">
-              {selectedplaces.map((place) => (
+              {selectedPlaces.map((place) => (
                 <Chip
                   key={place.id}
                   className="shrink-0"
