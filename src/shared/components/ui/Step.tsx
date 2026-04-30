@@ -59,8 +59,15 @@ export default function Step({
                     size="sm"
                   />
                 )}
+                <span
+                  className={cn(
+                    'text-sm',
+                    currentStep === currentIndexStep && 'underline',
+                  )}
+                >
+                  {option.label}
+                </span>
               </div>
-              <span className={cn("text-sm", currentStep === currentIndexStep && 'underline')}>{option.label}</span>
             </Button>
             {index + 1 < stepOptions.length && (
               <ChevronRight className="text-text-secondary h-4 w-4" />
