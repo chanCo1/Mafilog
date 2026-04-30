@@ -56,7 +56,10 @@ function SideModalEntity({
           `${isOpen ? 'translate-x-0' : 'translate-x-full'}`,
         )}
       >
-        <ReturnButton label={title} size="lg" onClick={handleClose} />
+        <div className='flex item-center justify-between'>
+          <span className='text-lg font-bold'>{title}</span>
+          <ReturnButton size="lg" onClick={handleClose} />
+        </div>
         <div className="scrollbar-hide flex h-full flex-col gap-3 overflow-auto">
           {children}
         </div>
