@@ -20,11 +20,12 @@ import { ChevronLeft } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
+import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
   handleClose: () => void;
-  isModify?: false;
+  isModify?: boolean;
 }
 
 export default function CreateNewTravelModal({
@@ -92,7 +93,7 @@ export default function CreateNewTravelModal({
         cityName.push(city.name);
       });
 
-      return `${cityName.join(', ')} 여행`
+      return `${cityName.join(', ')} 여행`;
     };
 
     const params = {
@@ -204,30 +205,56 @@ export default function CreateNewTravelModal({
         currentStep={currentStep}
         onClickStep={setCurrentStep}
       />
-      {currentStep === 1 && (
-        <CreateNewTravelStep1
-          selectedCities={selectedCities}
-          setSelectedCities={setSelectedCities}
-        />
-      )}
-      {currentStep === 2 && (
-        <CreateNewTravelStep2
-          selectedDate={selectedDate}
-          setSeletedDate={setSeletedDate}
-        />
-      )}
-      {currentStep === 3 && (
-        <CreateNewTravelStep3
-          title={travelTitle}
-          setTravelTitle={setTravelTitle}
-          travelCompanion={travelCompanion}
-          setTravelCompanion={setTravelCompanion}
-          travelStyle={travelStyle}
-          setTravelStyle={setTravelStyle}
-          selectedImage={selectedImage}
-          setSelectedImage={setSelectedImage}
-        />
-      )}
+      <div className="relative">
+        <FadeInOutStyled isShow={currentStep === 1}>
+          <CreateNewTravelStep1
+            selectedCities={selectedCities}
+            setSelectedCities={setSelectedCities}
+          />
+        </FadeInOutStyled>
+        <FadeInOutStyled isShow={currentStep === 2}>
+          <CreateNewTravelStep2
+            selectedDate={selectedDate}
+            setSeletedDate={setSeletedDate}
+          />
+        </FadeInOutStyled>
+        <FadeInOutStyled isShow={currentStep === 3}>
+          <CreateNewTravelStep3
+            title={travelTitle}
+            setTravelTitle={setTravelTitle}
+            travelCompanion={travelCompanion}
+            setTravelCompanion={setTravelCompanion}
+            travelStyle={travelStyle}
+            setTravelStyle={setTravelStyle}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+          />
+        </FadeInOutStyled>
+        {/* {currentStep === 1 && (
+          <CreateNewTravelStep1
+            selectedCities={selectedCities}
+            setSelectedCities={setSelectedCities}
+          />
+        )} */}
+        {/* {currentStep === 2 && (
+          <CreateNewTravelStep2
+            selectedDate={selectedDate}
+            setSeletedDate={setSeletedDate}
+          />
+        )} */}
+        {/* {currentStep === 3 && (
+          <CreateNewTravelStep3
+            title={travelTitle}
+            setTravelTitle={setTravelTitle}
+            travelCompanion={travelCompanion}
+            setTravelCompanion={setTravelCompanion}
+            travelStyle={travelStyle}
+            setTravelStyle={setTravelStyle}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+          />
+        )} */}
+      </div>
     </SideModal>
   );
 }
