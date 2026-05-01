@@ -7,7 +7,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { cn, convertTravelStyle } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
 import { TRAVEL_DETAIL_MOCK_DATA } from '@/features/myTravel/data';
@@ -26,22 +26,43 @@ import TravelScheduleView from '@/features/myTravel/components/detail/schedule/T
 import TravelExpensesView from '@/features/myTravel/components/detail/expneses/TravelExpensesView';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
+import { useTravelStore } from '@/shared/stores/useTravelStore';
 
 // interface IMyTravelDetailPage {}
 
 export default function MyTravelDetailPage() {
-  const {
-    id,
-    title,
-    from,
-    to,
-    status,
-    styles,
-    partner,
-    image,
-    schedule,
-    cities,
-  } = TRAVEL_DETAIL_MOCK_DATA;
+  const setInitTravel = useTravelStore((state) => state.setInitTravel);
+  const getTravelInfo = useTravelStore((state) => state.getTravelInfo);
+  const travelInfo = getTravelInfo();
+
+  console.log('>>>>', getTravelInfo());
+
+  useEffect(() => {
+    const {
+      id,
+      title,
+      from,
+      to,
+      status,
+      travelPartner,
+      travelStyles,
+      image,
+      schedule,
+      cities,
+    } = TRAVEL_DETAIL_MOCK_DATA;
+
+    setInitTravel({
+      id,
+      cities,
+      from,
+      status,
+      title,
+      to,
+      travelPartner,
+      travelPeriod: getTravelDay(from, to),
+      travelStyles,
+    });
+  }, []);
 
   const [isOpenTravelModify, setIsOpenTravelModify] = useState(false);
   const [selectedTab, setSelectedTab] = useState<TRAVEL_TAB>(
@@ -50,20 +71,26 @@ export default function MyTravelDetailPage() {
 
   /** 여행 기간 날짜 포멧 */
   const formattedValue = useMemo(() => {
-    if (!from || !to) return '';
+    if (!travelInfo.from || !travelInfo.to) return '';
 
-    if (from === to) {
-      return `${convertFormattedDate(from)}(${getDay(from)}) (${getTravelDay(from, to)}일)`;
+    if (travelInfo.from === travelInfo.to) {
+      return `${convertFormattedDate(travelInfo.from)}(${getDay(travelInfo.from)}) (${getTravelDay(travelInfo.from, travelInfo.to)}일)`;
     }
 
-    return `${convertFormattedDate(from)}(${getDay(from)}) ~ ${convertFormattedDate(to)}(${getDay(to)}) (${getTravelDay(from, to)}일)`;
-  }, [from, to]);
+    return `${convertFormattedDate(travelInfo.from)}(${getDay(travelInfo.from)}) ~ ${convertFormattedDate(travelInfo.to)}(${getDay(travelInfo.to)}) (${getTravelDay(travelInfo.from, travelInfo.to)}일)`;
+  }, [travelInfo.from, travelInfo.to]);
 
   return (
     <div className="flex flex-col gap-5">
       <PageHeader
-        title={title}
-        ruby={<TravelStatus status={status} from={from} to={to} />}
+        title={travelInfo.title}
+        ruby={
+          <TravelStatus
+            status={travelInfo.status}
+            from={travelInfo.from}
+            to={travelInfo.to}
+          />
+        }
         titleBtn={
           <div
             className="text-text-secondary shrink-0 cursor-pointer font-bold"
@@ -77,9 +104,9 @@ export default function MyTravelDetailPage() {
             <span>{formattedValue}</span>
             <span className="max-mobile:hidden">|</span>
             <div className="text-md flex gap-1">
-              <div>{convertTravelPartner(partner)}</div>
-              {styles.length &&
-                styles.map((style) => (
+              <div>{convertTravelPartner(travelInfo.travelPartner)}</div>
+              {travelInfo.travelStyles.length &&
+                travelInfo.travelStyles.map((style) => (
                   <div key={style}>#{convertTravelStyle(style)}</div>
                 ))}
               여행
@@ -122,10 +149,10 @@ export default function MyTravelDetailPage() {
       </div>
       <div className="relative">
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.SCHEDULE}>
-          <TravelScheduleView from={from} to={to} />
+          <TravelScheduleView />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.EXPENSES}>
-          <TravelExpensesView from={from} to={to} />
+          <TravelExpensesView from={travelInfo.from} to={travelInfo.to} />
         </FadeInOutStyled>
       </div>
       <CreateNewTravelModal

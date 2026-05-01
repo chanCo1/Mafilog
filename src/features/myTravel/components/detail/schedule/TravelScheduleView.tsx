@@ -14,20 +14,21 @@ import { Chip } from '@/shared/components/ui/Chip';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
+import { useTravelStore } from '@/shared/stores/useTravelStore';
 
-interface ITravelScheduleView {
-  from: Date;
-  to: Date;
-}
+interface ITravelScheduleView {}
 
-function TravelScheduleView({ from, to }: ITravelScheduleView) {
+function TravelScheduleView() {
+  const getTravelInfo = useTravelStore((state) => state.getTravelInfo);
+  const travelInfo = getTravelInfo();
+
   const [selectedDay, setSelectedDay] = useState(1);
   const [isOpenAddPlaceModel, setIsOpenAddPlaceModal] = useState(false);
 
   /** 여행 일수 */
-  const travelDays = useMemo(() => {
-    return getTravelDay(from, to);
-  }, [from, to]);
+  // const travelDays = useMemo(() => {
+  //   return getTravelDay(from, to);
+  // }, [from, to]);
 
   return (
     <>
@@ -53,31 +54,35 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
         }
         dayTimelines={
           <>
-            {getTravelDayOfWeek(from, to).map((_day, index) => {
-              return (
-                <TravelScheduleDay
-                  key={`${_day.day}-${index}`}
-                  day={_day.day}
-                  date={_day.date}
-                  // schedule={TRAVEL_DETAIL_MOCK_DATA.schedule}
-                />
-              );
-            })}
+            {getTravelDayOfWeek(travelInfo.from, travelInfo.to)?.map(
+              (_day, index) => {
+                return (
+                  <TravelScheduleDay
+                    key={`${_day.day}-${index}`}
+                    day={_day.day}
+                    date={_day.date}
+                    // schedule={TRAVEL_DETAIL_MOCK_DATA.schedule}
+                  />
+                );
+              },
+            )}
           </>
         }
         dayButtons={
           <>
-            {getTravelDayOfWeek(from, to).map((_day, index) => (
-              <Chip
-                key={`${_day.day}-${index}`}
-                size="md"
-                className="shrink-0"
-                variant={
-                  selectedDay === _day.day ? 'primary' : 'primaryOutline'
-                }
-                onClick={() => setSelectedDay(_day.day)}
-              >{`${_day.day}일차`}</Chip>
-            ))}
+            {getTravelDayOfWeek(travelInfo.from, travelInfo.to)?.map(
+              (_day, index) => (
+                <Chip
+                  key={`${_day.day}-${index}`}
+                  size="md"
+                  className="shrink-0"
+                  variant={
+                    selectedDay === _day.day ? 'primary' : 'primaryOutline'
+                  }
+                  onClick={() => setSelectedDay(_day.day)}
+                >{`${_day.day}일차`}</Chip>
+              ),
+            )}
           </>
         }
         stautsArea={
@@ -89,8 +94,6 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
       />
       <AddPlaceModal
         isOpen={isOpenAddPlaceModel}
-        from={from}
-        to={to}
         handleClose={() => setIsOpenAddPlaceModal(false)}
       />
     </>

@@ -23,23 +23,23 @@ import { Selectbox } from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
+import { useTravelStore } from '@/shared/stores/useTravelStore';
 
 interface IAddPlaceModal {
   isOpen: boolean;
   handleClose: () => void;
-  from: Date;
-  to: Date;
 }
 
 export default function AddPlaceModal({
   isOpen,
   handleClose,
-  from,
-  to,
 }: IAddPlaceModal) {
+  const getTravelInfo = useTravelStore((state) => state.getTravelInfo);
+  const travelInfo = getTravelInfo();
+
   /** 일정 선택 옵션 */
   const travelDaysOptions = () => {
-    return getTravelDayOfWeek(from, to).map((_day) => {
+    return getTravelDayOfWeek(travelInfo.from, travelInfo.to)?.map((_day) => {
       return {
         label: `${_day.day}일차 ${convertFormattedDate(_day.date, 'MM월 dd일')} (${getDay(_day.date)})`,
         value: _day.day,
@@ -59,7 +59,7 @@ export default function AddPlaceModal({
   const [resultMsg, setResultMsg] = useState('');
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>(
-    travelDaysOptions()[0],
+    travelDaysOptions()?.[0],
   );
   /** 클릭한 장소 정보 */
   const [clickPlaceData, setClickPlaceData] = useState<IPlaceList>();
@@ -158,7 +158,7 @@ export default function AddPlaceModal({
     setSearchPlace('');
     setPlaceList([]);
     setSelectedPlaces([]);
-    setSelectedDay(travelDaysOptions()[0]);
+    setSelectedDay(travelDaysOptions()?.[0]);
   };
 
   const clickedPlace = useMemo(() => {
@@ -184,7 +184,7 @@ export default function AddPlaceModal({
       <div className="flex h-full flex-col gap-2">
         <Selectbox
           label="일정 선택"
-          options={travelDaysOptions()}
+          options={travelDaysOptions() ? travelDaysOptions(): []}
           value={selectedDay}
           onChange={(value) => setSelectedDay(value)}
           placeholder="여행 일정을 선택해주세요"
@@ -215,7 +215,7 @@ export default function AddPlaceModal({
           }
         />
         <div className="max-mobile:h-40 h-60">
-          <GoogleMap places={clickedPlace} />
+          {/* <GoogleMap places={clickedPlace} /> */}
         </div>
         <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
           {placeList.length ? (

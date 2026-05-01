@@ -1,4 +1,4 @@
-import { TRAVEL_TAB, TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
+import { TRAVEL_TAB, TRAVEL_PARTNER, TRAVEL_STYLE, TRAVEL_STATUS } from '@/shared/types/Enum';
 
 export const CITY_MOCK_DATA = {
   places: [
@@ -104,9 +104,9 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
   title: '부산광역시, 도쿄도, 오사카시 여행',
   from: new Date('Mon Apr 27 2026 11:56:35 GMT+0900'),
   to: new Date('Sun may 3 2026 00:00:00 GMT+0900'),
-  status: 'progress',
-  partner: 'lover' as TRAVEL_PARTNER,
-  styles: ['heal', 'food', 'activity'] as TRAVEL_STYLE[],
+  status: 'progress' as TRAVEL_STATUS,
+  travelPartner: 'lover' as TRAVEL_PARTNER,
+  travelStyles: ['heal', 'food', 'activity'] as TRAVEL_STYLE[],
   cities: [
     {
       id: 'ChIJAWZKutdIZTURtdOKmJ3WltE',

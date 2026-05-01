@@ -47,7 +47,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
           {Array.from({ length: getTravelDay(from, to) }).map((_, index) => {
             const _day = index + 1;
             const dupDate = new Date(from);
-            dupDate.setDate(from.getDate() + index);
+            dupDate.setDate(from?.getDate() + index);
 
             return (
               <TravelExpensesDay
