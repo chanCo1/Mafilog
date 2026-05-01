@@ -60,6 +60,7 @@ export interface ITravelActions {
   setInitTravel: (data: ITravelState['travelInfo']) => void;
   setAddScheduleList: (data: ISchedule) => void;
   setDeleteScheduleList: (id: string | number) => void;
+  reset: () => void;
 }
 
 /** 여행 상세 전역 인터페이스 (getters) */

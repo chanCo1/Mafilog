@@ -35,6 +35,7 @@ export default function MyTravelDetailPage() {
   const travelInfo = useTravelStore((state) => state.travelInfo);
 
   useEffect(() => {
+    /** TODO: 임시 데이터 */
     const {
       id,
       title,
@@ -59,6 +60,10 @@ export default function MyTravelDetailPage() {
       travelPeriod: getTravelDay(from, to),
       travelStyles,
     });
+
+    return () => {
+      useTravelStore.getState().reset();
+    }
   }, []);
 
   const [isOpenTravelModify, setIsOpenTravelModify] = useState(false);

@@ -61,7 +61,6 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
 
   /** 일정 선택 초기값 */
   useEffect(() => {
-    console.log(getTravelCurrentDay(travelInfo.from, travelInfo.to));
     if (travelInfo.from && travelInfo.to) {
       setSelectedDay(
         travelDaysOptions[
@@ -171,6 +170,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   const clickedPlace = useMemo(() => {
     return clickPlaceData ? [clickPlaceData] : [];
   }, [clickPlaceData]);
+
   return (
     <SideModal
       isOpen={isOpen}
