@@ -28,16 +28,17 @@ export interface IGetGooglePlaces {
 }
 
 /** 도시 정보 */
-export interface ICityList {
-  id: string;
-  name: string;
-  location: ILocation;
-  address: string;
-  country: {
-    code: string | undefined;
-    name: string | undefined;
-  };
-}
+// export interface ICityList {
+//   id: string;
+//   name: string;
+//   location: ILocation;
+//   address: string;
+//   country: {
+//     code: string | undefined;
+//     name: string | undefined;
+//   };
+//   types: string[];
+// }
 
 interface ILocation {
   lat: number;
@@ -54,8 +55,5 @@ export interface IPlaceList {
     code: string | undefined;
     name: string | undefined;
   };
-  // displayName: string;
-  // rating: number;
-  // userRatingCount: number;
   types: string[];
 }

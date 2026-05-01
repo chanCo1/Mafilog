@@ -31,7 +31,7 @@ const GoogleMap = ({ places }: IGoogleMap) => {
     /** 단일 장소일 경우 */
     if (places.length === 1) {
       map.panTo(places[0].location);
-      map.setZoom(17);
+      map.setZoom(15);
 
       return;
     }

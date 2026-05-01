@@ -12,7 +12,7 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
 import Step from '@/shared/components/ui/Step';
 import CreateNewTravelStep1 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep1';
-import { ICityList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces';
 import { CREATE_TRAVEL_STEP_LIST } from '@/features/myTravel/constants';
 import CreateNewTravelStep2 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep2';
 import CreateNewTravelStep3 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep3';
@@ -37,7 +37,7 @@ export default function CreateNewTravelModal({
 
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedCities, setSelectedCities] = useState<ICityList[]>([]);
+  const [selectedCities, setSelectedCities] = useState<IPlaceList[]>([]);
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
   );
@@ -88,6 +88,7 @@ export default function CreateNewTravelModal({
     const getTravelName = () => {
       if (travelTitle) return travelTitle;
 
+      // TODO: const로도 값이 변경되는지 확인
       let cityName: string[] = [];
       selectedCities.forEach((city) => {
         cityName.push(city.name);

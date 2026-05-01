@@ -8,15 +8,15 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Chip } from '@/shared/components/ui/Chip';
 import { Input } from '@/shared/components/ui/Input';
-import { ICityList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces';
 import { Search, X } from 'lucide-react';
 import { CITY_MOCK_DATA } from '@/features/myTravel/data';
 import { IGetGooglePlaces } from '@/features/myTravel/interfaces';
 import { Loading } from '@/shared/components/ui/Loading';
 
 interface ICreateNewTravelStep1 {
-  selectedCities: ICityList[];
-  setSelectedCities: Dispatch<SetStateAction<ICityList[]>>;
+  selectedCities: IPlaceList[];
+  setSelectedCities: Dispatch<SetStateAction<IPlaceList[]>>;
 }
 
 export default function CreateNewTravelStep1({
@@ -24,7 +24,7 @@ export default function CreateNewTravelStep1({
   setSelectedCities,
 }: ICreateNewTravelStep1) {
   const [searchCity, setSearchCity] = useState<string>('');
-  const [cityList, setCityList] = useState<ICityList[]>([]);
+  const [cityList, setCityList] = useState<IPlaceList[]>([]);
   const [resultMsg, setResultMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -106,7 +106,7 @@ export default function CreateNewTravelStep1({
   };
 
   /** 도시 선택 */
-  const selectCity = (list: ICityList) => {
+  const selectCity = (list: IPlaceList) => {
     setSelectedCities([...selectedCities, list]);
     setSearchCity('');
   };

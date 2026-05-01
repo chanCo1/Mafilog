@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/shared/lib/utils';
-import { ICityList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces';
 import { convertFormattedDate, getTravelDay } from '@/shared/lib/utils';
 import { Badge } from '@/shared/components/ui/Badge';
 import { calcDDay } from '@/shared/lib/utils';
@@ -17,7 +17,7 @@ interface ITravelListCard {
   name: string;
   from: Date;
   to: Date;
-  cities: ICityList[];
+  cities: IPlaceList[];
   onClick?: () => void;
 }
 
@@ -56,7 +56,7 @@ export default function TravelListCard({
 
       return acc;
     },
-    {} as Record<string, ICityList[]>,
+    {} as Record<string, IPlaceList[]>,
   );
 
   return (
