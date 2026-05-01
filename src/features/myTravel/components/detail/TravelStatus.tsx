@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import { calcDDay } from '@/shared/lib/utils';
 import { TRAVEL_STATUS_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_STATUS } from '@/shared/types/Enum';
-import { getTravelCurrentDay } from '@/shared/lib/utils';
+import { getTravelCurrentDay, getTravelDay } from '@/shared/lib/utils';
 
 interface ITravelStatus {
   status: string;
@@ -48,7 +48,9 @@ export default function TravelStatus({ status, from, to }: ITravelStatus) {
   const getStatusBadge = useMemo(() => {
     switch (status) {
       case TRAVEL_STATUS.PROGRESS:
-        return getTravelCurrentDay(from, to);
+        return getTravelCurrentDay(from, to) === getTravelDay(from, to)
+          ? '마지막날'
+          : `${getTravelCurrentDay(from, to)}일차`;
       case TRAVEL_STATUS.UPCOMING:
         return `D-${calcDDay(from)}`;
       case TRAVEL_STATUS.LAST:
@@ -61,9 +63,7 @@ export default function TravelStatus({ status, from, to }: ITravelStatus) {
   return (
     <div className="flex gap-0.5 font-bold">
       <p className={cn(getStatusColor)}>{getStatusLabel}</p>
-      <span className="text-text-secondary">
-        {getStatusBadge}
-      </span>
+      <span className="text-text-secondary">{getStatusBadge}</span>
     </div>
   );
 }
