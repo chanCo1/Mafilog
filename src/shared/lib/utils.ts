@@ -39,6 +39,8 @@ const setResetHour = (date: Date): Date => {
 
 /** 여행 기간 구하기 */
 export const getTravelDay = (from: Date, to: Date) => {
+  if (!from || !to) return;
+
   const startDate = setResetHour(from);
   const endDate = setResetHour(to);
 
@@ -47,6 +49,8 @@ export const getTravelDay = (from: Date, to: Date) => {
 
 /** 여행 디데이 계산 */
 export const calcDDay = (from: Date) => {
+  if (!from) return;
+
   const today = setResetHour(new Date());
   const startDate = setResetHour(from);
 
@@ -59,6 +63,8 @@ export const calcDDay = (from: Date) => {
 
 /** 여행 일차 계산 */
 export const getTravelCurrentDay = (from: Date, to: Date) => {
+  if (!from || !to) return;
+
   const today = setResetHour(new Date());
   const startDate = setResetHour(from);
   const endDate = setResetHour(to);
@@ -76,6 +82,8 @@ export const getTravelCurrentDay = (from: Date, to: Date) => {
 
 /** 여행 기간에 따른 일차 & 날짜 구하기 */
 export const getTravelDayOfWeek = (from: Date, to: Date) => {
+  if (!from || !to) return;
+
   const travelDays = Array.from({ length: getTravelDay(from, to) }).map(
     (_, index) => {
       const _day = index + 1;
