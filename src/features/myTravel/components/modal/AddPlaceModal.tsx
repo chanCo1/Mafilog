@@ -10,11 +10,10 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Chip } from '@/shared/components/ui/Chip';
 import { Input } from '@/shared/components/ui/Input';
 import { Loading } from '@/shared/components/ui/Loading';
-import { Search, X, Star, UserStar } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { IGetGooglePlaces, IPlaceList } from '@/features/myTravel/interfaces';
 import {
-  convertComma,
   getPlaceCategory,
   getTravelDayOfWeek,
   convertFormattedDate,
@@ -23,6 +22,7 @@ import {
 import { Selectbox } from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
+import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 
 interface IAddPlaceModal {
   isOpen: boolean;
@@ -162,8 +162,8 @@ export default function AddPlaceModal({
   };
 
   const clickedPlace = useMemo(() => {
-  return clickPlaceData ? [clickPlaceData] : [];
-}, [clickPlaceData]);
+    return clickPlaceData ? [clickPlaceData] : [];
+  }, [clickPlaceData]);
 
   return (
     <SideModal
@@ -225,7 +225,7 @@ export default function AddPlaceModal({
                 className="flex items-center justify-between gap-1"
               >
                 <div
-                  className="flex cursor-pointer flex-col"
+                  className="flex w-full cursor-pointer flex-col"
                   onClick={() => setClickPlaceData(list)}
                 >
                   <p className="text-lg">{list.name}</p>
@@ -237,24 +237,7 @@ export default function AddPlaceModal({
                     {list.country.name && (
                       <>&nbsp;&#8226;&nbsp;{list.country.name}</>
                     )}
-                    {/* {list.displayName && (
-                      <>&nbsp;&#8226;&nbsp;{list.displayName}</>
-                    )} */}
                   </span>
-                  {/* <div className="flex items-center gap-1">
-                    <div className="flex items-center gap-1">
-                      <Star className="text-state-warning h-4 w-4 fill-current" />
-                      <span className="text-text-secondary text-sm">
-                        {list.rating ?? '-'}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <UserStar className="h-4 w-4 fill-current" />
-                      <span className="text-text-secondary text-sm">
-                        {convertComma(list.userRatingCount)}명
-                      </span>
-                    </div>
-                  </div> */}
                 </div>
                 <div className="shrink-0">
                   {selectedPlaces.find((city) => city.id === list.id) ? (
@@ -280,28 +263,11 @@ export default function AddPlaceModal({
             </>
           )}
         </div>
-        <div className="flex flex-col gap-1">
-          <p className="text-primary">선택된 장소</p>
-          {selectedPlaces.length ? (
-            <div className="scrollbar-hide flex gap-1 overflow-x-auto">
-              {selectedPlaces.map((place) => (
-                <Chip
-                  key={place.id}
-                  className="shrink-0"
-                  variant="gray"
-                  suffix={<X className="h-4 w-4" />}
-                  onClick={() => deleteSelectedPlace(place.id)}
-                >
-                  {place.name}
-                </Chip>
-              ))}
-            </div>
-          ) : (
-            <span className="text-text-secondary text-sm">
-              선택된 장소가 없어요
-            </span>
-          )}
-        </div>
+        <SelectedChips
+          title="선택된 장소"
+          selectedList={selectedPlaces}
+          onChipClick={deleteSelectedPlace}
+        />
       </div>
     </SideModal>
   );

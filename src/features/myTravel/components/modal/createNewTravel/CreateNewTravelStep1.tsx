@@ -13,6 +13,7 @@ import { Search, X } from 'lucide-react';
 import { CITY_MOCK_DATA } from '@/features/myTravel/data';
 import { IGetGooglePlaces } from '@/features/myTravel/interfaces';
 import { Loading } from '@/shared/components/ui/Loading';
+import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 
 interface ICreateNewTravelStep1 {
   selectedCities: IPlaceList[];
@@ -181,28 +182,11 @@ export default function CreateNewTravelStep1({
           </>
         )}
       </div>
-      <div className="flex flex-col gap-1">
-        <p className="text-primary">선택된 장소</p>
-        {selectedCities.length ? (
-          <div className="scrollbar-hide flex gap-1 overflow-x-auto">
-            {selectedCities.map((city) => (
-              <Chip
-                key={city.id}
-                className="shrink-0"
-                variant="gray"
-                suffix={<X className="h-4 w-4" />}
-                onClick={() => deleteSelectedCity(city.id)}
-              >
-                {city.name}
-              </Chip>
-            ))}
-          </div>
-        ) : (
-          <span className="text-text-secondary text-sm">
-            선택된 장소가 없어요
-          </span>
-        )}
-      </div>
+      <SelectedChips
+        title="선택된 도시"
+        selectedList={selectedCities}
+        onChipClick={deleteSelectedCity}
+      />
     </div>
   );
 }
