@@ -7,7 +7,12 @@ import {
   ITravelActions,
   ITravelGetters,
 } from '@/shared/interfaces';
-import { TRAVEL_STATUS, TRAVEL_STYLE, TRAVEL_PARTNER } from '@/shared/types/Enum';
+import {
+  TRAVEL_STATUS,
+  TRAVEL_STYLE,
+  TRAVEL_PARTNER,
+} from '@/shared/types/Enum';
+import { getTravelDayOfWeek } from '@/shared/lib/utils';
 
 type ITravelStore = ITravelState & ITravelActions & ITravelGetters;
 
@@ -44,6 +49,39 @@ export const useTravelStore = create<ITravelStore>()(
       setInitTravel: (data) =>
         set({ travelInfo: data }, false, 'travel/setInitTravel'),
 
+      /** 일정 리스트 초기값 설정 */
+      setInitSchedules: (data) =>
+        set(
+          (state) => {
+            getTravelDayOfWeek(data.from, data.to).forEach((_day) => {
+              state.schedules.push({
+                day: _day.day,
+                date: _day.date,
+                list: [],
+              });
+            });
+          },
+          false,
+          'travel/setInitSchedules',
+        ),
+
+      /** 가계부 리스트 초기값 설정 */
+      setInitExpeneses: (data) =>
+        set(
+          (state) => {
+            getTravelDayOfWeek(data.from, data.to).forEach((_day) => {
+              state.expenses.push({
+                day: _day.day,
+                date: _day.date,
+                list: [],
+                dailyExpenses: 0,
+              });
+            });
+          },
+          false,
+          'travel/setInitExpeneses',
+        ),
+
       /** 여행 일정 추가 */
       setAddScheduleList: (data) =>
         set(
@@ -68,6 +106,7 @@ export const useTravelStore = create<ITravelStore>()(
       /**
        * @Getters
        */
+      getTravelInfo: () => get().travelInfo,
     })),
   ),
 );

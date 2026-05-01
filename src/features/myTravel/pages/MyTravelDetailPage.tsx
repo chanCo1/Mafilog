@@ -32,6 +32,8 @@ import { useTravelStore } from '@/shared/stores/useTravelStore';
 
 export default function MyTravelDetailPage() {
   const setInitTravel = useTravelStore((state) => state.setInitTravel);
+  const setInitSchedules = useTravelStore((state) => state.setInitSchedules);
+  const setInitExpeneses = useTravelStore((state) => state.setInitExpeneses);
   const travelInfo = useTravelStore((state) => state.travelInfo);
 
   useEffect(() => {
@@ -60,6 +62,8 @@ export default function MyTravelDetailPage() {
       travelPeriod: getTravelDay(from, to),
       travelStyles,
     });
+    setInitSchedules({from, to});
+    setInitExpeneses({from, to});
 
     return () => {
       useTravelStore.getState().reset();
