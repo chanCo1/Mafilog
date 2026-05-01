@@ -16,11 +16,8 @@ import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 
-interface ITravelScheduleView {}
-
 function TravelScheduleView() {
-  const getTravelInfo = useTravelStore((state) => state.getTravelInfo);
-  const travelInfo = getTravelInfo();
+  const travelInfo = useTravelStore((state) => state.travelInfo);
 
   const [selectedDay, setSelectedDay] = useState(1);
   const [isOpenAddPlaceModel, setIsOpenAddPlaceModal] = useState(false);
@@ -54,7 +51,7 @@ function TravelScheduleView() {
         }
         dayTimelines={
           <>
-            {getTravelDayOfWeek(travelInfo.from, travelInfo.to)?.map(
+            {getTravelDayOfWeek(travelInfo.from, travelInfo.to).map(
               (_day, index) => {
                 return (
                   <TravelScheduleDay
@@ -70,7 +67,7 @@ function TravelScheduleView() {
         }
         dayButtons={
           <>
-            {getTravelDayOfWeek(travelInfo.from, travelInfo.to)?.map(
+            {getTravelDayOfWeek(travelInfo.from, travelInfo.to).map(
               (_day, index) => (
                 <Chip
                   key={`${_day.day}-${index}`}

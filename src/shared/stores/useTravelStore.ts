@@ -59,9 +59,6 @@ export const useTravelStore = create<ITravelStore>()(
       /**
        * @Getters
        */
-      getTravelInfo: () => get().travelInfo,
-      getTravelSchedules: () => get().schedules,
-      getTravelExpenses: () => get().expenses,
     })),
   ),
 );

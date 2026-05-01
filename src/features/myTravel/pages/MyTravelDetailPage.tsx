@@ -32,10 +32,7 @@ import { useTravelStore } from '@/shared/stores/useTravelStore';
 
 export default function MyTravelDetailPage() {
   const setInitTravel = useTravelStore((state) => state.setInitTravel);
-  const getTravelInfo = useTravelStore((state) => state.getTravelInfo);
-  const travelInfo = getTravelInfo();
-
-  console.log('>>>>', getTravelInfo());
+  const travelInfo = useTravelStore((state) => state.travelInfo);
 
   useEffect(() => {
     const {

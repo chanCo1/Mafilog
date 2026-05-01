@@ -5,7 +5,7 @@
  * @description: AddPlaceModal 컴포넌트, 여행 장소 추가 모달
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Chip } from '@/shared/components/ui/Chip';
 import { Input } from '@/shared/components/ui/Input';
@@ -18,6 +18,7 @@ import {
   getTravelDayOfWeek,
   convertFormattedDate,
   getDay,
+  getTravelCurrentDay,
 } from '@/shared/lib/utils';
 import { Selectbox } from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
@@ -30,22 +31,18 @@ interface IAddPlaceModal {
   handleClose: () => void;
 }
 
-export default function AddPlaceModal({
-  isOpen,
-  handleClose,
-}: IAddPlaceModal) {
-  const getTravelInfo = useTravelStore((state) => state.getTravelInfo);
-  const travelInfo = getTravelInfo();
+export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
+  const travelInfo = useTravelStore((state) => state.travelInfo);
 
   /** 일정 선택 옵션 */
-  const travelDaysOptions = () => {
-    return getTravelDayOfWeek(travelInfo.from, travelInfo.to)?.map((_day) => {
+  const travelDaysOptions = useMemo(() => {
+    return getTravelDayOfWeek(travelInfo.from, travelInfo.to).map((_day) => {
       return {
         label: `${_day.day}일차 ${convertFormattedDate(_day.date, 'MM월 dd일')} (${getDay(_day.date)})`,
         value: _day.day,
       };
     });
-  };
+  }, [travelInfo.from, travelInfo.to]);
 
   /** 장소 검색 */
   const [searchPlace, setSearchPlace] = useState<string>('');
@@ -58,11 +55,21 @@ export default function AddPlaceModal({
   /** 검색 결과 메시지 */
   const [resultMsg, setResultMsg] = useState('');
   /** 일정 선택 */
-  const [selectedDay, setSelectedDay] = useState<ILabelValue>(
-    travelDaysOptions()?.[0],
-  );
+  const [selectedDay, setSelectedDay] = useState<ILabelValue>();
   /** 클릭한 장소 정보 */
   const [clickPlaceData, setClickPlaceData] = useState<IPlaceList>();
+
+  /** 일정 선택 초기값 */
+  useEffect(() => {
+    console.log(getTravelCurrentDay(travelInfo.from, travelInfo.to));
+    if (travelInfo.from && travelInfo.to) {
+      setSelectedDay(
+        travelDaysOptions[
+          getTravelCurrentDay(travelInfo.from, travelInfo.to) - 1
+        ],
+      );
+    }
+  }, [travelInfo.from, travelInfo.to, travelDaysOptions]);
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const url = 'https://places.googleapis.com/v1/places:searchText';
@@ -158,13 +165,12 @@ export default function AddPlaceModal({
     setSearchPlace('');
     setPlaceList([]);
     setSelectedPlaces([]);
-    setSelectedDay(travelDaysOptions()?.[0]);
+    setSelectedDay(travelDaysOptions[0]);
   };
 
   const clickedPlace = useMemo(() => {
     return clickPlaceData ? [clickPlaceData] : [];
   }, [clickPlaceData]);
-
   return (
     <SideModal
       isOpen={isOpen}
@@ -184,7 +190,7 @@ export default function AddPlaceModal({
       <div className="flex h-full flex-col gap-2">
         <Selectbox
           label="일정 선택"
-          options={travelDaysOptions() ? travelDaysOptions(): []}
+          options={travelDaysOptions}
           value={selectedDay}
           onChange={(value) => setSelectedDay(value)}
           placeholder="여행 일정을 선택해주세요"
