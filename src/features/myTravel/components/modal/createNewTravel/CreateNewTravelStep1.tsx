@@ -14,6 +14,7 @@ import { CITY_MOCK_DATA } from '@/features/myTravel/data';
 import { IGetGooglePlaces } from '@/features/myTravel/interfaces';
 import { Loading } from '@/shared/components/ui/Loading';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
+import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 
 interface ICreateNewTravelStep1 {
   selectedCities: IPlaceList[];
@@ -24,6 +25,8 @@ export default function CreateNewTravelStep1({
   selectedCities,
   setSelectedCities,
 }: ICreateNewTravelStep1) {
+  const { countryData } = useCountriesDataStore();
+
   const [searchCity, setSearchCity] = useState<string>('');
   const [cityList, setCityList] = useState<IPlaceList[]>([]);
   const [resultMsg, setResultMsg] = useState('');
@@ -49,7 +52,7 @@ export default function CreateNewTravelStep1({
       //     'Content-Type': 'application/json',
       //     'X-Goog-Api-Key': GOOGLE_API_KEY as string,
       //     'X-Goog-FieldMask':
-      //       'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types,places.rating,places.user_ratings_total',
+      //       'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
       //   },
       //   body: JSON.stringify(body),
       // });
@@ -91,6 +94,7 @@ export default function CreateNewTravelStep1({
               lat: place.location.latitude,
               lng: place.location.longitude,
             },
+            types: place.types,
           };
         });
 
@@ -157,6 +161,16 @@ export default function CreateNewTravelStep1({
                 <span className="text-text-secondary text-sm">
                   {list.address}
                 </span>
+                <div className='flex gap-1 items-center'>
+                  {list.country.code && (
+                    <div>
+                      {countryData[list.country.code].flagEmoji}
+                    </div>
+                  )}
+                  <span className="text-text-secondary text-sm">
+                    {list.country.name && <>{list.country.name}</>}
+                  </span>
+                </div>
               </div>
               <div className="shrink-0">
                 {selectedCities.find((city) => city.id === list.id) ? (
