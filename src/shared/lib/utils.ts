@@ -39,7 +39,7 @@ const setResetHour = (date: Date): Date => {
 
 /** 여행 기간 구하기 */
 export const getTravelDay = (from: Date, to: Date) => {
-  if (!from || !to) return;
+  if (!from || !to) return 0;
 
   const startDate = setResetHour(from);
   const endDate = setResetHour(to);
@@ -63,27 +63,25 @@ export const calcDDay = (from: Date) => {
 
 /** 여행 일차 계산 */
 export const getTravelCurrentDay = (from: Date, to: Date) => {
-  if (!from || !to) return;
+  if (!from || !to) return 0;
 
   const today = setResetHour(new Date());
   const startDate = setResetHour(from);
-  const endDate = setResetHour(to);
+  // const endDate = setResetHour(to);
 
   const diffTime = today.getTime() - startDate.getTime();
   // 일수로 변환
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
-  if (today.getTime() === endDate.getTime()) {
-    return '마지막 날';
-  }
+  // if (today.getTime() === endDate.getTime()) {
+  //   return 'end';
+  // }
 
-  return `${diffDays}일차`;
+  return diffDays;
 };
 
 /** 여행 기간에 따른 일차 & 날짜 구하기 */
 export const getTravelDayOfWeek = (from: Date, to: Date) => {
-  if (!from || !to) return;
-
   const travelDays = Array.from({ length: getTravelDay(from, to) }).map(
     (_, index) => {
       const _day = index + 1;
