@@ -5,27 +5,20 @@
  * @description: TravelScheduleView 컴포넌트, 여행 일정탭 하위 내용
  */
 
-import { memo, useMemo, useState } from 'react';
+import { memo, useState } from 'react';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
-import { getTravelDay } from '@/shared/lib/utils';
 import TravelScheduleDay from '@/features/myTravel/components/detail/schedule/TravelScheduleDay';
 import { Chip } from '@/shared/components/ui/Chip';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
-import { getTravelDayOfWeek } from '@/shared/lib/utils';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 
 function TravelScheduleView() {
-  const travelInfo = useTravelStore((state) => state.travelInfo);
+  const schedules = useTravelStore((state) => state.schedules);
 
   const [selectedDay, setSelectedDay] = useState(1);
   const [isOpenAddPlaceModel, setIsOpenAddPlaceModal] = useState(false);
-
-  /** 여행 일수 */
-  // const travelDays = useMemo(() => {
-  //   return getTravelDay(from, to);
-  // }, [from, to]);
 
   return (
     <>
@@ -51,35 +44,30 @@ function TravelScheduleView() {
         }
         dayTimelines={
           <>
-            {getTravelDayOfWeek(travelInfo.from, travelInfo.to).map(
-              (_day, index) => {
-                return (
-                  <TravelScheduleDay
-                    key={`${_day.day}-${index}`}
-                    day={_day.day}
-                    date={_day.date}
-                    // schedule={TRAVEL_DETAIL_MOCK_DATA.schedule}
-                  />
-                );
-              },
-            )}
+            {schedules.map((_day, index) => {
+              return (
+                <TravelScheduleDay
+                  key={`${_day.day}-${index}`}
+                  day={_day.day}
+                  date={_day.date}
+                />
+              );
+            })}
           </>
         }
         dayButtons={
           <>
-            {getTravelDayOfWeek(travelInfo.from, travelInfo.to).map(
-              (_day, index) => (
-                <Chip
-                  key={`${_day.day}-${index}`}
-                  size="md"
-                  className="shrink-0"
-                  variant={
-                    selectedDay === _day.day ? 'primary' : 'primaryOutline'
-                  }
-                  onClick={() => setSelectedDay(_day.day)}
-                >{`${_day.day}일차`}</Chip>
-              ),
-            )}
+            {schedules.map((_day, index) => (
+              <Chip
+                key={`${_day.day}-${index}`}
+                size="md"
+                className="shrink-0"
+                variant={
+                  selectedDay === _day.day ? 'primary' : 'primaryOutline'
+                }
+                onClick={() => setSelectedDay(_day.day)}
+              >{`${_day.day}일차`}</Chip>
+            ))}
           </>
         }
         stautsArea={
