@@ -1,3 +1,5 @@
+import { EXPENSES_PAYMENT_TYPE } from '@/shared/types/Enum';
+
 /** google places 검색 */
 export interface IGetGooglePlaces {
   places: {
@@ -27,19 +29,6 @@ export interface IGetGooglePlaces {
   }[];
 }
 
-/** 도시 정보 */
-// export interface ICityList {
-//   id: string;
-//   name: string;
-//   location: ILocation;
-//   address: string;
-//   country: {
-//     code: string | undefined;
-//     name: string | undefined;
-//   };
-//   types: string[];
-// }
-
 interface ILocation {
   lat: number;
   lng: number;
@@ -56,4 +45,14 @@ export interface IPlaceList {
     name: string | undefined;
   };
   types: string[];
+}
+
+/** 가계부 정보 */
+export interface IExpensesList {
+  name: string; // 지출명;
+  amount: number; // 지출 금액;
+  currency: string; // 통화;
+  paymentType: EXPENSES_PAYMENT_TYPE; // 결제 타입
+  payer: string; // 결제자
+  spender: string[]; // 지출자
 }
