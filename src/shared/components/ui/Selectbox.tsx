@@ -5,7 +5,7 @@
  * @description: Selectbox 컴포넌트
  */
 
-import React from 'react';
+import React, { useState, ReactNode } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/Input';
 import { ChevronDown } from 'lucide-react';
@@ -22,7 +22,7 @@ interface ISelectbox extends Omit<
   description?: string;
   errorMsg?: string;
   options: ILabelValue[];
-  prefix?: React.ReactNode;
+  prefix?: ReactNode;
   size?: 'md' | 'sm';
   variant?: 'outline' | 'none';
   value: ILabelValue | undefined;
@@ -49,7 +49,7 @@ function SelectboxEntity(
   }: ISelectbox,
   ref: React.ForwardedRef<HTMLInputElement>,
 ) {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleFocus = () => {
     // handleBlur();

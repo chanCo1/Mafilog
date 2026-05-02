@@ -6,6 +6,7 @@
  */
 
 import { memo, useState } from 'react';
+import { cn } from '@/shared/lib/utils';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
 import TravelScheduleDay from '@/features/myTravel/components/detail/schedule/TravelScheduleDay';
@@ -15,10 +16,17 @@ import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import AddMemoModal from '@/features/myTravel/components/modal/AddMemoModal';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
+import Dropdown from '@/shared/components/ui/Dropdown';
+import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 
 function TravelScheduleView() {
   const schedules = useTravelStore((state) => state.schedules);
+  const travelInfo = useTravelStore((state) => state.travelInfo);
   const { clearSelectedSchedules } = useSelectSchedules();
+  const travelDaysList = useTravelDaysList({
+    from: travelInfo.from,
+    to: travelInfo.to,
+  });
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState(1);
@@ -48,9 +56,25 @@ function TravelScheduleView() {
             <div className="flex gap-1">
               {selectModifyMode ? (
                 <>
-                  <Button variant="gray" size="sm">
-                    선택 날짜 이동
-                  </Button>
+                  <Dropdown
+                    trigger={
+                      <Button variant="gray" size="sm">
+                        선택 날짜 이동
+                      </Button>
+                    }
+                  >
+                    {travelDaysList.map((list) => (
+                      <span
+                        key={list.value}
+                        className={cn(
+                          'hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5',
+                        )}
+                        onClick={() => console.log(list)}
+                      >
+                        {list.label}
+                      </span>
+                    ))}
+                  </Dropdown>
                   <Button variant="redOutline" size="sm">
                     선택 삭제
                   </Button>
