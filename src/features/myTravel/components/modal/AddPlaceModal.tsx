@@ -56,13 +56,13 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   const [selectedPlaces, setSelectedPlaces] = useState<IPlaceList[]>([]);
 
   /** 일정 선택 초기값 */
-  useEffect(() => {
-    if (travelInfo.from && travelInfo.to) {
-      setSelectedDay(
-        travelDaysList[getTravelCurrentDay(travelInfo.from, travelInfo.to) - 1],
-      );
-    }
-  }, [travelInfo.from, travelInfo.to, travelDaysList]);
+  // useEffect(() => {
+  //   if (travelInfo.from && travelInfo.to) {
+  //     setSelectedDay(
+  //       travelDaysList[getTravelCurrentDay(travelInfo.from, travelInfo.to) - 1],
+  //     );
+  //   }
+  // }, [travelInfo.from, travelInfo.to, travelDaysList]);
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const url = 'https://places.googleapis.com/v1/places:searchText';
