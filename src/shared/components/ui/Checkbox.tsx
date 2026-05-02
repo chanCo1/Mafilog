@@ -132,7 +132,7 @@ function CheckboxEntity(
               />
             );
           })}
-        {!checkOptions?.length && checkboxLabel && (
+        {!checkOptions?.length && (
           <SingleCheckbox
             className={cn(
               checkboxVariants({ color }),
@@ -171,7 +171,7 @@ interface ISingleCheckbox extends React.HTMLAttributes<HTMLDivElement> {
   // onChange?: () => void;
   isUserIcon?: boolean;
   isChecked?: boolean;
-  label: string;
+  label?: string;
 }
 export const SingleCheckbox = ({
   className,
@@ -200,7 +200,7 @@ export const SingleCheckbox = ({
           )}
         </>
       )}
-      <span className="text-text-primary">{label}</span>
+      {label && <span className="text-text-primary">{label}</span>}
     </div>
   );
 };
