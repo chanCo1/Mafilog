@@ -28,7 +28,7 @@ export default function TravelDetailTemplate({
           {handleButtons}
         </div>
         {/* 일차별 타임라인 */}
-        <div>{dayTimelines}</div>
+        <div className='flex flex-col gap-2'>{dayTimelines}</div>
       </div>
       <div className="max-mobile:w-full flex w-1/2 flex-col">
         {/* 일차 선택 버튼 */}
