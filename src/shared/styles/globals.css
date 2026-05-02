@@ -161,4 +161,5 @@ html::-webkit-scrollbar {
 body {
   background: var(--background);
   color: var(--text-primary);
+  word-break: break-all;
 }
