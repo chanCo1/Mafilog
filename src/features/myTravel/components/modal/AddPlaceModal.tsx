@@ -26,6 +26,7 @@ import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import { toast } from 'sonner';
+import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 
 interface IAddPlaceModal {
   isOpen: boolean;
@@ -37,16 +38,10 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   const setAddScheduleList = useTravelStore(
     (state) => state.setAddScheduleList,
   );
-
-  /** 일정 선택 옵션 */
-  const travelDaysOptions = useMemo(() => {
-    return getTravelDayOfWeek(travelInfo.from, travelInfo.to).map((_day) => {
-      return {
-        label: `${_day.day}일차 ${convertFormattedDate(_day.date, 'MM월 dd일')} (${getDay(_day.date)})`,
-        value: _day.day,
-      };
-    });
-  }, [travelInfo.from, travelInfo.to]);
+  const travelDaysList = useTravelDaysList({
+    from: travelInfo.from,
+    to: travelInfo.to,
+  });
 
   /** 장소 검색 */
   const [searchPlace, setSearchPlace] = useState<string>('');
@@ -61,7 +56,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>(
-    travelDaysOptions?.[0],
+    travelDaysList?.[0],
   );
   /** 장소 선택 */
   const [selectedPlaces, setSelectedPlaces] = useState<IPlaceList[]>([]);
@@ -70,12 +65,12 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   useEffect(() => {
     if (travelInfo.from && travelInfo.to) {
       setSelectedDay(
-        travelDaysOptions[
+        travelDaysList[
           getTravelCurrentDay(travelInfo.from, travelInfo.to) - 1
         ],
       );
     }
-  }, [travelInfo.from, travelInfo.to, travelDaysOptions]);
+  }, [travelInfo.from, travelInfo.to, travelDaysList]);
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const url = 'https://places.googleapis.com/v1/places:searchText';
@@ -185,7 +180,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
         day: selectedDay,
         places: selectedPlaces,
       });
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
 
@@ -212,7 +207,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
       <div className="flex h-full flex-col gap-2">
         <Selectbox
           label="일정 선택"
-          options={travelDaysOptions}
+          options={travelDaysList}
           value={selectedDay}
           onChange={(value) => setSelectedDay(value)}
           placeholder="여행 일정을 선택해주세요"

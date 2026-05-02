@@ -35,8 +35,8 @@ export default function TravelDetailTemplate({
         <div className="scrollbar-hide sticky max-mobile:relative top-11.5 max-mobile:top-0 flex gap-1 overflow-x-auto bg-white py-2">
           {dayButtons}
         </div>
-        {/* 변경사항 상태 반영 일정 - 지도 / 가계부 - 지출금액 */}
-        <div className="sticky top-25 w-full">
+        {/* 변경사항 상태 반영, 일정 -> 지도 / 가계부 -> 지출금액 */}
+        <div className="sticky top-24 w-full">
           {stautsArea}
         </div>
       </div>
