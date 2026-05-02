@@ -5,7 +5,7 @@
  * @description: TravelScheduleTimeline 컴포넌트, 여행 일정/지출 타임라인
  */
 
-import { MouseEvent } from 'react';
+import { MouseEvent, useState } from 'react';
 import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
@@ -15,6 +15,7 @@ import { IScheduleList } from '@/shared/interfaces';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { toast } from 'sonner';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
+import PlaceDeatilModal from '@/features/myTravel/components/modal/PlaceDeatilModal';
 
 interface ITravelScheduleTimeline {
   timeLineData?: IScheduleList;
@@ -38,6 +39,8 @@ export default function TravelScheduleTimeline({
     (state) => state.setDeleteScheduleList,
   );
 
+  const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
+
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -46,13 +49,17 @@ export default function TravelScheduleTimeline({
     if (day === undefined || currentIndex === undefined) return;
     const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
-     try {
-       setDeleteScheduleList({ day, index: currentIndex });
-     } catch (error) {
+    try {
+      setDeleteScheduleList({ day, index: currentIndex });
+    } catch (error) {
       console.log(error);
-     }
+    }
 
     toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
+  };
+
+  const onClickPlace = () => {
+    setIsOpenDatilModal(true);
   };
 
   return (
@@ -75,7 +82,7 @@ export default function TravelScheduleTimeline({
             {timeLineData?.type === SCHEDULE_TYPE.PLACE ? (
               <div>
                 <span className="text-sm font-bold">{timeLineData.time}</span>
-                <Card>
+                <Card className="cursor-pointer" onClick={onClickPlace}>
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex flex-col">
                       <span className="text-lg font-bold">
@@ -102,7 +109,7 @@ export default function TravelScheduleTimeline({
                 </div>
               </div>
             ) : (
-              <Card>
+              <Card className="cursor-pointer" onClick={onClickPlace}>
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-text-secondary">
                     {timeLineData.memo}
@@ -133,6 +140,12 @@ export default function TravelScheduleTimeline({
           </Card>
         )}
       </div>
+      <PlaceDeatilModal
+        isOpen={isOpenDatilModal}
+        handleClose={() => setIsOpenDatilModal(false)}
+        data={timeLineData}
+        day={day}
+      />
     </div>
   );
 }
