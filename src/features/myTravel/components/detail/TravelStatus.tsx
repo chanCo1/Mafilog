@@ -49,7 +49,7 @@ export default function TravelStatus({ status, from, to }: ITravelStatus) {
     switch (status) {
       case TRAVEL_STATUS.PROGRESS:
         return getTravelCurrentDay(from, to) === getTravelDay(from, to)
-          ? '마지막날'
+          ? '마지막 날'
           : `${getTravelCurrentDay(from, to)}일차`;
       case TRAVEL_STATUS.UPCOMING:
         return `D-${calcDDay(from)}`;

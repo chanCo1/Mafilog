@@ -38,6 +38,8 @@ export default function TravelScheduleDay({
               <TravelScheduleTimeline
                 key={`${_data.place?.id}-${index}`}
                 timeLineData={_data}
+                dailyAllSchedule={list}
+                currentIndex={index}
               />
             ))}
           </>

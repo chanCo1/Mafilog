@@ -22,7 +22,6 @@ export function useTimelineDiscplayCount({
 }: IuseTimelineDiscplayCount) {
   const displayCount = useMemo(() => {
     if (!type || !dailyAllSchedule || currentIndex === undefined) return 0;
-    if (type !== SCHEDULE_TYPE.PLACE) return;
 
     const sliced = dailyAllSchedule?.slice(0, currentIndex + 1);
 

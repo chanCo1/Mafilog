@@ -5,34 +5,31 @@
  * @description: TravelScheduleTimeline 컴포넌트, 여행 일정/지출 타임라인
  */
 
-import { useState, useMemo, MouseEvent } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { MouseEvent } from 'react';
 import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
-import { SCHEDULE_TYPE, ICON_TYPE } from '@/shared/types/Enum';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { Button } from '@/shared/components/ui/Button';
 import { IScheduleList } from '@/shared/interfaces';
+import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 
 interface ITravelScheduleTimeline {
   timeLineData?: IScheduleList;
+  dailyAllSchedule?: IScheduleList[];
+  currentIndex?: number;
 }
 
 export default function TravelScheduleTimeline({
   timeLineData,
+  dailyAllSchedule,
+  currentIndex,
 }: ITravelScheduleTimeline) {
-  /** 메모를 제외한 일정 카운트 */
-  // const getDisplayCount = useMemo(() => {
-  //   if (timeLineData?.type !== SCHEDULE_TYPE.PLACE) return;
-
-  //   const sliced = allSchedules?.slice(0, count! + 1);
-
-  //   const filltered = sliced.filter((schedule) => {
-  //     return schedule.type === SCHEDULE_TYPE.PLACE
-  //   });
-
-  //   return filltered.length;
-  // }, [timeLineData?.type, allSchedules, count]);
+  const displayCount = useTimelineDiscplayCount({
+    currentIndex,
+    dailyAllSchedule,
+    type: timeLineData?.type,
+  });
 
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
@@ -47,7 +44,7 @@ export default function TravelScheduleTimeline({
         <div className="shrink-0">
           {timeLineData?.type &&
             (timeLineData.type === SCHEDULE_TYPE.PLACE ? (
-              <CircledNumber number="1" />
+              <CircledNumber number={displayCount} />
             ) : (
               <CategoryIcon variant="memo" />
             ))}
