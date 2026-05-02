@@ -92,7 +92,10 @@ export interface ITravelActions {
     memo?: string;
     time?: string;
   }) => void;
-  setDeleteScheduleList: (id: string | number) => void;
+  setDeleteScheduleList: (data: {
+    day: number;
+    index: number;
+  }) => void;
   reset: () => void;
 }
 
