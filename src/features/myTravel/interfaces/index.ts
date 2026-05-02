@@ -49,6 +49,7 @@ export interface IPlaceList {
 
 /** 가계부 정보 */
 export interface IExpensesList {
+  id: string;
   name: string; // 지출명;
   amount: number; // 지출 금액;
   currency: string; // 통화;

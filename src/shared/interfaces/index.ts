@@ -56,6 +56,7 @@ export interface ISchedule {
 }
 
 export interface IScheduleList {
+  id: string;
   type: SCHEDULE_TYPE;
   place?: IPlaceList;
   time?: string;
@@ -67,6 +68,7 @@ export interface IExpenses {
   day: number;
   date: Date;
   list: {
+    id: string;
     type: EXPENSES_CATEGORY_TYPE; // 지출 타입;
     expenses: IExpensesList;
     time?: string;

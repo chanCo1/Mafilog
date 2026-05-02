@@ -96,6 +96,8 @@ export const useTravelStore = create<ITravelStore>()(
               if (data.type === SCHEDULE_TYPE.PLACE) {
                 data.places?.forEach((_place) => {
                   targetSchedule.list.push({
+                    // TODO: (임시)
+                    id: `${_place.id}-${new Date().getTime()}`,
                     type: data.type,
                     place: _place,
                     memo: data.memo,
@@ -105,6 +107,8 @@ export const useTravelStore = create<ITravelStore>()(
               } else {
                 // 메모 추가
                 targetSchedule.list.push({
+                  // TODO: (임시)
+                  id: `${data.day.value}-${data.type}-${data.memo}-${new Date().getTime()}`,
                   type: data.type,
                   memo: data.memo,
                   time: data.time,
