@@ -16,12 +16,14 @@ interface ITravelScheduleDay {
   day: number;
   date: Date;
   list: ISchedule['list'];
+  selectMode: boolean;
 }
 
 export default function TravelScheduleDay({
   day,
   date,
   list,
+  selectMode,
 }: ITravelScheduleDay) {
   return (
     <div className="flex flex-col gap-2.5">
@@ -41,6 +43,7 @@ export default function TravelScheduleDay({
                 dailyAllSchedule={list}
                 currentIndex={index}
                 day={day}
+                selectMode={selectMode}
               />
             ))}
           </>

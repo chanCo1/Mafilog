@@ -24,7 +24,7 @@ export default function TravelDetailTemplate({
     <div className="max-mobile:flex-col-reverse flex gap-4">
       <div className="max-mobile:w-full flex w-1/2 flex-col">
         {/* 타임라인 상단 버튼 */}
-        <div className="sticky top-11.5 z-1 flex justify-between bg-white py-2 [mask:linear-gradient(to_bottom,black_90%,transparent)]">
+        <div className="sticky top-11.5 z-1 flex items-center justify-between bg-white py-2 [mask:linear-gradient(to_bottom,black_90%,transparent)]">
           {handleButtons}
         </div>
         {/* 일차별 타임라인 */}

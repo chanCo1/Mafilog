@@ -24,6 +24,7 @@ interface ITravelScheduleTimeline {
   dailyAllSchedule?: IScheduleList[];
   currentIndex?: number;
   day?: number;
+  selectMode?: boolean;
 }
 
 export default function TravelScheduleTimeline({
@@ -31,6 +32,7 @@ export default function TravelScheduleTimeline({
   dailyAllSchedule,
   currentIndex,
   day,
+  selectMode,
 }: ITravelScheduleTimeline) {
   const displayCount = useTimelineDiscplayCount({
     currentIndex,

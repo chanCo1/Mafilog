@@ -18,7 +18,11 @@ import AddMemoModal from '@/features/myTravel/components/modal/AddMemoModal';
 function TravelScheduleView() {
   const schedules = useTravelStore((state) => state.schedules);
 
+  /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState(1);
+  /** 선택 수정 모드 */
+  const [selectModifyMode, setSelectModifyMode] = useState(false);
+
   const [isOpenAddPlaceModel, setIsOpenAddPlaceModal] = useState(false);
   const [isOpenAddMemoModel, setIsOpenAddMemoModal] = useState(false);
 
@@ -27,24 +31,47 @@ function TravelScheduleView() {
       <TravelDetailTemplate
         handleButtons={
           <>
-            <Button variant="gray" size="sm">
-              선택 수정
+            <Button
+              variant="gray"
+              size="sm"
+              onClick={() => setSelectModifyMode(!selectModifyMode)}
+            >
+              {selectModifyMode ? '돌아가기' : '선택 수정'}
             </Button>
             <div className="flex gap-1">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setIsOpenAddPlaceModal(true)}
-              >
-                장소 추가
-              </Button>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setIsOpenAddMemoModal(true)}
-              >
-                메모 추가
-              </Button>
+              {selectModifyMode ? (
+                <>
+                  <Button
+                    variant="gray"
+                    size="sm"
+                  >
+                    선택 날짜 이동
+                  </Button>
+                  <Button
+                    variant="redOutline"
+                    size="sm"
+                  >
+                    선택 삭제
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setIsOpenAddPlaceModal(true)}
+                  >
+                    장소 추가
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setIsOpenAddMemoModal(true)}
+                  >
+                    메모 추가
+                  </Button>
+                </>
+              )}
             </div>
           </>
         }
@@ -57,6 +84,7 @@ function TravelScheduleView() {
                   day={_day.day}
                   date={_day.date}
                   list={_day.list}
+                  selectMode={selectModifyMode}
                 />
               );
             })}
