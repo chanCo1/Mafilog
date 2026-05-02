@@ -39,21 +39,17 @@ interface ICard
   className?: string;
   disabled?: boolean;
   readonly?: boolean;
-  select?: boolean;
+  select?: boolean; // 선택 사용
+  isSelected?: boolean; // 선택되었는지 여부
 }
 
 function CardEntity(
-  { className, disabled, variant, size, readonly, select, ...props }: ICard,
+  { className, disabled, variant, size, readonly, select, isSelected, ...props }: ICard,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
-  const [isSelected, setIsSelected] = React.useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (disabled) return;
-
-    if (select) {
-      setIsSelected(!isSelected);
-    }
 
     if (props.onClick) {
       props.onClick(e);
