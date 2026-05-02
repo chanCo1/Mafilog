@@ -19,6 +19,8 @@ interface ITravelTimelineCard {
   onClickCard: () => void;
   className?: string;
   isMemo?: boolean;
+  selectMode: boolean;
+  isSelected: boolean;
 }
 
 export default function TravelTimelineCard({
@@ -28,17 +30,23 @@ export default function TravelTimelineCard({
   onClickDelete,
   onClickCard,
   className,
+  selectMode,
   isMemo,
+  isSelected,
 }: ITravelTimelineCard) {
   return (
     <div className={cn('felx flex-col', className)}>
       {time ? <span className="text-sm font-bold">{time}</span> : null}
-      <Card className="cursor-pointer" onClick={onClickCard}>
+      <Card
+        className="cursor-pointer"
+        onClick={onClickCard}
+        select={selectMode}
+        isSelected={isSelected}
+      >
         <div className="flex items-center justify-between gap-2">
           {children}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <Button
-              className="shrink-0"
               variant="redOutline"
               size="xs"
               onClick={onClickDelete}

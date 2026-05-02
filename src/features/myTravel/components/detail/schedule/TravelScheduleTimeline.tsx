@@ -18,6 +18,7 @@ import { useTravelStore } from '@/shared/stores/useTravelStore';
 import PlaceDeatilModal from '@/features/myTravel/components/modal/PlaceDeatilModal';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
+import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 
 interface ITravelScheduleTimeline {
   timeLineData?: IScheduleList;
@@ -42,8 +43,11 @@ export default function TravelScheduleTimeline({
   const setDeleteScheduleList = useTravelStore(
     (state) => state.setDeleteScheduleList,
   );
+  const { selectedSchedules, toggleSelect } = useSelectSchedules();
 
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
+
+  const isSelected = selectedSchedules.some(s => s.id === timeLineData?.id);
 
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
@@ -62,9 +66,13 @@ export default function TravelScheduleTimeline({
     toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
   };
 
-  const onClickPlace = () => {
-    setIsOpenDatilModal(true);
-  };
+  const onClickCard = () => {
+  if (selectMode && timeLineData) {
+    toggleSelect(timeLineData); // 선택 모드일 땐 토글만
+  } else {
+    setIsOpenDatilModal(true); // 아닐 땐 모달
+  }
+};
 
   const _place = timeLineData?.place;
 
@@ -89,8 +97,10 @@ export default function TravelScheduleTimeline({
               <TravelTimelineCard
                 time={timeLineData.time!}
                 memo={timeLineData.memo!}
-                onClickCard={onClickPlace}
+                onClickCard={onClickCard}
                 onClickDelete={(e) => handleDeleteSchedule(e)}
+                selectMode={selectMode!}
+                isSelected={isSelected}
               >
                 <div className="flex flex-col">
                   <span className="text-lg font-bold">
@@ -108,9 +118,11 @@ export default function TravelScheduleTimeline({
               <TravelTimelineCard
                 time={timeLineData.time!}
                 memo={timeLineData.memo!}
-                onClickCard={onClickPlace}
+                onClickCard={onClickCard}
                 onClickDelete={(e) => handleDeleteSchedule(e)}
+                selectMode={selectMode!}
                 isMemo
+                isSelected={isSelected}
               >
                 <span className="text-text-secondary">{timeLineData.memo}</span>
               </TravelTimelineCard>

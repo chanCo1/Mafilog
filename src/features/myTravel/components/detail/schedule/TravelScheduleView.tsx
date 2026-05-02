@@ -14,9 +14,11 @@ import GoogleMap from '@/shared/components/map/GoogleMap';
 import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import AddMemoModal from '@/features/myTravel/components/modal/AddMemoModal';
+import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 
 function TravelScheduleView() {
   const schedules = useTravelStore((state) => state.schedules);
+  const { clearSelectedSchedules } = useSelectSchedules();
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState(1);
@@ -26,31 +28,30 @@ function TravelScheduleView() {
   const [isOpenAddPlaceModel, setIsOpenAddPlaceModal] = useState(false);
   const [isOpenAddMemoModel, setIsOpenAddMemoModal] = useState(false);
 
+  const handleModifyMode = () => {
+    if (selectModifyMode) {
+      setSelectModifyMode(false);
+      clearSelectedSchedules();
+    } else {
+      setSelectModifyMode(true);
+    }
+  };
+
   return (
     <>
       <TravelDetailTemplate
         handleButtons={
           <>
-            <Button
-              variant="gray"
-              size="sm"
-              onClick={() => setSelectModifyMode(!selectModifyMode)}
-            >
+            <Button variant="gray" size="sm" onClick={handleModifyMode}>
               {selectModifyMode ? '돌아가기' : '선택 수정'}
             </Button>
             <div className="flex gap-1">
               {selectModifyMode ? (
                 <>
-                  <Button
-                    variant="gray"
-                    size="sm"
-                  >
+                  <Button variant="gray" size="sm">
                     선택 날짜 이동
                   </Button>
-                  <Button
-                    variant="redOutline"
-                    size="sm"
-                  >
+                  <Button variant="redOutline" size="sm">
                     선택 삭제
                   </Button>
                 </>
