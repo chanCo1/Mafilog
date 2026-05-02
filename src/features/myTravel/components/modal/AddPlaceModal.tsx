@@ -25,6 +25,7 @@ import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { toast } from 'sonner';
 
 interface IAddPlaceModal {
   isOpen: boolean;
@@ -33,6 +34,9 @@ interface IAddPlaceModal {
 
 export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   const travelInfo = useTravelStore((state) => state.travelInfo);
+  const setAddScheduleList = useTravelStore(
+    (state) => state.setAddScheduleList,
+  );
 
   /** 일정 선택 옵션 */
   const travelDaysOptions = useMemo(() => {
@@ -48,16 +52,19 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   const [searchPlace, setSearchPlace] = useState<string>('');
   /** 검색된 장소 리스트 */
   const [placeList, setPlaceList] = useState<IPlaceList[]>([]);
-  /** 로딩 여부 */
-  const [isLoading, setIsLoading] = useState(false);
-  /** 장소 선택 */
-  const [selectedPlaces, setSelectedPlaces] = useState<IPlaceList[]>([]);
   /** 검색 결과 메시지 */
   const [resultMsg, setResultMsg] = useState('');
-  /** 일정 선택 */
-  const [selectedDay, setSelectedDay] = useState<ILabelValue>();
   /** 클릭한 장소 정보 */
   const [clickPlaceData, setClickPlaceData] = useState<IPlaceList>();
+  /** 로딩 여부 */
+  const [isLoading, setIsLoading] = useState(false);
+
+  /** 일정 선택 */
+  const [selectedDay, setSelectedDay] = useState<ILabelValue>(
+    travelDaysOptions?.[0],
+  );
+  /** 장소 선택 */
+  const [selectedPlaces, setSelectedPlaces] = useState<IPlaceList[]>([]);
 
   /** 일정 선택 초기값 */
   useEffect(() => {
@@ -164,12 +171,27 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
     setSearchPlace('');
     setPlaceList([]);
     setSelectedPlaces([]);
-    setSelectedDay(travelDaysOptions[0]);
   };
 
   const clickedPlace = useMemo(() => {
     return clickPlaceData ? [clickPlaceData] : [];
   }, [clickPlaceData]);
+
+  /** 장소 추가 핸들링 */
+  const handelAddplace = () => {
+    try {
+      setAddScheduleList({
+        type: 'place',
+        day: selectedDay,
+        places: selectedPlaces,
+      });
+    } catch(error) {
+      console.log(error);
+    }
+
+    onClickCloseBtn();
+    toast.success('장소를 추가했어요');
+  };
 
   return (
     <SideModal
@@ -181,7 +203,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={!selectedPlaces.length} onClick={onClickCloseBtn}>
+          <Button disabled={!selectedPlaces.length} onClick={handelAddplace}>
             장소 추가
           </Button>
         </>

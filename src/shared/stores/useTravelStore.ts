@@ -87,11 +87,16 @@ export const useTravelStore = create<ITravelStore>()(
         set(
           (state) => {
             const targetSchedule = state.schedules.find(
-              (schedule: ISchedule) => schedule.day === data.day,
+              (schedule: ISchedule) => schedule.day === data.day.value,
             );
 
             if (targetSchedule) {
-              targetSchedule.list.push(...data.list);
+              data.places.forEach((_place) => {
+                targetSchedule.list.push({
+                  type: data.type,
+                  place: _place,
+                });
+              });
             }
           },
           false,
