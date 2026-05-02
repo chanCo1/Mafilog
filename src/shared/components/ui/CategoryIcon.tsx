@@ -9,7 +9,6 @@ import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import {
-  NotebookPen,
   Plus,
   Plane,
   Bus,
@@ -20,6 +19,7 @@ import {
   CircleEllipsis,
   Check,
   X,
+  StickyNote,
 } from 'lucide-react';
 
 const categoryIconVariants = cva(
@@ -73,57 +73,57 @@ function CategoryIconEntity(
   /** variant별 아이콘 크기 */
   const GetIconType = React.useMemo(() => {
     const fiveSize = 'h-5 w-5';
-    const fourPointFiveSize = 'h-4.5 w-4.5';
+    const fourHalfSize = 'h-4.5 w-4.5';
     const fourSize = 'h-4 w-4';
 
     switch (variant) {
       case 'check':
         return (
-          <Check className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <Check className={size === 'sm' ? fourHalfSize : fiveSize} />
         );
       case 'memo':
         return (
-          <NotebookPen
-            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+          <StickyNote
+            className={size === 'sm' ? fourHalfSize : fiveSize}
           />
         );
       case 'plus':
         return (
-          <Plus className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <Plus className={size === 'sm' ? fourHalfSize : fiveSize} />
         );
       case 'plane':
         return (
-          <Plane className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <Plane className={size === 'sm' ? fourHalfSize : fiveSize} />
         );
       case 'bus':
-        return <Bus className={size === 'sm' ? fourPointFiveSize : fiveSize} />;
+        return <Bus className={size === 'sm' ? fourHalfSize : fiveSize} />;
       case 'food':
         return (
-          <Utensils className={size === 'sm' ? fourSize : fourPointFiveSize} />
+          <Utensils className={size === 'sm' ? fourSize : fourHalfSize} />
         );
       case 'shopping':
         return (
           <ShoppingBasket
-            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+            className={size === 'sm' ? fourHalfSize : fiveSize}
           />
         );
       case 'tour':
         return (
-          <MapPin className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <MapPin className={size === 'sm' ? fourHalfSize : fiveSize} />
         );
       case 'house':
         return (
-          <House className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <House className={size === 'sm' ? fourHalfSize : fiveSize} />
         );
       case 'etc':
         return (
           <CircleEllipsis
-            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+            className={size === 'sm' ? fourHalfSize : fiveSize}
           />
         );
       case 'x':
         return (
-          <X className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <X className={size === 'sm' ? fourHalfSize : fiveSize} />
         );
     }
   }, [variant, size]);
