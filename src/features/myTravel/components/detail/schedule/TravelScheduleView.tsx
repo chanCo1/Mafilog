@@ -50,6 +50,7 @@ function TravelScheduleView() {
                   key={`${_day.day}-${index}`}
                   day={_day.day}
                   date={_day.date}
+                  list={_day.list}
                 />
               );
             })}

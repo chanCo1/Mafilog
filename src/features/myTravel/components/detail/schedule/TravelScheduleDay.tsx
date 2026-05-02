@@ -9,15 +9,19 @@ import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import TravelScheduleTimeline from '@/features/myTravel/components/detail/schedule/TravelScheduleTimeline';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
+import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { ISchedule } from '@/shared/interfaces';
 
 interface ITravelScheduleDay {
   day: number;
   date: Date;
+  list: ISchedule['list'];
 }
 
 export default function TravelScheduleDay({
   day,
   date,
+  list,
 }: ITravelScheduleDay) {
   return (
     <div className="flex flex-col gap-2.5">
@@ -28,7 +32,18 @@ export default function TravelScheduleDay({
         </span>
       </div>
       <div className="flex flex-col">
-        <TravelScheduleTimeline />
+        {list.length ? (
+          <>
+            {list.map((_data, index) => (
+              <TravelScheduleTimeline
+                key={`${_data.place?.id}-${index}`}
+                timeLineData={_data}
+              />
+            ))}
+          </>
+        ) : (
+          <TravelScheduleTimeline />
+        )}
       </div>
     </div>
   );

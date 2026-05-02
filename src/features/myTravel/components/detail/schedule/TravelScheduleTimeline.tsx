@@ -12,17 +12,18 @@ import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE, ICON_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { Button } from '@/shared/components/ui/Button';
+import { IScheduleList } from '@/shared/interfaces';
 
 interface ITravelScheduleTimeline {
-  type?: SCHEDULE_TYPE;
-  // icon: ICON_TYPE;
-  isSelect?: boolean;
+  timeLineData?: IScheduleList;
 }
 
-export default function TravelScheduleTimeline({ type }: ITravelScheduleTimeline) {
+export default function TravelScheduleTimeline({
+  timeLineData,
+}: ITravelScheduleTimeline) {
   /** 메모를 제외한 일정 카운트 */
   // const getDisplayCount = useMemo(() => {
-  //   if (type !== SCHEDULE_TYPE.PLACE) return;
+  //   if (timeLineData?.type !== SCHEDULE_TYPE.PLACE) return;
 
   //   const sliced = allSchedules?.slice(0, count! + 1);
 
@@ -31,7 +32,7 @@ export default function TravelScheduleTimeline({ type }: ITravelScheduleTimeline
   //   });
 
   //   return filltered.length;
-  // }, [type, allSchedules, count]);
+  // }, [timeLineData?.type, allSchedules, count]);
 
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
@@ -44,28 +45,30 @@ export default function TravelScheduleTimeline({ type }: ITravelScheduleTimeline
     <div className="flex w-full gap-3">
       <div className="flex flex-col items-center">
         <div className="shrink-0">
-          {type &&
-            (type === SCHEDULE_TYPE.PLACE ? (
+          {timeLineData?.type &&
+            (timeLineData.type === SCHEDULE_TYPE.PLACE ? (
               <CircledNumber number="1" />
             ) : (
               <CategoryIcon variant="memo" />
             ))}
-          {!type && <CategoryIcon variant="plus" />}
+          {!timeLineData?.type && <CategoryIcon variant="plus" />}
         </div>
         <div className="border-border-primary w-px flex-1 border border-dashed" />
       </div>
       <div className="w-full pb-2.5">
-        {type ? (
+        {timeLineData?.type ? (
           <>
-            {type === SCHEDULE_TYPE.PLACE ? (
+            {timeLineData?.type === SCHEDULE_TYPE.PLACE ? (
               <div>
-                <span className="text-sm font-bold">HH:mm</span>
+                <span className="text-sm font-bold">{timeLineData.time}</span>
                 <Card>
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex flex-col">
-                      <span className="text-lg font-bold">아사쿠사 규카츠</span>
+                      <span className="text-lg font-bold">
+                        {timeLineData.place?.name}
+                      </span>
                       <span className="text-text-secondary text-sm">
-                        아사쿠사아~~
+                        {timeLineData.place?.address}
                       </span>
                     </div>
                     <Button
@@ -79,15 +82,16 @@ export default function TravelScheduleTimeline({ type }: ITravelScheduleTimeline
                   </div>
                 </Card>
                 <div className="flex justify-end">
-                  <span className="text-text-secondary text-sm">메모~</span>
+                  <span className="text-text-secondary text-sm">
+                    {timeLineData.memo}
+                  </span>
                 </div>
               </div>
             ) : (
               <Card>
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-text-secondary">
-                    메모가 입력되었습니다. 메모가 입력되었습니다. 메모가
-                    입력되었습니다. 메모가 입력되었습니다.
+                    {timeLineData.memo}
                   </span>
                   <Button
                     className="shrink-0"
