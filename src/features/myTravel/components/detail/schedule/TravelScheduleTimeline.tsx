@@ -16,6 +16,7 @@ import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineD
 import { toast } from 'sonner';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import PlaceDeatilModal from '@/features/myTravel/components/modal/PlaceDeatilModal';
+import { getPlaceCategory } from '@/shared/lib/utils';
 
 interface ITravelScheduleTimeline {
   timeLineData?: IScheduleList;
@@ -62,6 +63,8 @@ export default function TravelScheduleTimeline({
     setIsOpenDatilModal(true);
   };
 
+  const _place = timeLineData?.place;
+
   return (
     <div className="flex w-full gap-3">
       <div className="flex flex-col items-center">
@@ -89,7 +92,10 @@ export default function TravelScheduleTimeline({
                         {timeLineData.place?.name}
                       </span>
                       <span className="text-text-secondary text-sm">
-                        {timeLineData.place?.address}
+                        {<>{getPlaceCategory(_place?.types!)}</>}
+                        {_place?.country.name && (
+                          <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
+                        )}
                       </span>
                     </div>
                     <Button
