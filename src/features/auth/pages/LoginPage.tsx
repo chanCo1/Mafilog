@@ -70,7 +70,6 @@ export default function LoginPage() {
             {...register('password')}
           />
         </div>
-        {/* TODO: 체크박스 단일로 사용할 경우도 만들어야할듯... */}
         <Checkbox
           checkboxLabel="이메일 저장"
           value={saveEmail}

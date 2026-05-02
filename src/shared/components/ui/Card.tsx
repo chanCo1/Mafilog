@@ -19,7 +19,7 @@ const cardVariants = cva('rounded-lg bg-white', {
       shadowed: 'bg-gray-1 shadow-md',
       white: '',
       shadowedWhite: 'shadow-md',
-      dashed: 'border border-dashed border-border-primary'
+      dashed: 'border border-dashed border-border-primary',
     },
     size: {
       md: 'p-2.5',
@@ -53,13 +53,11 @@ function CardEntity(
 
     if (select) {
       setIsSelected(!isSelected);
-      return;
     }
 
     if (props.onClick) {
       props.onClick(e);
     }
-
   };
 
   return (
