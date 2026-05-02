@@ -6,7 +6,7 @@
  */
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { ILabelValue } from '@/shared/interfaces';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import { Selectbox } from '@/shared/components/ui/Selectbox';
@@ -31,7 +31,7 @@ export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
   });
 
   /** 일정 선택 */
-  const [selectedDay, setSelectedDay] = useState(travelDaysList?.[0]);
+  const [selectedDay, setSelectedDay] = useState<ILabelValue>(travelDaysList?.[0]);
   /** 메모 입력 */
   const [inputMemo, setInputMemo] = useState('');
 
@@ -65,7 +65,7 @@ export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
   return (
     <SideModal
       isOpen={isOpen}
-      title="장소 추가"
+      title="메모 추가"
       handleClose={onClickCloseBtn}
       footer={
         <>

@@ -40,6 +40,7 @@ export default function TravelScheduleDay({
                 timeLineData={_data}
                 dailyAllSchedule={list}
                 currentIndex={index}
+                day={day}
               />
             ))}
           </>

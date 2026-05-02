@@ -117,7 +117,23 @@ export const useTravelStore = create<ITravelStore>()(
         ),
 
       /** 여행 일정 제거 */
-      setDeleteScheduleList: (id) => set((state) => {}),
+      setDeleteScheduleList: (data) =>
+        set(
+          (state) => {
+            const targetSchedule = state.schedules.find(
+              (schedule: ISchedule) => schedule.day === data.day,
+            );
+
+            if (targetSchedule) {
+              targetSchedule.list = targetSchedule.list.filter(
+                (_, index) => index !== data.index,
+              );
+            }
+          },
+          false,
+          'travel/setDeleteScheduleList',
+        ),
+
       /** 리셋 */
       reset: () => set(initialState),
 

@@ -13,29 +13,46 @@ import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { Button } from '@/shared/components/ui/Button';
 import { IScheduleList } from '@/shared/interfaces';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
+import { toast } from 'sonner';
+import { useTravelStore } from '@/shared/stores/useTravelStore';
 
 interface ITravelScheduleTimeline {
   timeLineData?: IScheduleList;
   dailyAllSchedule?: IScheduleList[];
   currentIndex?: number;
+  day?: number;
 }
 
 export default function TravelScheduleTimeline({
   timeLineData,
   dailyAllSchedule,
   currentIndex,
+  day,
 }: ITravelScheduleTimeline) {
   const displayCount = useTimelineDiscplayCount({
     currentIndex,
     dailyAllSchedule,
     type: timeLineData?.type,
   });
+  const setDeleteScheduleList = useTravelStore(
+    (state) => state.setDeleteScheduleList,
+  );
 
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('삭제!!!');
+
+    if (day === undefined || currentIndex === undefined) return;
+    const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
+
+     try {
+       setDeleteScheduleList({ day, index: currentIndex });
+     } catch (error) {
+      console.log(error);
+     }
+
+    toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
   };
 
   return (
