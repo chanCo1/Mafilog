@@ -52,12 +52,14 @@ export interface ITravelState {
 export interface ISchedule {
   day: number;
   date: Date;
-  list: {
-    type: SCHEDULE_TYPE;
-    place?: IPlaceList;
-    time?: string;
-    memo?: string;
-  }[];
+  list: IScheduleList[];
+}
+
+export interface IScheduleList {
+  type: SCHEDULE_TYPE;
+  place?: IPlaceList;
+  time?: string;
+  memo?: string;
 }
 
 /** 가계부 리스트 */
@@ -83,7 +85,11 @@ export interface ITravelActions {
   setInitTravel: (data: ITravelState['travelInfo']) => void;
   setInitSchedules: (date: IDateFromTo) => void;
   setInitExpeneses: (date: IDateFromTo) => void;
-  setAddScheduleList: (data: ISchedule) => void;
+  setAddScheduleList: (data: {
+    type: SCHEDULE_TYPE;
+    day: ILabelValue;
+    places: IPlaceList[];
+  }) => void;
   setDeleteScheduleList: (id: string | number) => void;
   reset: () => void;
 }
