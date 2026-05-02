@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import PlaceDeatilModal from '@/features/myTravel/components/modal/PlaceDeatilModal';
 import { getPlaceCategory } from '@/shared/lib/utils';
+import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 
 interface ITravelScheduleTimeline {
   timeLineData?: IScheduleList;
@@ -80,56 +81,37 @@ export default function TravelScheduleTimeline({
         <div className="border-border-primary w-px flex-1 border border-dashed" />
       </div>
       <div className="w-full pb-2.5">
-        {timeLineData?.type ? (
+        {timeLineData ? (
           <>
-            {timeLineData?.type === SCHEDULE_TYPE.PLACE ? (
-              <div>
-                <span className="text-sm font-bold">{timeLineData.time}</span>
-                <Card className="cursor-pointer" onClick={onClickPlace}>
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex flex-col">
-                      <span className="text-lg font-bold">
-                        {timeLineData.place?.name}
-                      </span>
-                      <span className="text-text-secondary text-sm">
-                        {<>{getPlaceCategory(_place?.types!)}</>}
-                        {_place?.country.name && (
-                          <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
-                        )}
-                      </span>
-                    </div>
-                    <Button
-                      className="shrink-0"
-                      variant="redOutline"
-                      size="xs"
-                      onClick={(e) => handleDeleteSchedule(e)}
-                    >
-                      삭제
-                    </Button>
-                  </div>
-                </Card>
-                <div className="flex justify-end">
+            {timeLineData.type === SCHEDULE_TYPE.PLACE ? (
+              <TravelTimelineCard
+                time={timeLineData.time!}
+                memo={timeLineData.memo!}
+                onClickCard={onClickPlace}
+                onClickDelete={(e) => handleDeleteSchedule(e)}
+              >
+                <div className="flex flex-col">
+                  <span className="text-lg font-bold">
+                    {timeLineData.place?.name}
+                  </span>
                   <span className="text-text-secondary text-sm">
-                    {timeLineData.memo}
+                    {<>{getPlaceCategory(_place?.types!)}</>}
+                    {_place?.country.name && (
+                      <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
+                    )}
                   </span>
                 </div>
-              </div>
+              </TravelTimelineCard>
             ) : (
-              <Card className="cursor-pointer" onClick={onClickPlace}>
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-text-secondary">
-                    {timeLineData.memo}
-                  </span>
-                  <Button
-                    className="shrink-0"
-                    variant="redOutline"
-                    size="xs"
-                    onClick={(e) => handleDeleteSchedule(e)}
-                  >
-                    삭제
-                  </Button>
-                </div>
-              </Card>
+              <TravelTimelineCard
+                time={timeLineData.time!}
+                memo={timeLineData.memo!}
+                onClickCard={onClickPlace}
+                onClickDelete={(e) => handleDeleteSchedule(e)}
+                isMemo
+              >
+                <span className="text-text-secondary">{timeLineData.memo}</span>
+              </TravelTimelineCard>
             )}
           </>
         ) : (
