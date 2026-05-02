@@ -13,12 +13,14 @@ import { Chip } from '@/shared/components/ui/Chip';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
+import AddMemoModal from '@/features/myTravel/components/modal/AddMemoModal';
 
 function TravelScheduleView() {
   const schedules = useTravelStore((state) => state.schedules);
 
   const [selectedDay, setSelectedDay] = useState(1);
   const [isOpenAddPlaceModel, setIsOpenAddPlaceModal] = useState(false);
+  const [isOpenAddMemoModel, setIsOpenAddMemoModal] = useState(false);
 
   return (
     <>
@@ -36,7 +38,11 @@ function TravelScheduleView() {
               >
                 장소 추가
               </Button>
-              <Button variant="secondary" size="sm">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsOpenAddMemoModal(true)}
+              >
                 메모 추가
               </Button>
             </div>
@@ -81,6 +87,10 @@ function TravelScheduleView() {
       <AddPlaceModal
         isOpen={isOpenAddPlaceModel}
         handleClose={() => setIsOpenAddPlaceModal(false)}
+      />
+      <AddMemoModal
+        isOpen={isOpenAddMemoModel}
+        handleClose={() => setIsOpenAddMemoModal(false)}
       />
     </>
   );

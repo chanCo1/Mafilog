@@ -10,16 +10,10 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Chip } from '@/shared/components/ui/Chip';
 import { Input } from '@/shared/components/ui/Input';
 import { Loading } from '@/shared/components/ui/Loading';
-import { Search, X } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { IGetGooglePlaces, IPlaceList } from '@/features/myTravel/interfaces';
-import {
-  getPlaceCategory,
-  getTravelDayOfWeek,
-  convertFormattedDate,
-  getDay,
-  getTravelCurrentDay,
-} from '@/shared/lib/utils';
+import { getPlaceCategory, getTravelCurrentDay } from '@/shared/lib/utils';
 import { Selectbox } from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
@@ -65,9 +59,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   useEffect(() => {
     if (travelInfo.from && travelInfo.to) {
       setSelectedDay(
-        travelDaysList[
-          getTravelCurrentDay(travelInfo.from, travelInfo.to) - 1
-        ],
+        travelDaysList[getTravelCurrentDay(travelInfo.from, travelInfo.to) - 1],
       );
     }
   }, [travelInfo.from, travelInfo.to, travelDaysList]);
@@ -173,7 +165,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   }, [clickPlaceData]);
 
   /** 장소 추가 핸들링 */
-  const handelAddplace = () => {
+  const handelAddPlace = () => {
     try {
       setAddScheduleList({
         type: 'place',
@@ -198,7 +190,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={!selectedPlaces.length} onClick={handelAddplace}>
+          <Button disabled={!selectedPlaces.length} onClick={handelAddPlace}>
             장소 추가
           </Button>
         </>
@@ -206,7 +198,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
     >
       <div className="flex h-full flex-col gap-2">
         <Selectbox
-          label="일정 선택"
+          label="여행 일정 선택"
           options={travelDaysList}
           value={selectedDay}
           onChange={(value) => setSelectedDay(value)}

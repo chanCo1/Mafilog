@@ -88,7 +88,9 @@ export interface ITravelActions {
   setAddScheduleList: (data: {
     type: SCHEDULE_TYPE;
     day: ILabelValue;
-    places: IPlaceList[];
+    places?: IPlaceList[];
+    memo?: string;
+    time?: string;
   }) => void;
   setDeleteScheduleList: (id: string | number) => void;
   reset: () => void;

@@ -11,6 +11,7 @@ import {
   TRAVEL_STATUS,
   TRAVEL_STYLE,
   TRAVEL_PARTNER,
+  SCHEDULE_TYPE,
 } from '@/shared/types/Enum';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
 
@@ -91,12 +92,24 @@ export const useTravelStore = create<ITravelStore>()(
             );
 
             if (targetSchedule) {
-              data.places.forEach((_place) => {
+              // 장소 추가
+              if (data.type === SCHEDULE_TYPE.PLACE) {
+                data.places?.forEach((_place) => {
+                  targetSchedule.list.push({
+                    type: data.type,
+                    place: _place,
+                    memo: data.memo,
+                    time: data.time,
+                  });
+                });
+              } else {
+                // 메모 추가
                 targetSchedule.list.push({
                   type: data.type,
-                  place: _place,
+                  memo: data.memo,
+                  time: data.time,
                 });
-              });
+              }
             }
           },
           false,
