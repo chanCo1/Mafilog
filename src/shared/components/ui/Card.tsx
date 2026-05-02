@@ -49,13 +49,17 @@ function CardEntity(
   const [isSelected, setIsSelected] = React.useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (disabled || !select) return;
+    if (disabled) return;
+
+    if (select) {
+      setIsSelected(!isSelected);
+      return;
+    }
 
     if (props.onClick) {
       props.onClick(e);
     }
 
-    setIsSelected(!isSelected);
   };
 
   return (
