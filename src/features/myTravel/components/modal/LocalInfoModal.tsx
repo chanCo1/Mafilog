@@ -14,6 +14,7 @@ import { Button } from '@/shared/components/ui/Button';
 import { IPlaceList } from '@/features/myTravel/interfaces';
 import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/LocalCurrencyInfo';
 import LocalTimeInfo from '@/features/myTravel/components/modal/localInfo/LocalTimeInfo';
+import Separator from '@/shared/components/ui/Separator';
 
 interface ILocalInfoModal {
   isOpen: boolean;
@@ -60,7 +61,9 @@ export default function LocalInfoModal({
         </div>
         <div className="flex flex-col gap-5">
           <LocalCurrencyInfo selectedCity={selectedCity} />
+          <Separator position='horizontal' />
           <LocalTimeInfo selectedCity={selectedCity} />
+          <Separator position='horizontal' />
         </div>
       </div>
     </SideModal>

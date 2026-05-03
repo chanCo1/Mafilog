@@ -10,6 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import { IPlaceList } from '@/features/myTravel/interfaces';
 import { convertFormattedDate } from '@/shared/lib/utils';
 import { useGetDiffTime } from '@/features/myTravel/hooks/useGetDiffTime';
+import Separator from '@/shared/components/ui/Separator';
 
 interface ILocalTimeInfo {
   selectedCity: IPlaceList | undefined;
@@ -61,6 +62,7 @@ export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
           time={getTime?.targetTime}
           date={getTime?.targetDate}
         />
+        <Separator />
         <LocalCityTime
           city="서울"
           time={getTime?.seoulTime}
@@ -78,9 +80,9 @@ interface ILocalCityTime {
 }
 const LocalCityTime = ({ city, date, time }: ILocalCityTime) => (
   <div className="flex w-full justify-center text-center">
-    <div className="flex flex-col gap-1">
-      <span className="text-text-secondary text-sm">{date}</span>
-      <span className="text-lg font-bold">{time}</span>
+    <div className="flex flex-col">
+      <span className="text-text-secondary text-sm font-bold">{date}</span>
+      <span className="text-xl font-bold">{time}</span>
       <span className="text-sm font-bold">{city}</span>
     </div>
   </div>
