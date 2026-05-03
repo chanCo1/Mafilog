@@ -100,6 +100,39 @@ export const CITY_MOCK_DATA = {
         languageCode: 'ko',
       },
     },
+    {
+      id: 'ChIJP3Sa8ziYEmsRUKgyFmh9AQM',
+      types: ['colloquial_area', 'locality', 'political'],
+      formattedAddress: '오스트레일리아 뉴사우스웨일스 주 시드니',
+      addressComponents: [
+        {
+          longText: '시드니',
+          shortText: '시드니',
+          types: ['colloquial_area', 'locality', 'political'],
+          languageCode: 'ko',
+        },
+        {
+          longText: '뉴사우스웨일스 주',
+          shortText: 'NSW',
+          types: ['administrative_area_level_1', 'political'],
+          languageCode: 'ko',
+        },
+        {
+          longText: '오스트레일리아',
+          shortText: 'AU',
+          types: ['country', 'political'],
+          languageCode: 'ko',
+        },
+      ],
+      location: {
+        latitude: -33.8622503,
+        longitude: 151.207684,
+      },
+      displayName: {
+        text: '시드니',
+        languageCode: 'ko',
+      },
+    },
   ],
 };
 
@@ -136,6 +169,14 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
       country: { name: '일본', code: 'JP' },
       location: { lat: 34.6937249, lng: 135.5022535 },
       name: '오사카시',
+    },
+    {
+      id: 'ChIJP3Sa8ziYEmsRUKgyFmh9AQM',
+      types: ['colloquial_area', 'locality', 'political'],
+      address: '오스트레일리아 뉴사우스웨일스 주 시드니',
+      country: { name: '오스트레일리아', code: 'AU' },
+      location: { lat: -33.8622503, lng: 151.207684 },
+      name: '시드니',
     },
   ],
   schedule: [
