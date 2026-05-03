@@ -13,6 +13,7 @@ import { useTravelStore } from '@/shared/stores/useTravelStore';
 import { Button } from '@/shared/components/ui/Button';
 import { IPlaceList } from '@/features/myTravel/interfaces';
 import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/LocalCurrencyInfo';
+import LocalTimeInfo from '@/features/myTravel/components/modal/localInfo/LocalTimeInfo';
 
 interface ILocalInfoModal {
   isOpen: boolean;
@@ -59,6 +60,7 @@ export default function LocalInfoModal({
         </div>
         <div className="flex flex-col gap-5">
           <LocalCurrencyInfo selectedCity={selectedCity} />
+          <LocalTimeInfo selectedCity={selectedCity} />
         </div>
       </div>
     </SideModal>

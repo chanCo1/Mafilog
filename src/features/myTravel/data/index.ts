@@ -171,7 +171,7 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
       country: { name: '일본', code: 'JP' },
       location: { lat: 34.6937249, lng: 135.5022535 },
       name: '오사카시',
-      imezone: 'Asia/Tokyo',
+      timezone: 'Asia/Tokyo',
     },
     {
       id: 'ChIJP3Sa8ziYEmsRUKgyFmh9AQM',
