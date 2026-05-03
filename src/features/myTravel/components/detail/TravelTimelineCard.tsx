@@ -9,7 +9,7 @@ import { ReactNode, MouseEvent } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/Button';
 import { Card } from '@/shared/components/ui/Card';
-import { GripVertical } from 'lucide-react';
+import { ChevronsUpDown } from 'lucide-react';
 
 interface ITravelTimelineCard {
   children: ReactNode;
@@ -53,7 +53,7 @@ export default function TravelTimelineCard({
             >
               삭제
             </Button>
-            <GripVertical className="h-5 w-5" />
+            <ChevronsUpDown className="h-5 w-5 text-text-secondary" />
           </div>
         </div>
       </Card>

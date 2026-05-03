@@ -94,7 +94,7 @@ export default function Selectbox({
       {isOpen && (
         <div
           className={cn(
-            'scrollbar-hide absolute z-50 flex max-h-50 w-full flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-md',
+            'scrollbar-hide absolute z-50 flex max-h-50 w-full flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
             label ? 'top-16' : 'top-10',
           )}
         >
