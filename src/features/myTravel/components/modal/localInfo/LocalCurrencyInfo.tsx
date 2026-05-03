@@ -7,7 +7,7 @@
 
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
-import { useFetchCurrency } from '@/features/myTravel/hooks/useFetchCurrency';
+import { useFetchCurrency } from '@/shared/hooks/rquery/useFetchCurrency';
 import { useGetCurrencyByCountry } from '@/shared/hooks/useGetCurrencyByCountry';
 import { CURRENCY_STANDARD_AMOUNT } from '@/features/myTravel/constants';
 import { IPlaceList } from '@/features/myTravel/interfaces';
@@ -20,7 +20,7 @@ interface ILocalCurrencyInfo {
 export default function LocalCurrencyInfo({
   selectedCity,
 }: ILocalCurrencyInfo) {
-  const { lastUpdate, isLoading } = useFetchCurrency();
+  const { lastUpdate } = useFetchCurrency();
   const getCurrency = useGetCurrencyByCountry(
     selectedCity?.country.code,
     CURRENCY_STANDARD_AMOUNT,

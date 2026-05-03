@@ -8,7 +8,7 @@
 import { useMemo } from 'react';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useIsMounted } from '@/shared/hooks/useIsMounted';
-import { useFetchCurrency } from '@/features/myTravel/hooks/useFetchCurrency';
+import { useFetchCurrency } from '@/shared/hooks/rquery/useFetchCurrency';
 
 export const useGetCurrencyByCountry = (
   countryCode: string | undefined, // 국가 코드
