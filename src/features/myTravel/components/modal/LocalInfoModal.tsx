@@ -45,7 +45,7 @@ export default function LocalInfoModal({
       }
     >
       <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 overflow-auto scrollbar-hide">
           {travelInfo.cities.map((city) => (
             <Chip
               key={city.id}
