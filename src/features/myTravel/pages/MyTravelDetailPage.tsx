@@ -27,6 +27,7 @@ import TravelExpensesView from '@/features/myTravel/components/detail/expneses/T
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
+import LocalInfoModal from '@/features/myTravel/components/modal/LocalInfoModal';
 
 // interface IMyTravelDetailPage {}
 
@@ -62,18 +63,20 @@ export default function MyTravelDetailPage() {
       travelPeriod: getTravelDay(from, to),
       travelStyles,
     });
-    setInitSchedules({from, to});
-    setInitExpeneses({from, to});
+    setInitSchedules({ from, to });
+    setInitExpeneses({ from, to });
 
     return () => {
       useTravelStore.getState().reset();
-    }
+    };
   }, []);
 
-  const [isOpenTravelModify, setIsOpenTravelModify] = useState(false);
   const [selectedTab, setSelectedTab] = useState<TRAVEL_TAB>(
     TRAVEL_TAB.SCHEDULE,
   );
+
+  const [isOpenTravelModify, setIsOpenTravelModify] = useState(false);
+  const [isOpenLocalInfoModal, setIsOpenLocalInfoModal] = useState(false);
 
   /** 여행 기간 날짜 포멧 */
   const formattedValue = useMemo(() => {
@@ -148,7 +151,11 @@ export default function MyTravelDetailPage() {
               </Button>
             </div>
           )}
-          <Button variant="gray" size="xs">
+          <Button
+            variant="gray"
+            size="xs"
+            onClick={() => setIsOpenLocalInfoModal(true)}
+          >
             현지 정보
           </Button>
         </div>
@@ -161,10 +168,17 @@ export default function MyTravelDetailPage() {
           <TravelExpensesView from={travelInfo.from} to={travelInfo.to} />
         </FadeInOutStyled>
       </div>
+
+      {/* 여행 수정 모달 */}
       <CreateNewTravelModal
         isOpen={isOpenTravelModify}
-        isModify
         handleClose={() => setIsOpenTravelModify(false)}
+        isModify
+      />
+
+      <LocalInfoModal
+        isOpen={isOpenLocalInfoModal}
+        handleClose={() => setIsOpenLocalInfoModal(false)}
       />
     </div>
   );
