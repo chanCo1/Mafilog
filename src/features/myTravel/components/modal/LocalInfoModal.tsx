@@ -11,11 +11,8 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Chip } from '@/shared/components/ui/Chip';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import { Button } from '@/shared/components/ui/Button';
-import { useFetchCurrency } from '@/features/myTravel/hooks/useFetchCurrency';
 import { IPlaceList } from '@/features/myTravel/interfaces';
-import { convertFormattedDate, convertComma } from '@/shared/lib/utils';
-import { useGetCurrencyByCountry } from '@/shared/hooks/useGetCurrencyByCountry';
-import { CURRENCY_STANDARD_AMOUNT } from '@/features/myTravel/constants';
+import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/LocalCurrencyInfo';
 
 interface ILocalInfoModal {
   isOpen: boolean;
@@ -28,12 +25,6 @@ export default function LocalInfoModal({
 }: ILocalInfoModal) {
   const travelInfo = useTravelStore((state) => state.travelInfo);
   const [selectedCity, setSelectedCity] = useState<IPlaceList>();
-
-  const { lastUpdate } = useFetchCurrency();
-  const getCurrency = useGetCurrencyByCountry(
-    selectedCity?.country.code,
-    CURRENCY_STANDARD_AMOUNT,
-  );
 
   useEffect(() => {
     if (isOpen) {
@@ -66,27 +57,8 @@ export default function LocalInfoModal({
             </Chip>
           ))}
         </div>
-        <div>
-          <div className="break-keep">
-            <span className="text-primary text-lg font-bold">
-              {selectedCity?.country.name}
-            </span>
-            ({selectedCity?.name})의 환율은&nbsp;
-            <span className="text-text-secondary">
-              {convertFormattedDate(lastUpdate)}
-            </span>
-            &nbsp;기준,
-            <br /> {`${convertComma(CURRENCY_STANDARD_AMOUNT)}원`}에&nbsp;
-            <span className="text-primary font-bold">
-              {getCurrency?.currencyCode}({getCurrency?.symbol})&nbsp;
-              {getCurrency?.convertedStandard}
-            </span>
-            &nbsp;
-            <span className="text-text-secondary text-sm">
-              ({getCurrency?.symbol}1 = {getCurrency?.convertedWon}원)
-            </span>
-            &nbsp;이에요.
-          </div>
+        <div className="flex flex-col gap-5">
+          <LocalCurrencyInfo selectedCity={selectedCity} />
         </div>
       </div>
     </SideModal>

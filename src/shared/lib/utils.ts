@@ -50,7 +50,7 @@ export const getTravelDay = (from: Date, to: Date) => {
 
 /** 여행 디데이 계산 */
 export const calcDDay = (from: Date) => {
-  if (!from) return;
+  if (!from) return 0;
 
   const today = setResetHour(new Date());
   const startDate = setResetHour(from);

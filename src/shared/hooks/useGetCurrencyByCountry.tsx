@@ -47,7 +47,7 @@ export const useGetCurrencyByCountry = (
       currencyCode, // 해당 통화 코드
       symbol, // 통화표
     };
-  }, [countryCode]);
+  }, [countryCode, isMounted]);
 
   return getCurrency;
 };
