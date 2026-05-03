@@ -9,16 +9,21 @@
 
 import { APIProvider } from '@vis.gl/react-google-maps';
 import Toast from '@/shared/components/ui/Toast';
-
-interface IProviders {}
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '@/shared/lib/queryClient';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <QueryClientProvider client={queryClient}>
       <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY || ''}>
         <Toast />
         {children}
+        {/* 개발 환경에서만 React Query Devtools 표시 */}
+        {process.env.NODE_ENV === 'development' && (
+          <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
+        )}
       </APIProvider>
-    </div>
+    </QueryClientProvider>
   );
 }
