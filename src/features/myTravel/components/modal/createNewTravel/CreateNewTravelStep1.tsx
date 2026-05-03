@@ -15,6 +15,7 @@ import { IGetGooglePlaces } from '@/features/myTravel/interfaces';
 import { Loading } from '@/shared/components/ui/Loading';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
+import tzlookup from 'tz-lookup';
 
 interface ICreateNewTravelStep1 {
   selectedCities: IPlaceList[];
@@ -95,6 +96,10 @@ export default function CreateNewTravelStep1({
               lng: place.location.longitude,
             },
             types: place.types,
+            timezone: tzlookup(
+              place.location.latitude,
+              place.location.longitude,
+            ),
           };
         });
 
@@ -161,11 +166,9 @@ export default function CreateNewTravelStep1({
                 <span className="text-text-secondary text-sm">
                   {list.address}
                 </span>
-                <div className='flex gap-1 items-center'>
+                <div className="flex items-center gap-1">
                   {list.country.code && (
-                    <div>
-                      {countryData[list.country.code].flagEmoji}
-                    </div>
+                    <div>{countryData[list.country.code].flagEmoji}</div>
                   )}
                   <span className="text-text-secondary text-sm">
                     {list.country.name && <>{list.country.name}</>}

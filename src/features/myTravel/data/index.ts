@@ -153,6 +153,7 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
       country: { name: '대한민국', code: 'KR' },
       location: { lat: 36.3577577, lng: 127.3867458 },
       name: '대전광역시',
+      timezone: 'Asia/Seoul',
     },
     {
       id: 'ChIJ51cu8IcbXWARiRtXIothAS4',
@@ -161,6 +162,7 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
       country: { name: '일본', code: 'JP' },
       location: { lat: 35.6764225, lng: 139.650027 },
       name: '도쿄도',
+      timezone: 'Asia/Tokyo',
     },
     {
       id: 'ChIJ4eIGNFXmAGAR5y9q5G7BW8U',
@@ -169,6 +171,7 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
       country: { name: '일본', code: 'JP' },
       location: { lat: 34.6937249, lng: 135.5022535 },
       name: '오사카시',
+      imezone: 'Asia/Tokyo',
     },
     {
       id: 'ChIJP3Sa8ziYEmsRUKgyFmh9AQM',
@@ -177,6 +180,7 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
       country: { name: '오스트레일리아', code: 'AU' },
       location: { lat: -33.8622503, lng: 151.207684 },
       name: '시드니',
+      timezone: 'Australia/Sydney',
     },
   ],
   schedule: [

@@ -45,6 +45,7 @@ export interface IPlaceList {
     name: string | undefined;
   };
   types: string[];
+  timezone?: string;
 }
 
 /** 가계부 정보 */
