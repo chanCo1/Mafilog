@@ -66,7 +66,6 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
             <Chip
               key={index}
               size="md"
-              className="shrink-0"
               variant={
                 selectedDay === list.value ? 'primary' : 'primaryOutline'
               }
@@ -79,7 +78,6 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
             <Chip
               key={index}
               size="md"
-              className="shrink-0"
               variant={selectedDay === index + 1 ? 'primary' : 'primaryOutline'}
               onClick={() => setSelectedDay(index + 1)}
             >{`${index + 1}일차`}</Chip>

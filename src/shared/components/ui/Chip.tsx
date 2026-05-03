@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
 const chipVariants = cva(
-  'flex gap-1 cursor-pointer font-bold rounded-2xl items-center justify-center disabled:pointer-events-none disabled:opacity-50 hover:opacity-90 text-white w-fit transition',
+  'flex gap-1 cursor-pointer font-bold rounded-2xl items-center justify-center disabled:pointer-events-none disabled:opacity-50 hover:opacity-90 text-white w-fit transition shrink-0',
   {
     variants: {
       variant: {

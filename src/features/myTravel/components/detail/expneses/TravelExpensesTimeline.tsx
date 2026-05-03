@@ -48,7 +48,6 @@ export default function TravelExpensesTimeline({
                   </span>
                 </div>
                 <Button
-                  className="shrink-0"
                   variant="redOutline"
                   size="xs"
                   onClick={(e) => handleDeleteSchedule(e)}

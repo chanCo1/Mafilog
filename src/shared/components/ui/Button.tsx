@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
 
-const buttonVariants = cva('flex gap-1 cursor-pointer font-bold rounded-md items-center justify-center disabled:pointer-events-none disabled:opacity-50 hover:opacity-90 text-white w-fit', {
+const buttonVariants = cva('flex gap-1 cursor-pointer font-bold rounded-md items-center justify-center disabled:pointer-events-none disabled:opacity-50 hover:opacity-90 text-white w-fit shrink-0', {
   variants: {
     variant: {
       primary: 'bg-primary',
