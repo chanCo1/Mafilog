@@ -6,8 +6,8 @@ export const queryClient = new QueryClient({
     queries: {
       refetchOnWindowFocus: false,
       refetchOnReconnect: true,
-      staleTime: 5 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
+      // staleTime: 5 * 60 * 1000,
+      // gcTime: 10 * 60 * 1000,
 
       retry: (failureCount, error) => {
         if (error instanceof AxiosError) {
