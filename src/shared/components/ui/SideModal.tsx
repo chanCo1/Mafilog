@@ -44,43 +44,55 @@ function SideModalEntity({
   handleClose,
   footer,
 }: ISideModal) {
-  const [mounted, setMounted] = useState(false);
+  // const [isMounted, setIsMounted] = useState(false);
+  const [isRender, setIsRender] = useState(false); // DOM에 존재 여부
+  const [isVisible, setIsVisible] = useState(false); // 슬라이드 애니메이션 여부
 
   useEffect(() => {
     // SSR 에러 방지
-    setMounted(true);
-    if (isOpen)
-      // 뒷 화면 스크롤 제거
-      document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = 'unset';
+    if (isOpen) {
+      setIsRender(true);
 
-    return () => {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 10);
+
+      document.body.style.overflow = 'hidden';
+      return () => clearTimeout(timer);
+    } else {
+      setIsVisible(false);
+
+      const timer = setTimeout(() => {
+        setIsRender(false);
+      }, 800);
+
       document.body.style.overflow = 'unset';
-    };
+      return () => clearTimeout(timer);
+    }
   }, [isOpen]);
 
-  if (!mounted) return null;
+  if (!isRender) return null;
 
   return createPortal(
     <>
       <Dimmed
-        className={cn(isOpen ? 'visible opacity-100' : 'invisible opacity-0')}
+        className={cn(
+          isVisible ? 'visible opacity-100' : 'invisible opacity-0',
+        )}
         // onClick={handleClose}
       />
       <div
         className={cn(
           sideModalVariants({ size }),
           'max-mobile:w-11/12',
-          `${isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
+          `${isVisible ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
         )}
       >
         <div className="item-center flex justify-between">
           <span className="text-lg font-bold">{title}</span>
           <ReturnButton size="lg" onClick={handleClose} />
         </div>
-        <div className="flex-1 min-h-0">
-          {children}
-        </div>
+        <div className="min-h-0 flex-1">{children}</div>
         <div className="flex items-center justify-end gap-1">
           {/* 커스텀 푸터 */}
           {footer}
