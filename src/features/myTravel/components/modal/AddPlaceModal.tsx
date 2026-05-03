@@ -14,7 +14,7 @@ import { Search } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { IGetGooglePlaces, IPlaceList } from '@/features/myTravel/interfaces';
 import { getPlaceCategory, getTravelCurrentDay } from '@/shared/lib/utils';
-import { Selectbox } from '@/shared/components/ui/Selectbox';
+import Selectbox from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';

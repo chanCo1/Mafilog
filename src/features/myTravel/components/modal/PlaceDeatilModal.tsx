@@ -8,7 +8,7 @@
 import { useState, useEffect } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
-import { Selectbox } from '@/shared/components/ui/Selectbox';
+import Selectbox from '@/shared/components/ui/Selectbox';
 import { Button } from '@/shared/components/ui/Button';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import { toast } from 'sonner';

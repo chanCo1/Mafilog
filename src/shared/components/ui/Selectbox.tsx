@@ -10,6 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/Input';
 import { ChevronDown } from 'lucide-react';
 import { ILabelValue } from '@/shared/interfaces';
+import { useOutsideClick } from '@/shared/hooks/useOutsideClick';
 
 interface ISelectbox extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -30,26 +31,25 @@ interface ISelectbox extends Omit<
   onChange: (value: ILabelValue) => void;
 }
 
-function SelectboxEntity(
-  {
-    className,
-    label,
-    labelPosition = 'top',
-    isRequired,
-    description,
-    errorMsg,
-    options,
-    prefix,
-    size = 'md',
-    variant = 'outline',
-    value,
-    onChange,
-    addValueText,
-    ...props
-  }: ISelectbox,
-  ref: React.ForwardedRef<HTMLInputElement>,
-) {
+export default function Selectbox({
+  className,
+  label,
+  labelPosition = 'top',
+  isRequired,
+  description,
+  errorMsg,
+  options,
+  prefix,
+  size = 'md',
+  variant = 'outline',
+  value,
+  onChange,
+  addValueText,
+  ...props
+}: ISelectbox) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const dropdownRef = useOutsideClick(() => setIsOpen(false));
 
   const handleFocus = () => {
     // handleBlur();
@@ -68,7 +68,7 @@ function SelectboxEntity(
   };
 
   return (
-    <div className={cn('relative', className)} ref={ref}>
+    <div className={cn('relative', className)} ref={dropdownRef}>
       <Input
         label={label}
         labelPosition={labelPosition}
@@ -119,5 +119,3 @@ function SelectboxEntity(
     </div>
   );
 }
-
-export const Selectbox = React.forwardRef(SelectboxEntity);

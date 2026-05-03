@@ -7,6 +7,7 @@
 
 import { useState, ReactNode } from 'react';
 import { cn } from '@/shared/lib/utils';
+import { useOutsideClick } from '@/shared/hooks/useOutsideClick';
 
 interface IDropdown {
   trigger: ReactNode;
@@ -17,14 +18,16 @@ interface IDropdown {
 export default function Dropdown({ trigger, className, children }: IDropdown) {
   const [isOpen, setIsOpen] = useState(false);
 
+  const dropdownRef = useOutsideClick(() => setIsOpen(false));
+
   return (
-    <div className={cn('flex flex-col items-end', className)}>
+    <div ref={dropdownRef} className={cn('flex flex-col items-end', className)}>
       <div onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
 
       {isOpen && (
         <div
           className={cn(
-            'absolute z-50 flex flex-col gap-1 rounded-lg bg-white p-2 shadow-md top-12 max-h-50 overflow-auto scrollbar-hide',
+            'scrollbar-hide absolute top-12 z-50 flex max-h-50 flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-md',
           )}
           onClick={() => setIsOpen(false)}
         >

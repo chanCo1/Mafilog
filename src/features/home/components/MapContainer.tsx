@@ -10,7 +10,7 @@
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import AmchartMap from '@/shared/components/map/AmchartMap';
-import { Selectbox } from '@/shared/components/ui/Selectbox';
+import Selectbox from '@/shared/components/ui/Selectbox';
 import { TRAVEL_TYPE_LIST } from '@/shared/constants';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
