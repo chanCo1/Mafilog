@@ -47,3 +47,6 @@ export const TRAVEL_TAB_LIST = [
   { label: '일정', value: TRAVEL_TAB.SCHEDULE },
   { label: '가계부', value: TRAVEL_TAB.EXPENSES },
 ];
+
+/** 환율 기준 금액 */
+export const CURRENCY_STANDARD_AMOUNT = 1000;
