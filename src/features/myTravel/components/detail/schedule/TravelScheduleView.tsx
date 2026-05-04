@@ -13,15 +13,16 @@ import TravelScheduleDay from '@/features/myTravel/components/detail/schedule/Tr
 import { Chip } from '@/shared/components/ui/Chip';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
-import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import AddMemoModal from '@/features/myTravel/components/modal/AddMemoModal';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import Dropdown from '@/shared/components/ui/Dropdown';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
+import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 
 function TravelScheduleView() {
-  const schedules = useTravelStore((state) => state.schedules);
-  const travelInfo = useTravelStore((state) => state.travelInfo);
+  const schedules = useTravelScheduleStore((state) => state.schedules);
+  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
   const { clearSelectedSchedules } = useSelectSchedules();
   const travelDaysList = useTravelDaysList({
     from: travelInfo.from,

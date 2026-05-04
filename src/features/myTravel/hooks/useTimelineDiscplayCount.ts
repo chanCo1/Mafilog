@@ -6,7 +6,7 @@
  */
 
 import { useMemo } from 'react';
-import { IScheduleList } from '@/shared/interfaces/travelStore.interface';
+import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
 interface IuseTimelineDiscplayCount {

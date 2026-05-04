@@ -10,12 +10,13 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Button } from '@/shared/components/ui/Button';
-import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { toast } from 'sonner';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { ILabelValue } from '@/shared/interfaces';
-import { IScheduleList } from '@/shared/interfaces/travelStore.interface';
+import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 
 interface IPlaceDeatilModal {
   isOpen: boolean;
@@ -32,8 +33,8 @@ export default function PlaceDeatilModal({
 }: IPlaceDeatilModal) {
   const isPlace = data?.type === SCHEDULE_TYPE.PLACE;
 
-  const travelInfo = useTravelStore((state) => state.travelInfo);
-  const setDeleteScheduleList = useTravelStore(
+  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const setDeleteScheduleList = useTravelScheduleStore(
     (state) => state.setDeleteScheduleList,
   );
   const travelDaysList = useTravelDaysList({

@@ -18,10 +18,11 @@ import Selectbox from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
-import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { toast } from 'sonner';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { IGetGooglePlacesResponse } from '@/features/myTravel/interfaces/api/googleplace.interface';
+import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 
 interface IAddPlaceModal {
   isOpen: boolean;
@@ -29,8 +30,8 @@ interface IAddPlaceModal {
 }
 
 export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
-  const travelInfo = useTravelStore((state) => state.travelInfo);
-  const setAddScheduleList = useTravelStore(
+  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const setAddScheduleList = useTravelScheduleStore(
     (state) => state.setAddScheduleList,
   );
   const travelDaysList = useTravelDaysList({

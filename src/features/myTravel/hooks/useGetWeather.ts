@@ -6,7 +6,7 @@
  */
 
 import { useMemo } from 'react';
-import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { useFetchWeather } from '@/features/myTravel/hooks/rquery/useFetchWeather';
 
 interface IGetWeather {
@@ -17,7 +17,7 @@ interface IGetWeather {
 type PrecipType = 'rain' | 'snow' | 'freezingrain' | 'ice';
 
 export const useGetWeather = ({ lat, lng }: IGetWeather) => {
-  const travelInfo = useTravelStore((state) => state.travelInfo);
+  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
   const { data } = useFetchWeather({
     lat,
     lng,

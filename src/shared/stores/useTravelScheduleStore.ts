@@ -1,55 +1,41 @@
+/**
+ * @file: useTravelScheduleStore.ts
+ * @author: chad
+ * @since: 2026.05.04 ~
+ * @description: 여행 일정 전역 관리
+ */
+
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { devtools } from 'zustand/middleware';
 import {
-  ITravelState,
   ISchedule,
-  ITravelActions,
-  ITravelGetters,
-} from '@/shared/interfaces';
-import {
-  TRAVEL_STATUS,
-  TRAVEL_STYLE,
-  TRAVEL_PARTNER,
-  SCHEDULE_TYPE,
-} from '@/shared/types/Enum';
+  ITravelScheduleState,
+  ITravelScheduleActions,
+  ITravelScheduleGetters,
+} from '@/shared/interfaces/travelScheduleStore.interface';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
 
-type ITravelStore = ITravelState & ITravelActions & ITravelGetters;
+type ITravelSchduleStore = ITravelScheduleState &
+  ITravelScheduleActions &
+  ITravelScheduleGetters;
 
 const initialState = {
-  travelInfo: {
-    id: 0,
-    title: '',
-    from: new Date(),
-    to: new Date(),
-    status: TRAVEL_STATUS.UPCOMING,
-    travelPeriod: 0,
-    travelStyles: [TRAVEL_STYLE.HEAL],
-    travelPartner: TRAVEL_PARTNER.ALONE,
-    cities: [],
-  },
   schedules: [],
-  expenses: [],
 };
 
-export const useTravelStore = create<ITravelStore>()(
+export const useTravelScheduleStore = create<ITravelSchduleStore>()(
   devtools(
     immer((set, get) => ({
       /**
        * @States
        */
-      travelInfo: initialState['travelInfo'],
       schedules: initialState['schedules'],
-      expenses: initialState['expenses'],
 
       /**
        * @Actions
        */
-      /** 여행 초기값 설정 */
-      setInitTravel: (data) =>
-        set({ travelInfo: data }, false, 'travel/setInitTravel'),
-
       /** 일정 리스트 초기값 설정 */
       setInitSchedules: (data) =>
         set(
@@ -64,23 +50,6 @@ export const useTravelStore = create<ITravelStore>()(
           },
           false,
           'travel/setInitSchedules',
-        ),
-
-      /** 가계부 리스트 초기값 설정 */
-      setInitExpeneses: (data) =>
-        set(
-          (state) => {
-            getTravelDayOfWeek(data.from, data.to).forEach((_day) => {
-              state.expenses.push({
-                day: _day.day,
-                date: _day.date,
-                list: [],
-                dailyExpenses: 0,
-              });
-            });
-          },
-          false,
-          'travel/setInitExpeneses',
         ),
 
       /** 여행 일정 추가 */
@@ -144,7 +113,7 @@ export const useTravelStore = create<ITravelStore>()(
       /**
        * @Getters
        */
-      getTravelInfo: () => get().travelInfo,
+      getTravelSchedules: () => get().schedules,
     })),
   ),
 );

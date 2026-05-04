@@ -9,7 +9,7 @@ import { cn } from '@/shared/lib/utils';
 import { useEffect, useState } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Chip } from '@/shared/components/ui/Chip';
-import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { Button } from '@/shared/components/ui/Button';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/LocalCurrencyInfo';
@@ -26,7 +26,7 @@ export default function LocalInfoModal({
   handleClose,
   isOpen,
 }: ILocalInfoModal) {
-  const travelInfo = useTravelStore((state) => state.travelInfo);
+  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
   const [selectedCity, setSelectedCity] = useState<IPlaceList>();
 
   useEffect(() => {

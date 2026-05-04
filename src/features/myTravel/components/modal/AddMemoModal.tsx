@@ -11,9 +11,10 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Button } from '@/shared/components/ui/Button';
-import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { toast } from 'sonner';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
+import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 
 interface IAddMemoModal {
   isOpen: boolean;
@@ -21,8 +22,8 @@ interface IAddMemoModal {
 }
 
 export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
-  const travelInfo = useTravelStore((state) => state.travelInfo);
-  const setAddScheduleList = useTravelStore(
+  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const setAddScheduleList = useTravelScheduleStore(
     (state) => state.setAddScheduleList,
   );
   const travelDaysList = useTravelDaysList({

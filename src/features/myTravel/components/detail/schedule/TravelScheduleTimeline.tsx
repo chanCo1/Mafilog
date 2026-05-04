@@ -11,10 +11,10 @@ import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { Button } from '@/shared/components/ui/Button';
-import { IScheduleList } from '@/shared/interfaces/travelStore.interface';
+import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { toast } from 'sonner';
-import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import PlaceDeatilModal from '@/features/myTravel/components/modal/PlaceDeatilModal';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
@@ -40,14 +40,14 @@ export default function TravelScheduleTimeline({
     dailyAllSchedule,
     type: timeLineData?.type,
   });
-  const setDeleteScheduleList = useTravelStore(
+  const setDeleteScheduleList = useTravelScheduleStore(
     (state) => state.setDeleteScheduleList,
   );
   const { selectedSchedules, toggleSelect } = useSelectSchedules();
 
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
 
-  const isSelected = selectedSchedules.some(s => s.id === timeLineData?.id);
+  const isSelected = selectedSchedules.some((s) => s.id === timeLineData?.id);
 
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
@@ -67,12 +67,12 @@ export default function TravelScheduleTimeline({
   };
 
   const onClickCard = () => {
-  if (selectMode && timeLineData) {
-    toggleSelect(timeLineData); // 선택 모드일 땐 토글만
-  } else {
-    setIsOpenDatilModal(true); // 아닐 땐 모달
-  }
-};
+    if (selectMode && timeLineData) {
+      toggleSelect(timeLineData); // 선택 모드일 땐 토글만
+    } else {
+      setIsOpenDatilModal(true); // 아닐 땐 모달
+    }
+  };
 
   const _place = timeLineData?.place;
 

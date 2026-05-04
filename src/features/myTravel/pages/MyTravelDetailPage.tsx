@@ -10,7 +10,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { cn, convertTravelStyle } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
-import { TRAVEL_DETAIL_MOCK_DATA } from '@/features/myTravel/data';
+import { TRAVEL_DETAIL_MOCK_DATA, CHECKLIST_MOCK_DATA } from '@/features/myTravel/data';
 import TravelStatus from '@/features/myTravel/components/detail/TravelStatus';
 import {
   convertFormattedDate,
@@ -26,16 +26,19 @@ import TravelScheduleView from '@/features/myTravel/components/detail/schedule/T
 import TravelExpensesView from '@/features/myTravel/components/detail/expneses/TravelExpensesView';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
-import { useTravelStore } from '@/shared/stores/useTravelStore';
+import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import LocalInfoModal from '@/features/myTravel/components/modal/LocalInfoModal';
+import CheckListModal from '@/features/myTravel/components/modal/CheckListModal';
+import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 
 // interface IMyTravelDetailPage {}
 
 export default function MyTravelDetailPage() {
-  const setInitTravel = useTravelStore((state) => state.setInitTravel);
-  const setInitSchedules = useTravelStore((state) => state.setInitSchedules);
-  const setInitExpeneses = useTravelStore((state) => state.setInitExpeneses);
-  const travelInfo = useTravelStore((state) => state.travelInfo);
+  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const setInitTravelInfo = useTravelInfoStore((state) => state.setInitTravelInfo);
+
+  const setInitSchedules = useTravelScheduleStore((state) => state.setInitSchedules)
+
 
   useEffect(() => {
     /** TODO: 임시 데이터 */
@@ -52,7 +55,7 @@ export default function MyTravelDetailPage() {
       cities,
     } = TRAVEL_DETAIL_MOCK_DATA;
 
-    setInitTravel({
+    setInitTravelInfo({
       id,
       cities,
       from,
@@ -64,10 +67,11 @@ export default function MyTravelDetailPage() {
       travelStyles,
     });
     setInitSchedules({ from, to });
-    setInitExpeneses({ from, to });
+    // setInitExpeneses({ from, to });
+    // setInitCheckList(CHECKLIST_MOCK_DATA);
 
     return () => {
-      useTravelStore.getState().reset();
+      useTravelInfoStore.getState().reset();
     };
   }, []);
 
@@ -75,8 +79,10 @@ export default function MyTravelDetailPage() {
     TRAVEL_TAB.SCHEDULE,
   );
 
+  /** 모달 컨트롤 */
   const [isOpenTravelModify, setIsOpenTravelModify] = useState(false);
   const [isOpenLocalInfoModal, setIsOpenLocalInfoModal] = useState(false);
+  const [isOpenCheckListModal, setIsOpenCheckListModal] = useState(false);
 
   /** 여행 기간 날짜 포멧 */
   const formattedValue = useMemo(() => {
@@ -138,7 +144,11 @@ export default function MyTravelDetailPage() {
         </div>
         <div className="flex gap-1">
           {selectedTab === TRAVEL_TAB.SCHEDULE ? (
-            <Button variant="gray" size="xs">
+            <Button
+              variant="gray"
+              size="xs"
+              onClick={() => setIsOpenCheckListModal(true)}
+            >
               체크리스트
             </Button>
           ) : (
@@ -176,6 +186,13 @@ export default function MyTravelDetailPage() {
         isModify
       />
 
+      {/* 체크리스트 모달 */}
+      <CheckListModal
+        isOpen={isOpenCheckListModal}
+        handleClose={() => setIsOpenCheckListModal(false)}
+      />
+
+      {/* 현지 정보 모달 */}
       <LocalInfoModal
         isOpen={isOpenLocalInfoModal}
         handleClose={() => setIsOpenLocalInfoModal(false)}
