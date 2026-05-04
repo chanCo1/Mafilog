@@ -1,3 +1,10 @@
+/**
+ * @file: useFetchWeather.ts
+ * @author: chad
+ * @since: 2026.05.04 ~
+ * @description: 날씨 정보 호출 react query
+ */
+
 import { useQuery } from '@tanstack/react-query';
 import { convertFormattedDate } from '@/shared/lib/utils';
 import { getWeatherByVisualCrossing } from '@/features/myTravel/services/weatherService';

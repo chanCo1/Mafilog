@@ -1,5 +1,12 @@
+/**
+ * @file: useFetchCurrency.ts
+ * @author: chad
+ * @since: 2026.05.03 ~
+ * @description: 환율 정보 호출 react query
+ */
+
 import { useQuery } from '@tanstack/react-query';
-import { fetchExchangeRate } from '@/features/myTravel/services/currencyService';
+import { getExchangeRate } from '@/features/myTravel/services/currencyService';
 import { convertFormattedDate } from '@/shared/lib/utils';
 
 export const useFetchCurrency = (targetCurrencyCode: string = 'KRW') => {
@@ -20,7 +27,7 @@ export const useFetchCurrency = (targetCurrencyCode: string = 'KRW') => {
       }
 
       /** 데이터가 없거나 날짜가 지났으면 새로 호출 */
-      const data = await fetchExchangeRate();
+      const data = await getExchangeRate({ baseCurrency: targetCurrencyCode });
 
       /** 로컬스토리지에 저장 */
       localStorage.setItem('exchange_data', JSON.stringify(data));

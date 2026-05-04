@@ -1,9 +1,14 @@
-/** 날씨 api */
+
+/**
+ * @file: getWeatherByVisualCrossing.ts
+ * @author: chad
+ * @since: 2026.05.04 ~
+ * @description: 날씨 정보 api
+ */
 
 import { IWeatherResponse } from '@/features/myTravel/interfaces/weather.interface';
 import axios from 'axios';
 
-const API_KEY = process.env.NEXT_PUBLIC_VISUALCROSSING_API_KEY;
 
 interface IGetWeatherByVisualCrossing {
   lat: number | undefined;
@@ -11,6 +16,8 @@ interface IGetWeatherByVisualCrossing {
   startDate: string;
   endDate: string;
 }
+
+const API_KEY = process.env.NEXT_PUBLIC_VISUALCROSSING_API_KEY;
 
 export const getWeatherByVisualCrossing = async ({
   lat,
