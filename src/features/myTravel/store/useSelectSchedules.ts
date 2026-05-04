@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { IScheduleList } from '@/shared/interfaces';
+import { IScheduleList } from '@/shared/interfaces/travelStore.interface';
 
 interface ISelectSchedules {
   /** 선택된 일정 리스트 */

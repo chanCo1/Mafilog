@@ -13,7 +13,8 @@ import { Button } from '@/shared/components/ui/Button';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import { toast } from 'sonner';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
-import { ILabelValue, IScheduleList } from '@/shared/interfaces';
+import { ILabelValue } from '@/shared/interfaces';
+import { IScheduleList } from '@/shared/interfaces/travelStore.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
 interface IPlaceDeatilModal {

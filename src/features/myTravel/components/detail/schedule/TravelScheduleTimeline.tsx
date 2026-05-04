@@ -11,7 +11,7 @@ import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { Button } from '@/shared/components/ui/Button';
-import { IScheduleList } from '@/shared/interfaces';
+import { IScheduleList } from '@/shared/interfaces/travelStore.interface';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { toast } from 'sonner';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
