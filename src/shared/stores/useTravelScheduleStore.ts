@@ -40,13 +40,15 @@ export const useTravelScheduleStore = create<ITravelSchduleStore>()(
       setInitSchedules: (data) =>
         set(
           (state) => {
-            getTravelDayOfWeek(data.from, data.to).forEach((_day) => {
-              state.schedules.push({
+            const newSchedules = getTravelDayOfWeek(data.from, data.to).map(
+              (_day) => ({
                 day: _day.day,
                 date: _day.date,
                 list: [],
-              });
-            });
+              }),
+            );
+
+            state.schedules = newSchedules;
           },
           false,
           'travel/setInitSchedules',

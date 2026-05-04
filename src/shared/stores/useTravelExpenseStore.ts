@@ -38,14 +38,16 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
       setInitExpense: (data) =>
         set(
           (state) => {
-            getTravelDayOfWeek(data.from, data.to).forEach((_day) => {
-              state.expense.push({
+            const newExpenses = getTravelDayOfWeek(data.from, data.to).map(
+              (_day) => ({
                 day: _day.day,
                 date: _day.date,
                 list: [],
                 dailyExpense: 0,
-              });
-            });
+              }),
+            );
+
+            state.expense = newExpenses;
           },
           false,
           'travel/setInitExpeneses',

@@ -33,13 +33,16 @@ export const useTravelCheckListStore = create<ITravelCheckListStore>()(
       /**
        * @Actions
        */
+      /** 여행 초기값 설정 */
+      setInitCheckList: (data) =>
+        set({ checkList: data }, false, 'checklist/setInitCheckList'),
       /** 리셋 */
       reset: () => set(initialState),
 
       /**
        * @Getters
        */
-      getTravelInfo: () => get().checkList,
+      getCheckList: () => get().checkList,
     })),
   ),
 );

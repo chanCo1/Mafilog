@@ -12,4 +12,6 @@ export interface ITravelCheckListActions {
 }
 
 /** 여행 체크리스트 전역 인터페이스 (getters) */
-export interface ITravelCheckListGetters {}
+export interface ITravelCheckListGetters {
+  getCheckList: () => ICheckList[];
+}

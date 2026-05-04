@@ -30,6 +30,8 @@ import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import LocalInfoModal from '@/features/myTravel/components/modal/LocalInfoModal';
 import CheckListModal from '@/features/myTravel/components/modal/CheckListModal';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
+import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
+import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
 
 // interface IMyTravelDetailPage {}
 
@@ -38,6 +40,8 @@ export default function MyTravelDetailPage() {
   const setInitTravelInfo = useTravelInfoStore((state) => state.setInitTravelInfo);
 
   const setInitSchedules = useTravelScheduleStore((state) => state.setInitSchedules)
+  const setInitExpense = useTravelExpenseListStore((state) => state.setInitExpense)
+  const setInitCheckList = useTravelCheckListStore((state) => state.setInitCheckList)
 
 
   useEffect(() => {
@@ -67,8 +71,8 @@ export default function MyTravelDetailPage() {
       travelStyles,
     });
     setInitSchedules({ from, to });
-    // setInitExpeneses({ from, to });
-    // setInitCheckList(CHECKLIST_MOCK_DATA);
+    setInitExpense({ from, to });
+    setInitCheckList(CHECKLIST_MOCK_DATA);
 
     return () => {
       useTravelInfoStore.getState().reset();

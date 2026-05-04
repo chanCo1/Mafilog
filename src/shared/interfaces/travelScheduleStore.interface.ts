@@ -2,11 +2,6 @@ import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { ILabelValue } from '@/shared/interfaces';
 
-/** 여행 상세 전역 인터페이스 (state) */
-export interface ITravelScheduleState {
-  schedules: ISchedule[];
-}
-
 /** 일정 리스트 */
 export interface ISchedule {
   day: number;
@@ -27,7 +22,12 @@ export interface IDateFromTo {
   to: Date;
 }
 
-/** 여행 상세 전역 인터페이스 (actions) */
+/** 여행 상세 전역 인터페이스 (state) */
+export interface ITravelScheduleState {
+  schedules: ISchedule[];
+}
+
+/** 여행 스케줄 전역 인터페이스 (actions) */
 export interface ITravelScheduleActions {
   setInitSchedules: (date: IDateFromTo) => void;
   setAddScheduleList: (data: {
@@ -41,7 +41,7 @@ export interface ITravelScheduleActions {
   reset: () => void;
 }
 
-/** 여행 상세 전역 인터페이스 (getters) */
+/** 여행 스케줄 전역 인터페이스 (getters) */
 export interface ITravelScheduleGetters {
   getTravelSchedules: () => ISchedule[];
 }
