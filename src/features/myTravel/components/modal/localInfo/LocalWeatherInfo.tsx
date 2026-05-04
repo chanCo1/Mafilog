@@ -18,8 +18,6 @@ export default function LocalWeatherInfo({ selectedCity }: ILocalWeatherInfo) {
     lng: selectedCity?.location.lng,
   });
 
-  console.log('getWeather >>> ', getWeather);
-
   return (
     <div className="flex flex-col gap-2">
       <div>
