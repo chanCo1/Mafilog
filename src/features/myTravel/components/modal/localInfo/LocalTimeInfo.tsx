@@ -58,7 +58,7 @@ export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
         <span className="text-primary text-lg font-bold">
           {selectedCity?.name}
         </span>
-        의 시차는 한국(서울)<span>{diffTimeMsg}</span>
+        의 시차는? 한국(서울)<span>{diffTimeMsg}</span>
       </div>
       <div className="flex gap-1">
         <LocalCityTime

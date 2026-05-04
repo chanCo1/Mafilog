@@ -33,7 +33,7 @@ export default function LocalCurrencyInfo({
           <span className="text-primary text-lg font-bold">
             {selectedCity?.country.name}
           </span>
-          ({selectedCity?.name})의 환율은<br />
+          ({selectedCity?.name})의 환율은?<br />
           <span className="text-text-secondary">
             {convertFormattedDate(lastUpdate)}
           </span>
