@@ -12,7 +12,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 const separatorVariants = cva('shrink-0 bg-gray-100 rounded-full', {
   variants: {
     position: {
-      horizontal: 'h-0.5 w-full',
+      horizontal: 'h-0.5 w-full w-4/5',
       vertical: 'h-auto self-stretch w-0.5',
     },
   },
@@ -30,10 +30,12 @@ interface ISeparator
 
 export default function Separator({ className, position, ...props }: ISeparator) {
   return (
-    <div
-      className={cn(separatorVariants({ position, className }))}
-      {...props}
-    />
+    <div className='flex items-center justify-center'>
+      <div
+        className={cn(separatorVariants({ position, className }))}
+        {...props}
+      />
+    </div>
   );
 }
 
