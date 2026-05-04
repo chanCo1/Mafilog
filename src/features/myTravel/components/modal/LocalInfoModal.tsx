@@ -15,6 +15,7 @@ import { IPlaceList } from '@/features/myTravel/interfaces';
 import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/LocalCurrencyInfo';
 import LocalTimeInfo from '@/features/myTravel/components/modal/localInfo/LocalTimeInfo';
 import Separator from '@/shared/components/ui/Separator';
+import LocalWeatherInfo from '@/features/myTravel/components/modal/localInfo/LocalWeatherInfo';
 
 interface ILocalInfoModal {
   isOpen: boolean;
@@ -59,11 +60,12 @@ export default function LocalInfoModal({
             </Chip>
           ))}
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-10">
           <LocalCurrencyInfo selectedCity={selectedCity} />
           <Separator position='horizontal' />
           <LocalTimeInfo selectedCity={selectedCity} />
           <Separator position='horizontal' />
+          <LocalWeatherInfo selectedCity={selectedCity} />
         </div>
       </div>
     </SideModal>
