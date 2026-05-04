@@ -11,7 +11,10 @@ export const useFetchCurrency = (targetCurrencyCode: string = 'KRW') => {
       const cached = localStorage.getItem('exchange_data');
       const cachedDate = localStorage.getItem('exchange_date');
 
-      /** 저장된 데이터가 있고, 오늘 날짜와 같으면 로컬스토리지에 있는 데이터를 전달 */
+      /**
+       * 저장된 데이터가 있고, 오늘 날짜와 같으면 로컬스토리지에 있는 데이터를 전달
+       * api 호출 비용 절감을 위해 하루에 한번 api 호출
+       */
       if (cached && cachedDate === today) {
         return JSON.parse(cached);
       }

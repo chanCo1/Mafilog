@@ -20,7 +20,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /** 날짜 포멧 변경 */
-export const convertFormattedDate = (date: Date, format = 'yyyy.MM.dd') => {
+export const convertFormattedDate = (date: Date, format = 'yyyy-MM-dd') => {
   if (!date) return;
   return formatDate(date, format, { locale: ko });
 };

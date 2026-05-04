@@ -17,7 +17,7 @@ interface ITravelStatus {
   from: Date;
   to: Date;
 }
-
+// TODO: 날짜로 상태값 구할지 status로 구할지 확인할것
 export default function TravelStatus({ status, from, to }: ITravelStatus) {
   /** 상태 라벨 */
   const getStatusLabel = useMemo(() => {

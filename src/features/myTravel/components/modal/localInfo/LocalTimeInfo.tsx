@@ -26,15 +26,14 @@ export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
       return (
         <div>
           보다&nbsp;
-          <span className="text-state-success font-bold text-lg">{`${getTime.diffHours}시간 빨라요`}</span>
+          <span className="text-state-success font-bold text-lg">{`${getTime.diffHours}시간 빨라요`}.</span>
         </div>
       );
     } else if (getTime.diffHours < 0) {
-      // return `보다 ${getTime.diffHours}시간 느려요`;
       return (
         <div>
           보다&nbsp;
-          <span className="text-state-error font-bold text-lg">{`${getTime.diffHours}시간 느려요`}</span>
+          <span className="text-state-error font-bold text-lg">{`${getTime.diffHours}시간 느려요`}.</span>
         </div>
       );
     } else {
@@ -42,7 +41,7 @@ export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
       return (
         <div>
           과&nbsp;
-          <span className="font-bold text-lg">같아요</span>
+          <span className="font-bold text-lg">같아요.</span>
         </div>
       );
     }
