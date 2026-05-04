@@ -12,7 +12,7 @@ import {
   TRAVEL_PARTNER_LIST,
   TRAVEL_STYLE_LIST,
 } from '@/features/myTravel/constants';
-import { IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
 /** 조건부로 클래스 사용(clsx) + props로 받은 스타일이 기본 스타일을 덮어쓰기(twMerge) */
 export function cn(...inputs: ClassValue[]) {

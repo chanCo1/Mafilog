@@ -7,7 +7,7 @@
 
 import { useMemo, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
-import { IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { convertFormattedDate } from '@/shared/lib/utils';
 import { useGetDiffTime } from '@/features/myTravel/hooks/useGetDiffTime';
 import Separator from '@/shared/components/ui/Separator';

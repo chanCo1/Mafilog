@@ -7,7 +7,7 @@
 
 import { Map, AdvancedMarker, Pin, useMap } from '@vis.gl/react-google-maps';
 import { useState, memo, useEffect } from 'react';
-import { IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface IGoogleMap {
   places?: IPlaceList[];

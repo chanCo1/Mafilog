@@ -6,7 +6,7 @@
  */
 
 import { Chip } from '@/shared/components/ui/Chip';
-import { IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { X } from 'lucide-react';
 import { cn } from '@/shared/lib/utils';
 

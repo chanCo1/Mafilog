@@ -11,7 +11,7 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Chip } from '@/shared/components/ui/Chip';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import { Button } from '@/shared/components/ui/Button';
-import { IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/LocalCurrencyInfo';
 import LocalTimeInfo from '@/features/myTravel/components/modal/localInfo/LocalTimeInfo';
 import Separator from '@/shared/components/ui/Separator';

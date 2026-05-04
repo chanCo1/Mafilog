@@ -6,7 +6,7 @@
  */
 
 import { cn } from '@/shared/lib/utils';
-import { IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { convertFormattedDate, getTravelDay } from '@/shared/lib/utils';
 import { Badge } from '@/shared/components/ui/Badge';
 import { calcDDay } from '@/shared/lib/utils';

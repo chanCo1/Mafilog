@@ -12,7 +12,7 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
 import Step from '@/shared/components/ui/Step';
 import CreateNewTravelStep1 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep1';
-import { IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { CREATE_TRAVEL_STEP_LIST } from '@/features/myTravel/constants';
 import CreateNewTravelStep2 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep2';
 import CreateNewTravelStep3 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep3';

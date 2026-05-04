@@ -12,7 +12,7 @@ import { Input } from '@/shared/components/ui/Input';
 import { Loading } from '@/shared/components/ui/Loading';
 import { Search } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
-import { IGetGooglePlaces, IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { getPlaceCategory, getTravelCurrentDay } from '@/shared/lib/utils';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
@@ -21,6 +21,7 @@ import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useTravelStore } from '@/shared/stores/useTravelStore';
 import { toast } from 'sonner';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
+import { IGetGooglePlacesResponse } from '@/features/myTravel/interfaces/api/googleplace.interface';
 
 interface IAddPlaceModal {
   isOpen: boolean;
@@ -93,7 +94,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
         body: JSON.stringify(body),
       });
 
-      const data: IGetGooglePlaces = await res.json();
+      const data: IGetGooglePlacesResponse = await res.json();
 
       if (data.places?.length) {
         /** 도시 정보 추출 */

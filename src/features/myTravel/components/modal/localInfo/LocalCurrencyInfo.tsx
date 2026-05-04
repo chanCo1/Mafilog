@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import { useFetchCurrency } from '@/shared/hooks/rquery/useFetchCurrency';
 import { useGetCurrencyByCountry } from '@/shared/hooks/useGetCurrencyByCountry';
 import { CURRENCY_STANDARD_AMOUNT } from '@/features/myTravel/constants';
-import { IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { convertFormattedDate, convertComma } from '@/shared/lib/utils';
 
 interface ILocalCurrencyInfo {

@@ -6,7 +6,7 @@
  */
 
 import { useGetWeather } from '@/features/myTravel/hooks/useGetWeather';
-import { IPlaceList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface ILocalWeatherInfo {
   selectedCity: IPlaceList | undefined;
