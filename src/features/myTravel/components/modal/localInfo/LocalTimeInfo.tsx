@@ -18,6 +18,7 @@ interface ILocalTimeInfo {
 
 export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
   const getTime = useGetDiffTime({ targetTimeZone: selectedCity?.timezone });
+  if (!getTime) return null;
 
   const diffTimeMsg = useMemo(() => {
     if (getTime?.diffHours === undefined) return '';
@@ -26,14 +27,18 @@ export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
       return (
         <div>
           보다&nbsp;
-          <span className="text-state-success font-bold text-lg">{`${getTime.diffHours}시간 빨라요`}.</span>
+          <span className="text-state-success text-lg font-bold">
+            {`${getTime.diffHours}시간 빨라요`}
+          </span>
         </div>
       );
     } else if (getTime.diffHours < 0) {
       return (
         <div>
           보다&nbsp;
-          <span className="text-state-error font-bold text-lg">{`${getTime.diffHours}시간 느려요`}.</span>
+          <span className="text-state-error text-lg font-bold">
+            {`${getTime.diffHours}시간 느려요`}
+          </span>
         </div>
       );
     } else {
@@ -41,7 +46,7 @@ export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
       return (
         <div>
           과&nbsp;
-          <span className="font-bold text-lg">같아요.</span>
+          <span className="text-lg font-bold">같아요</span>
         </div>
       );
     }
@@ -61,7 +66,7 @@ export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
           time={getTime?.targetTime}
           date={getTime?.targetDate}
         />
-        <Separator />
+        {/* <Separator /> */}
         <LocalCityTime
           city="서울"
           time={getTime?.seoulTime}
