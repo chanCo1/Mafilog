@@ -60,7 +60,7 @@ export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
         </span>
         의 시차는? 한국(서울)<span>{diffTimeMsg}</span>
       </div>
-      <div className="flex gap-1">
+      <div className="flex gap-3">
         <LocalCityTime
           city={selectedCity?.name}
           time={getTime?.targetTime}
@@ -83,7 +83,7 @@ interface ILocalCityTime {
   city: string | undefined;
 }
 const LocalCityTime = ({ city, date, time }: ILocalCityTime) => (
-  <div className="flex w-full justify-center text-center">
+  <div className="flex w-full justify-center text-center p-1 rounded-lg">
     <div className="flex flex-col">
       <span className="text-text-secondary text-sm font-bold">{date}</span>
       <span className="text-xl font-bold">{time}</span>

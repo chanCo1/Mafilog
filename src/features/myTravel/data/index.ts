@@ -239,3 +239,56 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
   ],
   image: null,
 };
+
+/** 체크리스트 목업 데이터 */
+export const CHECKLIST_MOCK_DATA = [
+  {
+    id: 1,
+    label: '필수 준비',
+    list: [
+      { id: 1, label: '여권', isChecked: false },
+      { id: 2, label: '신분증', isChecked: false },
+      { id: 3, label: '티켓(모바일티켓)', isChecked: false },
+      { id: 4, label: '환전', isChecked: false },
+      { id: 5, label: '해외 로밍', isChecked: false },
+    ],
+  },
+  {
+    id: 2,
+    label: '세면도구',
+    list: [
+      { id: 1, label: '칫솔/치약', isChecked: false },
+      { id: 2, label: '샴푸/린스', isChecked: false },
+      { id: 3, label: '바디워시', isChecked: false },
+      { id: 4, label: '클렌징폼', isChecked: false },
+      { id: 5, label: '수건', isChecked: false },
+    ],
+  },
+  {
+    id: 3,
+    label: '화장품',
+    list: [
+      { id: 1, label: '스킨/로션', isChecked: false },
+      { id: 2, label: '핸드크림', isChecked: false },
+      { id: 3, label: '립밤', isChecked: false },
+      { id: 4, label: '선크림', isChecked: false },
+    ],
+  },
+  {
+    id: 4,
+    label: '옷',
+    list: [
+      { id: 1, label: '여벌옷/잠옷', isChecked: false },
+      { id: 2, label: '속옷/양말', isChecked: false },
+    ],
+  },
+  {
+    id: 5,
+    label: '전자제품',
+    list: [
+      { id: 1, label: '충전기/케이블', isChecked: false },
+      { id: 2, label: '보조배터리', isChecked: false },
+      { id: 3, label: '변환 플러그(돼지코)', isChecked: false },
+    ],
+  },
+];
