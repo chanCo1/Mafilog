@@ -44,40 +44,54 @@ function SideModalEntity({
   handleClose,
   footer,
 }: ISideModal) {
-  // const [isMounted, setIsMounted] = useState(false);
-  const [isRender, setIsRender] = useState(false); // DOM에 존재 여부
-  const [isVisible, setIsVisible] = useState(false); // 슬라이드 애니메이션 여부
+  const [isMounted, setIsMounted] = useState(false);
+  // const [isRender, setIsRender] = useState(false); // DOM에 존재 여부
+  // const [isVisible, setIsVisible] = useState(false); // 슬라이드 애니메이션 여부
+
+  // useEffect(() => {
+  //   // SSR 에러 방지
+  //   if (isOpen) {
+  //     setIsMounted(true);
+
+  //     // const timer = setTimeout(() => {
+  //     //   setIsVisible(true);
+  //     // }, 10);
+
+  //     document.body.style.overflow = 'hidden';
+  //     // return () => clearTimeout(timer);
+  //   } else {
+  //     // setIsVisible(false);
+  //     setIsMounted(false);
+
+  //     // const timer = setTimeout(() => {
+  //     //   setIsRender(false);
+  //     // }, 800);
+
+  //     document.body.style.overflow = 'unset';
+  //     // return () => clearTimeout(timer);
+  //   }
+  // }, [isOpen]);
 
   useEffect(() => {
     // SSR 에러 방지
-    if (isOpen) {
-      setIsRender(true);
-
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 10);
-
+    setIsMounted(true);
+    if (isOpen)
+      // 뒷 화면 스크롤 제거
       document.body.style.overflow = 'hidden';
-      return () => clearTimeout(timer);
-    } else {
-      setIsVisible(false);
+    else document.body.style.overflow = 'unset';
 
-      const timer = setTimeout(() => {
-        setIsRender(false);
-      }, 800);
-
+    return () => {
       document.body.style.overflow = 'unset';
-      return () => clearTimeout(timer);
-    }
+    };
   }, [isOpen]);
 
-  if (!isRender) return null;
+  if (!isMounted) return null;
 
   return createPortal(
     <>
       <Dimmed
         className={cn(
-          isVisible ? 'visible opacity-100' : 'invisible opacity-0',
+          isOpen ? 'visible opacity-100' : 'invisible opacity-0',
         )}
         // onClick={handleClose}
       />
@@ -85,7 +99,7 @@ function SideModalEntity({
         className={cn(
           sideModalVariants({ size }),
           'max-mobile:w-11/12',
-          `${isVisible ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
+          `${isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
         )}
       >
         <div className="item-center flex justify-between">
