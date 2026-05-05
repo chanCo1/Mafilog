@@ -30,6 +30,7 @@ export interface ITravelCheckListActions {
   setAddCategory: (name: string) => void;
   setUpdateCategoryName: (target: ICheckList, name: string) => void;
   setDeleteCategory: (target: ICheckList) => void;
+  setCheckedItem: (target: ICheckList, targetItem: IChecklistItem) => void;
   setAddItem: (target: ICheckList, name: string) => void;
   setDeleteItem: (target: ICheckList, targetItem: IChecklistItem) => void;
   reset: () => void;

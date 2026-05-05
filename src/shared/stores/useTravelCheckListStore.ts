@@ -106,6 +106,27 @@ export const useTravelCheckListStore = create<ITravelCheckListStore>()(
           'checklist/setDeleteCategory',
         ),
 
+      /** 준비물 체크 */
+      setCheckedItem: (target, targetItem) =>
+        set(
+          (state) => {
+            const findCategory = state.checkList.find(
+              (list) => list.id === target.id,
+            );
+
+            if (findCategory) {
+              const findItem = findCategory.list.find(
+                (list) => list.id === targetItem.id,
+              );
+              if (findItem) {
+                findItem.isChecked = !findItem.isChecked;
+              }
+            }
+          },
+          false,
+          'checklist/setCheckedItem',
+        ),
+
       /** 준비물 추가 */
       setAddItem: (target, name) =>
         set(
@@ -141,7 +162,6 @@ export const useTravelCheckListStore = create<ITravelCheckListStore>()(
 
               findCategory.list = filtered;
             }
-
           },
           false,
           'checklist/setDeleteItem',
