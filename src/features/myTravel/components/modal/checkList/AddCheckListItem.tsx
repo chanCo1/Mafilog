@@ -23,10 +23,11 @@ export default function AddCheckListItem({ list }: IAddCheckListItem) {
 
   const [addItemName, setAddItemName] = useState('');
 
-  const handleAddItem = () =>{
-    setAddItem(list, addItemName)
+  const handleAddItem = () => {
+    setAddItem(list, addItemName);
+    setChangeCategoryStatus(list, null);
     setAddItemName('');
-  }
+  };
 
   return (
     <div className="flex items-center justify-between gap-2">
@@ -35,9 +36,9 @@ export default function AddCheckListItem({ list }: IAddCheckListItem) {
         value={addItemName}
         onChange={(e) => setAddItemName(e.target.value)}
         onKeyDown={(e) => {
-            if (e.nativeEvent.isComposing) return;
-            if (e.key === 'Enter') handleAddItem();
-          }}
+          if (e.nativeEvent.isComposing) return;
+          if (e.key === 'Enter') handleAddItem();
+        }}
       />
       <div className="flex shrink-0 gap-3">
         <div
