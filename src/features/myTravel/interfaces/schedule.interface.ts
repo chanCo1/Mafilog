@@ -16,17 +16,3 @@ export interface IPlaceList {
   types: string[];
   timezone?: string;
 }
-
-/** 체크리스트 */
-export interface ICheckList {
-  id: string | number;
-  label: string;
-  list: IChecklistItem[];
-}
-
-/** 체크리스트 아이템 */
-export interface IChecklistItem {
-  id: string | number;
-  label: string;
-  isChecked: boolean;
-}

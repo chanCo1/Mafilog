@@ -1,4 +1,19 @@
-import { ICheckList } from '@/features/myTravel/interfaces/schedule.interface';
+type TCategoryStatusType = 'editCategory' | 'addList' | null;
+
+/** 체크리스트 */
+export interface ICheckList {
+  id: string | number;
+  label: string;
+  status: TCategoryStatusType;
+  list: IChecklistItem[];
+}
+
+/** 체크리스트 아이템 */
+export interface IChecklistItem {
+  id: string | number;
+  label: string;
+  isChecked: boolean;
+}
 
 /** 여행 체크리스트 전역 인터페이스 (state) */
 export interface ITravelCheckListState {
@@ -7,7 +22,7 @@ export interface ITravelCheckListState {
 
 /** 여행 체크리스트 전역 인터페이스 (actions) */
 export interface ITravelCheckListActions {
-  setInitCheckList: (date: ICheckList[]) => void;
+  setInitCheckList: (data: ICheckList[]) => void;
   reset: () => void;
 }
 
