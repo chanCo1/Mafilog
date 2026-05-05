@@ -6,7 +6,7 @@
  * @description: 날씨 정보 api
  */
 
-import { IWeatherResponse } from '@/features/myTravel/interfaces/api/weather.interface';
+import { IWeatherResponse } from '@/shared/interfaces/api/weather.interface';
 import axios from 'axios';
 
 

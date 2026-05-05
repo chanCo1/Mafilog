@@ -7,7 +7,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { convertFormattedDate } from '@/shared/lib/utils';
-import { getWeatherByVisualCrossing } from '@/features/myTravel/services/weatherService';
+import { getWeatherByVisualCrossing } from '@/shared/services/weatherService';
 
 interface IUseFetchWeather {
   lat: number | undefined;

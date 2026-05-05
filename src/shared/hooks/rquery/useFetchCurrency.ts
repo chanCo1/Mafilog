@@ -6,7 +6,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { getExchangeRate } from '@/features/myTravel/services/currencyService';
+import { getExchangeRate } from '@/shared/services/currencyService';
 import { convertFormattedDate } from '@/shared/lib/utils';
 
 export const useFetchCurrency = (targetCurrencyCode: string = 'KRW') => {

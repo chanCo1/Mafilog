@@ -7,7 +7,7 @@
 
 import { useMemo } from 'react';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
-import { useFetchWeather } from '@/features/myTravel/hooks/rquery/useFetchWeather';
+import { useFetchWeather } from '@/shared/hooks/rquery/useFetchWeather';
 
 interface IGetWeather {
   lat: number | undefined;

@@ -11,7 +11,7 @@ import { Input } from '@/shared/components/ui/Input';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { Search, X } from 'lucide-react';
 import { CITY_MOCK_DATA } from '@/features/myTravel/data';
-import { IGetGooglePlacesResponse } from '@/features/myTravel/interfaces/api/googleplace.interface';
+import { IGetGooglePlacesResponse } from '@/shared/interfaces/api/googleplace.interface';
 import { Loading } from '@/shared/components/ui/Loading';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';

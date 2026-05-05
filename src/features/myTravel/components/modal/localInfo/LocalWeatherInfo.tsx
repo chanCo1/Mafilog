@@ -5,7 +5,7 @@
  * @description: LocalWeatherInfo 컴포넌트, 현지 날씨 정보 컴포넌트
  */
 
-import { useGetWeather } from '@/features/myTravel/hooks/useGetWeather';
+import { useGetWeather } from '@/shared/hooks/useGetWeather';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface ILocalWeatherInfo {
