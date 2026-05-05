@@ -24,7 +24,7 @@ export default function SelectedChips({
   className,
 }: ISelectedChips) {
   return (
-    <div className={cn('flex flex-col gap-1', className)}>
+    <div className={cn('flex flex-col gap-1 pb-1', className)}>
       <p className="text-primary">{title}</p>
       {selectedList.length ? (
         <div className="scrollbar-hide flex gap-1 overflow-x-auto">
