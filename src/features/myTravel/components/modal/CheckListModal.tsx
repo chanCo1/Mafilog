@@ -5,7 +5,7 @@
  * @description: CheckListModal 컴포넌트, 체크리스트 모달
  */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import Dropdown from '@/shared/components/ui/Dropdown';
 import { Chip } from '@/shared/components/ui/Chip';

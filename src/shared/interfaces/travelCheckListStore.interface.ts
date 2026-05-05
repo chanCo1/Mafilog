@@ -1,4 +1,4 @@
-type TCategoryStatusType = 'editCategory' | 'addList' | null;
+type TCategoryStatusType = 'editCategory' | 'addItem' | null;
 
 /** 체크리스트 */
 export interface ICheckList {
@@ -27,8 +27,10 @@ export interface ITravelCheckListActions {
     target: ICheckList,
     status: TCategoryStatusType,
   ) => void;
+  setAddCategory: (name: string) => void;
   setUpdateCategoryName: (target: ICheckList, name: string) => void;
   setDeleteCategory: (target: ICheckList) => void;
+  setAddItem: (target: ICheckList, name: string) => void;
   reset: () => void;
 }
 

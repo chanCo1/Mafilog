@@ -63,6 +63,21 @@ export const useTravelCheckListStore = create<ITravelCheckListStore>()(
           'checklist/setChangeCategoryStatus',
         ),
 
+      /** 카테고리 추가 */
+      setAddCategory: (name) =>
+        set(
+          (status) => {
+            status.checkList.push({
+              id: `${name}-${Math.floor(Math.random() * 1000)}`,
+              label: name,
+              status: null,
+              list: [],
+            });
+          },
+          false,
+          'checklist/setUpdateCategoryName',
+        ),
+
       /** 카테고리명 수정 */
       setUpdateCategoryName: (target, name) =>
         set(
@@ -89,6 +104,26 @@ export const useTravelCheckListStore = create<ITravelCheckListStore>()(
           },
           false,
           'checklist/setDeleteCategory',
+        ),
+
+      /** 준비물 추가 */
+      setAddItem: (target, name) =>
+        set(
+          (state) => {
+            const findCategory = state.checkList.find(
+              (list) => list.id === target.id,
+            );
+
+            if (findCategory) {
+              findCategory.list.push({
+                id: `${name}-${Math.floor(Math.random() * 1000)}`,
+                label: name,
+                isChecked: false,
+              });
+            }
+          },
+          false,
+          'checklist/setAddItem',
         ),
 
       /** 리셋 */
