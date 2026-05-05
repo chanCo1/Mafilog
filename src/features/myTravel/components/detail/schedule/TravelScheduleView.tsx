@@ -5,7 +5,7 @@
  * @description: TravelScheduleView 컴포넌트, 여행 일정탭 하위 내용
  */
 
-import { memo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
@@ -19,6 +19,7 @@ import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules
 import Dropdown from '@/shared/components/ui/Dropdown';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
 function TravelScheduleView() {
   const schedules = useTravelScheduleStore((state) => state.schedules);
@@ -45,6 +46,18 @@ function TravelScheduleView() {
       setSelectModifyMode(true);
     }
   };
+
+  const getPlace = useMemo(() => {
+    const targetDay = schedules.find((s) => s.day === selectedDay);
+
+    if (!targetDay) return [];
+
+    const places = targetDay.list
+      .filter((item) => item.type === 'place' && !!item.place)
+      .map((item) => item.place as IPlaceList);
+
+    return places.length > 0 ? places : [];
+  }, [schedules, selectedDay]);
 
   return (
     <>
@@ -132,9 +145,8 @@ function TravelScheduleView() {
           </>
         }
         stautsArea={
-          <div className="max-mobile:h-60 h-110">
-            <div className="h-full w-full bg-red-50" />
-            {/* <GoogleMap /> */}
+          <div className="max-mobile:h-60 h-110 overflow-hidden rounded-lg">
+            <GoogleMap places={getPlace} id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string} />
           </div>
         }
       />
@@ -150,4 +162,4 @@ function TravelScheduleView() {
   );
 }
 
-export default memo(TravelScheduleView);
+export default TravelScheduleView;
