@@ -17,6 +17,7 @@ import { Input } from '@/shared/components/ui/Input';
 import CategoryDropdown from '@/features/myTravel/components/modal/checkList/CategoryDropdown';
 import EditCategoryName from '@/features/myTravel/components/modal/checkList/EditCategoryName';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
+import AddCheckListItem from '@/features/myTravel/components/modal/checkList/AddCheckListItem';
 
 interface ICheckListModal {
   isOpen: boolean;
@@ -47,7 +48,6 @@ export default function CheckListModal({
     setIsOpenAddCategory(false);
     setAddCategoryName('');
   };
-
 
   return (
     <SideModal
@@ -151,24 +151,13 @@ export default function CheckListModal({
                     variant="plus"
                     size="sm"
                     circled={list.status === 'addItem' ? 'none' : 'outline'}
-                    className="cursor-pointer"
+                    className={
+                      list.status === 'addItem' ? 'none' : 'cursor-pointer'
+                    }
                     onClick={() => setChangeCategoryStatus(list, 'addItem')}
                   />
                   {list.status === 'addItem' && (
-                    <div className="flex items-center justify-between gap-2">
-                      <Input size="sm" />
-                      <div className="flex shrink-0 gap-3">
-                        <div className="text-primary cursor-pointer font-bold">
-                          추가
-                        </div>
-                        <div
-                          className="text-text-secondary cursor-pointer font-bold"
-                          onClick={() => setChangeCategoryStatus(list, null)}
-                        >
-                          취소
-                        </div>
-                      </div>
-                    </div>
+                    <AddCheckListItem list={list} />
                   )}
                 </div>
               </div>
