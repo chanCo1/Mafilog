@@ -23,6 +23,12 @@ export interface ITravelCheckListState {
 /** 여행 체크리스트 전역 인터페이스 (actions) */
 export interface ITravelCheckListActions {
   setInitCheckList: (data: ICheckList[]) => void;
+  setChangeCategoryStatus: (
+    target: ICheckList,
+    status: TCategoryStatusType,
+  ) => void;
+  setUpdateCategoryName: (target: ICheckList, name: string) => void;
+  setDeleteCategory: (target: ICheckList) => void;
   reset: () => void;
 }
 

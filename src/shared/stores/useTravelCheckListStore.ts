@@ -35,7 +35,62 @@ export const useTravelCheckListStore = create<ITravelCheckListStore>()(
        */
       /** 여행 초기값 설정 */
       setInitCheckList: (data) =>
-        set({ checkList: data }, false, 'checklist/setInitCheckList'),
+        set(
+          (state) => {
+            const addStatusData = data.map((_data) => {
+              // 프론트에서만 사용할 status 데이터 삽입
+              return { ..._data, status: null };
+            });
+            state.checkList = addStatusData;
+          },
+          false,
+          'checklist/setInitCheckList',
+        ),
+
+      /** 카테고리 상태 변경 */
+      setChangeCategoryStatus: (target, status) =>
+        set(
+          (state) => {
+            const findCategory = state.checkList.find(
+              (list) => list.id === target.id,
+            );
+
+            if (findCategory) {
+              findCategory.status = status;
+            }
+          },
+          false,
+          'checklist/setChangeCategoryStatus',
+        ),
+
+      /** 카테고리명 수정 */
+      setUpdateCategoryName: (target, name) =>
+        set(
+          (state) => {
+            const findCategory = state.checkList.find(
+              (list) => list.id === target.id,
+            );
+
+            if (findCategory) {
+              findCategory.label = name;
+            }
+          },
+          false,
+          'checklist/setUpdateCategoryName',
+        ),
+
+      /** 카테고리 삭제 */
+      setDeleteCategory: (target) =>
+        set(
+          (state) => {
+            state.checkList = state.checkList.filter(
+              (list) => list.id !== target.id,
+            );
+          },
+          false,
+          'checklist/setDeleteCategory',
+        ),
+
       /** 리셋 */
       reset: () => set(initialState),
 
