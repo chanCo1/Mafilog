@@ -5,7 +5,7 @@
  * @description: CheckListModal 컴포넌트, 체크리스트 모달
  */
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import Dropdown from '@/shared/components/ui/Dropdown';
 import { Chip } from '@/shared/components/ui/Chip';
@@ -35,14 +35,12 @@ export default function CheckListModal({
   const setAddCategory = useTravelCheckListStore(
     (state) => state.setAddCategory,
   );
-  const setDeleteItem = useTravelCheckListStore(
-    (state) => state.setDeleteItem,
-  );
+  const setDeleteItem = useTravelCheckListStore((state) => state.setDeleteItem);
   const setCheckedItem = useTravelCheckListStore(
     (state) => state.setCheckedItem,
   );
 
-  const [selectedCategory, setSelectedCategory] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState<string | number>(0);
   const [isOpenAddCategory, setIsOpenAddCategory] = useState(false);
 
   /** 카테고리 추가 state */
@@ -54,6 +52,11 @@ export default function CheckListModal({
     setIsOpenAddCategory(false);
     setAddCategoryName('');
   };
+
+  const filteredCheckList = useMemo(() => {
+    if (selectedCategory === 0) return checkList;
+    return checkList.filter((list) => list.id === selectedCategory);
+  }, [checkList, selectedCategory]);
 
   return (
     <SideModal
@@ -82,7 +85,7 @@ export default function CheckListModal({
                   variant={
                     selectedCategory === list.id ? 'primary' : 'primaryOutline'
                   }
-                  onClick={() => setSelectedCategory(list.id as number)}
+                  onClick={() => setSelectedCategory(list.id)}
                 >
                   {list.label}
                 </Chip>
@@ -122,7 +125,7 @@ export default function CheckListModal({
           ) : null}
         </div>
         <div className="scrollbar-hide flex flex-1 flex-col gap-4 overflow-auto">
-          {checkList.map((list, index) => (
+          {filteredCheckList.map((list, index) => (
             <div key={index} className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 {list.status === 'editCategory' ? (
@@ -148,7 +151,10 @@ export default function CheckListModal({
                       checkboxLabel={_list.label}
                       onChange={() => setCheckedItem(list, _list)}
                     />
-                    <div className="text-state-error cursor-pointer text-sm font-bold" onClick={() => setDeleteItem(list, _list)}>
+                    <div
+                      className="text-state-error cursor-pointer text-sm font-bold"
+                      onClick={() => setDeleteItem(list, _list)}
+                    >
                       삭제
                     </div>
                   </div>
