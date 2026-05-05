@@ -30,23 +30,19 @@ export default function CreateNewTravelStep1({
   const [searchCity, setSearchCity] = useState<string>('');
   const [cityList, setCityList] = useState<IPlaceList[]>([]);
   const [resultMsg, setResultMsg] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
   const [submitSearch, setSubmitSearch] = useState<string>('');
-  const { data: searchData } = useFetchGooglePlaces({
+  const { data: searchData, isLoading } = useFetchGooglePlaces({
     search: submitSearch,
   });
 
-
   const handleSearch = async () => {
-    setIsLoading(true);
-
     try {
+      // 검색 전 초기화 한번 진행
+      setSubmitSearch('');
       setSubmitSearch(searchCity);
     } catch (error) {
       console.error('GooglePlaces 검색 에러:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 

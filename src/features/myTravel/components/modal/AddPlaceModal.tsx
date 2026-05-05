@@ -48,7 +48,6 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   /** 클릭한 장소 정보 */
   const [clickPlaceData, setClickPlaceData] = useState<IPlaceList>();
   /** 로딩 여부 */
-  const [isLoading, setIsLoading] = useState(false);
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>();
@@ -56,7 +55,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   const [selectedPlaces, setSelectedPlaces] = useState<IPlaceList[]>([]);
 
   const [submitSearch, setSubmitSearch] = useState<string>('');
-  const { data: searchData } = useFetchGooglePlaces({
+  const { data: searchData, isLoading } = useFetchGooglePlaces({
     search: submitSearch,
   });
 
@@ -74,14 +73,12 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   }, [travelDaysList]);
 
   const handleSearch = async () => {
-    setIsLoading(true);
-
     try {
+      // 검색 전 초기화 한번 진행
+      setSubmitSearch('');
       setSubmitSearch(searchPlace);
     } catch (error) {
       console.error('GooglePlaces 검색 에러:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -139,8 +136,10 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   /** 데이터 초기화 */
   const dataReset = () => {
     setSearchPlace('');
+    setSubmitSearch('');
     setPlaceList([]);
     setSelectedPlaces([]);
+    setClickPlaceData(undefined);
   };
 
   const clickedPlace = useMemo(() => {
@@ -215,7 +214,10 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
           }
         />
         <div className="max-mobile:h-40 h-60 overflow-hidden rounded-lg">
-          <GoogleMap places={clickedPlace} />
+          <GoogleMap
+            places={clickedPlace}
+            id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID2 as string}
+          />
         </div>
         <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
           {placeList.length ? (
