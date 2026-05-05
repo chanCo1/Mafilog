@@ -35,6 +35,9 @@ export default function CheckListModal({
   const setAddCategory = useTravelCheckListStore(
     (state) => state.setAddCategory,
   );
+  const setDeleteItem = useTravelCheckListStore(
+    (state) => state.setDeleteItem,
+  );
 
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [isOpenAddCategory, setIsOpenAddCategory] = useState(false);
@@ -141,7 +144,7 @@ export default function CheckListModal({
                       value={_list.isChecked}
                       checkboxLabel={_list.label}
                     />
-                    <div className="text-state-error cursor-pointer text-sm font-bold">
+                    <div className="text-state-error cursor-pointer text-sm font-bold" onClick={() => setDeleteItem(list, _list)}>
                       삭제
                     </div>
                   </div>

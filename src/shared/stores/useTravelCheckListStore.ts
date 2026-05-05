@@ -33,7 +33,7 @@ export const useTravelCheckListStore = create<ITravelCheckListStore>()(
       /**
        * @Actions
        */
-      /** 여행 초기값 설정 */
+      /** 체크리스트 초기값 설정 */
       setInitCheckList: (data) =>
         set(
           (state) => {
@@ -124,6 +124,27 @@ export const useTravelCheckListStore = create<ITravelCheckListStore>()(
           },
           false,
           'checklist/setAddItem',
+        ),
+
+      /** 준비물 삭제 */
+      setDeleteItem: (target, targetItem) =>
+        set(
+          (state) => {
+            const findCategory = state.checkList.find(
+              (list) => list.id === target.id,
+            );
+
+            if (findCategory) {
+              const filtered = findCategory.list.filter(
+                (list) => list.id !== targetItem.id,
+              );
+
+              findCategory.list = filtered;
+            }
+
+          },
+          false,
+          'checklist/setDeleteItem',
         ),
 
       /** 리셋 */
