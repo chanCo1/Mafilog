@@ -13,7 +13,7 @@ import { Loading } from '@/shared/components/ui/Loading';
 import { Search } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
-import { getPlaceCategory, getTravelCurrentDay } from '@/shared/lib/utils';
+import { getPlaceCategory } from '@/shared/lib/utils';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
@@ -21,7 +21,6 @@ import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { toast } from 'sonner';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
-import { IGetGooglePlacesResponse } from '@/shared/interfaces/api/googleplace.interface';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
 
@@ -89,7 +88,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   useEffect(() => {
     if (searchData?.places?.length) {
       /** 도시 정보 추출 */
-      const getPlaceData = searchData?.places.map((place) => {
+      const getPlaceData = searchData.places.map((place) => {
         const getCountryCode = place.addressComponents.find((comp) =>
           comp?.types?.includes('country'),
         );

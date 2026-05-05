@@ -5,17 +5,16 @@
  * @description: CreateNewTravelStep1 컴포넌트, 새 여행 만들기 - 여행지 선택
  */
 
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { Chip } from '@/shared/components/ui/Chip';
 import { Input } from '@/shared/components/ui/Input';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
-import { Search, X } from 'lucide-react';
-import { CITY_MOCK_DATA } from '@/features/myTravel/data';
-import { IGetGooglePlacesResponse } from '@/shared/interfaces/api/googleplace.interface';
+import { Search } from 'lucide-react';
 import { Loading } from '@/shared/components/ui/Loading';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import tzlookup from 'tz-lookup';
+import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
 
 interface ICreateNewTravelStep1 {
   selectedCities: IPlaceList[];
@@ -33,87 +32,64 @@ export default function CreateNewTravelStep1({
   const [resultMsg, setResultMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-  const url = 'https://places.googleapis.com/v1/places:searchText';
+  const [submitSearch, setSubmitSearch] = useState<string>('');
+  const { data: searchData } = useFetchGooglePlaces({
+    search: submitSearch,
+  });
 
-  const body = {
-    textQuery: `${searchCity}`,
-    languageCode: 'ko',
-    includedType: 'locality',
-    maxResultCount: 50,
-  };
 
-  // TODO: 테스트
   const handleSearch = async () => {
     setIsLoading(true);
+
     try {
-      // const res = await fetch(url, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'X-Goog-Api-Key': GOOGLE_API_KEY as string,
-      //     'X-Goog-FieldMask':
-      //       'places.displayName,places.formattedAddress,places.location,places.id,places.addressComponents,places.types',
-      //   },
-      //   body: JSON.stringify(body),
-      // });
-
-      // const data: IGetGooglePlacesResponse = await res.json();
-
-      // if (data.places?.length) {
-      //   /** 도시 필터링 */
-      //   const filteredCities = data.places.filter((place) =>
-      //     ['locality', 'administrative_area_level_1'].some((value) =>
-      //       place.types.includes(value),
-      //     ),
-      //   );
-      if (CITY_MOCK_DATA.places?.length) {
-        /** 도시 필터링 */
-        const filteredCities = CITY_MOCK_DATA.places.filter((place) =>
-          ['locality', 'administrative_area_level_1'].some((value) =>
-            place.types.includes(value),
-          ),
-        );
-
-        /** 도시 정보 추출 */
-        const getCityData = filteredCities.map((place) => {
-          const getCountryCode = place.addressComponents.find((comp) =>
-            comp?.types?.includes('country'),
-          );
-
-          const country = {
-            name: getCountryCode?.longText,
-            code: getCountryCode?.shortText,
-          };
-
-          return {
-            id: place.id,
-            name: place.displayName.text,
-            address: place.formattedAddress,
-            country,
-            location: {
-              lat: place.location.latitude,
-              lng: place.location.longitude,
-            },
-            types: place.types,
-            timezone: tzlookup(
-              place.location.latitude,
-              place.location.longitude,
-            ),
-          };
-        });
-
-        setCityList(getCityData);
-      } else {
-        setCityList([]);
-        setResultMsg('검색된 도시가 없어요');
-      }
+      setSubmitSearch(searchCity);
     } catch (error) {
-      console.error('GeoNames 검색 에러:', error);
+      console.error('GooglePlaces 검색 에러:', error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (searchData?.places?.length) {
+      /** 도시 필터링 */
+      const filteredCities = searchData.places.filter((place) =>
+        ['locality', 'administrative_area_level_1'].some((value) =>
+          place.types.includes(value),
+        ),
+      );
+
+      /** 도시 정보 추출 */
+      const getCityData = filteredCities.map((place) => {
+        const getCountryCode = place.addressComponents.find((comp) =>
+          comp?.types?.includes('country'),
+        );
+
+        const country = {
+          name: getCountryCode?.longText,
+          code: getCountryCode?.shortText,
+        };
+
+        return {
+          id: place.id,
+          name: place.displayName.text,
+          address: place.formattedAddress,
+          country,
+          location: {
+            lat: place.location.latitude,
+            lng: place.location.longitude,
+          },
+          types: place.types,
+          timezone: tzlookup(place.location.latitude, place.location.longitude),
+        };
+      });
+
+      setCityList(getCityData);
+    } else {
+      setCityList([]);
+      setResultMsg('검색된 도시가 없어요');
+    }
+  }, [searchData]);
 
   /** 도시 선택 */
   const selectCity = (list: IPlaceList) => {
