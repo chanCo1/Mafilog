@@ -12,9 +12,10 @@ import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 interface IGoogleMap {
   places?: IPlaceList[];
   id: string;
+  isSingle?: boolean;
 }
 
-const GoogleMap = memo(({ places, id }: IGoogleMap) => {
+const GoogleMap = memo(({ places, id, isSingle }: IGoogleMap) => {
   const map = useMap(id);
 
   const [currentPos, setCurrentPos] = useState({ lat: 37.5665, lng: 126.978 }); // 서울 기본
@@ -47,7 +48,25 @@ const GoogleMap = memo(({ places, id }: IGoogleMap) => {
     map.fitBounds(bounds, 80);
   }, [map, places]);
 
-  console.log('랜더링!');
+  useEffect(() => {
+    if (!map || !places || places.length === 0) return;
+
+    const path = places.map((place) => place.location);
+
+    const polyline = new google.maps.Polyline({
+      path: path,
+      geodesic: true,
+      strokeColor: '#FF9692',
+      strokeOpacity: 1,
+      strokeWeight: 3,
+      map: map,
+    });
+
+    return () => {
+      polyline.setMap(null);
+    };
+  }, [map, places]);
+
   return (
     <div className="h-full w-full">
       <Map
@@ -66,12 +85,26 @@ const GoogleMap = memo(({ places, id }: IGoogleMap) => {
                 key={`${place.id}-${index}`}
                 position={place.location}
                 title={place.name}
+                onClick={() => {
+                  if (map) {
+                    map.panTo(place.location);
+                    map.setZoom(17);
+                  }
+                }}
               >
-                <Pin
-                  background={'#FF9692'}
-                  glyphColor={'#fff'}
-                  borderColor={'#222'}
-                />
+                {isSingle ? (
+                  <Pin
+                    background={'#FF9692'}
+                    glyphColor={'#fff'}
+                    borderColor={'#fff'}
+                  />
+                ) : (
+                  <div className="relative flex items-center justify-center">
+                    <div className="bg-state-error flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-sm font-bold text-white shadow-md transition-transform hover:scale-110">
+                      {index + 1}
+                    </div>
+                  </div>
+                )}
               </AdvancedMarker>
             ))
           : null}
