@@ -44,5 +44,6 @@ export const useTravelCheckListStore = create<ITravelCheckListStore>()(
        */
       getCheckList: () => get().checkList,
     })),
+    { name: 'checkList' },
   ),
 );

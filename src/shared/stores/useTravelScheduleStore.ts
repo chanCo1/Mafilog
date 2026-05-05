@@ -117,5 +117,6 @@ export const useTravelScheduleStore = create<ITravelSchduleStore>()(
        */
       getTravelSchedules: () => get().schedules,
     })),
+    { name: 'schedules' },
   ),
 );

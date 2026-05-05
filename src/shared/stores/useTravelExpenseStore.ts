@@ -61,5 +61,6 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
        */
       getTravelInfo: () => get().expense,
     })),
+    { name: 'expense' },
   ),
 );

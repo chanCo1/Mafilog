@@ -60,5 +60,6 @@ export const useTravelInfoStore = create<ITravelInfoStore>()(
        */
       getTravelInfo: () => get().travelInfo,
     })),
+    { name: 'travelInfo' },
   ),
 );
