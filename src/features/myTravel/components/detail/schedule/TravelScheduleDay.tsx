@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import TravelScheduleTimeline from '@/features/myTravel/components/detail/schedule/TravelScheduleTimeline';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
-import { ISchedule } from '@/shared/interfaces';
+import { ISchedule } from '@/shared/interfaces/travelScheduleStore.interface';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import { ILabelValue } from '@/shared/interfaces';
 
