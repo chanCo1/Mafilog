@@ -21,8 +21,9 @@ import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { toast } from 'sonner';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
-import { IGetGooglePlacesResponse } from '@/features/myTravel/interfaces/api/googleplace.interface';
+import { IGetGooglePlacesResponse } from '@/shared/interfaces/api/googleplace.interface';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
+import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
 
 interface IAddPlaceModal {
   isOpen: boolean;
@@ -55,6 +56,11 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   /** 장소 선택 */
   const [selectedPlaces, setSelectedPlaces] = useState<IPlaceList[]>([]);
 
+  const [submitSearch, setSubmitSearch] = useState<string>('');
+  const { data: searchData } = useFetchGooglePlaces({
+    search: submitSearch,
+  });
+
   /** 일정 선택 초기값 */
   // useEffect(() => {
   //   if (travelInfo.from && travelInfo.to) {
@@ -68,76 +74,50 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
     setSelectedDay(travelDaysList[0]);
   }, [travelDaysList]);
 
-  const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
-  const url = 'https://places.googleapis.com/v1/places:searchText';
-
-  const body = {
-    textQuery: `${searchPlace}`,
-    languageCode: 'ko',
-    regionCode: 'KR',
-    maxResultCount: 20,
-  };
-
-  /** TODO: 임시 테스트 */
   const handleSearch = async () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Goog-Api-Key': GOOGLE_API_KEY as string,
-          'X-Goog-FieldMask':
-            'places.id,places.displayName,places.addressComponents,places.formattedAddress,places.location,places.types',
-        },
-        // places.primaryTypeDisplayName
-        // places.rating
-        // places.userRatingCount
-        body: JSON.stringify(body),
-      });
-
-      const data: IGetGooglePlacesResponse = await res.json();
-
-      if (data.places?.length) {
-        /** 도시 정보 추출 */
-        const getPlaceData = data.places.map((place) => {
-          const getCountryCode = place.addressComponents.find((comp) =>
-            comp?.types?.includes('country'),
-          );
-
-          const country = {
-            name: getCountryCode?.longText,
-            code: getCountryCode?.shortText,
-          };
-
-          return {
-            id: place.id,
-            name: place.displayName.text,
-            address: place.formattedAddress,
-            country,
-            location: {
-              lat: place.location.latitude,
-              lng: place.location.longitude,
-            },
-            types: place.types,
-            // rating: place.rating,
-            // displayName: place?.primaryTypeDisplayName?.text || '',
-            // userRatingCount: place.userRatingCount,
-          };
-        });
-
-        setPlaceList(getPlaceData);
-      } else {
-        setPlaceList([]);
-        setResultMsg('검색된 장소가 없어요');
-      }
+      setSubmitSearch(searchPlace);
     } catch (error) {
-      console.error('GeoNames 검색 에러:', error);
+      console.error('GooglePlaces 검색 에러:', error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (searchData?.places?.length) {
+      /** 도시 정보 추출 */
+      const getPlaceData = searchData?.places.map((place) => {
+        const getCountryCode = place.addressComponents.find((comp) =>
+          comp?.types?.includes('country'),
+        );
+
+        const country = {
+          name: getCountryCode?.longText,
+          code: getCountryCode?.shortText,
+        };
+
+        return {
+          id: place.id,
+          name: place.displayName.text,
+          address: place.formattedAddress,
+          country,
+          location: {
+            lat: place.location.latitude,
+            lng: place.location.longitude,
+          },
+          types: place.types,
+        };
+      });
+
+      setPlaceList(getPlaceData);
+    } else {
+      setPlaceList([]);
+      setResultMsg('검색된 장소가 없어요');
+    }
+  }, [searchData]);
 
   /** 장소 선택 */
   const selectPlace = (list: any) => {
