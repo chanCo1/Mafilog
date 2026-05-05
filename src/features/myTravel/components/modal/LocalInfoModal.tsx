@@ -47,7 +47,7 @@ export default function LocalInfoModal({
       }
     >
       <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-1 overflow-auto scrollbar-hide">
+        <div className="scrollbar-hide flex items-center gap-1 overflow-auto">
           {travelInfo.cities.map((city) => (
             <Chip
               key={city.id}
@@ -60,11 +60,11 @@ export default function LocalInfoModal({
             </Chip>
           ))}
         </div>
-        <div className="flex flex-col gap-10">
+        <div className="relative flex flex-col gap-10">
           <LocalCurrencyInfo selectedCity={selectedCity} />
-          <Separator position='horizontal' />
+          <Separator position="horizontal" />
           <LocalTimeInfo selectedCity={selectedCity} />
-          <Separator position='horizontal' />
+          <Separator position="horizontal" />
           <LocalWeatherInfo selectedCity={selectedCity} />
         </div>
       </div>
