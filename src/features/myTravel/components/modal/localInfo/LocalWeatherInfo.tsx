@@ -25,7 +25,7 @@ export default function LocalWeatherInfo({ selectedCity }: ILocalWeatherInfo) {
         <span className="text-primary text-lg font-bold">
           {selectedCity?.name}
         </span>{' '}
-        날씨는?
+        날씨는
       </div>
       {getWeather?.length ? (
         <div className="scrollbar-hide flex gap-1 overflow-auto">
