@@ -15,7 +15,8 @@ import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore
 import { EllipsisVertical } from 'lucide-react';
 import { Input } from '@/shared/components/ui/Input';
 import CategoryDropdown from '@/features/myTravel/components/modal/checkList/CategoryDropdown';
-import { ICheckList } from '@/shared/interfaces/travelCheckListStore.interface';
+import EditCategoryName from '@/features/myTravel/components/modal/checkList/EditCategoryName';
+import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 
 interface ICheckListModal {
   isOpen: boolean;
@@ -30,22 +31,23 @@ export default function CheckListModal({
   const setChangeCategoryStatus = useTravelCheckListStore(
     (state) => state.setChangeCategoryStatus,
   );
-  const setUpdateCategoryName = useTravelCheckListStore(
-    (state) => state.setUpdateCategoryName,
+  const setAddCategory = useTravelCheckListStore(
+    (state) => state.setAddCategory,
   );
 
   const [selectedCategory, setSelectedCategory] = useState(0);
-  const [isAddCategory, setIsAddCategory] = useState(false);
+  const [isOpenAddCategory, setIsOpenAddCategory] = useState(false);
 
-  const [addCategory, setAddCategory] = useState('');
-  const [categoryName, setCategoryName] = useState('');
+  /** 카테고리 추가 state */
+  const [addCategoryName, setAddCategoryName] = useState('');
 
-  /** 카테고리명 수정 */
-  const handleUpdateCategoryName = (target: ICheckList) => {
-    setUpdateCategoryName(target, categoryName);
-    setChangeCategoryStatus(target, null);
-    setCategoryName('');
+  /** 카테고리 추가 */
+  const handleAddCategory = () => {
+    setAddCategory(addCategoryName);
+    setIsOpenAddCategory(false);
+    setAddCategoryName('');
   };
+
 
   return (
     <SideModal
@@ -83,24 +85,30 @@ export default function CheckListModal({
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => setIsAddCategory(true)}
+              onClick={() => setIsOpenAddCategory(true)}
             >
               카테고리 추가
             </Button>
           </div>
-          {isAddCategory ? (
+          {isOpenAddCategory ? (
             <div className="flex justify-between gap-1">
               <Input
                 size="sm"
-                value={addCategory}
-                onChange={(e) => setAddCategory(e.target.value)}
+                value={addCategoryName}
+                onChange={(e) => setAddCategoryName(e.target.value)}
                 placeholder="카테고리 추가.."
+                onKeyDown={(e) => {
+                  if (e.nativeEvent.isComposing) return;
+                  if (e.key === 'Enter') handleAddCategory();
+                }}
               />
-              <Button size="xs">추가</Button>
+              <Button size="xs" onClick={handleAddCategory}>
+                추가
+              </Button>
               <Button
                 size="xs"
                 variant="gray"
-                onClick={() => setIsAddCategory(false)}
+                onClick={() => setIsOpenAddCategory(false)}
               >
                 취소
               </Button>
@@ -112,39 +120,17 @@ export default function CheckListModal({
             <div key={index} className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
                 {list.status === 'editCategory' ? (
-                  <div className="flex w-full gap-1">
-                    <Input
-                      size="sm"
-                      value={categoryName}
-                      onChange={(e) => setCategoryName(e.target.value)}
-                    />
-                    <Button
-                      size="xs"
-                      onClick={() => handleUpdateCategoryName(list)}
-                    >
-                      수정
-                    </Button>
-                    <Button
-                      size="xs"
-                      variant="gray"
-                      onClick={() => setChangeCategoryStatus(list, null)}
-                    >
-                      취소
-                    </Button>
-                  </div>
+                  <EditCategoryName list={list} />
                 ) : (
                   <p className="font-bold">{list.label}</p>
                 )}
-                {list.status === null && (
+                {list.status !== 'editCategory' && (
                   <Dropdown
                     trigger={
                       <EllipsisVertical className="h-4 w-4 cursor-pointer" />
                     }
                   >
-                    <CategoryDropdown
-                      target={list}
-                      setCategoryName={setCategoryName}
-                    />
+                    <CategoryDropdown target={list} />
                   </Dropdown>
                 )}
               </div>
@@ -155,11 +141,36 @@ export default function CheckListModal({
                       value={_list.isChecked}
                       checkboxLabel={_list.label}
                     />
-                    <div className="text-state-error cursor-pointer text-sm">
+                    <div className="text-state-error cursor-pointer text-sm font-bold">
                       삭제
                     </div>
                   </div>
                 ))}
+                <div className="flex items-center gap-1">
+                  <CategoryIcon
+                    variant="plus"
+                    size="sm"
+                    circled={list.status === 'addItem' ? 'none' : 'outline'}
+                    className="cursor-pointer"
+                    onClick={() => setChangeCategoryStatus(list, 'addItem')}
+                  />
+                  {list.status === 'addItem' && (
+                    <div className="flex items-center justify-between gap-2">
+                      <Input size="sm" />
+                      <div className="flex shrink-0 gap-3">
+                        <div className="text-primary cursor-pointer font-bold">
+                          추가
+                        </div>
+                        <div
+                          className="text-text-secondary cursor-pointer font-bold"
+                          onClick={() => setChangeCategoryStatus(list, null)}
+                        >
+                          취소
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}

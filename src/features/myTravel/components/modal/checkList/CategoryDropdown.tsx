@@ -5,7 +5,7 @@
  * @description: CategoryDropdown 컴포넌트, 카테고리 더보기 클릭 시 노출 드롭다운 메뉴
  */
 
-import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import { ReactNode } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Pencil, Trash, Plus } from 'lucide-react';
 import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
@@ -13,13 +13,9 @@ import { ICheckList } from '@/shared/interfaces/travelCheckListStore.interface';
 
 interface ICategoryDropdown {
   target: ICheckList;
-  setCategoryName: Dispatch<SetStateAction<string>>;
 }
 
-export default function CategoryDropdown({
-  target,
-  setCategoryName,
-}: ICategoryDropdown) {
+export default function CategoryDropdown({ target }: ICategoryDropdown) {
   const setChangeCategoryStatus = useTravelCheckListStore(
     (state) => state.setChangeCategoryStatus,
   );
@@ -27,9 +23,9 @@ export default function CategoryDropdown({
     (state) => state.setDeleteCategory,
   );
 
+  /** 카테고리 수정 클릭 핸들링 */
   const handleEditCategory = () => {
     setChangeCategoryStatus(target, 'editCategory');
-    setCategoryName(target.label);
   };
 
   return (
@@ -41,12 +37,6 @@ export default function CategoryDropdown({
       <CategoryDropdownMenu onClick={() => setDeleteCategory(target)}>
         <Trash className="h-4 w-4" />
         카테고리 삭제
-      </CategoryDropdownMenu>
-      <CategoryDropdownMenu
-        onClick={() => setChangeCategoryStatus(target, 'addList')}
-      >
-        <Plus className="h-4 w-4" />
-        준비물 추가
       </CategoryDropdownMenu>
     </div>
   );
