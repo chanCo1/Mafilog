@@ -51,9 +51,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   const [isLoading, setIsLoading] = useState(false);
 
   /** 일정 선택 */
-  const [selectedDay, setSelectedDay] = useState<ILabelValue>(
-    travelDaysList?.[0],
-  );
+  const [selectedDay, setSelectedDay] = useState<ILabelValue>();
   /** 장소 선택 */
   const [selectedPlaces, setSelectedPlaces] = useState<IPlaceList[]>([]);
 
@@ -65,6 +63,10 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   //     );
   //   }
   // }, [travelInfo.from, travelInfo.to, travelDaysList]);
+
+  useEffect(() => {
+    setSelectedDay(travelDaysList[0]);
+  }, [travelDaysList]);
 
   const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
   const url = 'https://places.googleapis.com/v1/places:searchText';
@@ -168,6 +170,8 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
 
   /** 장소 추가 핸들링 */
   const handelAddPlace = () => {
+    if (!selectedDay) return;
+
     try {
       setAddScheduleList({
         type: 'place',
@@ -231,8 +235,8 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
             </>
           }
         />
-        <div className="max-mobile:h-40 h-60">
-          {/* <GoogleMap places={clickedPlace} /> */}
+        <div className="max-mobile:h-40 h-60 overflow-hidden rounded-lg">
+          <GoogleMap places={clickedPlace} />
         </div>
         <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
           {placeList.length ? (

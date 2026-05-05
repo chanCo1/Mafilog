@@ -5,7 +5,7 @@
  * @description: AddMemoModal 컴포넌트, 메모 추가 모달
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ILabelValue } from '@/shared/interfaces';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
@@ -32,9 +32,13 @@ export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
   });
 
   /** 일정 선택 */
-  const [selectedDay, setSelectedDay] = useState<ILabelValue>(travelDaysList?.[0]);
+  const [selectedDay, setSelectedDay] = useState<ILabelValue>();
   /** 메모 입력 */
   const [inputMemo, setInputMemo] = useState('');
+
+  useEffect(() => {
+    setSelectedDay(travelDaysList[0]);
+  }, [travelDaysList]);
 
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
@@ -49,6 +53,8 @@ export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
 
   /** 메모 추가 핸들링 */
   const handelAddMemo = () => {
+    if (!selectedDay) return;
+
     try {
       setAddScheduleList({
         type: 'memo',
