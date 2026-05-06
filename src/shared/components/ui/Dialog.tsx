@@ -1,8 +1,8 @@
 /**
- * @file: Alert.tsx
+ * @file: Dialog.tsx
  * @author: chad
  * @since: 2026.04.21 ~
- * @description: Alert 컴포넌트
+ * @description: Dialog 컴포넌트
  */
 
 import { ForwardedRef, forwardRef, useEffect } from 'react';
@@ -12,9 +12,8 @@ import { Button } from '@/shared/components/ui/Button';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { createPortal } from 'react-dom';
 import Dimmed from '@/shared/components/ui/Dimmed';
-import Separator from '@/shared/components/ui/Separator';
 
-const alertVariants = cva(
+const dialogVariants = cva(
   'z-50 transition duration-800 ease absolute flex items-center justify-cetner flex flex-col gap-2.5 rounded-lg bg-white p-2.5 shadow-md',
   {
     variants: {
@@ -35,11 +34,11 @@ const alertVariants = cva(
   },
 );
 
-interface IAlert extends VariantProps<typeof alertVariants> {
+interface IAlert extends VariantProps<typeof dialogVariants> {
   className?: string;
 }
 
-function AlertEntity(
+function DialogEntity(
   { size, variant, className }: IAlert,
   ref: ForwardedRef<HTMLDivElement>,
 ) {
@@ -82,7 +81,7 @@ function AlertEntity(
       <div
         className={cn(
           isOpen ? 'visible opacity-100' : 'invisible opacity-0',
-          alertVariants({ variant, size }),
+          dialogVariants({ variant, size }),
           className,
         )}
         ref={ref}
@@ -118,4 +117,4 @@ function AlertEntity(
   );
 }
 
-export const Alert = forwardRef(AlertEntity);
+export const Dialog = forwardRef(DialogEntity);
