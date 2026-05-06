@@ -28,6 +28,7 @@
     "framer-motion": "^12.38.0",
     "immer": "^11.1.4",
     "lucide-react": "^1.8.0",
+    "mathjs": "^15.2.0",
     "msw": "^2.13.4",
     "next": "14.2.35",
     "next-auth": "^4.24.14",
