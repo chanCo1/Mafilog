@@ -100,7 +100,7 @@ const GoogleMap = memo(({ places, id, isSingle }: IGoogleMap) => {
                   />
                 ) : (
                   <div className="relative flex items-center justify-center">
-                    <div className="bg-state-error flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-sm font-bold text-white shadow-md transition-transform hover:scale-110">
+                    <div className="bg-state-error flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-sm font-bold text-white shadow-md transition-transform hover:scale-110 absolute">
                       {index + 1}
                     </div>
                   </div>

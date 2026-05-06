@@ -14,7 +14,7 @@ import { createPortal } from 'react-dom';
 import Dimmed from '@/shared/components/ui/Dimmed';
 
 const dialogVariants = cva(
-  'z-50 transition duration-800 ease absolute flex items-center justify-cetner flex flex-col gap-2.5 rounded-lg bg-white p-2.5 shadow-md',
+  'z-50 transition duration-800 ease absolute flex items-center justify-cetner flex-col gap-2.5 rounded-lg bg-white p-2.5 shadow-md',
   {
     variants: {
       variant: {
@@ -34,12 +34,12 @@ const dialogVariants = cva(
   },
 );
 
-interface IAlert extends VariantProps<typeof dialogVariants> {
+interface IDialog extends VariantProps<typeof dialogVariants> {
   className?: string;
 }
 
 function DialogEntity(
-  { size, variant, className }: IAlert,
+  { size, variant, className }: IDialog,
   ref: ForwardedRef<HTMLDivElement>,
 ) {
   const { isOpen, options, closeDialog } = useDialogStore();
