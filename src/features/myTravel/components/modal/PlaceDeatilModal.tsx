@@ -17,6 +17,8 @@ import { ILabelValue } from '@/shared/interfaces';
 import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
+import { getPlaceCategory } from '@/shared/lib/utils';
+import TimePicker from '@/shared/components/ui/TimePicker';
 
 interface IPlaceDeatilModal {
   isOpen: boolean;
@@ -53,21 +55,21 @@ export default function PlaceDeatilModal({
 
   const onClickCloseBtn = () => {
     handleClose();
+    resetData();
   };
 
-  /** 초기값 대입 */
-  useEffect(() => {
+  const resetData = () => {
     if (day) {
       setSelectedDay(travelDaysList[day - 1]);
     }
 
-    if (data?.time) {
-      setSelectedTime(data?.time);
-    }
+    setSelectedTime(data?.time ?? '');
+    setInputMemo(data?.memo ?? '');
+  };
 
-    if (data?.memo) {
-      setInputMemo(data?.memo);
-    }
+  /** 초기값 대입 */
+  useEffect(() => {
+    resetData();
   }, [day, travelDaysList]);
 
   return (
@@ -88,6 +90,16 @@ export default function PlaceDeatilModal({
       }
     >
       <div className="flex h-full flex-col gap-2">
+        {data?.place && (
+          <div className="mb-4 flex flex-col gap-1">
+            <p>
+              {data.place.address} | {data.place.country.name}
+            </p>
+            <span className="text-text-secondary">
+              {getPlaceCategory(data.place.types)}
+            </span>
+          </div>
+        )}
         <div className="flex gap-1">
           <Selectbox
             label="여행 일정"
@@ -99,14 +111,12 @@ export default function PlaceDeatilModal({
             className={isPlace ? 'w-3/5' : 'w-full'}
           />
           {isPlace ? (
-            // TODO: 시간 선택 셀렉트 해야함
-            <Selectbox
+            <TimePicker
               label="방문 시간"
-              options={[]}
-              // value={''}
-              // onChange={(value) => setSelectedDay(value)}
               placeholder="-- : --"
               className="w-2/5"
+              value={selectedTime}
+              onChange={(value) => setSelectedTime(value)}
             />
           ) : null}
         </div>
