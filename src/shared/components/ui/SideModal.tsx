@@ -101,7 +101,7 @@ function SideModalEntity({
       <div
         className={cn(
           sideModalVariants({ size }),
-          'max-mobile:w-11/12',
+          'max-mobile:w-full max-mobile:rounded-l-none',
           `${isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
           // `${isVisible ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
         )}
