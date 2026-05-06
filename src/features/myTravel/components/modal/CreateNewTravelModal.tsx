@@ -12,7 +12,7 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
 import Step from '@/shared/components/ui/Step';
 import CreateNewTravelStep1 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep1';
-import { ICityList } from '@/features/myTravel/interfaces';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { CREATE_TRAVEL_STEP_LIST } from '@/features/myTravel/constants';
 import CreateNewTravelStep2 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep2';
 import CreateNewTravelStep3 from '@/features/myTravel/components/modal/createNewTravel/CreateNewTravelStep3';
@@ -20,11 +20,12 @@ import { ChevronLeft } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
+import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
   handleClose: () => void;
-  isModify?: false;
+  isModify?: boolean;
 }
 
 export default function CreateNewTravelModal({
@@ -36,7 +37,7 @@ export default function CreateNewTravelModal({
 
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedCities, setSelectedCities] = useState<ICityList[]>([]);
+  const [selectedCities, setSelectedCities] = useState<IPlaceList[]>([]);
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
   );
@@ -87,12 +88,13 @@ export default function CreateNewTravelModal({
     const getTravelName = () => {
       if (travelTitle) return travelTitle;
 
+      // TODO: const로도 값이 변경되는지 확인
       let cityName: string[] = [];
       selectedCities.forEach((city) => {
         cityName.push(city.name);
       });
 
-      return `${cityName.join(', ')} 여행`
+      return `${cityName.join(', ')} 여행`;
     };
 
     const params = {
@@ -204,30 +206,32 @@ export default function CreateNewTravelModal({
         currentStep={currentStep}
         onClickStep={setCurrentStep}
       />
-      {currentStep === 1 && (
-        <CreateNewTravelStep1
-          selectedCities={selectedCities}
-          setSelectedCities={setSelectedCities}
-        />
-      )}
-      {currentStep === 2 && (
-        <CreateNewTravelStep2
-          selectedDate={selectedDate}
-          setSeletedDate={setSeletedDate}
-        />
-      )}
-      {currentStep === 3 && (
-        <CreateNewTravelStep3
-          title={travelTitle}
-          setTravelTitle={setTravelTitle}
-          travelCompanion={travelCompanion}
-          setTravelCompanion={setTravelCompanion}
-          travelStyle={travelStyle}
-          setTravelStyle={setTravelStyle}
-          selectedImage={selectedImage}
-          setSelectedImage={setSelectedImage}
-        />
-      )}
+      <div className="relative h-[calc(100%-65px)]">
+        <FadeInOutStyled isShow={currentStep === 1}>
+          <CreateNewTravelStep1
+            selectedCities={selectedCities}
+            setSelectedCities={setSelectedCities}
+          />
+        </FadeInOutStyled>
+        <FadeInOutStyled isShow={currentStep === 2}>
+          <CreateNewTravelStep2
+            selectedDate={selectedDate}
+            setSeletedDate={setSeletedDate}
+          />
+        </FadeInOutStyled>
+        <FadeInOutStyled isShow={currentStep === 3}>
+          <CreateNewTravelStep3
+            title={travelTitle}
+            setTravelTitle={setTravelTitle}
+            travelCompanion={travelCompanion}
+            setTravelCompanion={setTravelCompanion}
+            travelStyle={travelStyle}
+            setTravelStyle={setTravelStyle}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+          />
+        </FadeInOutStyled>
+      </div>
     </SideModal>
   );
 }

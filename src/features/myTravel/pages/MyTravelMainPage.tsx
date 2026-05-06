@@ -13,8 +13,8 @@ import PageHeader from '@/shared/components/ui/PageHeader';
 import { Button } from '@/shared/components/ui/Button';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
-import TravelListCard from '@/features/myTravel/components/TravelListCard';
-import TravelListTemplate from '@/features/myTravel/components/TravelListTemplate';
+import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
+import TravelListTemplate from '@/features/myTravel/components/main/TravelListTemplate';
 
 export default function MyTravelMainPage() {
   const { upcomingTravel, lastTravel, progressTravel } = useMyTravelListStore();

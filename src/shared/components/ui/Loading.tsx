@@ -8,7 +8,13 @@
 import { forwardRef, LegacyRef, RefAttributes } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
-import { Pentagon } from 'lucide-react';
+import {
+  Pentagon,
+  GamepadDirectional,
+  Disc3,
+  CircleStar,
+  Plane,
+} from 'lucide-react';
 
 const loadingVariants = cva('animate-spin', {
   variants: {
@@ -32,7 +38,7 @@ function LoadingEntity(
   ref: LegacyRef<SVGSVGElement>,
 ) {
   return (
-    <Pentagon className={cn(loadingVariants({ size }), className)} ref={ref} />
+    <Plane className={cn(loadingVariants({ size }), className)} ref={ref} />
   );
 }
 

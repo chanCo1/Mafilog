@@ -11,7 +11,7 @@ import { forwardRef, useMemo } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 
 const returnButtonVariants = cva('flex items-center gap-1', {
@@ -32,7 +32,7 @@ interface IReturnButton extends VariantProps<typeof returnButtonVariants> {
   className?: string;
   path?: string;
   label?: string;
-  // size?: IButton['size'];
+  position?: 'left' | 'right';
   onClick?: () => void;
 }
 
@@ -42,6 +42,7 @@ function ReturnButtonEntity({
   path,
   size,
   onClick,
+  position = 'right',
 }: IReturnButton) {
   const router = useRouter();
 
@@ -76,6 +77,8 @@ function ReturnButtonEntity({
     [],
   );
 
+  const isRightPosition = position === 'right';
+
   return (
     <Button
       variant="none"
@@ -83,9 +86,10 @@ function ReturnButtonEntity({
       onClick={handleClick}
       className={cn('p-0')}
     >
-      <div className={cn(returnButtonVariants({ size }), className, '')}>
-        <ChevronLeft className={cn(getIconSize(size))} />
+      <div className={cn(returnButtonVariants({ size }), className)}>
+        {!isRightPosition && <ChevronLeft className={cn(getIconSize(size))} />}
         {label && <span>{label}</span>}
+        {isRightPosition && <ChevronRight className={cn(getIconSize(size))} />}
       </div>
     </Button>
   );

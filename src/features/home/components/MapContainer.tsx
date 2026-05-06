@@ -10,7 +10,7 @@
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import AmchartMap from '@/shared/components/map/AmchartMap';
-import { Selectbox } from '@/shared/components/ui/Selectbox';
+import Selectbox from '@/shared/components/ui/Selectbox';
 import { TRAVEL_TYPE_LIST } from '@/shared/constants';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
@@ -32,12 +32,13 @@ export default function MapContainer() {
         isDomestic ? 'max-mobile:h-80' : 'max-mobile:h-60',
       )}
     >
+      <p className="text-xl font-bold">지난 추억들</p>
       <div className="w-25">
         <Selectbox
           variant="none"
           options={TRAVEL_TYPE_LIST}
           value={selectedMap}
-          addValueText='지도'
+          addValueText="지도"
           onChange={(value) => setSelectedMap(value)}
         />
       </div>

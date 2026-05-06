@@ -12,10 +12,10 @@ export interface ICountriesData {
   flagEmoji: string;
   latlng: number[];
   region: string;
-  currency: IcountryCurrency;
+  currency: ICountryCurrency;
 }
 
-export interface IcountryCurrency {
+export interface ICountryCurrency {
   [code: string]: {
     name: string;
     symbol: string;

@@ -33,7 +33,7 @@ export default function CreateNewTravelStep2({
   }, [selectedDate]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex h-full flex-col gap-2">
       <Input
         label="여행기간"
         placeholder="ex) 2026-01-01 ~ 2026-01-02"
@@ -43,7 +43,9 @@ export default function CreateNewTravelStep2({
         value={formattedValue}
         prefix={<Calendar className="h-4 w-4" />}
       />
-      <DatePicker selected={selectedDate} onSelected={setSeletedDate} />
+      <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
+        <DatePicker selected={selectedDate} onSelected={setSeletedDate} />
+      </div>
     </div>
   );
 }

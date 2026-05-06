@@ -10,12 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { ILabelValue } from '@/shared/interfaces';
 import RequireDot from '@/shared/components/ui/RequireDot';
-import {
-  Square,
-  SquareCheckBig,
-  User,
-  UserCheck,
-} from 'lucide-react';
+import { Square, SquareCheckBig, User, UserCheck } from 'lucide-react';
 
 const checkboxVariants = cva('flex gap-1 cursor-pointer items-center w-fit', {
   variants: {
@@ -125,6 +120,7 @@ function CheckboxEntity(
                   disabled && 'cursor-default',
                   className,
                 )}
+                value={value as boolean}
                 isChecked={isChecked}
                 label={option.label}
                 onClick={() => onClickMultipleCheckbox(option)}
@@ -132,13 +128,14 @@ function CheckboxEntity(
               />
             );
           })}
-        {!checkOptions?.length && checkboxLabel && (
+        {!checkOptions?.length && (
           <SingleCheckbox
             className={cn(
               checkboxVariants({ color }),
               disabled && 'cursor-default',
               className,
             )}
+            value={value as boolean}
             isChecked={value as boolean}
             label={checkboxLabel}
             onClick={() => onClickSingleCheckbox(!value)}
@@ -171,14 +168,16 @@ interface ISingleCheckbox extends React.HTMLAttributes<HTMLDivElement> {
   // onChange?: () => void;
   isUserIcon?: boolean;
   isChecked?: boolean;
-  label: string;
+  label?: string;
+  value: boolean
 }
-export const SingleCheckbox = ({
+const SingleCheckbox = ({
   className,
   disabled,
   isUserIcon,
   isChecked,
   label,
+  value,
   ...props
 }: ISingleCheckbox) => {
   return (
@@ -200,7 +199,9 @@ export const SingleCheckbox = ({
           )}
         </>
       )}
-      <span className="text-text-primary">{label}</span>
+      {label && (
+        <span className={cn(value ? 'text-text-secondary line-through' : 'text-text-primary')}>{label}</span>
+      )}
     </div>
   );
 };

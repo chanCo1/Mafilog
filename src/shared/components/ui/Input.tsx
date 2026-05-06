@@ -92,7 +92,7 @@ function InputEntity(
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <div
         className={cn('flex gap-1', labelPosition === 'top' ? 'flex-col' : '')}
       >

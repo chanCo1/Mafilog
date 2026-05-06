@@ -10,19 +10,24 @@ import { cn } from '@/shared/lib/utils';
 import { calcDDay } from '@/shared/lib/utils';
 import { TRAVEL_STATUS_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_STATUS } from '@/shared/types/Enum';
+import { getTravelCurrentDay, getTravelDay } from '@/shared/lib/utils';
 
 interface ITravelStatus {
   status: string;
   from: Date;
   to: Date;
 }
-
+// TODO: 날짜로 상태값 구할지 status로 구할지 확인할것
 export default function TravelStatus({ status, from, to }: ITravelStatus) {
   /** 상태 라벨 */
   const getStatusLabel = useMemo(() => {
     const _status = TRAVEL_STATUS_LIST.find((list) => list.value === status);
 
-    return _status?.label;
+    if (_status?.value === TRAVEL_STATUS.PROGRESS) {
+      return _status?.label;
+    } else {
+      return `${_status?.label} 여행`;
+    }
   }, [status]);
 
   /** 상태 색상 */
@@ -39,11 +44,13 @@ export default function TravelStatus({ status, from, to }: ITravelStatus) {
     }
   }, [status]);
 
-  // TODO: 몇 일차인지 계산!
+  /** 상태에 따른 추가 문구 */
   const getStatusBadge = useMemo(() => {
     switch (status) {
       case TRAVEL_STATUS.PROGRESS:
-        return 'text-state-info';
+        return getTravelCurrentDay(from, to) === getTravelDay(from, to)
+          ? '마지막 날'
+          : `${getTravelCurrentDay(from, to)}일차`;
       case TRAVEL_STATUS.UPCOMING:
         return `D-${calcDDay(from)}`;
       case TRAVEL_STATUS.LAST:
@@ -51,12 +58,12 @@ export default function TravelStatus({ status, from, to }: ITravelStatus) {
       default:
         return '';
     }
-  }, []);
+  }, [status]);
 
   return (
-    <div className="flex gap-0.5">
-      <p className={cn(getStatusColor, 'font-bold')}>{getStatusLabel} 여행</p>
-      <span className="text-text-secondary text-sm font-bold">{getStatusBadge}</span>
+    <div className="flex gap-0.5 font-bold">
+      <p className={cn(getStatusColor)}>{getStatusLabel}</p>
+      <span className="text-text-secondary">{getStatusBadge}</span>
     </div>
   );
 }

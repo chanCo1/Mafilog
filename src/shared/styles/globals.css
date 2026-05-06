@@ -15,7 +15,7 @@
   --color-gray-5: #8193ae;
   --color-gray-4: #adb9c9;
   --color-gray-3: #d1d3dc;
-  --color-gray-2: #d6e0f0;
+  --color-gray-2: #ebf0f8;
   --color-gray-1: #fafbff;
 
   /** State Colors */
@@ -52,7 +52,8 @@
   --font-weight-medium: 500;
   --font-weight-regular: 400;
 
-  /** Responsive layout */
+  /** 브레이크 포인트는 기본 min으로 작동 */
+  /** 브레이크 포인트 안에서 작업 필요시 max- 붙여야 함 ex)max-mobile: */
   --breakpoint-mobile: 639px;
   --breakpoint-tablet: 767px;
   --breakpoint-desktop: 1023px;
@@ -78,7 +79,7 @@
   /* 모바일 설정 */
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  user-select: none;
+  /* user-select: none; */
 
   --text-primary: #676767;
   --background: #ffffff;
@@ -160,4 +161,5 @@ html::-webkit-scrollbar {
 body {
   background: var(--background);
   color: var(--text-primary);
+  word-break: break-all;
 }

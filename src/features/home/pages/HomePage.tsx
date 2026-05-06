@@ -62,9 +62,9 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      <div className="max-mobile:pt-55 max-mobile:gap-10 flex flex-col gap-15 pt-72">
-        <MapContainer />
+      <div className="max-mobile:pt-65 max-mobile:gap-10 flex flex-col gap-15 pt-72">
         <UpcomingContainer />
+        <MapContainer />
       </div>
     </>
   );

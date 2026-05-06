@@ -10,15 +10,15 @@ import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { Loader2 } from 'lucide-react';
 
-const buttonVariants = cva('flex gap-1 cursor-pointer font-bold rounded-md items-center justify-center disabled:pointer-events-none disabled:opacity-50 hover:opacity-90 text-white w-fit', {
+const buttonVariants = cva('flex gap-1 cursor-pointer font-bold rounded-md items-center justify-center disabled:pointer-events-none disabled:opacity-50 hover:opacity-90 text-white w-fit shrink-0', {
   variants: {
     variant: {
       primary: 'bg-primary',
       secondary: 'bg-secondary',
       gray: 'bg-gray-2 text-text-primary',
       ghost: 'hover:bg-gray-1 text-text-primary',
-      primaryOutline: 'border border-priamry text-primary',
-      redOutline: 'border border-state-error text-state-error',
+      primaryOutline: 'bg-white border border-priamry text-primary',
+      redOutline: 'bg-white border border-state-error text-state-error',
       none: 'bg-transparent text-text-primary',
     },
     size: {
@@ -74,7 +74,7 @@ function ButtonEntity(
           <span className="flex items-center">{prefix}</span>
         )}
       {/* 버튼안에 내용 노출 */}
-      {props.children && <span>{props.children}</span>}
+      {props.children && <>{props.children}</>}
       {/* suffix 있고 로딩 상태가 아닐 때 노출 */}
       {suffix && !isLoading && (
           <span className="flex items-center">{suffix}</span>

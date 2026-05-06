@@ -11,13 +11,13 @@ import { Card } from '@/shared/components/ui/Card';
 import Image from 'next/image';
 import { MEMORY_INTRODUCE_LIST } from '@/features/home/constants';
 import { IntroduceList } from '@/features/home/components/briefTab/IntroduceList';
-import { Alert } from '@/shared/components/ui/Alert';
+import { Button } from '@/shared/components/ui/Button';
 
 function MemoryBrief() {
   return (
     <Card className="flex h-full gap-2.5" readonly>
       {/* 왼쪽 설명 */}
-      <div className="flex w-2/5 flex-col gap-4 rounded-md bg-white p-4 max-mobile:w-full">
+      <div className="max-mobile:w-full flex w-2/5 flex-col gap-4 rounded-md bg-white p-4">
         <div>
           <p className="text-xl font-bold break-keep">
             소중했던 순간을 <br /> 채워보세요
@@ -35,7 +35,7 @@ function MemoryBrief() {
       </div>
 
       {/* 오른쪽 이미지 */}
-      <div className="relative w-3/5 p-4 max-mobile:hidden">
+      <div className="max-mobile:hidden relative w-3/5 p-4">
         <Image
           src="/world_map.png"
           alt="세계 지도 이미지"
@@ -50,12 +50,14 @@ function MemoryBrief() {
           className="opacity-20"
         />
         <div className="absolute top-1/2 left-1/2 flex w-3/4 -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1.5">
-          <Alert
-            type="alert"
-            title="어디에 추억을 채울까요?"
-            size="sm"
-            okLabel="채우기"
-          />
+          <div className="justify-cetner flex flex-col items-center gap-2.5 rounded-lg bg-white p-2.5 shadow-md w-50">
+            <p className="w-full py-2 text-center">어디에 추억을 채울까요?</p>
+            <div className="flex w-full items-center justify-end">
+              <Button variant="none" className={cn('text-primary')}>
+                채우기
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </Card>
