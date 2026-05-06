@@ -16,6 +16,7 @@ import { Input } from '@/shared/components/ui/Input';
 import { ChevronDown } from 'lucide-react';
 import { ILabelValue } from '@/shared/interfaces';
 import { useOutsideClick } from '@/shared/hooks/useOutsideClick';
+import { useDropdownDirection } from '@/shared/hooks/useDropdownDirection';
 
 interface ISelectbox extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -53,24 +54,9 @@ export default function Selectbox({
   ...props
 }: ISelectbox) {
   const [isOpen, setIsOpen] = useState(false);
-  const [direction, setDirection] = useState<'down' | 'up'>('down');
   const dropdownRef = useOutsideClick(() => setIsOpen(false));
-
-  // 열릴 때 위치 계산
-  useLayoutEffect(() => {
-    if (isOpen && dropdownRef.current) {
-      const rect = dropdownRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const dropdownMaxHeight = 200;
-
-      // 하단 여유 공간이 드롭다운 높이보다 작으면 위로 띄움
-      if (viewportHeight - rect.bottom < dropdownMaxHeight) {
-        setDirection('up');
-      } else {
-        setDirection('down');
-      }
-    }
-  }, [isOpen]);
+  
+  const direction = useDropdownDirection({ isOpen, ref: dropdownRef });
 
   const handleFocus = () => {
     // handleBlur();
@@ -113,19 +99,19 @@ export default function Selectbox({
 
       {/* 셀렉트박스 */}
       {isOpen && (
-        <div
+        <ul
           className={cn(
             'scrollbar-hide absolute z-50 flex max-h-50 w-full flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
             direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
           )}
         >
           {options.map((option) => (
-            <span
+            <li
               key={option.value}
               className={cn(
                 'hover:bg-gray-1 cursor-pointer rounded-md p-1.5',
                 option.value === value?.value
-                  ? 'text-text-primary'
+                  ? 'text-text-primary font-bold'
                   : 'text-text-secondary',
               )}
               onMouseDown={() => {
@@ -133,9 +119,9 @@ export default function Selectbox({
               }}
             >
               {option.label} {addValueText ?? ''}
-            </span>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
