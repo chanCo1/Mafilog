@@ -16,6 +16,7 @@ export const TRAVEL_TYPE = {
 } as const;
 export type TRAVEL_TYPE = (typeof TRAVEL_TYPE)[keyof typeof TRAVEL_TYPE];
 
+/** google place api에서 카테고리 그룹별로 정리 */
 export const PLACE_CATEGORY_TYPE = {
   /** 교통 */
   TRANSPORT: [

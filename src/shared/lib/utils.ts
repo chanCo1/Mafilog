@@ -136,7 +136,7 @@ export const getPlaceCategory = (types: IPlaceList['types']) => {
 /** 장소/지출 카테고리 한글로 변환 */
 export const convertCategory = (category: EXPENSES_CATEGORY_TYPE) => {
   switch (category.toLocaleLowerCase()) {
-    case EXPENSES_CATEGORY_TYPE.TRANSPORT:
+    case EXPENSES_CATEGORY_TYPE.BUS:
       return '교통';
     case EXPENSES_CATEGORY_TYPE.TOUR:
       return '관광명소';

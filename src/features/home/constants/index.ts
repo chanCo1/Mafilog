@@ -60,7 +60,7 @@ export const EXPNESES_INTRODUCE_LIST: string[] = [
 /** 가계부 목업 데이터 */
 export const EXPENSES_MOCK_DATA = [
   {
-    type: EXPENSES_CATEGORY_TYPE.TRANSPORT,
+    type: EXPENSES_CATEGORY_TYPE.BUS,
     name: '비행기 예약',
     payer: '나',
     spender: '나',
