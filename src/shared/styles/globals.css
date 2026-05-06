@@ -79,7 +79,7 @@
   /* 모바일 설정 */
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  /* user-select: none; */
+  user-select: none;
 
   --text-primary: #676767;
   --background: #ffffff;
