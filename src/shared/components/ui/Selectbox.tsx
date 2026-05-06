@@ -55,7 +55,7 @@ export default function Selectbox({
 }: ISelectbox) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useOutsideClick(() => setIsOpen(false));
-  
+
   const direction = useDropdownDirection({ isOpen, ref: dropdownRef });
 
   const handleFocus = () => {
@@ -81,7 +81,9 @@ export default function Selectbox({
         labelPosition={labelPosition}
         placeholder={props.placeholder}
         prefix={prefix}
-        suffix={<ChevronDown className="h-4 w-4" />}
+        suffix={
+          <ChevronDown className={cn('h-4 w-4 stroke-3 transition duration-200', isOpen ? 'rotate-180' : '')} />
+        }
         isRequired={isRequired}
         description={description}
         errorMsg={errorMsg}
@@ -98,7 +100,7 @@ export default function Selectbox({
       />
 
       {/* 셀렉트박스 */}
-      {isOpen && (
+      {isOpen && options && (
         <ul
           className={cn(
             'scrollbar-hide absolute z-50 flex max-h-50 w-full flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
