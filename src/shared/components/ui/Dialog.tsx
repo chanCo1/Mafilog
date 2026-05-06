@@ -12,6 +12,7 @@ import { Button } from '@/shared/components/ui/Button';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { createPortal } from 'react-dom';
 import Dimmed from '@/shared/components/ui/Dimmed';
+import { useIsMounted } from '@/shared/hooks/useIsMounted';
 
 const dialogVariants = cva(
   'z-50 transition duration-800 ease absolute flex items-center justify-cetner flex-col gap-2.5 rounded-lg bg-white p-2.5 shadow-md',
@@ -43,6 +44,7 @@ function DialogEntity(
   ref: ForwardedRef<HTMLDivElement>,
 ) {
   const { isOpen, options, closeDialog } = useDialogStore();
+  const isMounted = useIsMounted();
 
   const handleOk = () => {
     options?.onOk?.();
@@ -64,6 +66,8 @@ function DialogEntity(
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
+
+  if (!isMounted) return null;
 
   const isConfirm = options?.type === 'confirm';
 
