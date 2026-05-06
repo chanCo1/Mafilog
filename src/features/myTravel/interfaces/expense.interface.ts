@@ -1,4 +1,4 @@
-import { EXPENSES_PAYMENT_TYPE } from '@/shared/types/Enum';
+import { EXPENSES_PAYMENT_TYPE } from '@/shared/types/expenseEnum';
 
 /** 가계부 정보 */
 export interface IExpensesList {

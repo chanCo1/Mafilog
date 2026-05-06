@@ -6,8 +6,8 @@ import {
   TRAVEL_PARTNER,
   TRAVEL_STYLE,
   PLACE_CATEGORY_TYPE,
-  EXPENSES_CATEGORY_TYPE,
 } from '@/shared/types/Enum';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 import {
   TRAVEL_PARTNER_LIST,
   TRAVEL_STYLE_LIST,

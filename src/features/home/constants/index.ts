@@ -1,6 +1,7 @@
 import { ILabelValue } from '@/shared/interfaces';
 import { TTabTypes } from '@/features/home/types';
-import { EXPENSES_CATEGORY_TYPE, TRAVEL_TYPE } from '@/shared/types/Enum';
+import { TRAVEL_TYPE } from '@/shared/types/Enum';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 
 /** 서비스 간략 소개 탭 리스트 */
 export const TABLIST: ILabelValue<TTabTypes>[] = [

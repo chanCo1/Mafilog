@@ -9,15 +9,16 @@ import { useMemo } from 'react';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
-import { EXPENSES_CATEGORY_TYPE, ICON_TYPE } from '@/shared/types/Enum';
+import { ICON_TYPE } from '@/shared/types/Enum';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 import { TIconList } from '@/shared/types';
 
 interface IExpensesCard {
   type: string;
   name: string;
-  payer: string;
-  spender: string;
-  paymentMethod: string;
+  payer: string; // 결제자
+  spender: string; // 지줄차
+  paymentMethod: string; // 결제 방식
   currency: string;
 }
 

@@ -1,6 +1,3 @@
-/**
- * 일정 관련
- */
 /** 일정 타입 */
 export const SCHEDULE_TYPE = {
   /** 장소 */
@@ -19,30 +16,16 @@ export const TRAVEL_TYPE = {
 } as const;
 export type TRAVEL_TYPE = (typeof TRAVEL_TYPE)[keyof typeof TRAVEL_TYPE];
 
-/**
- * 가계부 관련
- */
-/** 가계부 지출 카테고리 타입 */
-export const EXPENSES_CATEGORY_TYPE = {
-  /** 교통 */
-  TRANSPORT: 'transport',
-  /** 음식 */
-  FOOD: 'food',
-  /** 쇼핑 */
-  SHOPPING: 'shopping',
-  /** 관광 */
-  TOUR: 'tour',
-  /** 숙소 */
-  HOUSE: 'house',
-  /** 기타 */
-  ETC: 'etc',
-} as const;
-export type EXPENSES_CATEGORY_TYPE =
-  (typeof EXPENSES_CATEGORY_TYPE)[keyof typeof EXPENSES_CATEGORY_TYPE];
-
 export const PLACE_CATEGORY_TYPE = {
   /** 교통 */
-  TRANSPORT: ['transportation_service', 'airport', 'transit_station', 'subway_station', 'bus_stop', 'bus_station'],
+  TRANSPORT: [
+    'transportation_service',
+    'airport',
+    'transit_station',
+    'subway_station',
+    'bus_stop',
+    'bus_station',
+  ],
   /** 음식점 */
   FOOD: ['food', 'restaurant', 'cafe'],
   /** 쇼핑 */
@@ -56,16 +39,6 @@ export const PLACE_CATEGORY_TYPE = {
 } as const;
 export type PLACE_CATEGORY_TYPE =
   (typeof PLACE_CATEGORY_TYPE)[keyof typeof PLACE_CATEGORY_TYPE];
-
-/** 가계부 지출 타입 */
-export const EXPENSES_PAYMENT_TYPE = {
-  /** 카드 */
-  CARD: 'card',
-  /** 현금 */
-  CASH: 'cash',
-} as const;
-export type EXPENSES_PAYMENT_TYPE =
-  (typeof EXPENSES_PAYMENT_TYPE)[keyof typeof EXPENSES_PAYMENT_TYPE];
 
 /** 아이콘 타입 */
 export const ICON_TYPE = {
