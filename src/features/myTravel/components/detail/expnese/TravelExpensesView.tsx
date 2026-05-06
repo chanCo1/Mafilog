@@ -10,9 +10,9 @@ import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDe
 import { Button } from '@/shared/components/ui/Button';
 import { getTravelDay } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
-import TravelExpensesDay from '@/features/myTravel/components/detail/expneses/TravelExpensesDay';
+import TravelExpensesDay from '@/features/myTravel/components/detail/expnese/TravelExpensesDay';
 import { Card } from '@/shared/components/ui/Card';
-import TravelExpensesSpendCard from '@/features/myTravel/components/detail/expneses/TravelExpensesSpendCard';
+import TravelExpensesSpendCard from '@/features/myTravel/components/detail/expnese/TravelExpensesSpendCard';
 
 interface ITravelExpensesView {
   from: Date;

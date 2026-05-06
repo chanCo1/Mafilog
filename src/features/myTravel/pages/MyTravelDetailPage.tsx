@@ -23,7 +23,7 @@ import { TRAVEL_TAB_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_TAB } from '@/shared/types/Enum';
 import { Button } from '@/shared/components/ui/Button';
 import TravelScheduleView from '@/features/myTravel/components/detail/schedule/TravelScheduleView';
-import TravelExpensesView from '@/features/myTravel/components/detail/expneses/TravelExpensesView';
+import TravelExpensesView from '@/features/myTravel/components/detail/expnese/TravelExpensesView';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';

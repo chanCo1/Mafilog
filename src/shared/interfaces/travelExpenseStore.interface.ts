@@ -1,5 +1,5 @@
 import { IExpensesList } from '@/features/myTravel/interfaces/expense.interface';
-import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/Enum';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 
 /** 여행 상세 전역 인터페이스 (state) */
 export interface ITravelExpenseState {

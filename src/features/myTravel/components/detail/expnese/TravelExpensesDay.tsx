@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
-import TravelExpensesTimeline from '@/features/myTravel/components/detail/expneses/TravelExpensesTimeline';
+import TravelExpensesTimeline from '@/features/myTravel/components/detail/expnese/TravelExpensesTimeline';
 
 interface ITravelExpensesDay {
   day?: number;
