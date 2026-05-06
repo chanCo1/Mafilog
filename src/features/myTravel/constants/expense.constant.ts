@@ -26,3 +26,9 @@ export const EXPENSE_CATEGORY_LIST = [
   { label: '관광', value: EXPENSES_CATEGORY_TYPE.TOUR },
   { label: '기타', value: EXPENSES_CATEGORY_TYPE.ETC },
 ];
+
+/** 지출 기본 일정 (모든날, 여행전) */
+export const TRAVEL_EXPENSES_BEFORE_LIST = [
+  { label: '모든날', value: 'all' },
+  { label: '여행전', value: 'before' },
+];
