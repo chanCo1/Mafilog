@@ -44,57 +44,57 @@ function SideModalEntity({
   handleClose,
   footer,
 }: ISideModal) {
-  // const [isMounted, setIsMounted] = useState(false);
-  const [isRender, setIsRender] = useState(false); // DOM에 존재 여부
-  const [isVisible, setIsVisible] = useState(false); // 슬라이드 애니메이션 여부
-
-  useEffect(() => {
-    // SSR 에러 방지
-    if (isOpen) {
-      setIsRender(true);
-      // 첫 번째 프레임: DOM 생성 인식
-      requestAnimationFrame(() => {
-        // 두 번째 프레임: 스타일 변경 인식 (애니메이션 보장)
-        requestAnimationFrame(() => {
-          setIsVisible(true);
-        });
-      });
-
-      document.body.style.overflow = 'hidden';
-    } else {
-      setIsVisible(false);
-
-      const timer = setTimeout(() => {
-        setIsRender(false);
-      }, 800);
-
-      document.body.style.overflow = 'unset';
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen]);
+  const [isMounted, setIsMounted] = useState(false);
+  // const [isRender, setIsRender] = useState(false); // DOM에 존재 여부
+  // const [isVisible, setIsVisible] = useState(false); // 슬라이드 애니메이션 여부
 
   // useEffect(() => {
   //   // SSR 에러 방지
-  //   setIsMounted(true);
-  //   if (isOpen)
-  //     // 뒷 화면 스크롤 제거
-  //     document.body.style.overflow = 'hidden';
-  //   else document.body.style.overflow = 'unset';
+  //   if (isOpen) {
+  //     setIsRender(true);
+  //     // 첫 번째 프레임: DOM 생성 인식
+  //     requestAnimationFrame(() => {
+  //       // 두 번째 프레임: 스타일 변경 인식 (애니메이션 보장)
+  //       requestAnimationFrame(() => {
+  //         setIsVisible(true);
+  //       });
+  //     });
 
-  //   return () => {
+  //     document.body.style.overflow = 'hidden';
+  //   } else {
+  //     setIsVisible(false);
+
+  //     const timer = setTimeout(() => {
+  //       setIsRender(false);
+  //     }, 800);
+
   //     document.body.style.overflow = 'unset';
-  //   };
+  //     return () => clearTimeout(timer);
+  //   }
   // }, [isOpen]);
 
-  // if (!isMounted) return null;
-  if (!isRender) return null;
+  useEffect(() => {
+    // SSR 에러 방지
+    setIsMounted(true);
+    if (isOpen)
+      // 뒷 화면 스크롤 제거
+      document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'unset';
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  if (!isMounted) return null;
+  // if (!isRender) return null;
 
   return createPortal(
     <>
       <Dimmed
         className={cn(
-          // isOpen ? 'visible opacity-100' : 'invisible opacity-0',
-          isVisible ? 'visible opacity-100' : 'invisible opacity-0',
+          isOpen ? 'visible opacity-100' : 'invisible opacity-0',
+          // isVisible ? 'visible opacity-100' : 'invisible opacity-0',
         )}
         // onClick={handleClose}
       />
@@ -102,8 +102,8 @@ function SideModalEntity({
         className={cn(
           sideModalVariants({ size }),
           'max-mobile:w-11/12',
-          // `${isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
-          `${isVisible ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
+          `${isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
+          // `${isVisible ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
         )}
       >
         <div className="item-center flex justify-between">
