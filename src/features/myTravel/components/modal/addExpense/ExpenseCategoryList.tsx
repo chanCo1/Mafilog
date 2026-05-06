@@ -39,8 +39,9 @@ export default function ExpenseCategoryList({
       </div>
       <Card>
         <div className="flex items-center justify-between px-6 py-1">
-          {EXPENSE_CATEGORY_LIST.map((list) => (
+          {EXPENSE_CATEGORY_LIST.map((list, index) => (
             <div
+              key={`${list.value}-${index}`}
               className={cn('flex cursor-pointer flex-col items-center px-1')}
             >
               <CategoryIcon
