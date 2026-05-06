@@ -5,7 +5,7 @@
  * @description: AddExpenseModal 컴포넌트, 지출내역 추가 모달
  */
 
-import { useState, ReactNode } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import { SideModal } from '@/shared/components/ui/SideModal';
@@ -24,6 +24,7 @@ import { ILabelValue } from '@/shared/interfaces';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { Textarea } from '@/shared/components/ui/Textarea';
+import Calculator from '@/shared/components/ui/Calculator';
 
 interface IAddExpenseModal {
   isModify?: boolean;
@@ -77,6 +78,12 @@ export default function AddExpenseModal({
     // setInputMemo(data?.memo ?? '');
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedDay(travelDaysList?.[0]);
+    }
+  }, [isOpen]);
+
   return (
     <SideModal
       isOpen={isOpen}
@@ -128,7 +135,7 @@ export default function AddExpenseModal({
             </div>
           </div>
 
-          <Input label="지출명" isRequired />
+          <Input label="지출 명" isRequired />
 
           <ExpenseCategoryList
             isRequired
@@ -138,7 +145,7 @@ export default function AddExpenseModal({
 
           <div className="flex items-center gap-1">
             <Selectbox
-              label="지출일 선택"
+              label="지출 일"
               isRequired
               options={travelDaysList}
               className="w-3/5"
@@ -160,7 +167,7 @@ export default function AddExpenseModal({
             value={inputMemo}
           />
         </div>
-        <div></div>
+        <Calculator />
       </div>
     </SideModal>
   );
