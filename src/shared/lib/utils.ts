@@ -119,6 +119,8 @@ export const convertComma = (value: number | string): string => {
 
 /** 장소 카테고리 가져오기 */
 export const getPlaceCategory = (types: IPlaceList['types']) => {
+  if (!types) return '';
+
   const findCategory = Object.entries(PLACE_CATEGORY_TYPE).find(
     ([key, value]) => {
       if (key === 'ETC') return false;
