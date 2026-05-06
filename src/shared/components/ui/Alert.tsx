@@ -5,68 +5,116 @@
  * @description: Alert 컴포넌트
  */
 
-import { ForwardedRef, forwardRef } from 'react';
+import { ForwardedRef, forwardRef, useEffect } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { Button } from '@/shared/components/ui/Button';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { createPortal } from 'react-dom';
+import Dimmed from '@/shared/components/ui/Dimmed';
+import Separator from '@/shared/components/ui/Separator';
 
-const alertVariants = cva('', {
-  variants: {
-    variant: {
-      default: '',
-      error: '',
+const alertVariants = cva(
+  'z-50 transition duration-800 ease absolute flex items-center justify-cetner flex flex-col gap-2.5 rounded-lg bg-white p-2.5 shadow-md',
+  {
+    variants: {
+      variant: {
+        default: '',
+        error: '',
+      },
+      size: {
+        lg: 'w-100',
+        md: 'w-75',
+        sm: 'w-50',
+      },
     },
-    size: {
-      lg: 'w-100',
-      md: 'w-75',
-      sm: 'w-50',
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
     },
   },
-  defaultVariants: {
-    variant: 'default',
-    size: 'md',
-  },
-});
+);
 
 interface IAlert extends VariantProps<typeof alertVariants> {
   className?: string;
-  type: 'alert' | 'confirm';
-  title: string;
-  okLabel?: string;
-  cancelLabel?: string;
 }
 
 function AlertEntity(
-  {
-    size,
-    variant,
-    className,
-    title,
-    type,
-    cancelLabel = '닫기',
-    okLabel = '확인',
-  }: IAlert,
+  { size, variant, className }: IAlert,
   ref: ForwardedRef<HTMLDivElement>,
 ) {
-  return (
+  const { isOpen, options, closeDialog } = useDialogStore();
+
+  const handleOk = () => {
+    options?.onOk?.();
+    closeDialog();
+  };
+
+  const handleCancel = () => {
+    options?.onCancel?.();
+    closeDialog();
+  };
+
+  useEffect(() => {
+    if (isOpen)
+      // 뒷 화면 스크롤 제거
+      document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'unset';
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  const isConfirm = options?.type === 'confirm';
+
+  return createPortal(
     <div
       className={cn(
-        alertVariants({ variant, size }),
-        'flex flex-col gap-2.5 rounded-lg bg-white p-2.5 shadow-md',
-        className,
+        'absolute z-100 flex h-full w-full items-center justify-center',
+        isOpen ? 'visible opacity-100' : 'invisible opacity-0',
       )}
-      ref={ref}
     >
-      <p>{title}</p>
-      <div className="flex justify-end gap-1">
-        {type === 'confirm' && (
-          <Button variant="gray" size="xs">
-            {cancelLabel}
-          </Button>
+      <Dimmed
+        className={cn(isOpen ? 'visible opacity-100' : 'invisible opacity-0')}
+        // onClick={handleClose}
+      />
+      <div
+        className={cn(
+          isOpen ? 'visible opacity-100' : 'invisible opacity-0',
+          alertVariants({ variant, size }),
+          className,
         )}
-        <Button size="xs">{okLabel}</Button>
+        ref={ref}
+      >
+        <p className="w-full py-7 text-center">{options?.message}</p>
+        <div
+          className={cn(
+            'flex w-full items-center gap-1',
+            isConfirm ? 'justify-center' : 'justify-end',
+          )}
+        >
+          {isConfirm && (
+            <Button
+              variant="ghost"
+              className="text-text-secondary w-1/2"
+              onClick={handleCancel}
+            >
+              {options?.cancelLabel || '취소'}
+            </Button>
+          )}
+          {isConfirm && <span className="text-gray-2">|</span>}
+          <Button
+            variant="ghost"
+            className={cn('text-primary', isConfirm ? 'w-1/2' : 'w-1/3')}
+            onClick={handleOk}
+          >
+            {options?.okLabel || '확인'}
+          </Button>
+        </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
 
