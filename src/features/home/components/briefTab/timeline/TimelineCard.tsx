@@ -11,7 +11,7 @@ import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { Chip } from '@/shared/components/ui/Chip';
 import { TRAVEL_TYPE, ICON_TYPE } from '@/shared/types/Enum';
-import { TIconList } from '@/shared/types';
+import { TIconList } from '@/shared/types/expenseEnum';
 
 interface ITimelineCard {
   name: string;

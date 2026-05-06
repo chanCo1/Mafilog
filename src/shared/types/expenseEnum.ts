@@ -1,3 +1,16 @@
+export type TIconList =
+  | 'memo'
+  | 'plus'
+  | 'plane'
+  | 'bus'
+  | 'food'
+  | 'shopping'
+  | 'tour'
+  | 'house'
+  | 'etc'
+  | 'check'
+  | 'x';
+
 /** 가계부 지출 카테고리 타입 */
 export const EXPENSES_CATEGORY_TYPE = {
   /** 교통 */

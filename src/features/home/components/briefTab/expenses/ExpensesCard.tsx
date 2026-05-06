@@ -11,7 +11,7 @@ import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { ICON_TYPE } from '@/shared/types/Enum';
 import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
-import { TIconList } from '@/shared/types';
+import { TIconList } from '@/shared/types/expenseEnum';
 
 interface IExpensesCard {
   type: string;
@@ -33,7 +33,7 @@ export default function ExpensesCard({
   /** 아이콘 타입 가져오기 */
   const getCategoryType = useMemo(() => {
     switch (type) {
-      case EXPENSES_CATEGORY_TYPE.TRANSPORT:
+      case EXPENSES_CATEGORY_TYPE.BUS:
         return ICON_TYPE.BUS;
       case EXPENSES_CATEGORY_TYPE.HOUSE:
         return ICON_TYPE.HOUSE;
