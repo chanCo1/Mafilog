@@ -10,7 +10,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import { cn, convertTravelStyle } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
-import { TRAVEL_DETAIL_MOCK_DATA, CHECKLIST_MOCK_DATA } from '@/features/myTravel/data';
+import {
+  TRAVEL_DETAIL_MOCK_DATA,
+  CHECKLIST_MOCK_DATA,
+} from '@/features/myTravel/data';
 import TravelStatus from '@/features/myTravel/components/detail/TravelStatus';
 import {
   convertFormattedDate,
@@ -37,12 +40,19 @@ import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore
 
 export default function MyTravelDetailPage() {
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const setInitTravelInfo = useTravelInfoStore((state) => state.setInitTravelInfo);
+  const setInitTravelInfo = useTravelInfoStore(
+    (state) => state.setInitTravelInfo,
+  );
 
-  const setInitSchedules = useTravelScheduleStore((state) => state.setInitSchedules)
-  const setInitExpense = useTravelExpenseListStore((state) => state.setInitExpense)
-  const setInitCheckList = useTravelCheckListStore((state) => state.setInitCheckList)
-
+  const setInitSchedules = useTravelScheduleStore(
+    (state) => state.setInitSchedules,
+  );
+  const setInitExpense = useTravelExpenseListStore(
+    (state) => state.setInitExpense,
+  );
+  const setInitCheckList = useTravelCheckListStore(
+    (state) => state.setInitCheckList,
+  );
 
   useEffect(() => {
     /** TODO: 임시 데이터 */
@@ -55,8 +65,9 @@ export default function MyTravelDetailPage() {
       travelPartner,
       travelStyles,
       image,
-      schedule,
+      // schedule,
       cities,
+      member,
     } = TRAVEL_DETAIL_MOCK_DATA;
 
     setInitTravelInfo({
@@ -69,6 +80,7 @@ export default function MyTravelDetailPage() {
       travelPartner,
       travelPeriod: getTravelDay(from, to),
       travelStyles,
+      member,
     });
     setInitSchedules({ from, to });
     setInitExpense({ from, to });

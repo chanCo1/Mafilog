@@ -17,6 +17,7 @@ export interface ITravelInfoState {
     travelStyles: TRAVEL_STYLE[];
     travelPartner: TRAVEL_PARTNER;
     cities: IPlaceList[];
+    member: string[];
   };
 }
 
