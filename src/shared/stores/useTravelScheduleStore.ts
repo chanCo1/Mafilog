@@ -68,7 +68,7 @@ export const useTravelScheduleStore = create<ITravelSchduleStore>()(
                 data.places?.forEach((_place) => {
                   targetSchedule.list.push({
                     // TODO: (임시)
-                    id: `${_place.id}-${new Date().getTime()}`,
+                    id: crypto.randomUUID(),
                     type: data.type,
                     place: _place,
                     memo: data.memo,
@@ -79,7 +79,7 @@ export const useTravelScheduleStore = create<ITravelSchduleStore>()(
                 // 메모 추가
                 targetSchedule.list.push({
                   // TODO: (임시)
-                  id: `${data.day.value}-${data.type}-${data.memo}-${new Date().getTime()}`,
+                  id: crypto.randomUUID(),
                   type: data.type,
                   memo: data.memo,
                   time: data.time,

@@ -66,7 +66,7 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
 
           if (targetDay) {
             targetDay.list.push({
-              id: `${data.day.value}-${data.name}`,
+              id: crypto.randomUUID(),
               ...data,
             });
           }
