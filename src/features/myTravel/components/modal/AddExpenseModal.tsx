@@ -5,7 +5,7 @@
  * @description: AddExpenseModal 컴포넌트, 지출내역 추가 모달
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import { SideModal } from '@/shared/components/ui/SideModal';
@@ -181,7 +181,7 @@ export default function AddExpenseModal({
   };
 
   /** 계산기에서 계산 된 값 가져오기 */
-  const handleCalcChange = (data: {
+  const handleCalcChange = useCallback((data: {
     amount: number;
     calcAmount: number;
     currencyCode: string;
@@ -193,7 +193,7 @@ export default function AddExpenseModal({
       currencyCode: data.currencyCode,
       amount: data.exchangeRate,
     });
-  };
+  }, []);
 
   return (
     <SideModal

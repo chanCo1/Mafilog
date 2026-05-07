@@ -65,7 +65,7 @@ export const EXPENSES_MOCK_DATA = [
     payer: '나',
     spender: '나',
     paymentMethod: '카드',
-    currency: 'KRW(원)',
+    currency: 'KRW',
   },
   {
     type: EXPENSES_CATEGORY_TYPE.FOOD,
@@ -73,7 +73,7 @@ export const EXPENSES_MOCK_DATA = [
     payer: '나',
     spender: '1/N',
     paymentMethod: '현금',
-    currency: 'USD(달러)',
+    currency: 'USD',
   },
 ];
 
