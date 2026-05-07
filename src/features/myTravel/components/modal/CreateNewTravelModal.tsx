@@ -43,8 +43,9 @@ export default function CreateNewTravelModal({
   );
   const [travelTitle, setTravelTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<File[]>([]);
-  const [travelCompanion, setTravelCompanion] = useState('alone');
+  const [travelPartner, setTravelPartner] = useState('alone');
   const [travelStyle, setTravelStyle] = useState<string[]>([]);
+  const [travelMember, setTravelMember] = useState<string[]>(['나'])
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -102,7 +103,7 @@ export default function CreateNewTravelModal({
       from: selectedDate?.from,
       to: selectedDate?.to,
       title: getTravelName(),
-      companion: travelCompanion,
+      companion: travelPartner,
       travelStyle: travelStyle,
       image: selectedImage,
     };
@@ -126,7 +127,7 @@ export default function CreateNewTravelModal({
     setSeletedDate(undefined);
     setTravelTitle('');
     setSelectedImage([]);
-    setTravelCompanion('alone');
+    setTravelPartner('alone');
     setTravelStyle([]);
   };
 
@@ -223,12 +224,14 @@ export default function CreateNewTravelModal({
           <CreateNewTravelStep3
             title={travelTitle}
             setTravelTitle={setTravelTitle}
-            travelCompanion={travelCompanion}
-            setTravelCompanion={setTravelCompanion}
+            travelPartner={travelPartner}
+            setTravelPartner={setTravelPartner}
             travelStyle={travelStyle}
             setTravelStyle={setTravelStyle}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
+            travelMember={travelMember}
+            setTravelMember={setTravelMember}
           />
         </FadeInOutStyled>
       </div>

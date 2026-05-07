@@ -34,6 +34,7 @@ const initialState = {
     travelStyles: [TRAVEL_STYLE.HEAL],
     travelPartner: TRAVEL_PARTNER.ALONE,
     cities: [],
+    member: [],
   },
 };
 
