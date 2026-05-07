@@ -5,7 +5,7 @@
  * @description: AddExpenseModal 컴포넌트, 지출내역 추가 모달
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import { SideModal } from '@/shared/components/ui/SideModal';
@@ -16,7 +16,7 @@ import {
   EXPENSE_CATEGORY_LIST,
 } from '@/features/myTravel/constants/expense.constant';
 import { Input } from '@/shared/components/ui/Input';
-import { TIconList } from '@/shared/types/expenseEnum';
+import { TIconList, EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
 import ExpenseCategoryList from '@/features/myTravel/components/modal/addExpense/ExpenseCategoryList';
 import TimePicker from '@/shared/components/ui/TimePicker';
 import Selectbox from '@/shared/components/ui/Selectbox';
@@ -25,6 +25,9 @@ import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Calculator from '@/shared/components/ui/Calculator';
+import RequireDot from '@/shared/components/ui/RequireDot';
+import { Radio } from '@/shared/components/ui/Radio';
+import { Checkbox } from '@/shared/components/ui/Checkbox';
 
 interface IAddExpenseModal {
   isModify?: boolean;
@@ -44,11 +47,11 @@ export default function AddExpenseModal({
   });
 
   /** 지출 방식 */
-  const [selectedSpender, setSelectedSpender] = useState(
+  const [selectedSpenderType, setSelectedSpenderType] = useState(
     SPENDER_TYPE_LIST[0].value,
   );
   /** 결제 방식 */
-  const [selectedPayment, setSelectedPayment] = useState(
+  const [selectedPaymentType, setSelectedPaymentType] = useState(
     PAYMENT_TYPE_LIST[0].value,
   );
   /** 카테고리 선택 */
@@ -64,6 +67,33 @@ export default function AddExpenseModal({
   /** 메모 */
   const [inputMemo, setInputMemo] = useState('');
 
+  /** 결제자 */
+  const [selectedPayer, setSelectPayer] = useState<ILabelValue>();
+  /** 지출자 */
+  const [selectedSepnder, setSelectedSepnder] = useState<ILabelValue[]>([]);
+
+  useEffect(() => {
+    if (isOpen && travelInfo) {
+      setSelectPayer({
+        label: travelInfo.member[0],
+        value: travelInfo.member[0],
+      });
+      setSelectedSepnder([
+        {
+          label: travelInfo.member[0],
+          value: travelInfo.member[0],
+        },
+      ]);
+    }
+  }, [travelInfo, isOpen]);
+
+  const getMembersOption = useMemo(() => {
+    return travelInfo.member.map((member) => ({
+      label: member,
+      value: member,
+    }));
+  }, [travelInfo.member]);
+
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
     handleClose();
@@ -76,6 +106,20 @@ export default function AddExpenseModal({
     // }
     // setSelectedTime(data?.time ?? '');
     // setInputMemo(data?.memo ?? '');
+  };
+
+  const handleSelect = (_member: string) => {
+    if (!_member) return;
+
+    setSelectedSepnder((prev) => {
+      const isExist = prev?.some((item) => item.value === _member);
+
+      if (isExist) {
+        return prev?.filter((item) => item.value !== _member);
+      } else {
+        return [...prev, { label: _member, value: _member }];
+      }
+    });
   };
 
   useEffect(() => {
@@ -101,18 +145,18 @@ export default function AddExpenseModal({
       }
     >
       <div className="flex h-full flex-col gap-2">
-        <div className="scrollbar-hide flex flex-1 flex-col gap-3 overflow-auto">
+        <div className="scrollbar-hide flex flex-1 flex-col gap-4 overflow-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
               {SPENDER_TYPE_LIST.map((type, index) => (
                 <Chip
                   key={`${type}-${index}`}
                   variant={
-                    selectedSpender === type.value
+                    selectedSpenderType === type.value
                       ? 'primary'
                       : 'primaryOutline'
                   }
-                  onClick={() => setSelectedSpender(type.value)}
+                  onClick={() => setSelectedSpenderType(type.value)}
                 >
                   {type.label}
                 </Chip>
@@ -123,11 +167,11 @@ export default function AddExpenseModal({
                 <Chip
                   key={`${type}-${index}`}
                   variant={
-                    selectedPayment === type.value
+                    selectedPaymentType === type.value
                       ? 'primary'
                       : 'primaryOutline'
                   }
-                  onClick={() => setSelectedPayment(type.value)}
+                  onClick={() => setSelectedPaymentType(type.value)}
                 >
                   {type.label}
                 </Chip>
@@ -143,7 +187,64 @@ export default function AddExpenseModal({
             setSelectedCategory={setSelectedCategory}
           />
 
-          <div className="flex items-center gap-1">
+          {/* 1/N일 경우 노출 */}
+          {selectedSpenderType === EXPENSES_SPENDER_TYPE.SPLIT && (
+            <Selectbox
+              label="결제 멤버"
+              isRequired
+              options={getMembersOption}
+              value={selectedPayer}
+              onChange={(value) => setSelectPayer(value)}
+            />
+          )}
+
+          {/* 지정일 경우 노출 */}
+          {selectedSpenderType === EXPENSES_SPENDER_TYPE.ASSIGN && (
+            <div className="flex flex-col gap-1">
+              <div className="flex items-baseline justify-between pr-3">
+                <div className="flex min-w-25 items-center gap-1">
+                  <span>지정 지출</span>
+                  <RequireDot />
+                </div>
+                <div className="text-text-secondary flex items-center gap-6 text-sm">
+                  <span>결제</span>
+                  <span>지출</span>
+                </div>
+              </div>
+              <div className="border-border-secondary flex flex-col gap-2 rounded-lg border p-3">
+                {travelInfo.member.map((_member, index) => (
+                  <div
+                    key={`${_member}-${index}`}
+                    className="flex items-center justify-between"
+                  >
+                    <span className="font-bold">{_member}</span>
+                    <div className="flex items-center gap-5">
+                      <Radio
+                        id={_member}
+                        isUserIcon
+                        value={selectedPayer as ILabelValue}
+                        onChange={setSelectPayer}
+                      />
+                      <Checkbox
+                        isUserIcon
+                        value={Boolean(
+                          selectedSepnder?.find(
+                            (sepnder) => sepnder.value === _member,
+                          ),
+                        )}
+                        onChange={() => handleSelect(_member)}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <span className="text-text-secondary text-sm">
+                결제자는 1명만 선택가능해요.
+              </span>
+            </div>
+          )}
+
+          <div className="flex items-center gap-2">
             <Selectbox
               label="지출 일"
               isRequired

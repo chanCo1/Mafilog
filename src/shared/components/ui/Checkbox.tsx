@@ -122,6 +122,7 @@ function CheckboxEntity(
                 )}
                 value={value as boolean}
                 isChecked={isChecked}
+                isUserIcon={isUserIcon}
                 label={option.label}
                 onClick={() => onClickMultipleCheckbox(option)}
                 {...props}
@@ -137,6 +138,7 @@ function CheckboxEntity(
             )}
             value={value as boolean}
             isChecked={value as boolean}
+            isUserIcon={isUserIcon}
             label={checkboxLabel}
             onClick={() => onClickSingleCheckbox(!value)}
             {...props}
@@ -185,7 +187,7 @@ const SingleCheckbox = ({
       {isChecked ? (
         <>
           {isUserIcon ? (
-            <UserCheck className="h-5 w-5" />
+            <User className="h-5 w-5 fill-current" />
           ) : (
             <SquareCheckBig className="h-5 w-5" />
           )}
