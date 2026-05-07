@@ -11,7 +11,6 @@ import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { ICON_TYPE } from '@/shared/types/Enum';
 import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
-import { TIconList } from '@/shared/types/expenseEnum';
 
 interface IExpensesCard {
   type: string;
@@ -54,7 +53,7 @@ export default function ExpensesCard({
     <div className="flex w-full gap-3">
       <div className="flex items-center justify-center">
         <div className="shrink-0">
-          <CategoryIcon variant={getCategoryType as TIconList} />
+          <CategoryIcon variant={getCategoryType as EXPENSES_CATEGORY_TYPE} />
         </div>
       </div>
       <div className="w-full">
