@@ -320,7 +320,10 @@ export default function AddExpenseModal({
             <Selectbox
               label="지출 일"
               isRequired
-              options={travelDaysList}
+              options={[
+                { label: '여행전', value: 0 },
+                ...travelDaysList,
+              ]}
               className="w-3/5"
               value={selectedDay}
               onChange={(value) => setSelectedDay(value)}

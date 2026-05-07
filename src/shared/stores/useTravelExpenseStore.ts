@@ -48,7 +48,10 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
               }),
             );
 
-            state.expense = newExpenses;
+            state.expense = [
+              { day: 0, date: undefined, list: [], dailyExpense: 0 },
+              ...newExpenses,
+            ];
           },
           false,
           'travel/setInitExpeneses',

@@ -13,7 +13,7 @@ export interface ITravelExpenseState {
 /** 가계부 리스트 */
 export interface IExpense {
   day: number;
-  date: Date;
+  date: Date | undefined;
   list: IExpenseList[];
   dailyExpense: number; // 일일 총 지출;
 }
