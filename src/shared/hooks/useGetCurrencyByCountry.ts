@@ -21,7 +21,7 @@ export const useGetCurrencyByCountry = (
   const { currencyData } = useFetchCurrency();
 
   const getCurrency = useMemo(() => {
-    if (!isMounted || !countryCode || !countryData[countryCode]) return;
+    if (!isMounted || !countryCode || !countryData[countryCode] || !currencyData) return;
 
     /** 국가코드로 특정 나라 정보 추출 */
     const _contry = countryData[countryCode];
@@ -49,7 +49,7 @@ export const useGetCurrencyByCountry = (
       symbol, // 통화표
       country: _contry,
     };
-  }, [countryCode, isMounted]);
+  }, [countryCode, isMounted, currencyData]);
 
   return getCurrency;
 };
