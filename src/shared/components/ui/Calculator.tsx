@@ -5,7 +5,7 @@
  * @description: 계산기 컴포넌트
  */
 
-import { ReactNode, useState, useEffect, useMemo } from 'react';
+import { ReactNode, useState, useEffect, useMemo, useRef } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import Selectbox from '@/shared/components/ui/Selectbox';
@@ -92,21 +92,29 @@ export default function Calculator() {
   /** 초기화 */
   const handleClear = () => {
     setInputNumber('');
+    lastValidResult.current = 0;
   };
 
+  const lastValidResult = useRef(0);
   /** 입력된 값 계산 */
   const result = useMemo(() => {
     if (!inpuNumber) return 0;
+
+    const trimmed = inpuNumber.trim();
+    const lastChar = trimmed.slice(-1);
+    const isOperator = ['+', '-', '*', '/'].includes(lastChar);
+
     try {
-      const lastChar = inpuNumber.trim().slice(-1);
-      // 연산자로 끝나지 않을 때만 계산 수행
-      if (!['+', '-', '*', '/'].includes(lastChar)) {
-        return evaluate(inpuNumber);
+      if (!isOperator) {
+        const calculated = evaluate(trimmed);
+        lastValidResult.current = calculated;
+        return calculated;
       }
-    } catch (error) {
-      console.error('Calculation Error');
+    } catch (e) {
+      return lastValidResult.current;
     }
-    return 0; // 혹은 이전 result를 유지하도록 처리 가능
+
+    return lastValidResult.current;
   }, [inpuNumber]);
 
   /** 입력된 값 환율 계산 */
@@ -147,30 +155,30 @@ export default function Calculator() {
         <CalcNumberArea number="2" onClick={() => handleClickNumber('2')} />
         <CalcNumberArea number="3" onClick={() => handleClickNumber('3')} />
         <CalcNumberArea
-          number={<X className="text-primary" />}
+          number={<X className="text-primary stroke-3" size={18} />}
           onClick={() => handleOperator('*')}
         />
         <CalcNumberArea
-          number={<Delete className="text-primary" />}
+          number={<Delete className="text-primary stroke-3" size={18} />}
           onClick={handleDelete}
         />
         <CalcNumberArea number="4" onClick={() => handleClickNumber('4')} />
         <CalcNumberArea number="5" onClick={() => handleClickNumber('5')} />
         <CalcNumberArea number="6" onClick={() => handleClickNumber('6')} />
         <CalcNumberArea
-          number={<Divide className="text-primary" />}
+          number={<Divide className="text-primary stroke-3" size={18} />}
           onClick={() => handleOperator('/')}
         />
         <CalcNumberArea
           number="AC"
-          className="text-primary"
+          className="text-primary text-md"
           onClick={handleClear}
         />
         <CalcNumberArea number="7" onClick={() => handleClickNumber('7')} />
         <CalcNumberArea number="8" onClick={() => handleClickNumber('8')} />
         <CalcNumberArea number="9" onClick={() => handleClickNumber('9')} />
         <CalcNumberArea
-          number={<Plus className="text-primary" />}
+          number={<Plus className="text-primary stroke-3" size={18} />}
           onClick={() => handleOperator('+')}
         />
         <div />
@@ -178,7 +186,7 @@ export default function Calculator() {
         <CalcNumberArea number="00" onClick={() => handleClickNumber('00')} />
         <CalcNumberArea number="." onClick={() => handleClickNumber('.')} />
         <CalcNumberArea
-          number={<Minus className="text-primary" />}
+          number={<Minus className="text-primary stroke-3" size={18} />}
           onClick={() => handleOperator('-')}
         />
         <div />
@@ -196,7 +204,12 @@ const CalcNumberArea = ({
   className?: string;
   onClick?: () => void;
 }) => (
-  <Button className={cn('w-full', className)} variant="ghost" onClick={onClick}>
+  <Button
+    className={cn('text-md w-full', className)}
+    variant="ghost"
+    size="sm"
+    onClick={onClick}
+  >
     {number}
   </Button>
 );

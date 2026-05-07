@@ -206,7 +206,7 @@ export default function AddExpenseModal({
                   <span>지정 지출</span>
                   <RequireDot />
                 </div>
-                <div className="text-text-secondary flex items-center gap-6 text-sm">
+                <div className="text-text-secondary flex items-center gap-5 text-sm">
                   <span>결제</span>
                   <span>지출</span>
                 </div>
