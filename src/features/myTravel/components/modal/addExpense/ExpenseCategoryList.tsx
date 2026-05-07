@@ -43,6 +43,7 @@ export default function ExpenseCategoryList({
             <div
               key={`${list.value}-${index}`}
               className={cn('flex cursor-pointer flex-col items-center px-1')}
+              onClick={() => setSelectedCategory(list.value)}
             >
               <CategoryIcon
                 variant={list.value as TIconList}
@@ -51,7 +52,6 @@ export default function ExpenseCategoryList({
                 )}
                 circled="none"
                 size="md"
-                onClick={() => setSelectedCategory(list.value)}
               />
               <span
                 className={cn(
