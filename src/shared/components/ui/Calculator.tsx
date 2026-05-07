@@ -73,7 +73,7 @@ export default function Calculator({ onChangeValue }: ICalculator) {
     if (currencyList.length > 0 && !selectedCurrency) {
       setSelectedCurrency(currencyList[0]);
     }
-  }, [currencyList]);
+  }, [currencyList, setSelectedCurrency, selectedCurrency]);
 
   /** 숫자 클릭 */
   const handleClickNumber = (num: string) => {
@@ -157,6 +157,7 @@ export default function Calculator({ onChangeValue }: ICalculator) {
           {currencyList && (
             <div className="max-w-20">
               <Selectbox
+                className='font-bold'
                 variant="none"
                 options={currencyList}
                 value={selectedCurrency}

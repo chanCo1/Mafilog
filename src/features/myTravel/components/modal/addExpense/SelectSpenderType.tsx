@@ -39,6 +39,12 @@ export default function SelectSpenderType({
     }));
   }, [travelInfo.member]);
 
+  /** 1/N 선택 핸들링 */
+  const handleSplitSpend = (value: ILabelValue) => {
+    setSelectPayer(value);
+    setSelectedSepnder(getMembersOption);
+  };
+
   /** 지출자 선택 */
   const handleSelectSpender = (_member: string) => {
     if (!_member) return;
@@ -63,7 +69,7 @@ export default function SelectSpenderType({
           isRequired
           options={getMembersOption}
           value={selectedPayer}
-          onChange={(value) => setSelectPayer(value)}
+          onChange={(value) => handleSplitSpend(value)}
         />
       )}
 
