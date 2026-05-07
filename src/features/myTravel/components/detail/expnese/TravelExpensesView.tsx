@@ -15,6 +15,7 @@ import { Card } from '@/shared/components/ui/Card';
 import TravelExpensesSpendCard from '@/features/myTravel/components/detail/expnese/TravelExpensesSpendCard';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 import { TRAVEL_EXPENSES_BEFORE_LIST } from '@/features/myTravel/constants/expense.constant';
+import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
 
 interface ITravelExpensesView {
   from: Date;
@@ -22,11 +23,16 @@ interface ITravelExpensesView {
 }
 
 function TravelExpensesView({ from, to }: ITravelExpensesView) {
+  /** 지출일 선택 */
   const [selectedDay, setSelectedDay] = useState<string | number>(
     TRAVEL_EXPENSES_BEFORE_LIST[0].value,
   );
+  /** 선택 수정 모드 */
+  const [selectModifyMode, setSelectModifyMode] = useState(false);
 
   const [isOpenAddExpenseModal, setIsOpenAddExpneseModal] = useState(false);
+
+  const expense = useTravelExpenseListStore((state) => state.expense);
 
   return (
     <>
@@ -47,21 +53,15 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
         }
         dayTimelines={
           <>
-            <TravelExpensesDay isBefore />
-            {Array.from({ length: getTravelDay(from, to) }).map((_, index) => {
-              const _day = index + 1;
-              const dupDate = new Date(from);
-              dupDate.setDate(from?.getDate() + index);
-
-              return (
-                <TravelExpensesDay
-                  key={`${dupDate}-${index}`}
-                  day={_day}
-                  date={dupDate}
-                  // schedule={TRAVEL_DETAIL_MOCK_DATA.schedule}
-                />
-              );
-            })}
+            {expense.map((_day, index) => (
+              <TravelExpensesDay
+                key={`${_day.day}-${index}`}
+                day={_day.day}
+                date={_day.date}
+                list={_day.list}
+                selectMode={selectModifyMode}
+              />
+            ))}
           </>
         }
         dayButtons={
@@ -78,16 +78,17 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
                 {list.label}
               </Chip>
             ))}
-            {Array.from({ length: getTravelDay(from, to) }).map((_, index) => (
-              <Chip
-                key={index}
-                size="md"
-                variant={
-                  selectedDay === index + 1 ? 'primary' : 'primaryOutline'
-                }
-                onClick={() => setSelectedDay(index + 1)}
-              >{`${index + 1}일차`}</Chip>
-            ))}
+            {expense.map((_day, index) => {
+              if (_day.day === 0) return;
+              return (
+                <Chip
+                  key={index}
+                  size="md"
+                  variant={selectedDay === index ? 'primary' : 'primaryOutline'}
+                  onClick={() => setSelectedDay(index)}
+                >{`${index}일차`}</Chip>
+              );
+            })}
           </>
         }
         stautsArea={
