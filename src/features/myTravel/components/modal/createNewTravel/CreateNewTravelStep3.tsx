@@ -92,10 +92,10 @@ export default function CreateNewTravelStep3({
         {/* TODO: 멤버 저장 어떻게 할지 고민 */}
         <div className="flex flex-col gap-1 p-1">
           <span>여행 멤버</span>
-          {travelMember.map((member) => (
-            <div className="flex items-center gap-2">
+          {travelMember.map((member, index) => (
+            <div key={`${member}-${index}`} className="flex items-center gap-2">
               <div className="flex items-center gap-1">
-                <User size="18" className="" />
+                <User size="18" className="fill-current text-primary" />
                 <span className="font-bold">{member}</span>
               </div>
               {member !== '나' && (
