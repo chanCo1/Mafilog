@@ -86,7 +86,15 @@ export default function Calculator() {
 
   /** 하나씩 지우기 (Delete) */
   const handleDelete = () => {
-    setInputNumber((prev) => prev.trimEnd().slice(0, -1));
+    const trimmed = inpuNumber.trim();
+    const lastChar = trimmed.slice(-1);
+    const isOperator = ['+', '-', '*', '/'].includes(lastChar);
+
+    if (isOperator) {
+      setInputNumber((prev) => prev.trimEnd().slice(0, -1).trim());
+    } else {
+      setInputNumber((prev) => prev.trimEnd().slice(0, -1));
+    }
   };
 
   /** 초기화 */
