@@ -14,6 +14,7 @@ import {
   ITravelExpenseGetters,
 } from '@/shared/interfaces/travelExpenseStore.interface';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
+import { IExpense } from '@/shared/interfaces/travelExpenseStore.interface';
 
 type ITravelExpenseStore = ITravelExpenseState &
   ITravelExpenseActions &
@@ -52,6 +53,21 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
           false,
           'travel/setInitExpeneses',
         ),
+
+      /** 지출 추가 */
+      setAddExpenseList: (data) =>
+        set((state) => {
+          const targetDay = state.expense.find(
+            (expense: IExpense) => expense.day === data.day.value,
+          );
+
+          if (targetDay) {
+            targetDay.list.push({
+              id: `${data.day.value}-${data.name}`,
+              ...data,
+            });
+          }
+        }),
 
       /** 리셋 */
       reset: () => set(initialState),

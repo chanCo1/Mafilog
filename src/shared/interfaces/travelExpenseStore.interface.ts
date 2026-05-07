@@ -1,5 +1,9 @@
-import { IExpensesList } from '@/features/myTravel/interfaces/expense.interface';
-import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
+import { ILabelValue } from '@/shared/interfaces';
+import {
+  EXPENSES_CATEGORY_TYPE,
+  EXPENSES_PAYMENT_TYPE,
+  EXPENSES_SPENDER_TYPE,
+} from '@/shared/types/expenseEnum';
 
 /** 여행 상세 전역 인터페이스 (state) */
 export interface ITravelExpenseState {
@@ -10,14 +14,27 @@ export interface ITravelExpenseState {
 export interface IExpense {
   day: number;
   date: Date;
-  list: {
-    id: string;
-    type: EXPENSES_CATEGORY_TYPE; // 지출 타입;
-    expense: IExpensesList;
-    time?: string;
-    memo?: string;
-  }[];
+  list: IExpenseList[];
   dailyExpense: number; // 일일 총 지출;
+}
+
+/** 지출 정보 */
+export interface IExpenseList {
+  id?: string;
+  name: string; // 지출명
+  spenderType: EXPENSES_SPENDER_TYPE;
+  category: EXPENSES_CATEGORY_TYPE;
+  amount: number; // 지출 금액
+  calcExchangeAmount: number; // 한화 금액
+  exchangeRate: {
+    currencyCode: string; // 통화 코드
+    amount: number; // 환율금액
+  };
+  paymentType: EXPENSES_PAYMENT_TYPE; // 결제 타입
+  payer: ILabelValue; // 결제자
+  spender: ILabelValue[]; // 지출자
+  time?: string;
+  memo?: string;
 }
 
 export interface IDateFromTo {
@@ -28,6 +45,7 @@ export interface IDateFromTo {
 /** 여행 가계부 전역 인터페이스 (actions) */
 export interface ITravelExpenseActions {
   setInitExpense: (date: IDateFromTo) => void;
+  setAddExpenseList: (data: IExpenseList & { day: ILabelValue }) => void;
   reset: () => void;
 }
 

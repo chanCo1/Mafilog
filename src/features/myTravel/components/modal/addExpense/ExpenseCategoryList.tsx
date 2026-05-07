@@ -11,7 +11,7 @@ import RequireDot from '@/shared/components/ui/RequireDot';
 import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { EXPENSE_CATEGORY_LIST } from '@/features/myTravel/constants/expense.constant';
-import { TIconList } from '@/shared/types/expenseEnum';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 
 interface IExpenseCategoryList extends HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -19,7 +19,7 @@ interface IExpenseCategoryList extends HTMLAttributes<HTMLDivElement> {
   isRequired?: boolean;
   description?: string;
   selectedCategory: string;
-  setSelectedCategory: Dispatch<SetStateAction<TIconList>>
+  setSelectedCategory: Dispatch<SetStateAction<EXPENSES_CATEGORY_TYPE>>
 }
 
 export default function ExpenseCategoryList({
@@ -46,7 +46,7 @@ export default function ExpenseCategoryList({
               onClick={() => setSelectedCategory(list.value)}
             >
               <CategoryIcon
-                variant={list.value as TIconList}
+                variant={list.value}
                 className={cn('transition duration-300',
                   selectedCategory === list.value ? '' : 'text-gray-3',
                 )}

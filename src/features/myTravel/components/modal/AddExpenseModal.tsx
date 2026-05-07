@@ -16,7 +16,10 @@ import {
   EXPENSE_CATEGORY_LIST,
 } from '@/features/myTravel/constants/expense.constant';
 import { Input } from '@/shared/components/ui/Input';
-import { TIconList, EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
+import {
+  EXPENSES_SPENDER_TYPE,
+  EXPENSES_CATEGORY_TYPE,
+} from '@/shared/types/expenseEnum';
 import ExpenseCategoryList from '@/features/myTravel/components/modal/addExpense/ExpenseCategoryList';
 import TimePicker from '@/shared/components/ui/TimePicker';
 import Selectbox from '@/shared/components/ui/Selectbox';
@@ -28,6 +31,9 @@ import Calculator from '@/shared/components/ui/Calculator';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import { Radio } from '@/shared/components/ui/Radio';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
+import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
+import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
+import { toast } from 'sonner';
 
 interface IAddExpenseModal {
   isModify?: boolean;
@@ -46,6 +52,12 @@ export default function AddExpenseModal({
     to: travelInfo.to,
   });
 
+  const setAddExpenseList = useTravelExpenseListStore(
+    (state) => state.setAddExpenseList,
+  );
+
+  /** 지출 명 */
+  const [expenseName, setExpenseName] = useState('');
   /** 지출 방식 */
   const [selectedSpenderType, setSelectedSpenderType] = useState(
     SPENDER_TYPE_LIST[0].value,
@@ -55,29 +67,47 @@ export default function AddExpenseModal({
     PAYMENT_TYPE_LIST[0].value,
   );
   /** 카테고리 선택 */
-  const [selectedCategory, setSelectedCategory] = useState<TIconList>(
-    EXPENSE_CATEGORY_LIST[2].value,
-  );
-  /** 일정 */
-  const [selectedDay, setSelectedDay] = useState<ILabelValue>(
-    travelDaysList?.[0],
-  );
-  /** 시간 */
+  const [selectedCategory, setSelectedCategory] =
+    useState<EXPENSES_CATEGORY_TYPE>(EXPENSE_CATEGORY_LIST[2].value);
+  /** 지출 일 */
+  const [selectedDay, setSelectedDay] = useState<ILabelValue>({
+    label: '',
+    value: '',
+  });
+  /** 지출 시간 */
   const [selectedTime, setSelectedTime] = useState('');
   /** 메모 */
   const [inputMemo, setInputMemo] = useState('');
 
   /** 결제자 */
-  const [selectedPayer, setSelectPayer] = useState<ILabelValue>();
+  const [selectedPayer, setSelectPayer] = useState<ILabelValue>({
+    label: '',
+    value: '',
+  });
   /** 지출자 */
   const [selectedSepnder, setSelectedSepnder] = useState<ILabelValue[]>([]);
 
+  /** 환율 정보 */
+  const [selectedExchangeRate, setSelectedExchangeRate] = useState<
+    IExpenseList['exchangeRate']
+  >({
+    currencyCode: '',
+    amount: 0,
+  });
+  /** 지출 금액 */
+  const [expenseAmount, setExpenseAmount] = useState(0);
+  /** 지출 환율 금액 */
+  const [calcExchangeAmount, setCalcExchangeAmount] = useState(0);
+
   useEffect(() => {
     if (isOpen && travelInfo) {
+      setSelectedDay(travelDaysList?.[0]);
+
       setSelectPayer({
         label: travelInfo.member[0],
         value: travelInfo.member[0],
       });
+
       setSelectedSepnder([
         {
           label: travelInfo.member[0],
@@ -94,6 +124,33 @@ export default function AddExpenseModal({
     }));
   }, [travelInfo.member]);
 
+  /** 지출 추가 핸들링 */
+  const handleAddExpense = () => {
+    if (!expenseName) return;
+
+    try {
+      setAddExpenseList({
+        name: expenseName,
+        spenderType: selectedSpenderType,
+        category: selectedCategory,
+        day: selectedDay,
+        time: selectedTime,
+        memo: inputMemo,
+        spender: selectedSepnder,
+        payer: selectedPayer,
+        paymentType: selectedPaymentType,
+        amount: expenseAmount,
+        calcExchangeAmount: calcExchangeAmount,
+        exchangeRate: selectedExchangeRate,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    onClickCloseBtn();
+    toast.success('지출을 추가했어요');
+  };
+
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
     handleClose();
@@ -108,7 +165,8 @@ export default function AddExpenseModal({
     // setInputMemo(data?.memo ?? '');
   };
 
-  const handleSelect = (_member: string) => {
+  /** 지출자 선택 */
+  const handleSelectSpender = (_member: string) => {
     if (!_member) return;
 
     setSelectedSepnder((prev) => {
@@ -122,11 +180,20 @@ export default function AddExpenseModal({
     });
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      setSelectedDay(travelDaysList?.[0]);
-    }
-  }, [isOpen]);
+  /** 계산기에서 계산 된 값 가져오기 */
+  const handleCalcChange = (data: {
+    amount: number;
+    calcAmount: number;
+    currencyCode: string;
+    exchangeRate: number;
+  }) => {
+    setExpenseAmount(data.amount);
+    setCalcExchangeAmount(data.calcAmount);
+    setSelectedExchangeRate({
+      currencyCode: data.currencyCode,
+      amount: data.exchangeRate,
+    });
+  };
 
   return (
     <SideModal
@@ -138,7 +205,7 @@ export default function AddExpenseModal({
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={false} onClick={() => null}>
+          <Button disabled={false} onClick={handleAddExpense}>
             지출 추가
           </Button>
         </>
@@ -179,7 +246,12 @@ export default function AddExpenseModal({
             </div>
           </div>
 
-          <Input label="지출 명" isRequired />
+          <Input
+            label="지출 명"
+            isRequired
+            value={expenseName}
+            onChange={(e) => setExpenseName(e.target.value)}
+          />
 
           <ExpenseCategoryList
             isRequired
@@ -232,7 +304,7 @@ export default function AddExpenseModal({
                             (sepnder) => sepnder.value === _member,
                           ),
                         )}
-                        onChange={() => handleSelect(_member)}
+                        onChange={() => handleSelectSpender(_member)}
                       />
                     </div>
                   </div>
@@ -268,7 +340,7 @@ export default function AddExpenseModal({
             value={inputMemo}
           />
         </div>
-        <Calculator />
+        <Calculator onChangeValue={handleCalcChange} />
       </div>
     </SideModal>
   );
