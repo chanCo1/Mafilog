@@ -98,16 +98,17 @@ function TravelScheduleView() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => setIsOpenAddPlaceModal(true)}
-                  >
-                    장소 추가
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
                     onClick={() => setIsOpenAddMemoModal(true)}
                   >
                     메모 추가
+                  </Button>
+                  <Button
+                    className='w-35'
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setIsOpenAddPlaceModal(true)}
+                  >
+                    장소 추가
                   </Button>
                 </>
               )}

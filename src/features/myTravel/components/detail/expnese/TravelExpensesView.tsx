@@ -43,6 +43,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
               선택 수정
             </Button>
             <Button
+              className='w-35'
               variant="secondary"
               size="sm"
               onClick={() => setIsOpenAddExpneseModal(true)}
