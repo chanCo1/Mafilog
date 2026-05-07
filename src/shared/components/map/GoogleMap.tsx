@@ -6,7 +6,7 @@
  */
 
 import { Map, AdvancedMarker, Pin, useMap } from '@vis.gl/react-google-maps';
-import { useState, memo, useEffect } from 'react';
+import { useState, memo, useEffect, useCallback } from 'react';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface IGoogleMap {
@@ -67,6 +67,15 @@ const GoogleMap = memo(({ places, id, isSingle }: IGoogleMap) => {
     };
   }, [map, places]);
 
+  const handleMarkerClick = useCallback(
+    (location: google.maps.LatLngLiteral) => {
+      if (!map) return;
+      map.panTo(location);
+      map.setZoom(17);
+    },
+    [map],
+  );
+
   return (
     <div className="h-full w-full">
       <Map
@@ -85,12 +94,7 @@ const GoogleMap = memo(({ places, id, isSingle }: IGoogleMap) => {
                 key={`${place.id}-${index}`}
                 position={place.location}
                 title={place.name}
-                onClick={() => {
-                  if (map) {
-                    map.panTo(place.location);
-                    map.setZoom(17);
-                  }
-                }}
+                onClick={() => handleMarkerClick(place.location)}
               >
                 {isSingle ? (
                   <Pin
@@ -100,7 +104,7 @@ const GoogleMap = memo(({ places, id, isSingle }: IGoogleMap) => {
                   />
                 ) : (
                   <div className="relative flex items-center justify-center">
-                    <div className="bg-state-error flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-sm font-bold text-white shadow-md transition-transform hover:scale-110 absolute">
+                    <div className="bg-state-error absolute flex h-8 w-8 items-center justify-center rounded-full border-2 border-white text-sm font-bold text-white shadow-md transition-transform hover:scale-110">
                       {index + 1}
                     </div>
                   </div>
