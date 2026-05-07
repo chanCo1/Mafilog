@@ -15,7 +15,7 @@ import {
 } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/Input';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Clock } from 'lucide-react';
 import { useOutsideClick } from '@/shared/hooks/useOutsideClick';
 import { useDropdownDirection } from '@/shared/hooks/useDropdownDirection';
 
@@ -29,7 +29,7 @@ interface ITimePicker extends Omit<
   isRequired?: boolean;
   description?: string;
   errorMsg?: string;
-  prefix?: ReactNode;
+  // prefix?: ReactNode;
   size?: 'md' | 'sm';
   variant?: 'outline' | 'none';
   value: string;
@@ -44,7 +44,7 @@ export default function TimePicker({
   isRequired,
   description,
   errorMsg,
-  prefix,
+  // prefix,
   size = 'md',
   variant = 'outline',
   value,
@@ -127,7 +127,7 @@ export default function TimePicker({
         label={label}
         labelPosition={labelPosition}
         placeholder={props.placeholder}
-        prefix={prefix}
+        prefix={<Clock size={16} />}
         suffix={
           <ChevronDown className={cn('h-4 w-4 stroke-3 transition duration-200', isOpen ? 'rotate-180' : '')} />
         }
