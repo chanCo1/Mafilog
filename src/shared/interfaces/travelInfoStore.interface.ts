@@ -18,6 +18,7 @@ export interface ITravelInfoState {
     travelPartner: TRAVEL_PARTNER;
     cities: IPlaceList[];
     member: string[];
+    dayRange: number;
   };
 }
 
