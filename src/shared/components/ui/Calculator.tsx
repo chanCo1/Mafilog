@@ -5,7 +5,7 @@
  * @description: 계산기 컴포넌트
  */
 
-import { ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState, useEffect, useMemo } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import Selectbox from '@/shared/components/ui/Selectbox';
@@ -24,13 +24,9 @@ interface ICalculator {}
 export default function Calculator() {
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
 
-  const [currencyList, setCurrencyList] = useState<ILabelValue[]>();
   const [selectedCurrency, setSelectedCurrency] = useState<ILabelValue>();
 
   const [inpuNumber, setInputNumber] = useState('');
-  const [result, setResult] = useState(0);
-  const [calcResultCurrency, setCalcResultCurrency] = useState(0);
-  
 
   const { countryData } = useCountriesDataStore();
 
@@ -39,30 +35,38 @@ export default function Calculator() {
     CURRENCY_STANDARD_AMOUNT,
   );
 
+  const currencyList = useMemo(() => {
+    if (!countryData || !travelInfo.cities.length) return [];
+
+    /** 여행중인 나라만 추출 */
+    const travelCountryCodes = Array.from(
+      new Set(travelInfo.cities.map((city) => city.country.code)),
+    );
+
+    const filteredCountries = Object.values(countryData).filter(
+      (country) =>
+        travelCountryCodes.includes(country.code) && country.code !== 'US',
+    );
+
+    /** 미국 데이터, 달러는 항상 포함 */
+    const usaData = countryData['US'];
+
+    const mergeCountries = usaData
+      ? [...filteredCountries, usaData]
+      : filteredCountries;
+
+    // 셀렉트 옵션
+    return mergeCountries.map((country) => ({
+      label: Object.keys(country.currency)[0],
+      value: country.code,
+    }));
+  }, [countryData, travelInfo.cities]);
+
   useEffect(() => {
-    if (countryData) {
-      /** 여행중인 나라의 코드만 추출 */
-      const getCountryCode = travelInfo.cities.map((city) => city.country.code);
-
-      /** 미국 정보 가져오기 */
-      const getUSAdata = countryData['US'];
-
-      const filteredList = Object.values(countryData).filter((value) =>
-        getCountryCode.includes(value.code),
-      );
-
-      /** 미국 데이터와 합치기 */
-      const mergeFilteredListWithUsa = [...filteredList, getUSAdata];
-
-      const countryMap = mergeFilteredListWithUsa.map((list) => ({
-        label: Object.keys(list.currency)[0],
-        value: list.code,
-      }));
-
-      setCurrencyList(countryMap);
-      setSelectedCurrency(countryMap[0]);
+    if (currencyList.length > 0 && !selectedCurrency) {
+      setSelectedCurrency(currencyList[0]);
     }
-  }, [travelInfo.cities]);
+  }, [currencyList]);
 
   /** 숫자 클릭 */
   const handleClickNumber = (num: string) => {
@@ -88,29 +92,26 @@ export default function Calculator() {
   /** 초기화 */
   const handleClear = () => {
     setInputNumber('');
-    setResult(0);
-    setCalcResultCurrency(0)
   };
 
-  useEffect(() => {
-    if (!inpuNumber) {
-      handleClear();
-    };
-
+  /** 입력된 값 계산 */
+  const result = useMemo(() => {
+    if (!inpuNumber) return 0;
     try {
-      // 수식의 끝이 연산자로 끝나지 않을 때만 계산
       const lastChar = inpuNumber.trim().slice(-1);
-      if (inpuNumber && !['+', '-', '*', '/'].includes(lastChar)) {
-        const calculated = evaluate(inpuNumber);
-        setResult(calculated);
+      // 연산자로 끝나지 않을 때만 계산 수행
+      if (!['+', '-', '*', '/'].includes(lastChar)) {
+        return evaluate(inpuNumber);
       }
     } catch (error) {
-      console.log('Calculation Error');
+      console.error('Calculation Error');
     }
+    return 0; // 혹은 이전 result를 유지하도록 처리 가능
   }, [inpuNumber]);
 
-  useEffect(() => {
-    setCalcResultCurrency(result * Number(getCurrency?.convertedWon))
+  /** 입력된 값 환율 계산 */
+  const calcResultCurrency = useMemo(() => {
+    return result * Number(getCurrency?.convertedWon || 0);
   }, [result, getCurrency]);
 
   return (
