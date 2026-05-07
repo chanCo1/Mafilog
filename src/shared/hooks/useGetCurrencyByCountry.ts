@@ -10,6 +10,7 @@ import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useIsMounted } from '@/shared/hooks/useIsMounted';
 import { useFetchCurrency } from '@/shared/hooks/rquery/useFetchCurrency';
 
+/** 국가 코드별 환율 금액 가져오는 훅 */
 export const useGetCurrencyByCountry = (
   countryCode: string | undefined, // 국가 코드
   standardAmount: number = 1000,
@@ -46,6 +47,7 @@ export const useGetCurrencyByCountry = (
       convertedWon, // 1 환율 금액 당 원화
       currencyCode, // 해당 통화 코드
       symbol, // 통화표
+      country: _contry,
     };
   }, [countryCode, isMounted]);
 

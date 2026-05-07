@@ -107,9 +107,9 @@ export default function Selectbox({
             direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
           )}
         >
-          {options.map((option) => (
+          {options.map((option, index) => (
             <li
-              key={option.value}
+              key={`${option.value}-${index}`}
               className={cn(
                 'hover:bg-gray-1 cursor-pointer rounded-md p-1.5',
                 option.value === value?.value

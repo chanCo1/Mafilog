@@ -16,6 +16,7 @@ interface IUseFetchWeather {
   endDate: Date;
 }
 
+/** 날씨 정보 호출 react query */
 export const useFetchWeather = ({
   lat,
   lng,

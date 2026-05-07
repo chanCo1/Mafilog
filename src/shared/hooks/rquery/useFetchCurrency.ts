@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getExchangeRate } from '@/shared/services/currencyService';
 import { convertFormattedDate } from '@/shared/lib/utils';
 
+/** 환율 정보 호출 react query */
 export const useFetchCurrency = (targetCurrencyCode: string = 'KRW') => {
   const query = useQuery({
     queryKey: ['exchangeRate'],
