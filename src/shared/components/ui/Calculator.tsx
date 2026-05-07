@@ -19,9 +19,16 @@ import { useGetCurrencyByCountry } from '@/shared/hooks/useGetCurrencyByCountry'
 import { CURRENCY_STANDARD_AMOUNT } from '@/features/myTravel/constants';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 
-interface ICalculator {}
+interface ICalculator {
+  onChangeValue?: (data: {
+    amount: number; // 지출 금액
+    calcAmount: number; // 한화 금액
+    currencyCode: string; // 선택된 통화
+    exchangeRate: number; // 적용된 환율
+  }) => void;
+}
 
-export default function Calculator() {
+export default function Calculator({ onChangeValue }: ICalculator) {
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
 
   const [selectedCurrency, setSelectedCurrency] = useState<ILabelValue>();
@@ -129,6 +136,15 @@ export default function Calculator() {
   const calcResultCurrency = useMemo(() => {
     return result * Number(getCurrency?.convertedWon || 0);
   }, [result, getCurrency]);
+
+  useEffect(() => {
+    onChangeValue?.({
+      amount: result,
+      calcAmount: calcResultCurrency,
+      currencyCode: getCurrency?.currencyCode || '',
+      exchangeRate: Number(getCurrency?.convertedWon || 0),
+    });
+  }, [result, calcResultCurrency, getCurrency, onChangeValue]);
 
   return (
     <div className="flex flex-col">
