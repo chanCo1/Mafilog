@@ -1,5 +1,5 @@
 /**
- * @file: useTravelExpenseListStore.ts
+ * @file: useTravelExpenseStore.ts
  * @author: chad
  * @since: 2026.05.04 ~
  * @description: 여행 가계부 전역 관리
@@ -14,7 +14,10 @@ import {
   ITravelExpenseGetters,
 } from '@/shared/interfaces/travelExpenseStore.interface';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
-import { IExpense } from '@/shared/interfaces/travelExpenseStore.interface';
+import {
+  IExpense,
+  IExpenseList,
+} from '@/shared/interfaces/travelExpenseStore.interface';
 import { nanoid } from 'nanoid';
 
 type ITravelExpenseStore = ITravelExpenseState &
@@ -25,7 +28,7 @@ const initialState = {
   expenses: [],
 };
 
-export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
+export const useTravelExpenseStore = create<ITravelExpenseStore>()(
   devtools(
     immer((set, get) => ({
       /**
@@ -50,7 +53,7 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
             );
 
             state.expenses = [
-              { day: 0, date: undefined, list: [], dailyExpense: 0 },
+              { day: 0, date: undefined, list: [], dailyExpense: 0 }, // 여행전
               ...newExpenses,
             ];
           },
@@ -68,8 +71,8 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
 
             if (targetDay) {
               targetDay.list.push({
-                id: nanoid(),
                 ...data,
+                id: nanoid(),
               });
             }
           },
@@ -96,9 +99,55 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
         ),
 
       /** 지출 수정 */
-      setUpdateExpense: (data) => set((state) => {
-        
-      }, false, 'expense/setUpdateExpense'),
+      setUpdateExpense: (data) =>
+        set((state) => {}, false, 'expense/setUpdateExpense'),
+
+      /** 지출 선택 이동 */
+      setMoveSelectedExpense: (data) =>
+        set(
+          (state) => {
+            const targetDay = state.expenses.find(
+              (schedule: IExpense) => schedule.day === data.day,
+            );
+
+            if (!targetDay) return;
+
+            const movingItems: IExpenseList[] = [];
+
+            state.expenses.forEach((expense) => {
+              // 해당 날짜의 리스트에서 선택된 id들만 필터링
+              const itemsToMove = expense.list.filter((item) =>
+                data.id.includes(item.id as string),
+              );
+
+              movingItems.push(...itemsToMove);
+
+              // 선택된 id 제거
+              expense.list = expense.list.filter(
+                (item) => !data.id.includes(item.id as string),
+              );
+            });
+
+            const updatedItems = movingItems.map((item) => ({
+              ...item,
+              day: data.day,
+            }));
+
+            targetDay.list.push(...updatedItems);
+          },
+          false,
+          'expense/setMoveSelectedExpense',
+        ),
+
+      /** 지출 선택 삭제 */
+      setDeleteSelectedExpense: (data) =>
+        set(
+          (state) => {
+            console.log(data);
+          },
+          false,
+          'expense/setDeleteSelectedExpense',
+        ),
 
       /** 리셋 */
       reset: () => set(initialState),

@@ -26,7 +26,7 @@ import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Calculator from '@/shared/components/ui/Calculator';
 import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
-import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
+import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { toast } from 'sonner';
 import SelectSpenderType from '@/features/myTravel/components/modal/addExpense/SelectSpenderType';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
@@ -90,13 +90,13 @@ export default function AddExpenseModal({
     to: travelInfo.to,
   });
 
-  const setAddExpenseList = useTravelExpenseListStore(
+  const setAddExpenseList = useTravelExpenseStore(
     (state) => state.setAddExpenseList,
   );
-  const setUpdateExpense = useTravelExpenseListStore(
+  const setUpdateExpense = useTravelExpenseStore(
     (state) => state.setUpdateExpense,
   );
-  const setDeleteExpenseList = useTravelExpenseListStore(
+  const setDeleteExpenseList = useTravelExpenseStore(
     (state) => state.setDeleteExpenseList,
   );
   const { openDialog } = useDialogStore();
@@ -133,7 +133,7 @@ export default function AddExpenseModal({
       name: expenseName,
       spenderType: selectedSpenderType,
       category: selectedCategory,
-      day: selectedDay,
+      day: selectedDay.value as number,
       time: selectedTime,
       memo: inputMemo,
       spender: selectedSepnder,
@@ -158,7 +158,7 @@ export default function AddExpenseModal({
       name: expenseName,
       spenderType: selectedSpenderType,
       category: selectedCategory,
-      day: selectedDay,
+      day: selectedDay.value as number,
       time: selectedTime,
       memo: inputMemo,
       spender: selectedSepnder,
@@ -187,7 +187,7 @@ export default function AddExpenseModal({
       okLabel: '삭제',
       onOk: () => {
         setDeleteExpenseList({
-          day: timeLineData.day.value as number,
+          day: timeLineData.day,
           id: timeLineData?.id as string,
         });
         toast.success(`지출을 삭제했어요`);

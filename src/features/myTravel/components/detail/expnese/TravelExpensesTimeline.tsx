@@ -14,7 +14,7 @@ import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTime
 import { EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import { toast } from 'sonner';
-import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
+import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 
@@ -30,7 +30,7 @@ export default function TravelExpensesTimeline({
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
 
   const { selectedExpenses, toggleSelect } = useSelectExpenses();
-  const setDeleteExpenseList = useTravelExpenseListStore(
+  const setDeleteExpenseList = useTravelExpenseStore(
     (state) => state.setDeleteExpenseList,
   );
   const { openDialog } = useDialogStore();
@@ -52,7 +52,7 @@ export default function TravelExpensesTimeline({
       okLabel: '삭제',
       onOk: () => {
         setDeleteExpenseList({
-          day: timeLineData.day.value as number,
+          day: timeLineData.day as number,
           id: timeLineData?.id as string,
         });
         toast.success(`지출을 삭제했어요`);

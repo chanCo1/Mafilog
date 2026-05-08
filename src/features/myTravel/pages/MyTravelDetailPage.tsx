@@ -34,7 +34,7 @@ import LocalInfoModal from '@/features/myTravel/components/modal/LocalInfoModal'
 import CheckListModal from '@/features/myTravel/components/modal/CheckListModal';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
-import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
+import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 
 // interface IMyTravelDetailPage {}
 
@@ -47,7 +47,7 @@ export default function MyTravelDetailPage() {
   const setInitSchedules = useTravelScheduleStore(
     (state) => state.setInitSchedules,
   );
-  const setInitExpense = useTravelExpenseListStore(
+  const setInitExpense = useTravelExpenseStore(
     (state) => state.setInitExpense,
   );
   const setInitCheckList = useTravelCheckListStore(
