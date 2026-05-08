@@ -149,7 +149,7 @@ export default function FileUpload({
                 className="rounded-lg object-cover"
               />
               <div className="absolute flex w-full justify-between p-2">
-                <div className="bg-gray-8 rounded-md p-2 text-sm text-white">
+                <div className="bg-gray-8 rounded-md px-2 py-1 text-sm text-white">
                   대표
                 </div>
                 <CategoryIcon
