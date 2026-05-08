@@ -27,8 +27,13 @@ export const EXPENSE_CATEGORY_LIST = [
   { label: '기타', value: EXPENSES_CATEGORY_TYPE.ETC },
 ];
 
+export const TRAVEL_EXPENSE_BEFORE = {
+  label: '여행전',
+  value: 0,
+};
+
 /** 지출 기본 일정 (모든날, 여행전) */
 export const TRAVEL_EXPENSES_BEFORE_LIST = [
   { label: '모든날', value: 'all' },
-  { label: '여행전', value: 'before' },
+  TRAVEL_EXPENSE_BEFORE,
 ];

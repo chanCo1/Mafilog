@@ -21,6 +21,7 @@ import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import Dropdown from '@/shared/components/ui/Dropdown';
 import { ILabelValue } from '@/shared/interfaces';
+import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.constant';
 
 interface ITravelExpensesView {
   from: Date;
@@ -88,7 +89,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
                       </Button>
                     }
                   >
-                    {[{ label: '여행전', value: 0 }, ...travelDaysList].map(
+                    {[TRAVEL_EXPENSE_BEFORE, ...travelDaysList].map(
                       (list) => (
                         <span
                           key={list.value}

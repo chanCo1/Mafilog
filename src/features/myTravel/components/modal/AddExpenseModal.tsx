@@ -30,6 +30,7 @@ import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { toast } from 'sonner';
 import SelectSpenderType from '@/features/myTravel/components/modal/addExpense/SelectSpenderType';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.constant';
 interface IAddExpenseModal {
   isModify?: boolean;
   isOpen: boolean;
@@ -105,7 +106,7 @@ export default function AddExpenseModal({
     if (!isOpen) return;
 
     if (isModify) {
-      console.log('t수정')
+      console.log('t수정');
     } else {
       if (travelInfo) {
         setSelectedDay(travelDaysList?.[0]);
@@ -323,7 +324,7 @@ export default function AddExpenseModal({
             <Selectbox
               label="지출 일"
               isRequired
-              options={[{ label: '여행전', value: 0 }, ...travelDaysList]}
+              options={[TRAVEL_EXPENSE_BEFORE, ...travelDaysList]}
               className="w-3/5"
               value={selectedDay}
               onChange={(value) => setSelectedDay(value)}
