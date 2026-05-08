@@ -115,24 +115,22 @@ export default function AddExpenseModal({
   const handleAddExpense = () => {
     if (!expenseName) return;
 
-    try {
-      setAddExpenseList({
-        name: expenseName,
-        spenderType: selectedSpenderType,
-        category: selectedCategory,
-        day: selectedDay,
-        time: selectedTime,
-        memo: inputMemo,
-        spender: selectedSepnder,
-        payer: selectedPayer,
-        paymentType: selectedPaymentType,
-        amount: expenseAmount,
-        calcExchangeAmount: calcExchangeAmount,
-        exchangeRate: selectedExchangeRate,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    const saveData = {
+      name: expenseName,
+      spenderType: selectedSpenderType,
+      category: selectedCategory,
+      day: selectedDay,
+      time: selectedTime,
+      memo: inputMemo,
+      spender: selectedSepnder,
+      payer: selectedPayer,
+      paymentType: selectedPaymentType,
+      amount: expenseAmount,
+      calcExchangeAmount: calcExchangeAmount,
+      exchangeRate: selectedExchangeRate,
+    };
+
+    setAddExpenseList(saveData);
 
     onClickCloseBtn();
     toast.success('지출을 추가했어요');
@@ -170,6 +168,8 @@ export default function AddExpenseModal({
     [],
   );
 
+  const isDisabled = !expenseName || !selectedPayer.value || !selectedSepnder.length || !expenseAmount;
+
   return (
     <SideModal
       isOpen={isOpen}
@@ -180,7 +180,7 @@ export default function AddExpenseModal({
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={false} onClick={handleAddExpense}>
+          <Button disabled={isDisabled} onClick={handleAddExpense}>
             지출 추가
           </Button>
         </>

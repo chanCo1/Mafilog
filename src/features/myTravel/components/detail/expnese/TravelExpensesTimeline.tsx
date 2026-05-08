@@ -11,6 +11,7 @@ import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
+import { EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
 
 interface ITravelExpensesTimeline {
   timeLineData?: IExpenseList;
@@ -42,11 +43,11 @@ export default function TravelExpensesTimeline({
     if (!type || spender.length === 0) return '';
 
     switch (type) {
-      case 'self':
+      case EXPENSES_SPENDER_TYPE.SELF:
         return spender[0]?.label || '';
-      case 'split':
+      case EXPENSES_SPENDER_TYPE.SPLIT:
         return '1/N';
-      case 'assign':
+      case EXPENSES_SPENDER_TYPE.ASSIGN:
         return spender.map((_spender) => _spender.label).join(', ');
       default:
         return '';
