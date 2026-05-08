@@ -15,6 +15,7 @@ import {
 } from '@/shared/interfaces/travelExpenseStore.interface';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
 import { IExpense } from '@/shared/interfaces/travelExpenseStore.interface';
+import { nanoid } from 'nanoid';
 
 type ITravelExpenseStore = ITravelExpenseState &
   ITravelExpenseActions &
@@ -67,7 +68,7 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
 
             if (targetDay) {
               targetDay.list.push({
-                id: crypto.randomUUID(),
+                id: nanoid(),
                 ...data,
               });
             }
@@ -86,7 +87,7 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
 
             if (targetExpense) {
               targetExpense.list = targetExpense.list.filter(
-                (_, index) => index !== data.index,
+                (list) => list.id !== data.id,
               );
             }
           },
