@@ -36,7 +36,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
   const [isOpenAddExpenseModal, setIsOpenAddExpneseModal] = useState(false);
 
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const expense = useTravelExpenseListStore((state) => state.expense);
+  const expenses = useTravelExpenseListStore((state) => state.expenses);
   const { clearSelectedExpenses } = useSelectExpenses();
 
   const travelDaysList = useTravelDaysList({
@@ -100,7 +100,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
         }
         dayTimelines={
           <>
-            {expense.map((_day, index) => (
+            {expenses.map((_day, index) => (
               <TravelExpensesDay
                 key={`${_day.day}-${index}`}
                 day={_day.day}
@@ -125,7 +125,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
                 {list.label}
               </Chip>
             ))}
-            {expense.map((_day, index) => {
+            {expenses.map((_day, index) => {
               if (_day.day === 0) return;
               return (
                 <Chip

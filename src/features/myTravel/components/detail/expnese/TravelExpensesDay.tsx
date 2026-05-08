@@ -69,7 +69,7 @@ export default function TravelExpensesDay({
                 key={`${_data?.id}-${index}`}
                 timeLineData={_data}
                 // dailyAllSchedule={list}
-                // currentIndex={index}
+                currentIndex={index}
                 day={day}
                 selectMode={selectMode}
               />

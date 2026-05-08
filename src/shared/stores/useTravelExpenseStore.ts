@@ -21,7 +21,7 @@ type ITravelExpenseStore = ITravelExpenseState &
   ITravelExpenseGetters;
 
 const initialState = {
-  expense: [],
+  expenses: [],
 };
 
 export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
@@ -30,7 +30,7 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
       /**
        * @States
        */
-      expense: initialState['expense'],
+      expenses: initialState['expenses'],
 
       /**
        * @Actions
@@ -48,7 +48,7 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
               }),
             );
 
-            state.expense = [
+            state.expenses = [
               { day: 0, date: undefined, list: [], dailyExpense: 0 },
               ...newExpenses,
             ];
@@ -59,18 +59,40 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
 
       /** 지출 추가 */
       setAddExpenseList: (data) =>
-        set((state) => {
-          const targetDay = state.expense.find(
-            (expense: IExpense) => expense.day === data.day.value,
-          );
+        set(
+          (state) => {
+            const targetDay = state.expenses.find(
+              (expense: IExpense) => expense.day === data.day.value,
+            );
 
-          if (targetDay) {
-            targetDay.list.push({
-              id: crypto.randomUUID(),
-              ...data,
-            });
-          }
-        }),
+            if (targetDay) {
+              targetDay.list.push({
+                id: crypto.randomUUID(),
+                ...data,
+              });
+            }
+          },
+          false,
+          'travel/setAddExpenseList',
+        ),
+
+      /** 지출 제거 */
+      setDeleteExpenseList: (data) =>
+        set(
+          (state) => {
+            const targetExpense = state.expenses.find(
+              (schedule: IExpense) => schedule.day === data.day,
+            );
+
+            if (targetExpense) {
+              targetExpense.list = targetExpense.list.filter(
+                (_, index) => index !== data.index,
+              );
+            }
+          },
+          false,
+          'travel/setDeleteExpenseList',
+        ),
 
       /** 리셋 */
       reset: () => set(initialState),
@@ -78,7 +100,7 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
       /**
        * @Getters
        */
-      getTravelInfo: () => get().expense,
+      getTravelInfo: () => get().expenses,
     })),
     { name: 'expense' },
   ),

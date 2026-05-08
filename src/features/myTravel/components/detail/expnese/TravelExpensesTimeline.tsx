@@ -13,11 +13,14 @@ import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 import { EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
+import { toast } from 'sonner';
+import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
 
 interface ITravelExpensesTimeline {
   timeLineData?: IExpenseList;
   // dailyAllSchedule?: IExpenseList[];
-  // currentIndex?: number;
+  currentIndex?: number;
   day?: number;
   selectMode?: boolean;
 }
@@ -25,23 +28,39 @@ interface ITravelExpensesTimeline {
 export default function TravelExpensesTimeline({
   timeLineData,
   // dailyAllSchedule,
-  // currentIndex,
+  currentIndex,
   day,
   selectMode,
 }: ITravelExpensesTimeline) {
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
 
   const { selectedExpenses, toggleSelect } = useSelectExpenses();
+  const setDeleteExpenseList = useTravelExpenseListStore(
+    (state) => state.setDeleteExpenseList,
+  );
+  const { openDialog } = useDialogStore();
 
   const isSelected = selectedExpenses.some(
     (expense) => expense.id === timeLineData?.id,
   );
 
-  /** 일정 삭제 핸들러 */
+  /** 지출 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
     e.stopPropagation();
-    console.log('삭제!!!');
+    e.preventDefault();
+
+    if (day === undefined || currentIndex === undefined) return;
+
+    openDialog({
+      message: '지출을 삭제할까요?',
+      type:'confirm',
+      okLabel: '삭제',
+      onOk: () => {
+        setDeleteExpenseList({ day, index: currentIndex });
+        toast.success(`지출을 삭제했어요`);
+      }
+    })
+
   };
 
   const onClickCard = () => {

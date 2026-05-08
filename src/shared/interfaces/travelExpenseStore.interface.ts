@@ -7,7 +7,7 @@ import {
 
 /** 여행 상세 전역 인터페이스 (state) */
 export interface ITravelExpenseState {
-  expense: IExpense[];
+  expenses: IExpense[];
 }
 
 /** 가계부 리스트 */
@@ -46,6 +46,7 @@ export interface IDateFromTo {
 export interface ITravelExpenseActions {
   setInitExpense: (date: IDateFromTo) => void;
   setAddExpenseList: (data: IExpenseList & { day: ILabelValue }) => void;
+  setDeleteExpenseList: (data: { day: number; index: number }) => void;
   reset: () => void;
 }
 

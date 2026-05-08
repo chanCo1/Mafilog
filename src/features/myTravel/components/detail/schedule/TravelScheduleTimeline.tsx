@@ -58,11 +58,7 @@ export default function TravelScheduleTimeline({
     if (day === undefined || currentIndex === undefined) return;
     const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
-    try {
-      setDeleteScheduleList({ day, index: currentIndex });
-    } catch (error) {
-      console.log(error);
-    }
+    setDeleteScheduleList({ day, index: currentIndex });
 
     toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
   };
