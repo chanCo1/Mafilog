@@ -93,15 +93,23 @@ export default function TravelExpensesTimeline({
                   ({convertComma(timeLineData.calcExchangeAmount ?? 0)}원)
                 </span>
               </div>
-              <p className="text-lg font-bold">{timeLineData.name}</p>
+              <p className="font-bold">{timeLineData.name}</p>
               <div className="text-text-secondary text-sm">
-                <span className="font-bold">결제: </span>
-                <span>
-                  {timeLineData.payer.label} · {getPaymetTypeLabel}
-                </span>
-                <span> / </span>
-                <span className="font-bold">지출: </span>
-                <span>{getSpender}</span>
+                {getPaymetTypeLabel && (
+                  <>
+                    <span className="font-bold">결제: </span>
+                    <span>
+                      {timeLineData.payer.label} · {getPaymetTypeLabel}
+                    </span>
+                  </>
+                )}
+                {getSpender && (
+                  <>
+                    <span> / </span>
+                    <span className="font-bold">지출: </span>
+                    <span>{getSpender}</span>
+                  </>
+                )}
               </div>
             </div>
           </TravelTimelineCard>

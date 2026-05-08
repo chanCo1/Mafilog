@@ -92,12 +92,14 @@ export default function PlaceDeatilModal({
       <div className="flex h-full flex-col gap-2">
         {data?.place && (
           <div className="mb-4 flex flex-col gap-1">
-            <p>
-              {data.place.address} | {data.place.country.name}
-            </p>
-            <span className="text-text-secondary">
-              {getPlaceCategory(data.place.types)}
-            </span>
+            <p>{data.place.address}</p>
+            <div className="text-text-secondary flex gap-1">
+              <span>
+                {data.place.country.name}
+              </span>
+              <span className='text-gray-2'> | </span>
+              <span>{getPlaceCategory(data.place.types)}</span>
+            </div>
           </div>
         )}
         <div className="flex gap-1">

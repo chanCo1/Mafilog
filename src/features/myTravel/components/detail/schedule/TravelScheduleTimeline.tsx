@@ -10,7 +10,6 @@ import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
-import { Button } from '@/shared/components/ui/Button';
 import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { toast } from 'sonner';
@@ -106,12 +105,14 @@ export default function TravelScheduleTimeline({
                   <span className="text-lg font-bold">
                     {timeLineData.place?.name}
                   </span>
-                  <span className="text-text-secondary text-sm">
-                    {<>{getPlaceCategory(_place?.types!)}</>}
-                    {_place?.country.name && (
-                      <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
-                    )}
-                  </span>
+                  {_place && (
+                    <span className="text-text-secondary text-sm">
+                      {<>{getPlaceCategory(_place.types)}</>}
+                      {_place.country.name && (
+                        <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
+                      )}
+                    </span>
+                  )}
                 </div>
               </TravelTimelineCard>
             ) : (
