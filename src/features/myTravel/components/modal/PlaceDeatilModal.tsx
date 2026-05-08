@@ -19,6 +19,7 @@ import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TimePicker from '@/shared/components/ui/TimePicker';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
 
 interface IPlaceDeatilModal {
   isOpen: boolean;
@@ -41,6 +42,7 @@ export default function PlaceDeatilModal({
     from: travelInfo.from,
     to: travelInfo.to,
   });
+  const { openDialog } = useDialogStore();
 
   /** 일정 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>(
@@ -54,6 +56,24 @@ export default function PlaceDeatilModal({
   const onClickCloseBtn = () => {
     handleClose();
     resetData();
+  };
+
+  /** 일정 삭제 핸들러 */
+  const handleDeleteSchedule = () => {
+    if (timeLineData?.day === undefined) return;
+
+    openDialog({
+      message: `${isPlace ? '장소' : '메모'}를 삭제할까요?`,
+      type: 'confirm',
+      okLabel: '삭제',
+      onOk: () => {
+        setDeleteScheduleList({
+          day: timeLineData.day.value as number,
+          id: timeLineData?.id as string,
+        });
+        toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
+      },
+    });
   };
 
   const resetData = useCallback(() => {
@@ -77,7 +97,7 @@ export default function PlaceDeatilModal({
       handleClose={onClickCloseBtn}
       footer={
         <div className="flex w-full justify-between">
-          <Button variant="redOutline">삭제</Button>
+          <Button variant="redOutline" onClick={handleDeleteSchedule}>삭제</Button>
           <div className="flex gap-1">
             <Button variant="gray" onClick={onClickCloseBtn}>
               취소

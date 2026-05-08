@@ -171,7 +171,7 @@ export default function Calculator({ onChangeValue }: ICalculator) {
         </div>
         <div className="text-text-secondary flex items-center justify-between text-sm font-bold">
           <span>{`환율 (${getCurrency?.currencyCode} 1 = KRW ${getCurrency?.convertedWon})`}</span>
-          <span>{convertComma(calcResultCurrency)}</span>
+          <span>{convertComma(calcResultCurrency)}원</span>
         </div>
       </Card>
 

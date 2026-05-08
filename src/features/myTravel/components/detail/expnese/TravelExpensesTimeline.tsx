@@ -40,7 +40,7 @@ export default function TravelExpensesTimeline({
   );
 
   /** 지출 삭제 핸들러 */
-  const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleDeleteExpense = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
 
@@ -102,7 +102,7 @@ export default function TravelExpensesTimeline({
             time={timeLineData.time!}
             memo={timeLineData.memo!}
             onClickCard={onClickCard}
-            onClickDelete={(e) => handleDeleteSchedule(e)}
+            onClickDelete={(e) => handleDeleteExpense(e)}
             selectMode={selectMode!}
             isSelected={isSelected}
           >

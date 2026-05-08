@@ -6,6 +6,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { cn } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
@@ -28,10 +29,11 @@ import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
 import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
 import { toast } from 'sonner';
 import SelectSpenderType from '@/features/myTravel/components/modal/addExpense/SelectSpenderType';
-
+import { useDialogStore } from '@/shared/stores/useDialogStore';
 interface IAddExpenseModal {
   isModify?: boolean;
   isOpen: boolean;
+  timeLineData?: IExpenseList;
   handleClose: () => void;
 }
 
@@ -39,17 +41,8 @@ export default function AddExpenseModal({
   isModify = false,
   isOpen,
   handleClose,
+  timeLineData,
 }: IAddExpenseModal) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
-
-  const setAddExpenseList = useTravelExpenseListStore(
-    (state) => state.setAddExpenseList,
-  );
-
   /** 지출 명 */
   const [expenseName, setExpenseName] = useState('');
   /** 지출 방식 */
@@ -72,7 +65,6 @@ export default function AddExpenseModal({
   const [selectedTime, setSelectedTime] = useState('');
   /** 메모 */
   const [inputMemo, setInputMemo] = useState('');
-
   /** 결제자 */
   const [selectedPayer, setSelectPayer] = useState<ILabelValue>({
     label: '',
@@ -80,7 +72,6 @@ export default function AddExpenseModal({
   });
   /** 지출자 */
   const [selectedSepnder, setSelectedSepnder] = useState<ILabelValue[]>([]);
-
   /** 환율 정보 */
   const [selectedExchangeRate, setSelectedExchangeRate] = useState<
     IExpenseList['exchangeRate']
@@ -92,6 +83,20 @@ export default function AddExpenseModal({
   const [expenseAmount, setExpenseAmount] = useState(0);
   /** 지출 환율 금액 */
   const [calcExchangeAmount, setCalcExchangeAmount] = useState(0);
+
+  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const travelDaysList = useTravelDaysList({
+    from: travelInfo.from,
+    to: travelInfo.to,
+  });
+
+  const setAddExpenseList = useTravelExpenseListStore(
+    (state) => state.setAddExpenseList,
+  );
+  const setDeleteExpenseList = useTravelExpenseListStore(
+    (state) => state.setDeleteExpenseList,
+  );
+  const { openDialog } = useDialogStore();
 
   useEffect(() => {
     if (isOpen && travelInfo) {
@@ -136,6 +141,24 @@ export default function AddExpenseModal({
     toast.success('지출을 추가했어요');
   };
 
+  /** 지출 삭제 핸들러 */
+  const handleDeleteExpense = () => {
+    if (timeLineData?.day === undefined) return;
+
+    openDialog({
+      message: '지출을 삭제할까요?',
+      type: 'confirm',
+      okLabel: '삭제',
+      onOk: () => {
+        setDeleteExpenseList({
+          day: timeLineData.day.value as number,
+          id: timeLineData?.id as string,
+        });
+        toast.success(`지출을 삭제했어요`);
+      },
+    });
+  };
+
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
     handleClose();
@@ -168,22 +191,38 @@ export default function AddExpenseModal({
     [],
   );
 
-  const isDisabled = !expenseName || !selectedPayer.value || !selectedSepnder.length || !expenseAmount;
+  const isDisabled =
+    !expenseName ||
+    !selectedPayer.value ||
+    !selectedSepnder.length ||
+    !expenseAmount;
 
   return (
     <SideModal
       isOpen={isOpen}
-      title="지출 내역 추가"
+      title={`지출 내역 ${isModify ? '수정' : '추가'}`}
       handleClose={onClickCloseBtn}
       footer={
-        <>
-          <Button variant="gray" onClick={onClickCloseBtn}>
-            취소
-          </Button>
-          <Button disabled={isDisabled} onClick={handleAddExpense}>
-            지출 추가
-          </Button>
-        </>
+        <div
+          className={cn(
+            'flex w-full',
+            isModify ? 'justify-between' : 'justify-end',
+          )}
+        >
+          {isModify && (
+            <Button variant="redOutline" onClick={handleDeleteExpense}>
+              삭제
+            </Button>
+          )}
+          <div className="flex gap-1">
+            <Button variant="gray" onClick={onClickCloseBtn}>
+              취소
+            </Button>
+            <Button disabled={isDisabled} onClick={handleAddExpense}>
+              지출 추가
+            </Button>
+          </div>
+        </div>
       }
     >
       <div className="flex h-full flex-col gap-2">
