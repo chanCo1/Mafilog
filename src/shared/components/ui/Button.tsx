@@ -17,8 +17,8 @@ const buttonVariants = cva('flex gap-1 cursor-pointer font-bold rounded-md items
       secondary: 'bg-secondary',
       gray: 'bg-gray-2 text-text-primary',
       ghost: 'hover:bg-gray-1 text-text-primary',
-      primaryOutline: 'bg-white border border-priamry text-primary',
-      redOutline: 'bg-white border border-state-error text-state-error',
+      primaryOutline: 'bg-white ring ring-inset ring-priamry text-primary',
+      redOutline: 'bg-white ring ring-inset ring-state-error text-state-error',
       none: 'bg-transparent text-text-primary',
     },
     size: {
@@ -68,7 +68,7 @@ function ButtonEntity(
       {...props}
     >
       {/* 로딩 상태일 경우 노출 */}
-      {isLoading && <Loader2 className="h-4 w-4 animate-spin py-" />}
+      {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
       {/* prefix가 있고 로딩 상태가 아닐 때 노출 */}
       {prefix && !isLoading && (
           <span className="flex items-center">{prefix}</span>

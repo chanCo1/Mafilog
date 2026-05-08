@@ -18,7 +18,7 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        outline: 'border-1 border-border-secondary rounded-md',
+        outline: 'border border-border-secondary rounded-md',
         none: 'border-none',
       },
       size: {
