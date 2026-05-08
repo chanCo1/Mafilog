@@ -80,9 +80,7 @@ function TravelScheduleView() {
                     {travelDaysList.map((list) => (
                       <span
                         key={list.value}
-                        className={cn(
-                          'hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5',
-                        )}
+                        className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
                         onClick={() => console.log(list)}
                       >
                         {list.label}
@@ -103,7 +101,7 @@ function TravelScheduleView() {
                     메모 추가
                   </Button>
                   <Button
-                    className='w-35'
+                    className="w-35"
                     variant="secondary"
                     size="sm"
                     onClick={() => setIsOpenAddPlaceModal(true)}

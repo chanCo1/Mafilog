@@ -16,6 +16,10 @@ import TravelExpensesSpendCard from '@/features/myTravel/components/detail/expne
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 import { TRAVEL_EXPENSES_BEFORE_LIST } from '@/features/myTravel/constants/expense.constant';
 import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
+import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
+import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
+import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
+import Dropdown from '@/shared/components/ui/Dropdown';
 
 interface ITravelExpensesView {
   from: Date;
@@ -29,27 +33,69 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
   );
   /** 선택 수정 모드 */
   const [selectModifyMode, setSelectModifyMode] = useState(false);
-
   const [isOpenAddExpenseModal, setIsOpenAddExpneseModal] = useState(false);
 
+  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
   const expense = useTravelExpenseListStore((state) => state.expense);
+  const { clearSelectedExpenses } = useSelectExpenses();
+
+  const travelDaysList = useTravelDaysList({
+    from: travelInfo.from,
+    to: travelInfo.to,
+  });
+
+  const handleModifyMode = () => {
+    if (selectModifyMode) {
+      setSelectModifyMode(false);
+      clearSelectedExpenses();
+    } else {
+      setSelectModifyMode(true);
+    }
+  };
 
   return (
     <>
       <TravelDetailTemplate
         handleButtons={
           <>
-            <Button variant="gray" size="sm">
-              선택 수정
+            <Button variant="gray" size="sm" onClick={handleModifyMode}>
+              {selectModifyMode ? '돌아가기' : '선택 수정'}
             </Button>
-            <Button
-              className='w-35'
-              variant="secondary"
-              size="sm"
-              onClick={() => setIsOpenAddExpneseModal(true)}
-            >
-              지출 추가
-            </Button>
+            <div className="flex gap-1">
+              {selectModifyMode ? (
+                <>
+                  <Dropdown
+                    trigger={
+                      <Button variant="gray" size="sm">
+                        선택 날짜 이동
+                      </Button>
+                    }
+                  >
+                    {travelDaysList.map((list) => (
+                      <span
+                        key={list.value}
+                        className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
+                        onClick={() => console.log(list)}
+                      >
+                        {list.label}
+                      </span>
+                    ))}
+                  </Dropdown>
+                  <Button variant="redOutline" size="sm">
+                    선택 삭제
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  className="w-35"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setIsOpenAddExpneseModal(true)}
+                >
+                  지출 추가
+                </Button>
+              )}
+            </div>
           </>
         }
         dayTimelines={

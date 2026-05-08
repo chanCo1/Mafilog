@@ -46,7 +46,9 @@ export default function TravelScheduleTimeline({
 
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
 
-  const isSelected = selectedSchedules.some((s) => s.id === timeLineData?.id);
+  const isSelected = selectedSchedules.some(
+    (schedule) => schedule.id === timeLineData?.id,
+  );
 
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {

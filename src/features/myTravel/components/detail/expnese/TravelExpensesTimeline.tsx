@@ -5,34 +5,51 @@
  * @description: TravelExpensesTimeline 컴포넌트, 가계부 지출 리스트 카드
  */
 
-import { MouseEvent, useMemo } from 'react';
+import { MouseEvent, useMemo, useState } from 'react';
 import { convertComma, convertPaymentType } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 import { EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
+import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 
 interface ITravelExpensesTimeline {
   timeLineData?: IExpenseList;
-  dailyAllSchedule?: IExpenseList[];
-  currentIndex?: number;
+  // dailyAllSchedule?: IExpenseList[];
+  // currentIndex?: number;
   day?: number;
   selectMode?: boolean;
 }
 
 export default function TravelExpensesTimeline({
   timeLineData,
-  dailyAllSchedule,
-  currentIndex,
+  // dailyAllSchedule,
+  // currentIndex,
   day,
   selectMode,
 }: ITravelExpensesTimeline) {
+  const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
+
+  const { selectedExpenses, toggleSelect } = useSelectExpenses();
+
+  const isSelected = selectedExpenses.some(
+    (expense) => expense.id === timeLineData?.id,
+  );
+
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     console.log('삭제!!!');
+  };
+
+  const onClickCard = () => {
+    if (selectMode && timeLineData) {
+      toggleSelect(timeLineData); // 선택 모드일 땐 토글만
+    } else {
+      setIsOpenDatilModal(true); // 아닐 땐 모달
+    }
   };
 
   /** 지출자 가져오기 */
@@ -68,10 +85,10 @@ export default function TravelExpensesTimeline({
           <TravelTimelineCard
             time={timeLineData.time!}
             memo={timeLineData.memo!}
-            // onClickCard={onClickCard}
+            onClickCard={onClickCard}
             onClickDelete={(e) => handleDeleteSchedule(e)}
             selectMode={selectMode!}
-            // isSelected={isSelected}
+            isSelected={isSelected}
           >
             <div className="flex flex-col">
               <div className="flex items-baseline gap-1">
