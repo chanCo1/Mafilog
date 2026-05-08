@@ -20,7 +20,7 @@ export interface IExpense {
 
 /** 지출 정보 */
 export interface IExpenseList {
-  id?: string;
+  id: string;
   name: string; // 지출명
   spenderType: EXPENSES_SPENDER_TYPE;
   category: EXPENSES_CATEGORY_TYPE;
@@ -35,7 +35,7 @@ export interface IExpenseList {
   spender: ILabelValue[]; // 지출자
   time?: string;
   memo?: string;
-  day: ILabelValue;
+  day: number;
 }
 
 export interface IDateFromTo {
@@ -46,9 +46,11 @@ export interface IDateFromTo {
 /** 여행 가계부 전역 인터페이스 (actions) */
 export interface ITravelExpenseActions {
   setInitExpense: (date: IDateFromTo) => void;
-  setAddExpenseList: (data: IExpenseList & { day: ILabelValue }) => void;
+  setAddExpenseList: (data: IExpenseList & { day: number }) => void;
   setDeleteExpenseList: (data: { day: number; id: string | number }) => void;
-  setUpdateExpense: (data: IExpenseList & { day: ILabelValue }) => void;
+  setUpdateExpense: (data: IExpenseList & { day: number }) => void;
+  setMoveSelectedExpense: (data: { day: number; id: string[] }) => void;
+  setDeleteSelectedExpense: (id: string[]) => void;
   reset: () => void;
 }
 

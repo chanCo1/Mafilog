@@ -66,7 +66,7 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
         set(
           (state) => {
             const targetDay = state.expenses.find(
-              (expense: IExpense) => expense.day === data.day.value,
+              (expense: IExpense) => expense.day === data.day,
             );
 
             if (targetDay) {
@@ -117,14 +117,14 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
             state.expenses.forEach((expense) => {
               // 해당 날짜의 리스트에서 선택된 id들만 필터링
               const itemsToMove = expense.list.filter((item) =>
-                data.id.includes(item.id as string),
+                data.id.includes(item.id),
               );
 
               movingItems.push(...itemsToMove);
 
               // 선택된 id 제거
               expense.list = expense.list.filter(
-                (item) => !data.id.includes(item.id as string),
+                (item) => !data.id.includes(item.id),
               );
             });
 

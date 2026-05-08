@@ -130,6 +130,7 @@ export default function AddExpenseModal({
     if (!expenseName) return;
 
     const saveData = {
+      id: '',
       name: expenseName,
       spenderType: selectedSpenderType,
       category: selectedCategory,
@@ -155,6 +156,7 @@ export default function AddExpenseModal({
     if (!expenseName) return;
 
     const updateData = {
+      id: '',
       name: expenseName,
       spenderType: selectedSpenderType,
       category: selectedCategory,

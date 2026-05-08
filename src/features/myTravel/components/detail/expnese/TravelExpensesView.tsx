@@ -15,11 +15,12 @@ import { Card } from '@/shared/components/ui/Card';
 import TravelExpensesSpendCard from '@/features/myTravel/components/detail/expnese/TravelExpensesSpendCard';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 import { TRAVEL_EXPENSES_BEFORE_LIST } from '@/features/myTravel/constants/expense.constant';
-import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
+import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import Dropdown from '@/shared/components/ui/Dropdown';
+import { ILabelValue } from '@/shared/interfaces';
 
 interface ITravelExpensesView {
   from: Date;
@@ -36,7 +37,10 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
   const [isOpenAddExpenseModal, setIsOpenAddExpneseModal] = useState(false);
 
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const expenses = useTravelExpenseListStore((state) => state.expenses);
+  const expenses = useTravelExpenseStore((state) => state.expenses);
+  const { setDeleteSelectedExpense, setMoveSelectedExpense } =
+    useTravelExpenseStore();
+  const selectedExpenses = useSelectExpenses((state) => state.selectedExpenses);
   const { clearSelectedExpenses } = useSelectExpenses();
 
   const travelDaysList = useTravelDaysList({
@@ -44,6 +48,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
     to: travelInfo.to,
   });
 
+  /** 선택 수정 모드인지에 따라 핸들링 */
   const handleModifyMode = () => {
     if (selectModifyMode) {
       setSelectModifyMode(false);
@@ -51,6 +56,18 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
     } else {
       setSelectModifyMode(true);
     }
+  };
+
+  /** 선택 이동 */
+  const handelMoveSelectedExpense = (day: ILabelValue) => {
+    const getExpenseId = selectedExpenses.map((expense) => expense.id);
+    setMoveSelectedExpense({ day: day.value as number, id: getExpenseId });
+    clearSelectedExpenses();
+  };
+  /** 선택 삭제 */
+  const handleDeleteSelectedExpense = () => {
+    const getExpenseId = selectedExpenses.map((expense) => expense.id);
+    setDeleteSelectedExpense(getExpenseId);
   };
 
   return (
@@ -71,17 +88,23 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
                       </Button>
                     }
                   >
-                    {travelDaysList.map((list) => (
-                      <span
-                        key={list.value}
-                        className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
-                        onClick={() => console.log(list)}
-                      >
-                        {list.label}
-                      </span>
-                    ))}
+                    {[{ label: '여행전', value: 0 }, ...travelDaysList].map(
+                      (list) => (
+                        <span
+                          key={list.value}
+                          className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
+                          onClick={() => handelMoveSelectedExpense(list)}
+                        >
+                          {list.label}
+                        </span>
+                      ),
+                    )}
                   </Dropdown>
-                  <Button variant="redOutline" size="sm">
+                  <Button
+                    variant="redOutline"
+                    size="sm"
+                    onClick={() => handleDeleteSelectedExpense()}
+                  >
                     선택 삭제
                   </Button>
                 </>
