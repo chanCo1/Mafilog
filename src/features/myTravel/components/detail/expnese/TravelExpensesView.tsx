@@ -8,7 +8,6 @@
 import { memo, useState } from 'react';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
-import { getTravelDay } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import TravelExpensesDay from '@/features/myTravel/components/detail/expnese/TravelExpensesDay';
 import { Card } from '@/shared/components/ui/Card';
@@ -22,13 +21,12 @@ import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import Dropdown from '@/shared/components/ui/Dropdown';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.constant';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { toast } from 'sonner';
 
-interface ITravelExpensesView {
-  from: Date;
-  to: Date;
-}
+// interface ITravelExpensesView {}
 
-function TravelExpensesView({ from, to }: ITravelExpensesView) {
+function TravelExpensesView() {
   /** 지출일 선택 */
   const [selectedDay, setSelectedDay] = useState<string | number>(
     TRAVEL_EXPENSES_BEFORE_LIST[0].value,
@@ -49,6 +47,8 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
     to: travelInfo.to,
   });
 
+  const { openDialog } = useDialogStore();
+
   /** 선택 수정 모드인지에 따라 핸들링 */
   const handleModifyMode = () => {
     if (selectModifyMode) {
@@ -65,10 +65,21 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
     setMoveSelectedExpense({ day: day.value as number, id: getExpenseId });
     clearSelectedExpenses();
   };
+
   /** 선택 삭제 */
   const handleDeleteSelectedExpense = () => {
     const getExpenseId = selectedExpenses.map((expense) => expense.id);
-    setDeleteSelectedExpense(getExpenseId);
+
+    openDialog({
+      message: '선택된 지출을 삭제할까요?',
+      type: 'confirm',
+      okLabel: '삭제',
+      onOk: () => {
+        setDeleteSelectedExpense({ id: getExpenseId });
+        toast.success(`지출을 삭제했어요`);
+        clearSelectedExpenses();
+      },
+    });
   };
 
   return (
@@ -89,17 +100,15 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
                       </Button>
                     }
                   >
-                    {[TRAVEL_EXPENSE_BEFORE, ...travelDaysList].map(
-                      (list) => (
-                        <span
-                          key={list.value}
-                          className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
-                          onClick={() => handelMoveSelectedExpense(list)}
-                        >
-                          {list.label}
-                        </span>
-                      ),
-                    )}
+                    {[TRAVEL_EXPENSE_BEFORE, ...travelDaysList].map((list) => (
+                      <span
+                        key={list.value}
+                        className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
+                        onClick={() => handelMoveSelectedExpense(list)}
+                      >
+                        {list.label}
+                      </span>
+                    ))}
                   </Dropdown>
                   <Button
                     variant="redOutline"

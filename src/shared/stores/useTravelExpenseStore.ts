@@ -143,7 +143,12 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
       setDeleteSelectedExpense: (data) =>
         set(
           (state) => {
-            console.log(data);
+            state.expenses.forEach((expense) => {
+              // 선택된 id 제거
+              expense.list = expense.list.filter(
+                (item) => !data.id.includes(item.id),
+              );
+            });
           },
           false,
           'expense/setDeleteSelectedExpense',

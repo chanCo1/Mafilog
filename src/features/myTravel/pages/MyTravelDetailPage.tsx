@@ -191,7 +191,7 @@ export default function MyTravelDetailPage() {
           <TravelScheduleView />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.EXPENSES}>
-          <TravelExpensesView from={travelInfo.from} to={travelInfo.to} />
+          <TravelExpensesView />
         </FadeInOutStyled>
       </div>
 
