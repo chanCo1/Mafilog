@@ -55,7 +55,7 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
             ];
           },
           false,
-          'travel/setInitExpeneses',
+          'expense/setInitExpeneses',
         ),
 
       /** 지출 추가 */
@@ -74,7 +74,7 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
             }
           },
           false,
-          'travel/setAddExpenseList',
+          'expense/setAddExpenseList',
         ),
 
       /** 지출 제거 */
@@ -92,8 +92,13 @@ export const useTravelExpenseListStore = create<ITravelExpenseStore>()(
             }
           },
           false,
-          'travel/setDeleteExpenseList',
+          'expense/setDeleteExpenseList',
         ),
+
+      /** 지출 수정 */
+      setUpdateExpense: (data) => set((state) => {
+        
+      }, false, 'expense/setUpdateExpense'),
 
       /** 리셋 */
       reset: () => set(initialState),

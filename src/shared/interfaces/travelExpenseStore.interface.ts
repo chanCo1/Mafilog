@@ -48,6 +48,7 @@ export interface ITravelExpenseActions {
   setInitExpense: (date: IDateFromTo) => void;
   setAddExpenseList: (data: IExpenseList & { day: ILabelValue }) => void;
   setDeleteExpenseList: (data: { day: number; id: string | number }) => void;
+  setUpdateExpense: (data: IExpenseList & { day: ILabelValue }) => void;
   reset: () => void;
 }
 

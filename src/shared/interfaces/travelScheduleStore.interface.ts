@@ -39,6 +39,11 @@ export interface ITravelScheduleActions {
     time?: string;
   }) => void;
   setDeleteScheduleList: (data: { day: number; id: string | number }) => void;
+  setUpdateSchedule: (data: {
+    day: ILabelValue;
+    time: string;
+    memo: string;
+  }) => void;
   reset: () => void;
 }
 

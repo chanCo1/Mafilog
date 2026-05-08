@@ -88,6 +88,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
               ) : (
                 <Button
                   className="w-35"
+                  // className="w-35 bg-linear-to-r from-secondary to-primary"
                   variant="secondary"
                   size="sm"
                   onClick={() => setIsOpenAddExpneseModal(true)}

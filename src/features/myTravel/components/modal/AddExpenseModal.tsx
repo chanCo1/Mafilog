@@ -93,28 +93,37 @@ export default function AddExpenseModal({
   const setAddExpenseList = useTravelExpenseListStore(
     (state) => state.setAddExpenseList,
   );
+  const setUpdateExpense = useTravelExpenseListStore(
+    (state) => state.setUpdateExpense,
+  );
   const setDeleteExpenseList = useTravelExpenseListStore(
     (state) => state.setDeleteExpenseList,
   );
   const { openDialog } = useDialogStore();
 
   useEffect(() => {
-    if (isOpen && travelInfo) {
-      setSelectedDay(travelDaysList?.[0]);
+    if (!isOpen) return;
 
-      setSelectPayer({
-        label: travelInfo.member[0],
-        value: travelInfo.member[0],
-      });
+    if (isModify) {
+      console.log('t수정')
+    } else {
+      if (travelInfo) {
+        setSelectedDay(travelDaysList?.[0]);
 
-      setSelectedSepnder([
-        {
+        setSelectPayer({
           label: travelInfo.member[0],
           value: travelInfo.member[0],
-        },
-      ]);
+        });
+
+        setSelectedSepnder([
+          {
+            label: travelInfo.member[0],
+            value: travelInfo.member[0],
+          },
+        ]);
+      }
     }
-  }, [travelInfo, isOpen, travelDaysList]);
+  }, [travelInfo, isOpen, travelDaysList, isModify]);
 
   /** 지출 추가 핸들링 */
   const handleAddExpense = () => {
@@ -141,8 +150,35 @@ export default function AddExpenseModal({
     toast.success('지출을 추가했어요');
   };
 
+  /** 지출 수정 핸들링 */
+  const handleUpdateExpense = () => {
+    if (!expenseName) return;
+
+    const updateData = {
+      name: expenseName,
+      spenderType: selectedSpenderType,
+      category: selectedCategory,
+      day: selectedDay,
+      time: selectedTime,
+      memo: inputMemo,
+      spender: selectedSepnder,
+      payer: selectedPayer,
+      paymentType: selectedPaymentType,
+      amount: expenseAmount,
+      calcExchangeAmount: calcExchangeAmount,
+      exchangeRate: selectedExchangeRate,
+    };
+
+    setUpdateExpense(updateData);
+
+    onClickCloseBtn();
+    toast.success('지출을 수정했어요');
+  };
+
   /** 지출 삭제 핸들러 */
   const handleDeleteExpense = () => {
+    if (!isModify) return;
+
     if (timeLineData?.day === undefined) return;
 
     openDialog({
@@ -219,7 +255,7 @@ export default function AddExpenseModal({
               취소
             </Button>
             <Button disabled={isDisabled} onClick={handleAddExpense}>
-              지출 추가
+              {isModify ? '수정' : '지출 추가'}
             </Button>
           </div>
         </div>
