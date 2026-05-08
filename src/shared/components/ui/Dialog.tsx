@@ -59,7 +59,7 @@ function DialogEntity({ className }: IDialog) {
       />
       <div
         className={cn(
-          'ease justify-cetner absolute z-50 flex w-75 flex-col items-center gap-2.5 rounded-lg bg-white p-2.5 shadow-md transition duration-800',
+          'ease justify-cetner absolute z-50 flex w-75 flex-col items-center gap-2.5 rounded-lg bg-white p-2.5 shadow-md transition duration-200',
           isOpen ? 'visible opacity-100' : 'invisible opacity-0',
           options?.type === 'error' && 'border-state-error border-2',
           className,
