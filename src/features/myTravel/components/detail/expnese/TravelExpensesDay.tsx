@@ -68,9 +68,6 @@ export default function TravelExpensesDay({
               <TravelExpensesTimeline
                 key={`${_data?.id}-${index}`}
                 timeLineData={_data}
-                // dailyAllSchedule={list}
-                currentIndex={index}
-                day={day}
                 selectMode={selectMode}
               />
             ))}

@@ -16,20 +16,15 @@ import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import { toast } from 'sonner';
 import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
+import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 
 interface ITravelExpensesTimeline {
   timeLineData?: IExpenseList;
-  // dailyAllSchedule?: IExpenseList[];
-  currentIndex?: number;
-  day?: number;
   selectMode?: boolean;
 }
 
 export default function TravelExpensesTimeline({
   timeLineData,
-  // dailyAllSchedule,
-  currentIndex,
-  day,
   selectMode,
 }: ITravelExpensesTimeline) {
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
@@ -49,18 +44,20 @@ export default function TravelExpensesTimeline({
     e.stopPropagation();
     e.preventDefault();
 
-    if (day === undefined || currentIndex === undefined) return;
+    if (timeLineData?.day === undefined) return;
 
     openDialog({
       message: '지출을 삭제할까요?',
-      type:'confirm',
+      type: 'confirm',
       okLabel: '삭제',
       onOk: () => {
-        setDeleteExpenseList({ day, index: currentIndex });
+        setDeleteExpenseList({
+          day: timeLineData.day.value as number,
+          id: timeLineData?.id as string,
+        });
         toast.success(`지출을 삭제했어요`);
-      }
-    })
-
+      },
+    });
   };
 
   const onClickCard = () => {
@@ -152,6 +149,13 @@ export default function TravelExpensesTimeline({
           </Card>
         )}
       </div>
+
+      <AddExpenseModal
+        isOpen={isOpenDatilModal}
+        handleClose={() => setIsOpenDatilModal(false)}
+        timeLineData={timeLineData}
+        isModify
+      />
     </div>
   );
 }

@@ -15,6 +15,7 @@ export interface IScheduleList {
   place?: IPlaceList;
   time?: string;
   memo?: string;
+  day: ILabelValue;
 }
 
 export interface IDateFromTo {
@@ -37,7 +38,7 @@ export interface ITravelScheduleActions {
     memo?: string;
     time?: string;
   }) => void;
-  setDeleteScheduleList: (data: { day: number; index: number }) => void;
+  setDeleteScheduleList: (data: { day: number; id: string | number }) => void;
   reset: () => void;
 }
 

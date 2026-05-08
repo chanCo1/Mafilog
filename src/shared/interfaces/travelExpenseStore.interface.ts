@@ -35,6 +35,7 @@ export interface IExpenseList {
   spender: ILabelValue[]; // 지출자
   time?: string;
   memo?: string;
+  day: ILabelValue;
 }
 
 export interface IDateFromTo {
@@ -46,7 +47,7 @@ export interface IDateFromTo {
 export interface ITravelExpenseActions {
   setInitExpense: (date: IDateFromTo) => void;
   setAddExpenseList: (data: IExpenseList & { day: ILabelValue }) => void;
-  setDeleteExpenseList: (data: { day: number; index: number }) => void;
+  setDeleteExpenseList: (data: { day: number; id: string | number }) => void;
   reset: () => void;
 }
 

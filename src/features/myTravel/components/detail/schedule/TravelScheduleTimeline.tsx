@@ -18,12 +18,12 @@ import PlaceDeatilModal from '@/features/myTravel/components/modal/PlaceDeatilMo
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
 
 interface ITravelScheduleTimeline {
   timeLineData?: IScheduleList;
   dailyAllSchedule?: IScheduleList[];
   currentIndex?: number;
-  day?: number;
   selectMode?: boolean;
 }
 
@@ -31,7 +31,6 @@ export default function TravelScheduleTimeline({
   timeLineData,
   dailyAllSchedule,
   currentIndex,
-  day,
   selectMode,
 }: ITravelScheduleTimeline) {
   const displayCount = useTimelineDiscplayCount({
@@ -43,6 +42,7 @@ export default function TravelScheduleTimeline({
     (state) => state.setDeleteScheduleList,
   );
   const { selectedSchedules, toggleSelect } = useSelectSchedules();
+  const { openDialog } = useDialogStore();
 
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
 
@@ -55,12 +55,22 @@ export default function TravelScheduleTimeline({
     e.preventDefault();
     e.stopPropagation();
 
-    if (day === undefined || currentIndex === undefined) return;
+    if (timeLineData?.day.value === undefined || currentIndex === undefined)
+      return;
     const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
-    setDeleteScheduleList({ day, index: currentIndex });
-
-    toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
+    openDialog({
+      message: `${isPlace ? '장소' : '메모'}를 삭제할까요?`,
+      type: 'confirm',
+      okLabel: '삭제',
+      onOk: () => {
+        setDeleteScheduleList({
+          day: timeLineData?.day.value as number,
+          id: timeLineData?.id as string,
+        });
+        toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
+      },
+    });
   };
 
   const onClickCard = () => {
@@ -144,8 +154,7 @@ export default function TravelScheduleTimeline({
       <PlaceDeatilModal
         isOpen={isOpenDatilModal}
         handleClose={() => setIsOpenDatilModal(false)}
-        data={timeLineData}
-        day={day}
+        timeLineData={timeLineData}
       />
     </div>
   );

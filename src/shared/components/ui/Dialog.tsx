@@ -49,7 +49,7 @@ function DialogEntity({ className }: IDialog) {
   return createPortal(
     <div
       className={cn(
-        'absolute z-100 flex h-full w-full items-center justify-center',
+        'fixed z-100 flex h-full w-full items-center justify-center',
         isOpen ? 'visible opacity-100' : 'invisible opacity-0',
       )}
     >
