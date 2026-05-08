@@ -5,8 +5,8 @@
  * @description: TravelExpensesTimeline 컴포넌트, 가계부 지출 리스트 카드
  */
 
-import { useState, MouseEvent, useMemo } from 'react';
-import { cn, convertComma } from '@/shared/lib/utils';
+import { MouseEvent, useMemo } from 'react';
+import { convertComma, convertPaymentType } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
@@ -34,29 +34,20 @@ export default function TravelExpensesTimeline({
     console.log('삭제!!!');
   };
 
-  /** 결제 타입 가져오기 */
-  const getPaymetTypeLabel = useMemo(() => {
-    switch (timeLineData?.paymentType) {
-      case 'card':
-        return '카드';
-      case 'cash':
-        return '현금';
-      default:
-        return '알 수 없음';
-    }
-  }, [timeLineData?.paymentType]);
-
   /** 지출자 가져오기 */
   const getSpender = useMemo(() => {
-    switch (timeLineData?.spenderType) {
+    const type = timeLineData?.spenderType;
+    const spender = timeLineData?.spender || [];
+
+    if (!type || spender.length === 0) return '';
+
+    switch (type) {
       case 'self':
-        return timeLineData?.spender[0].label;
+        return spender[0]?.label || '';
       case 'split':
         return '1/N';
       case 'assign':
-        return timeLineData?.spender
-          .map((_spender) => _spender.label)
-          .join(',');
+        return spender.map((_spender) => _spender.label).join(', ');
       default:
         return '';
     }
@@ -95,14 +86,11 @@ export default function TravelExpensesTimeline({
               </div>
               <p className="font-bold">{timeLineData.name}</p>
               <div className="text-text-secondary text-sm">
-                {getPaymetTypeLabel && (
-                  <>
-                    <span className="font-bold">결제: </span>
-                    <span>
-                      {timeLineData.payer.label} · {getPaymetTypeLabel}
-                    </span>
-                  </>
-                )}
+                <span className="font-bold">결제: </span>
+                <span>
+                  {timeLineData.payer.label} ·{' '}
+                  {convertPaymentType(timeLineData.paymentType)}
+                </span>
                 {getSpender && (
                   <>
                     <span> / </span>

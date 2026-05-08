@@ -13,6 +13,7 @@ import {
   TRAVEL_STYLE_LIST,
 } from '@/features/myTravel/constants';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
+import { EXPENSES_PAYMENT_TYPE } from '@/shared/types/expenseEnum';
 
 /** 조건부로 클래스 사용(clsx) + props로 받은 스타일이 기본 스타일을 덮어쓰기(twMerge) */
 export function cn(...inputs: ClassValue[]) {
@@ -150,5 +151,17 @@ export const convertCategory = (category: EXPENSES_CATEGORY_TYPE) => {
       return '기타';
     default:
       return '기타';
+  }
+};
+
+/** 결제 타입 한글로 변환 */
+export const convertPaymentType = (paymentType: EXPENSES_PAYMENT_TYPE) => {
+  switch (paymentType) {
+    case EXPENSES_PAYMENT_TYPE.CARD:
+      return '카드';
+    case EXPENSES_PAYMENT_TYPE.CASH:
+      return '현금';
+    default:
+      return '알 수 없음';
   }
 };
