@@ -24,18 +24,19 @@ export interface IExpenseList {
   name: string; // 지출명
   spenderType: EXPENSES_SPENDER_TYPE;
   category: EXPENSES_CATEGORY_TYPE;
-  amount: number; // 지출 금액
-  calcExchangeAmount: number; // 한화 금액
-  exchangeRate: {
-    currencyCode: string; // 통화 코드
-    amount: number; // 환율금액
-  };
   paymentType: EXPENSES_PAYMENT_TYPE; // 결제 타입
   payer: ILabelValue; // 결제자
   spender: ILabelValue[]; // 지출자
   time?: string;
   memo?: string;
   day: number;
+  amount: number; // 지출 금액
+  calcExchangeAmount: number; // 한화 금액
+  exchangeRate: {
+    currencyCode: ILabelValue; // 통화 코드
+    amount: number; // 환율금액
+  };
+  calcFormula: string;
 }
 
 export interface IDateFromTo {

@@ -23,17 +23,32 @@ interface ICalculator {
   onChangeValue?: (data: {
     amount: number; // 지출 금액
     calcAmount: number; // 한화 금액
-    currencyCode: string; // 선택된 통화
+    currencyCode: ILabelValue; // 선택된 통화
     exchangeRate: number; // 적용된 환율
+    formula: string; // 계산 수식
   }) => void;
+  defaultValue: {
+    inputNumber: string;
+    selectedCurrency: ILabelValue;
+  };
 }
 
-export default function Calculator({ onChangeValue }: ICalculator) {
+export default function Calculator({
+  onChangeValue,
+  defaultValue,
+}: ICalculator) {
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
 
   const [selectedCurrency, setSelectedCurrency] = useState<ILabelValue>();
 
   const [inpuNumber, setInputNumber] = useState('');
+
+  useEffect(() => {
+    if (defaultValue) {
+      setInputNumber(defaultValue.inputNumber);
+      setSelectedCurrency(defaultValue.selectedCurrency);
+    }
+  }, [defaultValue]);
 
   const { countryData } = useCountriesDataStore();
 
@@ -69,6 +84,7 @@ export default function Calculator({ onChangeValue }: ICalculator) {
     }));
   }, [countryData, travelInfo.cities]);
 
+  /** 초기 통화 적용 */
   useEffect(() => {
     if (currencyList.length > 0 && !selectedCurrency) {
       setSelectedCurrency(currencyList[0]);
@@ -105,7 +121,7 @@ export default function Calculator({ onChangeValue }: ICalculator) {
   };
 
   /** 초기화 */
-  const handleClear = () => {
+  const resetData = () => {
     setInputNumber('');
     lastValidResult.current = 0;
   };
@@ -141,10 +157,18 @@ export default function Calculator({ onChangeValue }: ICalculator) {
     onChangeValue?.({
       amount: result,
       calcAmount: calcResultCurrency,
-      currencyCode: getCurrency?.currencyCode || '',
+      currencyCode: selectedCurrency!,
       exchangeRate: Number(getCurrency?.convertedWon || 0),
+      formula: inpuNumber,
     });
-  }, [result, calcResultCurrency, getCurrency, onChangeValue]);
+  }, [
+    result,
+    calcResultCurrency,
+    selectedCurrency,
+    onChangeValue,
+    inpuNumber,
+    getCurrency?.convertedWon,
+  ]);
 
   return (
     <div className="flex flex-col">
@@ -157,7 +181,7 @@ export default function Calculator({ onChangeValue }: ICalculator) {
           {currencyList && (
             <div className="max-w-20">
               <Selectbox
-                className='font-bold'
+                className="font-bold"
                 variant="none"
                 options={currencyList}
                 value={selectedCurrency}
@@ -197,7 +221,7 @@ export default function Calculator({ onChangeValue }: ICalculator) {
         <CalcNumberArea
           number="AC"
           className="text-primary text-md"
-          onClick={handleClear}
+          onClick={resetData}
         />
         <CalcNumberArea number="7" onClick={() => handleClickNumber('7')} />
         <CalcNumberArea number="8" onClick={() => handleClickNumber('8')} />

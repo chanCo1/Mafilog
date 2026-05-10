@@ -109,12 +109,12 @@ export default function TravelExpensesTimeline({
             <div className="flex flex-col">
               <div className="flex items-baseline gap-1">
                 <span className="font-bold">
-                  {timeLineData.exchangeRate.currencyCode}
+                  {timeLineData.exchangeRate.currencyCode.label}
                 </span>
                 <span className="text-state-error text-lg font-bold">
                   {convertComma(timeLineData.amount ?? 0)}
                 </span>
-                {timeLineData.exchangeRate.currencyCode !== 'KRW' && (
+                {timeLineData.exchangeRate.currencyCode.label !== 'KRW' && (
                   <span className="text-text-secondary text-sm font-bold">
                     ({convertComma(timeLineData.calcExchangeAmount ?? 0)}원)
                   </span>
