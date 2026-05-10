@@ -30,138 +30,155 @@ const initialState = {
 
 export const useTravelExpenseStore = create<ITravelExpenseStore>()(
   devtools(
-    immer((set, get) => ({
-      /**
-       * @States
-       */
-      expenses: initialState['expenses'],
+    immer((set, get) => {
+      /** 타겟 일정 찾기 */
+      const findTargetDay = (state: ITravelExpenseState, day: number) => {
+        return state.expenses.find((e) => e.day === day);
+      };
 
-      /**
-       * @Actions
-       */
-      /** 가계부 리스트 초기값 설정 */
-      setInitExpense: (data) =>
-        set(
-          (state) => {
-            const newExpenses = getTravelDayOfWeek(data.from, data.to).map(
-              (_day) => ({
-                day: _day.day,
-                date: _day.date,
-                list: [],
-                dailyExpense: 0,
-              }),
-            );
+      return {
+        /**
+         * @States
+         */
+        expenses: initialState['expenses'],
 
-            state.expenses = [
-              { day: 0, date: undefined, list: [], dailyExpense: 0 }, // 여행전
-              ...newExpenses,
-            ];
-          },
-          false,
-          'expense/setInitExpeneses',
-        ),
+        /**
+         * @Actions
+         */
+        /** 가계부 리스트 초기값 설정 */
+        setInitExpense: (data) =>
+          set(
+            (state) => {
+              const newExpenses = getTravelDayOfWeek(data.from, data.to).map(
+                (_day) => ({
+                  day: _day.day,
+                  date: _day.date,
+                  list: [],
+                  dailyExpense: 0,
+                }),
+              );
 
-      /** 지출 추가 */
-      setAddExpenseList: (data) =>
-        set(
-          (state) => {
-            const targetDay = state.expenses.find(
-              (expense: IExpense) => expense.day === data.day,
-            );
+              state.expenses = [
+                { day: 0, date: undefined, list: [], dailyExpense: 0 }, // 여행전
+                ...newExpenses,
+              ];
+            },
+            false,
+            'expense/setInitExpeneses',
+          ),
 
-            if (targetDay) {
-              targetDay.list.push({
-                ...data,
-                id: nanoid(),
+        /** 지출 추가 */
+        setAddExpenseList: (data) =>
+          set(
+            (state) => {
+              const targetDay = findTargetDay(state, data.day);
+
+              if (targetDay) {
+                targetDay.list.push({
+                  ...data,
+                  id: nanoid(),
+                });
+              }
+            },
+            false,
+            'expense/setAddExpenseList',
+          ),
+
+        /** 지출 제거 */
+        setDeleteExpenseList: (data) =>
+          set(
+            (state) => {
+              const targetDay = findTargetDay(state, data.day);
+
+              if (targetDay) {
+                targetDay.list = targetDay.list.filter(
+                  (list) => list.id !== data.id,
+                );
+              }
+            },
+            false,
+            'expense/setDeleteExpenseList',
+          ),
+
+        /** 지출 수정 */
+        setUpdateExpense: (data) =>
+          set(
+            (state) => {
+              state.expenses.forEach((expense) => {
+                expense.list = expense.list.filter(
+                  (item) => item.id !== data.id,
+                );
               });
-            }
-          },
-          false,
-          'expense/setAddExpenseList',
-        ),
 
-      /** 지출 제거 */
-      setDeleteExpenseList: (data) =>
-        set(
-          (state) => {
-            const targetExpense = state.expenses.find(
-              (schedule: IExpense) => schedule.day === data.day,
-            );
+              const targetDay = findTargetDay(state, data.day);
 
-            if (targetExpense) {
-              targetExpense.list = targetExpense.list.filter(
-                (list) => list.id !== data.id,
-              );
-            }
-          },
-          false,
-          'expense/setDeleteExpenseList',
-        ),
+              if (targetDay) {
+                targetDay.list.push(data);
+              }
+            },
+            false,
+            'expense/setUpdateExpense',
+          ),
 
-      /** 지출 수정 */
-      setUpdateExpense: (data) =>
-        set((state) => {}, false, 'expense/setUpdateExpense'),
+        /** 지출 선택 이동 */
+        setMoveSelectedExpense: (data) =>
+          set(
+            (state) => {
+              const targetDay = findTargetDay(state, data.day);
 
-      /** 지출 선택 이동 */
-      setMoveSelectedExpense: (data) =>
-        set(
-          (state) => {
-            const targetDay = state.expenses.find(
-              (schedule: IExpense) => schedule.day === data.day,
-            );
+              if (!targetDay) return;
 
-            if (!targetDay) return;
+              const movingItems: IExpenseList[] = [];
 
-            const movingItems: IExpenseList[] = [];
+              state.expenses.forEach((expense) => {
+                // 해당 날짜의 리스트에서 선택된 id들만 필터링
+                const itemsToMove = expense.list.filter((item) =>
+                  data.id.includes(item.id),
+                );
 
-            state.expenses.forEach((expense) => {
-              // 해당 날짜의 리스트에서 선택된 id들만 필터링
-              const itemsToMove = expense.list.filter((item) =>
-                data.id.includes(item.id),
-              );
+                movingItems.push(...itemsToMove);
 
-              movingItems.push(...itemsToMove);
+                // 선택된 id 제거
+                expense.list = expense.list.filter(
+                  (item) => !data.id.includes(item.id),
+                );
+              });
 
-              // 선택된 id 제거
-              expense.list = expense.list.filter(
-                (item) => !data.id.includes(item.id),
-              );
-            });
+              const updatedItems = movingItems.map((item) => ({
+                ...item,
+                day: data.day,
+              }));
 
-            const updatedItems = movingItems.map((item) => ({
-              ...item,
-              day: data.day,
-            }));
+              targetDay.list.push(...updatedItems);
+            },
+            false,
+            'expense/setMoveSelectedExpense',
+          ),
 
-            targetDay.list.push(...updatedItems);
-          },
-          false,
-          'expense/setMoveSelectedExpense',
-        ),
+        /** 지출 선택 삭제 */
+        setDeleteSelectedExpense: (data) =>
+          set(
+            (state) => {
+              state.expenses.forEach((expense) => {
+                // 선택된 id 제거
+                expense.list = expense.list.filter(
+                  (item) => !data.id.includes(item.id),
+                );
+              });
+            },
+            false,
+            'expense/setDeleteSelectedExpense',
+          ),
 
-      /** 지출 선택 삭제 */
-      setDeleteSelectedExpense: (data) =>
-        set(
-          (state) => {
-            state.expenses.forEach((expense) => {
-              // 선택된 id 제거
-              expense.list = expense.list.filter(
-                (item) => !data.id.includes(item.id),
-              );
-            });
-          },
-          false,
-          'expense/setDeleteSelectedExpense',
-        ),
+        /** 리셋 */
+        reset: () => set(initialState),
 
-      /** 리셋 */
-      reset: () => set(initialState),
-
-      /**
-       * @Getters
-       */
-      getTravelInfo: () => get().expenses,
-    })),
-    { name: 'expense' },
+        /**
+         * @Getters
+         */
+        getTravelInfo: () => get().expenses,
+      };
+    }),
+    { name: 'expenses' },
   ),
 );
