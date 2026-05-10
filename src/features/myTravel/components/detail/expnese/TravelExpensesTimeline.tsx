@@ -114,9 +114,11 @@ export default function TravelExpensesTimeline({
                 <span className="text-state-error text-lg font-bold">
                   {convertComma(timeLineData.amount ?? 0)}
                 </span>
-                <span className="text-text-secondary text-sm font-bold">
-                  ({convertComma(timeLineData.calcExchangeAmount ?? 0)}원)
-                </span>
+                {timeLineData.exchangeRate.currencyCode !== 'KRW' && (
+                  <span className="text-text-secondary text-sm font-bold">
+                    ({convertComma(timeLineData.calcExchangeAmount ?? 0)}원)
+                  </span>
+                )}
               </div>
               <p className="font-bold">{timeLineData.name}</p>
               <div className="text-text-secondary text-sm">
