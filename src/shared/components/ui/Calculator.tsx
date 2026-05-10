@@ -27,28 +27,26 @@ interface ICalculator {
     exchangeRate: number; // 적용된 환율
     formula: string; // 계산 수식
   }) => void;
-  defaultValue: {
-    inputNumber: string;
-    selectedCurrency: ILabelValue;
-  };
+  defaultValue:
+    | {
+        inputNumber: string;
+        selectedCurrency: ILabelValue;
+      }
+    | undefined;
+  isModify?: boolean;
+  isOpen?: boolean;
 }
 
 export default function Calculator({
   onChangeValue,
   defaultValue,
+  isModify = false,
+  isOpen
 }: ICalculator) {
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
 
-  const [selectedCurrency, setSelectedCurrency] = useState<ILabelValue>();
-
   const [inpuNumber, setInputNumber] = useState('');
-
-  useEffect(() => {
-    if (defaultValue) {
-      setInputNumber(defaultValue.inputNumber);
-      setSelectedCurrency(defaultValue.selectedCurrency);
-    }
-  }, [defaultValue]);
+  const [selectedCurrency, setSelectedCurrency] = useState<ILabelValue>();
 
   const { countryData } = useCountriesDataStore();
 
@@ -84,12 +82,18 @@ export default function Calculator({
     }));
   }, [countryData, travelInfo.cities]);
 
-  /** 초기 통화 적용 */
   useEffect(() => {
-    if (currencyList.length > 0 && !selectedCurrency) {
-      setSelectedCurrency(currencyList[0]);
+    if (isModify) {
+      setInputNumber(defaultValue?.inputNumber || '');
+      setSelectedCurrency(defaultValue?.selectedCurrency);
+      return;
     }
-  }, [currencyList, setSelectedCurrency, selectedCurrency]);
+
+    if (!isModify) {
+      setSelectedCurrency(currencyList[0]);
+      setInputNumber('');
+    }
+  }, [currencyList, isModify, isOpen]);
 
   /** 숫자 클릭 */
   const handleClickNumber = (num: string) => {

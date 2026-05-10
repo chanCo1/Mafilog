@@ -153,19 +153,30 @@ export default function AddExpenseModal({
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
     handleClose();
-    // dataReset();
+    resetData();
   };
 
   /** 지출 추가 모달 리셋 */
   const resetData = useCallback(() => {
     if (travelInfo) {
+      setExpenseName('');
+      setSelectedSpenderType(SPENDER_TYPE_LIST[0].value);
+      setSelectedPaymentType(PAYMENT_TYPE_LIST[0].value);
+      setSelectedCategory(EXPENSE_CATEGORY_LIST[2].value);
+      setSelectedTime('');
+      setInputMemo('');
+      setSelectedExchangeRate({
+        currencyCode: { label: '', value: '' },
+        amount: 0,
+      });
+      setExpenseAmount(0);
+      setCalcExchangeAmount(0);
+      setCalcFormula('');
       setSelectedDay(travelDaysList?.[0]);
-
       setSelectPayer({
         label: travelInfo.member[0],
         value: travelInfo.member[0],
       });
-
       setSelectedSepnder([
         {
           label: travelInfo.member[0],
@@ -202,9 +213,21 @@ export default function AddExpenseModal({
     !selectedSepnder.length ||
     !expenseAmount;
 
+  /** 지출 모든날 */
   const travelAllDays = useMemo(() => {
     return [TRAVEL_EXPENSE_BEFORE, ...travelDaysList];
   }, [travelDaysList]);
+
+  /** 계산기에 보낼 기본 값 */
+  const calculatorDefaultValue = useMemo(() => {
+    if (isModify && timeLineData?.calcFormula) {
+      return {
+        inputNumber: timeLineData.calcFormula,
+        selectedCurrency: timeLineData.exchangeRate.currencyCode,
+      };
+    }
+    return undefined;
+  }, [isModify, timeLineData]);
 
   /** 초기값 대입 */
   useEffect(() => {
@@ -339,10 +362,9 @@ export default function AddExpenseModal({
         </div>
         <Calculator
           onChangeValue={handleCalcChange}
-          defaultValue={{
-            inputNumber: calcFormula,
-            selectedCurrency: selectedExchangeRate.currencyCode,
-          }}
+          defaultValue={calculatorDefaultValue}
+          isModify={isModify}
+          isOpen={isOpen}
         />
       </div>
     </SideModal>
