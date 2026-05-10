@@ -177,6 +177,30 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
          * @Getters
          */
         getTravelInfo: () => get().expenses,
+
+        /** 일차 별 지출 총액 */
+        getDailyTotalAmount: (day) => {
+          const expenses = get().expenses;
+          const targetDay = findTargetDay({ expenses }, day);
+
+          if (!targetDay) return 0;
+          return targetDay.list.reduce(
+            (sum, item) => sum + item.calcExchangeAmount,
+            0,
+          );
+        },
+
+        /** 모든날 총 지출 */
+        getAllTotalAmount: () => {
+          const expensesRange = get().expenses.length;
+
+          let totalAmount = 0;
+          for (let i = 0; i < expensesRange; i++) {
+            totalAmount += get().getDailyTotalAmount(i);
+          }
+
+          return Math.max(0, totalAmount);
+        },
       };
     }),
     { name: 'expenses' },

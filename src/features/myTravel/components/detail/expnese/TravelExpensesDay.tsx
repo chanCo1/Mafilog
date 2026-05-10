@@ -7,12 +7,13 @@
 
 import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
-import { convertFormattedDate, getDay } from '@/shared/lib/utils';
+import { convertFormattedDate, getDay, convertComma } from '@/shared/lib/utils';
 import TravelExpensesTimeline from '@/features/myTravel/components/detail/expnese/TravelExpensesTimeline';
 import { IExpense } from '@/shared/interfaces/travelExpenseStore.interface';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import { ILabelValue } from '@/shared/interfaces';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
+import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 
 interface ITravelExpensesDay {
   day?: number;
@@ -28,6 +29,9 @@ export default function TravelExpensesDay({
   selectMode,
 }: ITravelExpensesDay) {
   const { selectedExpenses, toggleDayAll } = useSelectExpenses();
+  const { getDailyTotalAmount } = useTravelExpenseStore();
+
+  const dailyTotalAmount = getDailyTotalAmount(day!);
 
   // 현재 일차의 list 아이템들이 모두 selectedSchedules에 포함되어 있는지 확인
   const isAllSelected =
@@ -58,7 +62,9 @@ export default function TravelExpensesDay({
         </div>
         <div className="flex items-end gap-1">
           <span className="text-sm">지출</span>
-          <span className="font-bold">{0}원</span>
+          <span className="font-bold">
+            {convertComma(dailyTotalAmount)}원
+          </span>
         </div>
       </div>
       <div className="flex flex-col">

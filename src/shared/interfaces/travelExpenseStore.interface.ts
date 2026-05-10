@@ -58,4 +58,6 @@ export interface ITravelExpenseActions {
 /** 여행 가계부 전역 인터페이스 (getters) */
 export interface ITravelExpenseGetters {
   getTravelExpense: () => IExpense[];
+  getDailyTotalAmount: (day: number) => number;
+  getAllTotalAmount: () => number;
 }

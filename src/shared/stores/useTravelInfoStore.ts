@@ -57,7 +57,6 @@ export const useTravelInfoStore = create<ITravelInfoStore>()(
           (state) => {
             state.travelInfo = {
               ...data,
-              dayRange: getTravelDay(data.from, data.to),
             };
           },
           false,

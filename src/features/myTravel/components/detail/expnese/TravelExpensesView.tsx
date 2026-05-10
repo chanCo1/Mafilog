@@ -23,6 +23,7 @@ import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.constant';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { toast } from 'sonner';
+import { convertComma } from '@/shared/lib/utils';
 
 // interface ITravelExpensesView {}
 
@@ -37,8 +38,11 @@ function TravelExpensesView() {
 
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
   const expenses = useTravelExpenseStore((state) => state.expenses);
-  const { setDeleteSelectedExpense, setMoveSelectedExpense } =
-    useTravelExpenseStore();
+  const {
+    setDeleteSelectedExpense,
+    setMoveSelectedExpense,
+    getAllTotalAmount,
+  } = useTravelExpenseStore();
   const selectedExpenses = useSelectExpenses((state) => state.selectedExpenses);
   const { clearSelectedExpenses } = useSelectExpenses();
 
@@ -182,7 +186,7 @@ function TravelExpensesView() {
               <div className="flex items-center justify-between">
                 <p className="text-lg font-bold">여행 총 지출</p>
                 <div className="text-state-error text-h3 flex justify-end font-bold">
-                  <span>{0}원</span>
+                  <span>{convertComma(getAllTotalAmount())}원</span>
                 </div>
               </div>
               <div className="flex justify-end">
