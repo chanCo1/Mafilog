@@ -41,7 +41,7 @@ function TravelExpensesView() {
   const {
     setDeleteSelectedExpense,
     setMoveSelectedExpense,
-    getAllTotalAmount,
+    getAllTotalSpend,
   } = useTravelExpenseStore();
   const selectedExpenses = useSelectExpenses((state) => state.selectedExpenses);
   const { clearSelectedExpenses } = useSelectExpenses();
@@ -186,7 +186,7 @@ function TravelExpensesView() {
               <div className="flex items-center justify-between">
                 <p className="text-lg font-bold">여행 총 지출</p>
                 <div className="text-state-error text-h3 flex justify-end font-bold">
-                  <span>{convertComma(getAllTotalAmount())}원</span>
+                  <span>{convertComma(getAllTotalSpend())}원</span>
                 </div>
               </div>
               <div className="flex justify-end">

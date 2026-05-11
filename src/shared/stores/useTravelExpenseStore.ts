@@ -180,31 +180,61 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
         getTravelInfo: () => get().expenses,
 
         /** 일차 별 지출 총액 */
-        getDailyTotalAmount: (day) => {
+        getDailyTotalSpend: (day) => {
           const expenses = get().expenses;
           const targetDay = findTargetDay({ expenses }, day);
 
           if (!targetDay) return 0;
 
-          let dailyAmount = 0;
-          dailyAmount = targetDay.list.reduce(
+          const dailySpend = targetDay.list.reduce(
             (sum, item) => sum + item.calcExchangeAmount,
             0,
           );
 
-          return Math.max(0, roundDecimal(dailyAmount));
+          return Math.max(0, roundDecimal(dailySpend));
+        },
+
+        /** 일차 별 내 지출 */
+        getDailyMySpend: (day) => {
+          const expenses = get().expenses;
+          const targetDay = findTargetDay({ expenses }, day);
+
+          if (!targetDay) return 0;
+
+          const filtered = targetDay.list.filter(
+            (list) => list.payer.value === '나',
+          );
+
+          const dailyMySpend = filtered.reduce(
+            (sum, item) => sum + item.calcExchangeAmount,
+            0,
+          );
+
+          return Math.max(0, roundDecimal(dailyMySpend));
         },
 
         /** 모든날 총 지출 */
-        getAllTotalAmount: () => {
+        getAllTotalMySpend: () => {
           const expensesRange = get().expenses.length;
 
-          let totalAmount = 0;
+          let totalSpend = 0;
           for (let i = 0; i < expensesRange; i++) {
-            totalAmount += get().getDailyTotalAmount(i);
+            totalSpend += get().getDailyMySpend(i);
           }
 
-          return Math.max(0, roundDecimal(totalAmount));
+          return Math.max(0, roundDecimal(totalSpend));
+        },
+
+        /** 모든날 총 지출 */
+        getAllTotalSpend: () => {
+          const expensesRange = get().expenses.length;
+
+          let totalSpend = 0;
+          for (let i = 0; i < expensesRange; i++) {
+            totalSpend += get().getDailyTotalSpend(i);
+          }
+
+          return Math.max(0, roundDecimal(totalSpend));
         },
       };
     }),

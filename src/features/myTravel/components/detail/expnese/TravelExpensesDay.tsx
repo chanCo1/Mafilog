@@ -29,9 +29,9 @@ export default function TravelExpensesDay({
   selectMode,
 }: ITravelExpensesDay) {
   const { selectedExpenses, toggleDayAll } = useSelectExpenses();
-  const { getDailyTotalAmount } = useTravelExpenseStore();
+  const { getDailyTotalSpend } = useTravelExpenseStore();
 
-  const dailyTotalAmount = getDailyTotalAmount(day!);
+  const dailyTotalAmount = getDailyTotalSpend(day!);
 
   // 현재 일차의 list 아이템들이 모두 selectedSchedules에 포함되어 있는지 확인
   const isAllSelected =

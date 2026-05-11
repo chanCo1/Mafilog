@@ -169,7 +169,7 @@ export const convertComma = (value: number | string): string => {
 /** 소수점 2자리에서 반올림 처리 */
 export const roundDecimal = (
   number: number | string,
-  decimal = 100,
+  decimal = 10,
 ): number => {
   if (!number && number !== 0) return 0;
 
