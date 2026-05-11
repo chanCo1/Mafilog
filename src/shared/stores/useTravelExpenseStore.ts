@@ -19,6 +19,7 @@ import {
   IExpenseList,
 } from '@/shared/interfaces/travelExpenseStore.interface';
 import { nanoid } from 'nanoid';
+import { roundDecimal } from '@/shared/lib/utils';
 
 type ITravelExpenseStore = ITravelExpenseState &
   ITravelExpenseActions &
@@ -184,10 +185,14 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
           const targetDay = findTargetDay({ expenses }, day);
 
           if (!targetDay) return 0;
-          return targetDay.list.reduce(
+
+          let dailyAmount = 0;
+          dailyAmount = targetDay.list.reduce(
             (sum, item) => sum + item.calcExchangeAmount,
             0,
           );
+
+          return Math.max(0, roundDecimal(dailyAmount));
         },
 
         /** 모든날 총 지출 */
@@ -199,7 +204,7 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
             totalAmount += get().getDailyTotalAmount(i);
           }
 
-          return Math.max(0, totalAmount);
+          return Math.max(0, roundDecimal(totalAmount));
         },
       };
     }),

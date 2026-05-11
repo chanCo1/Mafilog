@@ -9,7 +9,7 @@ import { ReactNode, useState, useEffect, useMemo, useRef } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import Selectbox from '@/shared/components/ui/Selectbox';
-import { convertComma } from '@/shared/lib/utils';
+import { convertComma, roundDecimal } from '@/shared/lib/utils';
 import { Divide, Plus, Minus, X, Delete } from 'lucide-react';
 import { evaluate } from 'mathjs';
 import { Button } from '@/shared/components/ui/Button';
@@ -41,7 +41,7 @@ export default function Calculator({
   onChangeValue,
   defaultValue,
   isModify = false,
-  isOpen
+  isOpen,
 }: ICalculator) {
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
 
@@ -143,7 +143,7 @@ export default function Calculator({
       if (!isOperator) {
         const calculated = evaluate(trimmed);
         lastValidResult.current = calculated;
-        return calculated;
+        return roundDecimal(calculated);
       }
     } catch (e) {
       return lastValidResult.current;
@@ -154,7 +154,8 @@ export default function Calculator({
 
   /** 입력된 값 환율 계산 */
   const calcResultCurrency = useMemo(() => {
-    return result * Number(getCurrency?.convertedWon || 0);
+    const calcCurrency = result * Number(getCurrency?.convertedWon || 0);
+    return roundDecimal(calcCurrency);
   }, [result, getCurrency]);
 
   useEffect(() => {
