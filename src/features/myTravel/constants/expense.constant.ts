@@ -37,3 +37,9 @@ export const TRAVEL_EXPENSES_BEFORE_LIST = [
   { label: '모든날', value: 'all' },
   TRAVEL_EXPENSE_BEFORE,
 ];
+
+/** 통계 리스트 */
+export const EXPENSE_STATISTIC_LIST = [
+  { label: '일정별', value: 'schedule' },
+  { label: '카테고리별', value: 'category' },
+];

@@ -37,3 +37,10 @@ export const EXPENSES_SPENDER_TYPE = {
 };
 export type EXPENSES_SPENDER_TYPE =
   (typeof EXPENSES_SPENDER_TYPE)[keyof typeof EXPENSES_SPENDER_TYPE];
+
+/** 통계탭 타입 */
+export const STATISTIC_TAB = {
+  SCHEDULE: 'schedule', // 일정
+  CAETGORY: 'category', // 카테고리
+} as const;
+export type STATISTIC_TAB = (typeof STATISTIC_TAB)[keyof typeof STATISTIC_TAB];
