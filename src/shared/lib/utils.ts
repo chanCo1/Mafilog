@@ -167,14 +167,26 @@ export const convertComma = (value: number | string): string => {
 };
 
 /** 소수점 2자리에서 반올림 처리 */
-export const roundDecimal = (
-  number: number | string,
-  decimal = 10,
-): number => {
+export const roundDecimal = (number: number | string, decimal = 10): number => {
   if (!number && number !== 0) return 0;
 
   const num = typeof number === 'string' ? Number(number) : number;
   if (isNaN(num)) return 0;
 
   return Math.round(num * decimal) / decimal;
+};
+
+/** 퍼센트 구하기 */
+export const getPercent = ({
+  deno,
+  numer,
+  round = 10,
+}: {
+  numer: number;
+  deno: number;
+  round?: number;
+}) => {
+  if ((!numer && numer !== 0) || (!deno && deno !== 0)) return 0;
+
+  return Math.round((numer / deno) * 100 * round) / round;
 };
