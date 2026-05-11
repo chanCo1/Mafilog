@@ -35,6 +35,7 @@ import CheckListModal from '@/features/myTravel/components/modal/CheckListModal'
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
 import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
+import ExpenseStatisticModal from '@/features/myTravel/components/modal/ExpenseStatisticModal';
 
 // interface IMyTravelDetailPage {}
 
@@ -47,9 +48,7 @@ export default function MyTravelDetailPage() {
   const setInitSchedules = useTravelScheduleStore(
     (state) => state.setInitSchedules,
   );
-  const setInitExpense = useTravelExpenseStore(
-    (state) => state.setInitExpense,
-  );
+  const setInitExpense = useTravelExpenseStore((state) => state.setInitExpense);
   const setInitCheckList = useTravelCheckListStore(
     (state) => state.setInitCheckList,
   );
@@ -99,6 +98,7 @@ export default function MyTravelDetailPage() {
   const [isOpenTravelModify, setIsOpenTravelModify] = useState(false);
   const [isOpenLocalInfoModal, setIsOpenLocalInfoModal] = useState(false);
   const [isOpenCheckListModal, setIsOpenCheckListModal] = useState(false);
+  const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
 
   /** 여행 기간 날짜 포멧 */
   const formattedValue = useMemo(() => {
@@ -134,7 +134,7 @@ export default function MyTravelDetailPage() {
           <div className="max-mobile:flex-col mobile:gap-1 max-mobile:items-start flex items-center">
             <span>{formattedValue}</span>
             <span className="max-mobile:hidden">|</span>
-            <div className="text-md flex gap-1 max-mobile:text-sm">
+            <div className="text-md max-mobile:text-sm flex gap-1">
               <div>{convertTravelPartner(travelInfo.travelPartner)}</div>
               {travelInfo.travelStyles.length &&
                 travelInfo.travelStyles.map((style) => (
@@ -169,7 +169,11 @@ export default function MyTravelDetailPage() {
             </Button>
           ) : (
             <div className="flex gap-1">
-              <Button variant="gray" size="xs">
+              <Button
+                variant="gray"
+                size="xs"
+                onClick={() => setIsOpenStatisticModal(true)}
+              >
                 통계
               </Button>
               <Button variant="gray" size="xs">
@@ -212,6 +216,12 @@ export default function MyTravelDetailPage() {
       <LocalInfoModal
         isOpen={isOpenLocalInfoModal}
         handleClose={() => setIsOpenLocalInfoModal(false)}
+      />
+
+      {/* 통계 모달 */}
+      <ExpenseStatisticModal
+        isOpen={isOpenStatisticModal}
+        handleClose={() => setIsOpenStatisticModal(false)}
       />
     </div>
   );
