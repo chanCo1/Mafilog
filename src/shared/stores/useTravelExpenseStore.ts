@@ -286,6 +286,75 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
           }));
         },
 
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = 카테고리별
+        /** 카테고리별 지출 총액 */
+        getCategorySpend: (category) => {
+          const { expenses } = get();
+
+          let catergoryItems: IExpenseList[] = [];
+          expenses.forEach((expense) =>
+            expense.list.forEach((list) => {
+              if (list.category === category) {
+                catergoryItems.push(list);
+              }
+            }),
+          );
+
+          const categorySpendAmount = catergoryItems.reduce(
+            (sum, item) => sum + item.calcExchangeAmount,
+            0,
+          );
+
+          return Math.max(0, roundDecimal(categorySpendAmount));
+        },
+
+        /** 카테고리별, 통화 별 총 지출 */
+        getCategorySpendByCurrency: (category) => {
+          const { expenses } = get();
+
+          let catergoryItems: IExpenseList[] = [];
+          expenses.forEach((expense) =>
+            expense.list.forEach((list) => {
+              if (list.category === category) {
+                catergoryItems.push(list);
+              }
+            }),
+          );
+
+          const reduceSpend = catergoryItems.reduce(
+            (acc, item) => {
+              const category = item.category;
+              const currencyLabel = item.exchangeRate.currencyCode.label;
+              const amount = item.amount;
+              const calcExchangeAmount = item.calcExchangeAmount;
+
+              if (!acc[currencyLabel]) {
+                acc[currencyLabel] = {
+                  category: '',
+                  amount: 0,
+                  calcCurrencyAmount: 0,
+                };
+              }
+
+              acc[currencyLabel].category = category;
+              acc[currencyLabel].amount += amount;
+              acc[currencyLabel].calcCurrencyAmount += calcExchangeAmount;
+              return acc;
+            },
+            {} as Record<
+              string,
+              { category: string; amount: number; calcCurrencyAmount: number }
+            >,
+          );
+
+          return Object.entries(reduceSpend).map(([currency, spend]) => ({
+            category,
+            currency,
+            spend: roundDecimal(spend.amount),
+            calcSpend: roundDecimal(spend.calcCurrencyAmount),
+          }));
+        },
+
         // = = = = = = = = = = = = = = = = = = = = = = = = = = 모든날
         /** 모든날 총 지출 */
         getAllTotalSpend: () => {

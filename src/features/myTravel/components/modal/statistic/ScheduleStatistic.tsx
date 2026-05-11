@@ -40,7 +40,7 @@ export default function ScheduleStatistic({
               <p className="font-bold">
                 {expense.day === 0 ? '여행전' : `${expense.day}일차`}
               </p>
-              <span className='text-text-secondary text-sm font-bold'>{0}%</span>
+              <span className='text-text-secondary'>{0}%</span>
             </div>
             <div className="flex flex-col">
               <p className="text-state-error text-lg font-bold">

@@ -48,6 +48,7 @@ export interface ISpendByCurrency {
   currency: string;
   spend: number;
   calcSpend: number;
+  category?: string;
 }
 
 /** 여행 가계부 전역 인터페이스 (actions) */
@@ -64,12 +65,19 @@ export interface ITravelExpenseActions {
 /** 여행 가계부 전역 인터페이스 (getters) */
 export interface ITravelExpenseGetters {
   getTravelExpense: () => IExpense[];
+
   getAllTotalSpend: () => number;
   getAllTotalMySpend: () => number;
   getAllTotalSpendByCurrency: () => ISpendByCurrency[];
   getAllTotalMySpendByCurrency: () => ISpendByCurrency[];
+
   getDailyAllSpend: (day: number) => number;
   getDailyMySpend: (day: number) => number;
   getDailyAllSpendByCurrency: (day: number) => ISpendByCurrency[];
   getDailyMySpendByCurrency: (day: number) => ISpendByCurrency[];
+
+  getCategorySpend: (category: EXPENSES_CATEGORY_TYPE) => number;
+  getCategorySpendByCurrency: (
+    category: EXPENSES_CATEGORY_TYPE,
+  ) => ISpendByCurrency[];
 }
