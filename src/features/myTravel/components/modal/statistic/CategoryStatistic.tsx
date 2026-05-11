@@ -5,10 +5,8 @@
  * @description: 통계 모달 > 카테고리별 컴포넌트
  */
 
-import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
-import { convertComma } from '@/shared/lib/utils';
+import { convertComma, getPercent } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 import { EXPENSE_CATEGORY_LIST } from '@/features/myTravel/constants/expense.constant';
@@ -22,12 +20,15 @@ export default function CategoryStatistic({
   isShowMySpend,
 }: ICategoryStatistic) {
   const {
+    getAllTotalSpend,
+    getAllTotalMySpend,
     getCategorySpend,
     getCategorySpendByCurrency,
     getCategoryMySpend,
     getCategoryMySpendByCurrency,
   } = useTravelExpenseStore();
 
+  const totalSpend = isShowMySpend ? getAllTotalMySpend : getAllTotalSpend;
   const categorySpend = isShowMySpend ? getCategoryMySpend : getCategorySpend;
   const categorySpendByCurrency = isShowMySpend
     ? getCategoryMySpendByCurrency
@@ -41,7 +42,13 @@ export default function CategoryStatistic({
             <div className="flex items-center gap-1">
               <CategoryIcon variant={list.value} circled="none" size="sm" />
               <p className="font-bold">{list.label}</p>
-              <span className="text-text-secondary">{0}%</span>
+              <span className="text-text-secondary">
+                {getPercent({
+                  numer: categorySpend(list.value),
+                  deno: totalSpend(),
+                })}
+                %
+              </span>
             </div>
             <div className="flex flex-col">
               <p className="text-state-error text-lg font-bold">

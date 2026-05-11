@@ -7,7 +7,7 @@
 
 import { useState } from 'react';
 import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
-import { convertComma } from '@/shared/lib/utils';
+import { convertComma, getPercent } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 
@@ -20,12 +20,15 @@ export default function ScheduleStatistic({
 }: IScheduleStatistic) {
   const expenses = useTravelExpenseStore((state) => state.expenses);
   const {
+    getAllTotalSpend,
+    getAllTotalMySpend,
     getDailyAllSpend,
     getDailyMySpend,
     getDailyAllSpendByCurrency,
     getDailyMySpendByCurrency,
   } = useTravelExpenseStore();
 
+  const totalSpend = isShowMySpend ? getAllTotalMySpend : getAllTotalSpend;
   const dailySpend = isShowMySpend ? getDailyMySpend : getDailyAllSpend;
   const dailySpendByCurrency = isShowMySpend
     ? getDailyMySpendByCurrency
@@ -36,11 +39,17 @@ export default function ScheduleStatistic({
       {expenses.map((expense, index) => (
         <Card key={`${expense.day}-${index}`}>
           <div className="flex items-start justify-between">
-            <div className='flex items-baseline gap-1'>
+            <div className="flex items-baseline gap-1">
               <p className="font-bold">
                 {expense.day === 0 ? '여행전' : `${expense.day}일차`}
               </p>
-              <span className='text-text-secondary'>{0}%</span>
+              <span className="text-text-secondary">
+                {getPercent({
+                  numer: dailySpend(expense.day),
+                  deno: totalSpend(),
+                })}
+                %
+              </span>
             </div>
             <div className="flex flex-col">
               <p className="text-state-error text-lg font-bold">

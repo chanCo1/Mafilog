@@ -31,7 +31,9 @@ export default function ExpenseStatisticModal({
     EXPENSE_STATISTIC_LIST[0],
   );
 
-  const { getAllTotalSpend } = useTravelExpenseStore();
+  const { getAllTotalSpend, getAllTotalMySpend } = useTravelExpenseStore();
+
+  const totalSpend = isShowMySpend ? getAllTotalMySpend : getAllTotalSpend;
 
   return (
     <SideModal
@@ -49,7 +51,7 @@ export default function ExpenseStatisticModal({
           <div className="flex flex-col">
             <p className="font-bold">여행 총 지출</p>
             <span className="text-state-error text-xxl font-bold">
-              {convertComma(getAllTotalSpend())}원
+              {convertComma(totalSpend())}원
             </span>
           </div>
           <Toggle
