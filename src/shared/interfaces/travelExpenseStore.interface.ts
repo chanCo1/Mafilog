@@ -67,9 +67,9 @@ export interface ITravelExpenseGetters {
   getAllTotalSpend: () => number;
   getAllTotalMySpend: () => number;
   getAllTotalSpendByCurrency: () => ISpendByCurrency[];
-  getAllTotalMySpendByCurrency: () => number;
+  getAllTotalMySpendByCurrency: () => ISpendByCurrency[];
   getDailyAllSpend: (day: number) => number;
   getDailyMySpend: (day: number) => number;
   getDailyAllSpendByCurrency: (day: number) => ISpendByCurrency[];
-  getDailyMySpendByCurrency: (day: number) => number;
+  getDailyMySpendByCurrency: (day: number) => ISpendByCurrency[];
 }

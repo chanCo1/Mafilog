@@ -24,6 +24,7 @@ import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.con
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { toast } from 'sonner';
 import { convertComma } from '@/shared/lib/utils';
+import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 
 // interface ITravelExpensesView {}
 
@@ -42,6 +43,7 @@ function TravelExpensesView() {
     setDeleteSelectedExpense,
     setMoveSelectedExpense,
     getAllTotalSpend,
+    getAllTotalSpendByCurrency,
   } = useTravelExpenseStore();
   const selectedExpenses = useSelectExpenses((state) => state.selectedExpenses);
   const { clearSelectedExpenses } = useSelectExpenses();
@@ -189,17 +191,14 @@ function TravelExpensesView() {
                   <span>{convertComma(getAllTotalSpend())}원</span>
                 </div>
               </div>
-              {/* <div className="flex justify-end">
-                <div className="flex flex-col items-end">
-                  <div className="flex items-end gap-2">
-                    <p>KRW</p>
-                    <span className="text-state-error text-lg font-bold">
-                      {0}원
-                    </span>
-                  </div>
-                  <span className="text-text-secondary text-sm">{0}원</span>
-                </div>
-              </div> */}
+              {getAllTotalSpendByCurrency().map((currency, index) => (
+                <CurrencySpend
+                  key={`${currency.currency}-${index}`}
+                  currency={currency.currency}
+                  spend={currency.spend}
+                  calcExchangeRate={currency.calcSpend}
+                />
+              ))}
             </Card>
           </div>
         }

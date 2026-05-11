@@ -9,6 +9,7 @@ import { Card } from '@/shared/components/ui/Card';
 import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useMemo } from 'react';
 import { convertComma } from '@/shared/lib/utils';
+import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 
 const ALL_DAY = 'all'; // 모든날
 
@@ -28,6 +29,8 @@ export default function TravelExpensesSpendCard({
     getAllTotalMySpend,
     getAllTotalSpendByCurrency,
     getDailyAllSpendByCurrency,
+    getAllTotalMySpendByCurrency,
+    getDailyMySpendByCurrency,
   } = useTravelExpenseStore();
 
   /** 일정별 지출 */
@@ -42,12 +45,17 @@ export default function TravelExpensesSpendCard({
       ? getAllTotalMySpend()
       : getDailyMySpend(selectedDay as number);
 
+  /** 모든날 통화별 지출 */
   const dailySpendByCurrency =
     selectedDay === ALL_DAY
       ? getAllTotalSpendByCurrency()
       : getDailyAllSpendByCurrency(selectedDay as number);
 
-  const dailyMySpendByCurrency = selectedDay === ALL_DAY ? [] : [];
+  /** 일정별 통화별 내 지출 */
+  const mySpendByCurrency =
+    selectedDay === ALL_DAY
+      ? getAllTotalMySpendByCurrency()
+      : getDailyMySpendByCurrency(selectedDay as number);
 
   const getExpenseName = useMemo(() => {
     if (selectedDay === ALL_DAY) {
@@ -68,8 +76,17 @@ export default function TravelExpensesSpendCard({
           <p className="text-lg font-bold">
             {getExpenseName} {isMySpend && '내'} 지출
           </p>
-          {isMySpend ? (
-            <></>
+          {/* {isMySpend ? (
+            <>
+              {mySpendByCurrency.map((currency, index) => (
+                <CurrencySpend
+                  key={`${currency.currency}-${index}`}
+                  currency={currency.currency}
+                  spend={currency.spend}
+                  calcExchangeRate={currency.calcSpend}
+                />
+              ))}
+            </>
           ) : (
             <>
               {dailySpendByCurrency.map((currency, index) => (
@@ -81,11 +98,11 @@ export default function TravelExpensesSpendCard({
                 />
               ))}
             </>
-          )}
+          )} */}
         </div>
-        <div className="flex items-baseline justify-between pt-2.5 font-bold">
+        <div className="flex items-baseline justify-between font-bold">
           <span className="max-mobile:text-sm">KRW</span>
-          <span className="text-state-error text-xl max-mobile:text-lg">
+          <span className="text-state-error max-mobile:text-lg text-xl">
             {convertComma(isMySpend ? mySpend : dailySpend)}원
           </span>
         </div>
@@ -93,27 +110,3 @@ export default function TravelExpensesSpendCard({
     </Card>
   );
 }
-
-const CurrencySpend = ({
-  currency,
-  spend,
-  calcExchangeRate,
-}: {
-  currency: string;
-  spend: number;
-  calcExchangeRate?: number;
-}) => (
-  <div className="flex flex-col items-end">
-    <div className="flex items-center gap-1">
-      <p className="">{currency}</p>
-      <span className="text-state-error text-lg max-mobile:text-md font-bold">
-        {convertComma(spend)}
-      </span>
-    </div>
-    {calcExchangeRate && currency !== 'KRW' && (
-      <span className="text-text-secondary text-sm font-bold">
-        {convertComma(calcExchangeRate)}원
-      </span>
-    )}
-  </div>
-);

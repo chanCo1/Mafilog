@@ -259,12 +259,31 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
             (list) => list.payer.value === '나',
           );
 
-          const dailyMySpend = filtered.reduce(
-            (sum, item) => sum + item.calcExchangeAmount,
-            0,
+          const reduceSpend = filtered.reduce(
+            (acc, item) => {
+              const currencyLabel = item.exchangeRate.currencyCode.label;
+              const amount = item.amount;
+              const calcExchangeAmount = item.calcExchangeAmount;
+
+              if (!acc[currencyLabel]) {
+                acc[currencyLabel] = { amount: 0, calcCurrencyAmount: 0 };
+              }
+
+              acc[currencyLabel].amount += amount;
+              acc[currencyLabel].calcCurrencyAmount += calcExchangeAmount;
+              return acc;
+            },
+            {} as Record<
+              string,
+              { amount: number; calcCurrencyAmount: number }
+            >,
           );
 
-          return Math.max(0, roundDecimal(dailyMySpend));
+          return Object.entries(reduceSpend).map(([currency, spend]) => ({
+            currency,
+            spend: roundDecimal(spend.amount),
+            calcSpend: roundDecimal(spend.calcCurrencyAmount),
+          }));
         },
 
         // = = = = = = = = = = = = = = = = = = = = = = = = = = 모든날
@@ -328,10 +347,38 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
 
         /** 모든날 통화 별 내 지출 */
         getAllTotalMySpendByCurrency: () => {
-          // const expenses = get().expenses;
-          // const spendCurrencies = expenses.map((expense) => expense.list.find((list) => list.exchangeRate.currencyCode.label))
-          // console.log(spendCurrencies)
-          // return Math.max(0, roundDecimal(dailySpend));
+          const { expenses } = get();
+
+          const reduceTotalSpend = expenses.reduce(
+            (acc, day) => {
+              day.list.forEach((item) => {
+                if (item.payer.value !== '나') return;
+
+                const currencyLabel = item.exchangeRate.currencyCode.label;
+                const amount = item.amount;
+                const calcAmount = item.calcExchangeAmount;
+
+                if (!acc[currencyLabel]) {
+                  acc[currencyLabel] = { totalAmount: 0, totalCalcAmount: 0 };
+                }
+
+                acc[currencyLabel].totalAmount += amount;
+                acc[currencyLabel].totalCalcAmount += calcAmount;
+              });
+
+              return acc;
+            },
+            {} as Record<
+              string,
+              { totalAmount: number; totalCalcAmount: number }
+            >,
+          );
+
+          return Object.entries(reduceTotalSpend).map(([currency, data]) => ({
+            currency,
+            spend: roundDecimal(data.totalAmount),
+            calcSpend: roundDecimal(data.totalCalcAmount),
+          }));
         },
       };
     }),
