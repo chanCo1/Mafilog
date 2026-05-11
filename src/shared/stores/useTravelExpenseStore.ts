@@ -308,6 +308,31 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
           return Math.max(0, roundDecimal(categorySpendAmount));
         },
 
+        /** 카테고리별 내 지출 총액 */
+        getCategoryMySpend: (category) => {
+          const { expenses } = get();
+
+          let catergoryItems: IExpenseList[] = [];
+          expenses.forEach((expense) =>
+            expense.list.forEach((list) => {
+              if (list.category === category) {
+                catergoryItems.push(list);
+              }
+            }),
+          );
+
+          const filtered = catergoryItems.filter(
+            (list) => list.payer.value === '나',
+          );
+
+          const categorySpendAmount = filtered.reduce(
+            (sum, item) => sum + item.calcExchangeAmount,
+            0,
+          );
+
+          return Math.max(0, roundDecimal(categorySpendAmount));
+        },
+
         /** 카테고리별, 통화 별 총 지출 */
         getCategorySpendByCurrency: (category) => {
           const { expenses } = get();
@@ -322,6 +347,57 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
           );
 
           const reduceSpend = catergoryItems.reduce(
+            (acc, item) => {
+              const category = item.category;
+              const currencyLabel = item.exchangeRate.currencyCode.label;
+              const amount = item.amount;
+              const calcExchangeAmount = item.calcExchangeAmount;
+
+              if (!acc[currencyLabel]) {
+                acc[currencyLabel] = {
+                  category: '',
+                  amount: 0,
+                  calcCurrencyAmount: 0,
+                };
+              }
+
+              acc[currencyLabel].category = category;
+              acc[currencyLabel].amount += amount;
+              acc[currencyLabel].calcCurrencyAmount += calcExchangeAmount;
+              return acc;
+            },
+            {} as Record<
+              string,
+              { category: string; amount: number; calcCurrencyAmount: number }
+            >,
+          );
+
+          return Object.entries(reduceSpend).map(([currency, spend]) => ({
+            category,
+            currency,
+            spend: roundDecimal(spend.amount),
+            calcSpend: roundDecimal(spend.calcCurrencyAmount),
+          }));
+        },
+
+        /** 카테고리별, 통화별 내 지출 */
+        getCategoryMySpendByCurrency: (category) => {
+          const { expenses } = get();
+
+          let catergoryItems: IExpenseList[] = [];
+          expenses.forEach((expense) =>
+            expense.list.forEach((list) => {
+              if (list.category === category) {
+                catergoryItems.push(list);
+              }
+            }),
+          );
+
+          const filtered = catergoryItems.filter(
+            (list) => list.payer.value === '나',
+          );
+
+          const reduceSpend = filtered.reduce(
             (acc, item) => {
               const category = item.category;
               const currencyLabel = item.exchangeRate.currencyCode.label;

@@ -142,7 +142,7 @@ function CategoryIconEntity(
           <Utensils
             className={
               circled === 'none'
-                ? 'w-full'
+                ? 'w-full pt-0.5'
                 : size === 'sm'
                   ? fourSize
                   : fourHalfSize

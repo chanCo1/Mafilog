@@ -77,7 +77,11 @@ export interface ITravelExpenseGetters {
   getDailyMySpendByCurrency: (day: number) => ISpendByCurrency[];
 
   getCategorySpend: (category: EXPENSES_CATEGORY_TYPE) => number;
+  getCategoryMySpend: (category: EXPENSES_CATEGORY_TYPE) => number;
   getCategorySpendByCurrency: (
+    category: EXPENSES_CATEGORY_TYPE,
+  ) => ISpendByCurrency[];
+  getCategoryMySpendByCurrency: (
     category: EXPENSES_CATEGORY_TYPE,
   ) => ISpendByCurrency[];
 }

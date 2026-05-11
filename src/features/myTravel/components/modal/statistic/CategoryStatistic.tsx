@@ -14,11 +14,24 @@ import CurrencySpend from '@/features/myTravel/components/detail/expnese/Currenc
 import { EXPENSE_CATEGORY_LIST } from '@/features/myTravel/constants/expense.constant';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 
-interface ICategoryStatistic {}
+interface ICategoryStatistic {
+  isShowMySpend: boolean;
+}
 
-export default function CategoryStatistic() {
-  const { getCategorySpend, getCategorySpendByCurrency } =
-    useTravelExpenseStore();
+export default function CategoryStatistic({
+  isShowMySpend,
+}: ICategoryStatistic) {
+  const {
+    getCategorySpend,
+    getCategorySpendByCurrency,
+    getCategoryMySpend,
+    getCategoryMySpendByCurrency,
+  } = useTravelExpenseStore();
+
+  const categorySpend = isShowMySpend ? getCategoryMySpend : getCategorySpend;
+  const categorySpendByCurrency = isShowMySpend
+    ? getCategoryMySpendByCurrency
+    : getCategorySpendByCurrency;
 
   return (
     <div className="flex flex-col gap-3">
@@ -32,9 +45,9 @@ export default function CategoryStatistic() {
             </div>
             <div className="flex flex-col">
               <p className="text-state-error text-lg font-bold">
-                {convertComma(getCategorySpend(list.value))}원
+                {convertComma(categorySpend(list.value))}원
               </p>
-              {getCategorySpendByCurrency(list.value).map((currency, index) => (
+              {categorySpendByCurrency(list.value).map((currency, index) => (
                 <CurrencySpend
                   key={`${currency.currency}-${index}`}
                   currency={currency.currency}

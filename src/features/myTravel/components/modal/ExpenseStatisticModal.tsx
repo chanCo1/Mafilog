@@ -79,7 +79,7 @@ export default function ExpenseStatisticModal({
           {selectedStatistic.value === STATISTIC_TAB.SCHEDULE ? (
             <ScheduleStatistic isShowMySpend={isShowMySpend} />
           ) : (
-            <CategoryStatistic />
+            <CategoryStatistic isShowMySpend={isShowMySpend} />
           )}
         </div>
       </div>
