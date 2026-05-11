@@ -22,7 +22,7 @@ export default function CurrencySpend({
     <div className="flex flex-col items-end">
       <div className="flex items-center gap-1">
         <p className="">{currency}</p>
-        <span className="text-state-error max-mobile:text-md text-lg font-bold">
+        <span className="font-bold">
           {convertComma(spend)}
         </span>
       </div>

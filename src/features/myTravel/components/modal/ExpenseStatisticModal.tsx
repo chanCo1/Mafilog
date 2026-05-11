@@ -31,12 +31,7 @@ export default function ExpenseStatisticModal({
     EXPENSE_STATISTIC_LIST[0],
   );
 
-  const {
-    setDeleteSelectedExpense,
-    setMoveSelectedExpense,
-    getAllTotalSpend,
-    getAllTotalSpendByCurrency,
-  } = useTravelExpenseStore();
+  const { getAllTotalSpend } = useTravelExpenseStore();
 
   return (
     <SideModal
@@ -65,8 +60,9 @@ export default function ExpenseStatisticModal({
         </div>
 
         <div className="flex gap-1">
-          {EXPENSE_STATISTIC_LIST.map((list) => (
+          {EXPENSE_STATISTIC_LIST.map((list, index) => (
             <Chip
+              key={`${list.value}-${index}`}
               variant={
                 selectedStatistic.value === list.value
                   ? 'primary'
@@ -79,11 +75,13 @@ export default function ExpenseStatisticModal({
           ))}
         </div>
 
-        {selectedStatistic.value === STATISTIC_TAB.SCHEDULE ? (
-          <ScheduleStatistic />
-        ) : (
-          <CategoryStatistic />
-        )}
+        <div className="scrollbar-hide overflow-auto">
+          {selectedStatistic.value === STATISTIC_TAB.SCHEDULE ? (
+            <ScheduleStatistic isShowMySpend={isShowMySpend} />
+          ) : (
+            <CategoryStatistic />
+          )}
+        </div>
       </div>
     </SideModal>
   );
