@@ -107,17 +107,6 @@ export const convertTravelStyle = (style: TRAVEL_STYLE) => {
   return TRAVEL_STYLE_LIST.find((list) => list.value === style)?.label;
 };
 
-/** 숫자에 1,000 단위 콤마를 추가하는 함수 */
-export const convertComma = (value: number | string): string => {
-  if (!value && value !== 0) return '0';
-
-  const num = typeof value === 'string' ? Number(value) : value;
-
-  if (isNaN(num)) return '';
-
-  return new Intl.NumberFormat('ko-KR').format(num);
-};
-
 /** 장소 카테고리 가져오기 */
 export const getPlaceCategory = (types: IPlaceList['types']) => {
   if (!types) return '';
@@ -164,4 +153,28 @@ export const convertPaymentType = (paymentType: EXPENSES_PAYMENT_TYPE) => {
     default:
       return '알 수 없음';
   }
+};
+
+// = = = = = = = = = = = = = = = = 금액 관련
+/** 숫자에 1,000 단위 콤마를 추가하는 함수 */
+export const convertComma = (value: number | string): string => {
+  if (!value && value !== 0) return '0';
+
+  const num = typeof value === 'string' ? Number(value) : value;
+  if (isNaN(num)) return '';
+
+  return new Intl.NumberFormat('ko-KR').format(num);
+};
+
+/** 소수점 2자리에서 반올림 처리 */
+export const roundDecimal = (
+  number: number | string,
+  decimal = 100,
+): number => {
+  if (!number && number !== 0) return 0;
+
+  const num = typeof number === 'string' ? Number(number) : number;
+  if (isNaN(num)) return 0;
+
+  return Math.round(num * decimal) / decimal;
 };
