@@ -179,9 +179,10 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
          */
         getTravelInfo: () => get().expenses,
 
-        /** 일차 별 지출 총액 */
-        getDailyTotalSpend: (day) => {
-          const expenses = get().expenses;
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = 일정별
+        /** 일정 별 지출 총액 */
+        getDailyAllSpend: (day) => {
+          const { expenses } = get();
           const targetDay = findTargetDay({ expenses }, day);
 
           if (!targetDay) return 0;
@@ -194,9 +195,9 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
           return Math.max(0, roundDecimal(dailySpend));
         },
 
-        /** 일차 별 내 지출 */
+        /** 일정 별 내 지출 */
         getDailyMySpend: (day) => {
-          const expenses = get().expenses;
+          const { expenses } = get();
           const targetDay = findTargetDay({ expenses }, day);
 
           if (!targetDay) return 0;
@@ -213,7 +214,73 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
           return Math.max(0, roundDecimal(dailyMySpend));
         },
 
+        /** 일정 별, 통화 별 총 지출 */
+        getDailyAllSpendByCurrency: (day) => {
+          const { expenses } = get();
+          const targetDay = findTargetDay({ expenses }, day);
+
+          if (!targetDay) return [];
+
+          const reduceSpend = targetDay.list.reduce(
+            (acc, item) => {
+              const currencyLabel = item.exchangeRate.currencyCode.label;
+              const amount = item.amount;
+              const calcExchangeAmount = item.calcExchangeAmount;
+
+              if (!acc[currencyLabel]) {
+                acc[currencyLabel] = { amount: 0, calcCurrencyAmount: 0 };
+              }
+
+              acc[currencyLabel].amount += amount;
+              acc[currencyLabel].calcCurrencyAmount += calcExchangeAmount;
+              return acc;
+            },
+            {} as Record<
+              string,
+              { amount: number; calcCurrencyAmount: number }
+            >,
+          );
+
+          return Object.entries(reduceSpend).map(([currency, spend]) => ({
+            currency,
+            spend: roundDecimal(spend.amount),
+            calcSpend: roundDecimal(spend.calcCurrencyAmount),
+          }));
+        },
+
+        /** 일정 별, 통화 별 내 지출 */
+        getDailyMySpendByCurrency: (day) => {
+          const { expenses } = get();
+          const targetDay = findTargetDay({ expenses }, day);
+
+          if (!targetDay) return 0;
+
+          const filtered = targetDay.list.filter(
+            (list) => list.payer.value === '나',
+          );
+
+          const dailyMySpend = filtered.reduce(
+            (sum, item) => sum + item.calcExchangeAmount,
+            0,
+          );
+
+          return Math.max(0, roundDecimal(dailyMySpend));
+        },
+
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = 모든날
         /** 모든날 총 지출 */
+        getAllTotalSpend: () => {
+          const expensesRange = get().expenses.length;
+
+          let totalSpend = 0;
+          for (let i = 0; i < expensesRange; i++) {
+            totalSpend += get().getDailyAllSpend(i);
+          }
+
+          return Math.max(0, roundDecimal(totalSpend));
+        },
+
+        /** 모든날 총 내 지출 */
         getAllTotalMySpend: () => {
           const expensesRange = get().expenses.length;
 
@@ -225,16 +292,46 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
           return Math.max(0, roundDecimal(totalSpend));
         },
 
-        /** 모든날 총 지출 */
-        getAllTotalSpend: () => {
-          const expensesRange = get().expenses.length;
+        /** 모든날 통화 별 지출 */
+        getAllTotalSpendByCurrency: () => {
+          const { expenses } = get();
 
-          let totalSpend = 0;
-          for (let i = 0; i < expensesRange; i++) {
-            totalSpend += get().getDailyTotalSpend(i);
-          }
+          const reduceTotalSpend = expenses.reduce(
+            (acc, day) => {
+              day.list.forEach((item) => {
+                const currencyLabel = item.exchangeRate.currencyCode.label;
+                const amount = item.amount;
+                const calcAmount = item.calcExchangeAmount;
 
-          return Math.max(0, roundDecimal(totalSpend));
+                if (!acc[currencyLabel]) {
+                  acc[currencyLabel] = { totalAmount: 0, totalCalcAmount: 0 };
+                }
+
+                acc[currencyLabel].totalAmount += amount;
+                acc[currencyLabel].totalCalcAmount += calcAmount;
+              });
+
+              return acc;
+            },
+            {} as Record<
+              string,
+              { totalAmount: number; totalCalcAmount: number }
+            >,
+          );
+
+          return Object.entries(reduceTotalSpend).map(([currency, data]) => ({
+            currency,
+            spend: roundDecimal(data.totalAmount),
+            calcSpend: roundDecimal(data.totalCalcAmount),
+          }));
+        },
+
+        /** 모든날 통화 별 내 지출 */
+        getAllTotalMySpendByCurrency: () => {
+          // const expenses = get().expenses;
+          // const spendCurrencies = expenses.map((expense) => expense.list.find((list) => list.exchangeRate.currencyCode.label))
+          // console.log(spendCurrencies)
+          // return Math.max(0, roundDecimal(dailySpend));
         },
       };
     }),

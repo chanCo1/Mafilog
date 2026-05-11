@@ -134,7 +134,7 @@ export default function MyTravelDetailPage() {
           <div className="max-mobile:flex-col mobile:gap-1 max-mobile:items-start flex items-center">
             <span>{formattedValue}</span>
             <span className="max-mobile:hidden">|</span>
-            <div className="text-md flex gap-1">
+            <div className="text-md flex gap-1 max-mobile:text-sm">
               <div>{convertTravelPartner(travelInfo.travelPartner)}</div>
               {travelInfo.travelStyles.length &&
                 travelInfo.travelStyles.map((style) => (

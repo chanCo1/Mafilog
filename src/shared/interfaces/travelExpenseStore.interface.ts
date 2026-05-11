@@ -44,6 +44,12 @@ export interface IDateFromTo {
   to: Date;
 }
 
+export interface ISpendByCurrency {
+  currency: string;
+  spend: number;
+  calcSpend: number;
+}
+
 /** 여행 가계부 전역 인터페이스 (actions) */
 export interface ITravelExpenseActions {
   setInitExpense: (date: IDateFromTo) => void;
@@ -58,8 +64,12 @@ export interface ITravelExpenseActions {
 /** 여행 가계부 전역 인터페이스 (getters) */
 export interface ITravelExpenseGetters {
   getTravelExpense: () => IExpense[];
-  getDailyTotalSpend: (day: number) => number;
-  getDailyMySpend: (day: number) => number;
   getAllTotalSpend: () => number;
   getAllTotalMySpend: () => number;
+  getAllTotalSpendByCurrency: () => ISpendByCurrency[];
+  getAllTotalMySpendByCurrency: () => number;
+  getDailyAllSpend: (day: number) => number;
+  getDailyMySpend: (day: number) => number;
+  getDailyAllSpendByCurrency: (day: number) => ISpendByCurrency[];
+  getDailyMySpendByCurrency: (day: number) => number;
 }

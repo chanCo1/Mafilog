@@ -29,9 +29,9 @@ export default function TravelExpensesDay({
   selectMode,
 }: ITravelExpensesDay) {
   const { selectedExpenses, toggleDayAll } = useSelectExpenses();
-  const { getDailyTotalSpend } = useTravelExpenseStore();
+  const { getDailyAllSpend } = useTravelExpenseStore();
 
-  const dailyTotalAmount = getDailyTotalSpend(day!);
+  const dailyAllAmount = getDailyAllSpend(day!);
 
   // 현재 일차의 list 아이템들이 모두 selectedSchedules에 포함되어 있는지 확인
   const isAllSelected =
@@ -63,7 +63,7 @@ export default function TravelExpensesDay({
         <div className="flex items-end gap-1">
           <span className="text-sm">지출</span>
           <span className="font-bold">
-            {convertComma(dailyTotalAmount)}원
+            {convertComma(dailyAllAmount)}원
           </span>
         </div>
       </div>
