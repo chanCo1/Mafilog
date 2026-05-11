@@ -186,7 +186,7 @@ export const getPercent = ({
   deno: number;
   round?: number;
 }) => {
-  if ((!numer && numer !== 0) || (!deno && deno !== 0)) return 0;
+  if (!numer|| !deno) return 0;
 
   return Math.round((numer / deno) * 100 * round) / round;
 };
