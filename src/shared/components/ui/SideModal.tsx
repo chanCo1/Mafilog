@@ -121,4 +121,4 @@ function SideModalEntity({
   );
 }
 
-export const SideModal = forwardRef(SideModalEntity);
+export const SideModal = SideModalEntity;

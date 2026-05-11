@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
     title: 'Mafilog',
   },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
   formatDetection: {
     telephone: false, // 숫자 클릭 시 전화걸기 팝업 방지
   },
