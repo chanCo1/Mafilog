@@ -21,7 +21,7 @@ export default function DefaultLayout({
       <header className="fixed top-0 z-10 w-full">
         <Header />
       </header>
-      <div className={cn(DEFAULT_LAYOUT_CLASSNAME, 'w-full flex-1 mt-12 px-3 py-7')}>
+      <div className={cn(DEFAULT_LAYOUT_CLASSNAME, 'w-full flex-1 mt-10 px-3 py-7')}>
         {children}
       </div>
       <Footer />

@@ -5,11 +5,12 @@
  * @description: 통계 > 일정별 컴포넌트
  */
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { convertComma, getPercent } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
+import BarChart from '@/shared/components/chart/BarChart';
 
 interface IScheduleStatistic {
   isShowMySpend: boolean;
@@ -34,8 +35,24 @@ export default function ScheduleStatistic({
     ? getDailyMySpendByCurrency
     : getDailyAllSpendByCurrency;
 
+  const getBarChartData = useMemo(() => {
+    const labels: string[] = [];
+    const data: number[] = [];
+
+    expenses.forEach((expense) => {
+      labels.push(expense.day === 0 ? '여행전' : `${expense.day}일차`);
+      data.push(dailySpend(expense.day));
+    });
+
+    return {
+      labels,
+      data,
+    };
+  }, [dailySpend, expenses]);
+
   return (
     <div className="flex flex-col gap-3">
+      <BarChart labels={getBarChartData.labels} data={getBarChartData.data} />
       {expenses.map((expense, index) => (
         <Card key={`${expense.day}-${index}`}>
           <div className="flex items-start justify-between">
