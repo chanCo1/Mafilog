@@ -39,20 +39,46 @@ export default function ScheduleStatistic({
     const labels: string[] = [];
     const data: number[] = [];
 
+    const dayMap: Record<number, number> = {};
+
     expenses.forEach((expense) => {
       labels.push(expense.day === 0 ? '여행전' : `${expense.day}일차`);
       data.push(dailySpend(expense.day));
+
+      dayMap[expense.day] = dailySpend(expense.day);
     });
+
+    const maxDay = Object.keys(dayMap).reduce(
+      (a, b) => (dayMap[Number(a)] > dayMap[Number(b)] ? a : b),
+      '0',
+    );
 
     return {
       labels,
       data,
+      maxDay,
     };
   }, [dailySpend, expenses]);
 
   return (
     <div className="flex flex-col gap-3">
-      <BarChart labels={getBarChartData.labels} data={getBarChartData.data} />
+      <div>
+        <BarChart labels={getBarChartData.labels} data={getBarChartData.data} />
+        <div className="flex items-baseline justify-center">
+          {totalSpend() ? (
+            <>
+              <span className="font-bold">
+                {getBarChartData.maxDay === '0'
+                  ? '여행전'
+                  : `${getBarChartData.maxDay}일차`}
+              </span>
+              <span className="text-sm">에 가장 많이 지출했어요</span>
+            </>
+          ) : (
+            <span className="text-sm text-text-secondary">아직 지출 내역이 없어요</span>
+          )}
+        </div>
+      </div>
       {expenses.map((expense, index) => (
         <Card key={`${expense.day}-${index}`}>
           <div className="flex items-start justify-between">
