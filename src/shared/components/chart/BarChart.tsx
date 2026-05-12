@@ -56,20 +56,18 @@ export default function BarChart({ data, dataLabel = '지출 (원)', labels }: I
       legend: {
         display: false,
       },
-      // datalabels: {
-      //   display: true,
-      //   color: '#fff',
-      //   align: 'start',
-      //   anchor: 'start',
-      //   offset: -80,
-      //   formatter: (value: number) => {
-      //     return value.toLocaleString() + '원';
-      //   },
-      //   font: {
-      //     weight: 'bold',
-      //     size: 12,
-      //   },
-      // },
+      datalabels: {
+        display: true,
+        color: '#fff',
+        align: 'center',
+        formatter: (value: number) => {
+          return value.toLocaleString();
+        },
+        font: {
+          weight: 'bold',
+          size: 10,
+        },
+      },
     },
     scales: {
       x: {

@@ -16,7 +16,7 @@ import {
   ChartOptions,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-// import ChartDataLabels from 'chartjs-plugin-datalabels';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 interface IDoughnutChart {
   labels: string[];
@@ -32,7 +32,7 @@ ChartJS.register(
   // Title,
   Tooltip,
   Legend,
-  // ChartDataLabels,
+  ChartDataLabels,
 );
 
 export default function DoughnutChart({
@@ -62,20 +62,20 @@ export default function DoughnutChart({
       legend: {
         display: false,
       },
-      // datalabels: {
-      //   display: true,
-      //   color: '#fff',
-      //   align: 'start',
-      //   anchor: 'start',
-      //   offset: -80,
-      //   formatter: (value: number) => {
-      //     return value.toLocaleString() + '원';
-      //   },
-      //   font: {
-      //     weight: 'bold',
-      //     size: 12,
-      //   },
-      // },
+      datalabels: {
+        display: true,
+        color: '#fff',
+        font: {
+          weight: 'bold',
+          size: 10,
+        },
+        textAlign: 'center',
+        formatter: (value, ctx) => {
+          const label = ctx.chart.data.labels?.[ctx.dataIndex];
+          if (value === 0 || value < 5) return null;
+          return `${label}\n${value}%`;
+        },
+      },
     },
   };
 
