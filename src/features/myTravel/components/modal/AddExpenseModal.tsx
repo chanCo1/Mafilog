@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { cn, roundDecimal } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
@@ -16,7 +16,11 @@ import {
   EXPENSE_CATEGORY_LIST,
 } from '@/features/myTravel/constants/expense.constant';
 import { Input } from '@/shared/components/ui/Input';
-import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
+import {
+  EXPENSES_CATEGORY_TYPE,
+  EXPENSES_SPENDER_TYPE,
+  EXPENSES_PAYMENT_TYPE,
+} from '@/shared/types/expenseEnum';
 import ExpenseCategoryList from '@/features/myTravel/components/modal/addExpense/ExpenseCategoryList';
 import TimePicker from '@/shared/components/ui/TimePicker';
 import Selectbox from '@/shared/components/ui/Selectbox';
@@ -31,6 +35,7 @@ import { toast } from 'sonner';
 import SelectSpenderType from '@/features/myTravel/components/modal/addExpense/SelectSpenderType';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.constant';
+
 interface IAddExpenseModal {
   isModify?: boolean;
   isOpen: boolean;
@@ -47,13 +52,11 @@ export default function AddExpenseModal({
   /** 지출 명 */
   const [expenseName, setExpenseName] = useState('');
   /** 지출 방식 */
-  const [selectedSpenderType, setSelectedSpenderType] = useState(
-    SPENDER_TYPE_LIST[0].value,
-  );
+  const [selectedSpenderType, setSelectedSpenderType] =
+    useState<EXPENSES_SPENDER_TYPE>(SPENDER_TYPE_LIST[0].value);
   /** 결제 방식 */
-  const [selectedPaymentType, setSelectedPaymentType] = useState(
-    PAYMENT_TYPE_LIST[0].value,
-  );
+  const [selectedPaymentType, setSelectedPaymentType] =
+    useState<EXPENSES_PAYMENT_TYPE>(PAYMENT_TYPE_LIST[0].value);
   /** 카테고리 선택 */
   const [selectedCategory, setSelectedCategory] =
     useState<EXPENSES_CATEGORY_TYPE>(EXPENSE_CATEGORY_LIST[2].value);
@@ -103,6 +106,14 @@ export default function AddExpenseModal({
     if (isModify && !timeLineData) return;
     if (!expenseName) return;
 
+    const withAmountSpender = selectedSepnder.map((spender) => ({
+      ...spender,
+      amount: roundDecimal(expenseAmount / selectedSepnder.length),
+      calcExchangeAmount: roundDecimal(
+        calcExchangeAmount / selectedSepnder.length,
+      ),
+    }));
+
     const saveData = {
       id: isModify ? timeLineData!.id : '',
       name: expenseName,
@@ -111,7 +122,7 @@ export default function AddExpenseModal({
       day: selectedDay.value as number,
       time: selectedTime,
       memo: inputMemo,
-      spender: selectedSepnder,
+      spender: withAmountSpender,
       payer: selectedPayer,
       paymentType: selectedPaymentType,
       amount: expenseAmount,

@@ -13,6 +13,7 @@ import { Checkbox } from '@/shared/components/ui/Checkbox';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import { ILabelValue } from '@/shared/interfaces';
+import { IMemberList } from '@/shared/interfaces';
 
 interface ISelectSpenderType {
   selectedSpenderType: EXPENSES_SPENDER_TYPE;
@@ -46,16 +47,16 @@ export default function SelectSpenderType({
   };
 
   /** 지출자 선택 */
-  const handleSelectSpender = (_member: string) => {
+  const handleSelectSpender = (_member: IMemberList) => {
     if (!_member) return;
 
     setSelectedSepnder((prev) => {
-      const isExist = prev?.some((item) => item.value === _member);
+      const isExist = prev?.some((item) => item.value === _member.id);
 
       if (isExist) {
-        return prev?.filter((item) => item.value !== _member);
+        return prev?.filter((item) => item.value !== _member.id);
       } else {
-        return [...prev, { label: _member, value: _member }];
+        return [...prev, { label: _member.name, value: _member.id }];
       }
     });
   };
@@ -95,7 +96,7 @@ export default function SelectSpenderType({
                 <span className="font-bold">{_member.name}</span>
                 <div className="flex items-center gap-5">
                   <Radio
-                    id={_member.id}
+                    id={{ label: _member.name, value: _member.id }}
                     isUserIcon
                     value={selectedPayer as ILabelValue}
                     onChange={(value) => setSelectPayer(value)}
@@ -107,7 +108,7 @@ export default function SelectSpenderType({
                         (sepnder) => sepnder.value === _member.id,
                       ),
                     )}
-                    onChange={() => handleSelectSpender(_member.id)}
+                    onChange={() => handleSelectSpender(_member)}
                   />
                 </div>
               </div>

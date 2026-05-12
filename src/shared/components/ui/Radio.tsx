@@ -33,7 +33,7 @@ const radioVariants = cva('flex gap-1 cursor-pointer items-center w-fit', {
 
 interface IRadio
   extends
-    Omit<React.HTMLAttributes<HTMLDivElement>, 'color' | 'onChange'>,
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'color' | 'onChange' | 'id'>,
     VariantProps<typeof radioVariants> {
   className?: string;
   label?: string;
@@ -47,6 +47,7 @@ interface IRadio
   value: ILabelValue;
   onChange: (value: ILabelValue) => void;
   isUserIcon?: boolean;
+  id: ILabelValue;
 }
 
 function RadioEntity(
@@ -64,6 +65,7 @@ function RadioEntity(
     value,
     onChange,
     isUserIcon,
+    id,
     ...props
   }: IRadio,
   ref: React.ForwardedRef<HTMLInputElement>,
@@ -138,11 +140,11 @@ function RadioEntity(
             )}
             /** 옵션이 없을 땐 id로 값 만들기 */
             onClick={() =>
-              onClickRadio({ label: props.id || '', value: props.id || '' })
+              onClickRadio({ label: id.label || '', value: id.value || '' })
             }
           >
             {/* 단일로 사용할 때는 id 값으로 구분 */}
-            {renderIcon(value?.value === props.id)}
+            {renderIcon(value?.value === id.value)}
             {label && <span className="text-text-primary">{label}</span>}
           </div>
         )}
