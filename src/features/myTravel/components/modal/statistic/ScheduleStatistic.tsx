@@ -39,24 +39,24 @@ export default function ScheduleStatistic({
     const labels: string[] = [];
     const data: number[] = [];
 
-    const dayMap: Record<number, number> = {};
+    const dailyExpense: Record<number, number> = {};
 
     expenses.forEach((expense) => {
       labels.push(expense.day === 0 ? '여행전' : `${expense.day}일차`);
       data.push(dailySpend(expense.day));
 
-      dayMap[expense.day] = dailySpend(expense.day);
+      dailyExpense[expense.day] = dailySpend(expense.day);
     });
 
-    const maxDay = Object.keys(dayMap).reduce(
-      (a, b) => (dayMap[Number(a)] > dayMap[Number(b)] ? a : b),
+    const mostDay = Object.keys(dailyExpense).reduce(
+      (a, b) => (dailyExpense[Number(a)] > dailyExpense[Number(b)] ? a : b),
       '0',
     );
 
     return {
       labels,
       data,
-      maxDay,
+      mostDay,
     };
   }, [dailySpend, expenses]);
 
@@ -68,9 +68,9 @@ export default function ScheduleStatistic({
           {totalSpend() ? (
             <>
               <span className="font-bold">
-                {getBarChartData.maxDay === '0'
+                {getBarChartData.mostDay === '0'
                   ? '여행전'
-                  : `${getBarChartData.maxDay}일차`}
+                  : `${getBarChartData.mostDay}일차`}
               </span>
               <span className="text-sm">에 가장 많이 지출했어요</span>
             </>
