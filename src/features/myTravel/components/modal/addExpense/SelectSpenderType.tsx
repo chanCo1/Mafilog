@@ -34,8 +34,8 @@ export default function SelectSpenderType({
 
   const getMembersOption = useMemo(() => {
     return travelInfo.member.map((member) => ({
-      label: member,
-      value: member,
+      label: member.name,
+      value: member.id,
     }));
   }, [travelInfo.member]);
 
@@ -89,13 +89,13 @@ export default function SelectSpenderType({
           <div className="border-border-secondary flex flex-col gap-2 rounded-lg border p-3">
             {travelInfo.member.map((_member, index) => (
               <div
-                key={`${_member}-${index}`}
+                key={`${_member.id}-${index}`}
                 className="flex items-center justify-between"
               >
-                <span className="font-bold">{_member}</span>
+                <span className="font-bold">{_member.name}</span>
                 <div className="flex items-center gap-5">
                   <Radio
-                    id={_member}
+                    id={_member.id}
                     isUserIcon
                     value={selectedPayer as ILabelValue}
                     onChange={(value) => setSelectPayer(value)}
@@ -104,10 +104,10 @@ export default function SelectSpenderType({
                     isUserIcon
                     value={Boolean(
                       selectedSepnder?.find(
-                        (sepnder) => sepnder.value === _member,
+                        (sepnder) => sepnder.value === _member.id,
                       ),
                     )}
-                    onChange={() => handleSelectSpender(_member)}
+                    onChange={() => handleSelectSpender(_member.id)}
                   />
                 </div>
               </div>

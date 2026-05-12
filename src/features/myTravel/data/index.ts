@@ -183,7 +183,11 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
       timezone: 'Australia/Sydney',
     },
   ],
-  member: ['나', '같이간친구A', '같이간친구B'],
+  member: [
+    { id: 'mflid-1', name: '나' },
+    { id: 'mflid-2', name: '같이간친구A' },
+    { id: 'mflid-3', name: '같이간친구B' },
+  ],
   // schedule: [
   //   {
   //     day: 1,

@@ -174,13 +174,13 @@ export default function AddExpenseModal({
       setCalcFormula('');
       setSelectedDay(travelDaysList?.[0]);
       setSelectPayer({
-        label: travelInfo.member[0],
-        value: travelInfo.member[0],
+        label: travelInfo.member[0].name,
+        value: travelInfo.member[0].id,
       });
       setSelectedSepnder([
         {
-          label: travelInfo.member[0],
-          value: travelInfo.member[0],
+          label: travelInfo.member[0].name,
+          value: travelInfo.member[0].id,
         },
       ]);
     }

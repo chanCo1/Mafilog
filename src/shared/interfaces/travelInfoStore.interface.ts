@@ -1,4 +1,5 @@
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
+import { ILabelValue, IMemberList } from '@/shared/interfaces';
 import {
   TRAVEL_STATUS,
   TRAVEL_PARTNER,
@@ -17,7 +18,7 @@ export interface ITravelInfoState {
     travelStyles: TRAVEL_STYLE[];
     travelPartner: TRAVEL_PARTNER;
     cities: IPlaceList[];
-    member: string[];
+    member: IMemberList[];
   };
 }
 

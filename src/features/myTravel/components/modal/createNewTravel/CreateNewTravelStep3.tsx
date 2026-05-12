@@ -17,18 +17,21 @@ import {
 import RequireDot from '@/shared/components/ui/RequireDot';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { User, CircleX } from 'lucide-react';
+import { IMemberList } from '@/shared/interfaces';
+import { nanoid } from 'nanoid';
+import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
 
 interface ICreateNewTravelStep3 {
   title: string;
   setTravelTitle: Dispatch<SetStateAction<string>>;
   selectedImage: File[];
   setSelectedImage: Dispatch<SetStateAction<File[]>>;
-  travelPartner: string;
-  setTravelPartner: Dispatch<SetStateAction<string>>;
-  travelStyle: string[];
-  setTravelStyle: Dispatch<SetStateAction<string[]>>;
-  travelMember: string[];
-  setTravelMember: Dispatch<SetStateAction<string[]>>;
+  travelPartner: TRAVEL_PARTNER;
+  setTravelPartner: Dispatch<SetStateAction<TRAVEL_PARTNER>>;
+  travelStyle: TRAVEL_STYLE[];
+  setTravelStyle: Dispatch<SetStateAction<TRAVEL_STYLE[]>>;
+  travelMember: IMemberList[];
+  setTravelMember: Dispatch<SetStateAction<IMemberList[]>>;
 }
 
 export default function CreateNewTravelStep3({
@@ -47,7 +50,7 @@ export default function CreateNewTravelStep3({
   const [addMemberName, setAddMemberName] = useState('');
 
   /** 여행 스타일 핸들링 */
-  const handleTravelStyle = (value: string) => {
+  const handleTravelStyle = (value: TRAVEL_STYLE) => {
     const isChecked = travelStyle.some((_value) => _value === value);
 
     if (isChecked) {
@@ -59,14 +62,14 @@ export default function CreateNewTravelStep3({
 
   /** 여행 멤버 추가 */
   const handleAddMember = () => {
-    setTravelMember([...travelMember, addMemberName]);
+    setTravelMember([...travelMember, { id: nanoid(), name: addMemberName }]);
     setAddMemberName('');
     setIsActiveAddTravelMember(false);
   };
 
   /** 여행 멤버 삭제 */
-  const handelDeleteMember = (name: string) => {
-    const filteredMember = travelMember.filter((member) => member !== name);
+  const handelDeleteMember = (id: string) => {
+    const filteredMember = travelMember.filter((member) => member.id !== id);
     setTravelMember(filteredMember);
   };
 
@@ -95,14 +98,14 @@ export default function CreateNewTravelStep3({
           {travelMember.map((member, index) => (
             <div key={`${member}-${index}`} className="flex items-center gap-2">
               <div className="flex items-center gap-1">
-                <User size="18" className="fill-current text-primary" />
-                <span className="font-bold">{member}</span>
+                <User size="18" className="text-primary fill-current" />
+                <span className="font-bold">{member.name}</span>
               </div>
-              {member !== '나' && (
+              {member.name !== '나' && (
                 <CircleX
                   className="text-text-secondary cursor-pointer"
                   size={18}
-                  onClick={() => handelDeleteMember(member)}
+                  onClick={() => handelDeleteMember(member.id)}
                 />
               )}
             </div>

@@ -21,6 +21,8 @@ import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
+import { IMemberList } from '@/shared/interfaces';
+import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -43,9 +45,13 @@ export default function CreateNewTravelModal({
   );
   const [travelTitle, setTravelTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<File[]>([]);
-  const [travelPartner, setTravelPartner] = useState('alone');
-  const [travelStyle, setTravelStyle] = useState<string[]>([]);
-  const [travelMember, setTravelMember] = useState<string[]>(['나'])
+  const [travelPartner, setTravelPartner] = useState<TRAVEL_PARTNER>(
+    TRAVEL_PARTNER.ALONE,
+  );
+  const [travelStyle, setTravelStyle] = useState<TRAVEL_STYLE[]>([]);
+  const [travelMember, setTravelMember] = useState<IMemberList[]>([
+    { id: '1', name: '나' },
+  ]);
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -106,6 +112,7 @@ export default function CreateNewTravelModal({
       companion: travelPartner,
       travelStyle: travelStyle,
       image: selectedImage,
+      member: travelMember,
     };
 
     // TODO: 임시
