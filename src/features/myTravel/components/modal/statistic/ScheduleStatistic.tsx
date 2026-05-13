@@ -63,7 +63,12 @@ export default function ScheduleStatistic({
   return (
     <div className="flex flex-col gap-3">
       <div>
-        <BarChart labels={getBarChartData.labels} data={getBarChartData.data} />
+        {totalSpend() ? (
+          <BarChart
+            labels={getBarChartData.labels}
+            data={getBarChartData.data}
+          />
+        ) : null}
         <div className="flex items-baseline justify-center">
           {totalSpend() ? (
             <>
@@ -75,7 +80,9 @@ export default function ScheduleStatistic({
               <span className="text-sm">에 가장 많이 지출했어요</span>
             </>
           ) : (
-            <span className="text-sm text-text-secondary">아직 지출 내역이 없어요</span>
+            <span className="text-text-secondary text-sm">
+              아직 지출 내역이 없어요
+            </span>
           )}
         </div>
       </div>

@@ -94,11 +94,13 @@ export default function CategoryStatistic({
   return (
     <div className="flex flex-col gap-3">
       <div>
-        <DoughnutChart
-          backgroundColor={getChartData.backgroundColor}
-          data={getChartData.data}
-          labels={getChartData.labels}
-        />
+        {totalSpend() ? (
+          <DoughnutChart
+            backgroundColor={getChartData.backgroundColor}
+            data={getChartData.data}
+            labels={getChartData.labels}
+          />
+        ) : null}
         <div className="flex items-baseline justify-center">
           {totalSpend() ? (
             <>
