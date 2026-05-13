@@ -571,6 +571,47 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
 
           return roundDecimal(total);
         },
+
+        /** 결제자, 지출자 리스트 */
+        getSettlementList: () => {
+          const { expenses } = get();
+
+          const settlementMap: Record<string, number> = {};
+
+          expenses.forEach((day) => {
+            day.list.forEach((item) => {
+              // 결제자 정보
+              const payerInfo = {
+                label: item.payer.label,
+                value: item.payer.value,
+              };
+
+              item.spender.forEach((spender) => {
+                // 지출자 정보
+                const spenderInfo = {
+                  label: spender.label,
+                  value: spender.value,
+                };
+
+                if (payerInfo.value !== spenderInfo.value) {
+                  // 결제자와 지출자가 다르면 키 생성
+                  const key = `${spenderInfo.value}_${payerInfo.value}`;
+
+                  settlementMap[key] = (settlementMap[key] || 0) + spender.calcExchangeAmount;
+                }
+              });
+            });
+          });
+
+          return Object.entries(settlementMap).map(([key, amount]) => {
+            const [fromId, toId] = key.split('_');
+            return {
+              fromId,
+              toId,
+              amount: roundDecimal(amount),
+            };
+          });
+        },
       };
     }),
     { name: 'expenses' },

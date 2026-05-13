@@ -73,25 +73,40 @@ export interface ITravelExpenseActions {
 export interface ITravelExpenseGetters {
   getTravelExpense: () => IExpense[];
 
+  /** 모든날 총 지출 */
   getAllTotalSpend: () => number;
+  /** 모든날 총 내 지출 */
   getAllTotalMySpend: () => number;
+  /** 모든날 통화 별 지출 */
   getAllTotalSpendByCurrency: () => ISpendByCurrency[];
   getAllTotalMySpendByCurrency: () => ISpendByCurrency[];
 
+  /** 일정 별 지출 총액 */
   getDailyAllSpend: (day: number) => number;
+  /** 일정 별 내 지출 */
   getDailyMySpend: (day: number) => number;
+  /** 일정 별, 통화 별 총 지출 */
   getDailyAllSpendByCurrency: (day: number) => ISpendByCurrency[];
+  /** 일정 별, 통화 별 내 지출 */
   getDailyMySpendByCurrency: (day: number) => ISpendByCurrency[];
 
+  /** 카테고리별 지출 총액 */
   getCategorySpend: (category: EXPENSES_CATEGORY_TYPE) => number;
+  /** 카테고리별 내 지출 총액 */
   getCategoryMySpend: (category: EXPENSES_CATEGORY_TYPE) => number;
+  /** 카테고리별, 통화 별 총 지출 */
   getCategorySpendByCurrency: (
     category: EXPENSES_CATEGORY_TYPE,
   ) => ISpendByCurrency[];
+  /** 카테고리별, 통화별 내 지출 */
   getCategoryMySpendByCurrency: (
     category: EXPENSES_CATEGORY_TYPE,
   ) => ISpendByCurrency[];
 
+  /** 멤버별 총 결제 금액 */
   getTotalPaymentAmountByMember: (id: string) => number;
+  /** 멤버별 총 지출 금액 */
   getTotalSpendAmountByMember: (id: string) => number;
+  /** 결제자, 지출자 리스트 */
+  getSettlementList: () => { fromId: string; toId: string; amount: number }[];
 }
