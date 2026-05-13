@@ -43,7 +43,6 @@ export default function SelectSpenderType({
   /** 1/N 선택 핸들링 */
   const handleSplitSpend = (value: ILabelValue) => {
     setSelectPayer(value);
-    setSelectedSepnder(getMembersOption);
   };
 
   /** 지출자 선택 */

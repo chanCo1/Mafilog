@@ -263,6 +263,41 @@ export default function AddExpenseModal({
     }
   }, [isOpen, isModify, resetData, timeLineData, travelAllDays]);
 
+  const getMembersOption = useMemo(() => {
+    return travelInfo.member.map((member) => ({
+      label: member.name,
+      value: member.id,
+    }));
+  }, [travelInfo.member]);
+
+  // TODO: 지출자 타입 누를때마다 초기화 되는 부분 어떻게할지? 각자 따로 저장소를 가질지 고민
+  /** 지출 타입 핸들링 */
+  const handleSelectedSpenderType = (type: string) => {
+    setSelectedSpenderType(type);
+
+    if (type === EXPENSES_SPENDER_TYPE.SELF) {
+      setSelectPayer({
+        label: travelInfo.member[0].name,
+        value: travelInfo.member[0].id,
+      });
+      setSelectedSepnder([
+        {
+          label: travelInfo.member[0].name,
+          value: travelInfo.member[0].id,
+        },
+      ]);
+    } else if (type === EXPENSES_SPENDER_TYPE.SPLIT) {
+      setSelectedSepnder(getMembersOption);
+    } else {
+      setSelectedSepnder([
+        {
+          label: travelInfo.member[0].name,
+          value: travelInfo.member[0].id,
+        },
+      ]);
+    }
+  };
+
   return (
     <SideModal
       isOpen={isOpen}
@@ -303,7 +338,7 @@ export default function AddExpenseModal({
                       ? 'primary'
                       : 'primaryOutline'
                   }
-                  onClick={() => setSelectedSpenderType(type.value)}
+                  onClick={() => handleSelectedSpenderType(type.value)}
                 >
                   {type.label}
                 </Chip>
