@@ -111,8 +111,12 @@ export interface ITravelExpenseGetters {
   getSettlementList: () => { fromId: string; toId: string; amount: number }[];
   /** 최종 정산 내역 */
   getFinalSettlement: () => {
-    senderId: string;
-    receiverId: string;
+    sendId: string;
+    receiveId: string;
     amount: number;
   }[];
+  /** 내가 받을 금액 구하기 */
+  getMyReceiveAmount: (id: string) => number;
+  /** 내 순수 지출 구하기 */
+  getMyNetExpense: (id: string) => number;
 }

@@ -645,14 +645,35 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
                 return {
                   // 결과값이 양수면 id1 -> id2 보냄
                   // 결과값이 음수면 id2 -> id1 보냄
-                  senderId: finalAmount > 0 ? id1 : id2,
-                  receiverId: finalAmount > 0 ? id2 : id1,
+                  sendId: finalAmount > 0 ? id1 : id2,
+                  receiveId: finalAmount > 0 ? id2 : id1,
                   amount: Math.abs(roundDecimal(finalAmount)),
                 };
               })
               // 0원인 경우는 제외
               .filter((item) => item.amount > 0)
           );
+        },
+
+        /** 내가 받을 금액 구하기 */
+        getMyReceiveAmount: (id) => {
+          const finalSettlement = get().getFinalSettlement();
+
+          const myReceiveAmount = finalSettlement
+            .filter((settle) => settle.receiveId === id)
+            .reduce((acc, item) => acc + item.amount, 0);
+
+          return roundDecimal(myReceiveAmount);
+        },
+
+        /** 내 순수 지출 구하기 */
+        getMyNetExpense: (id) => {
+          const totalPayment = get().getTotalSpendAmountByMember(id);
+          const receiveAmount = get().getMyReceiveAmount(id);
+
+          const calcAmount = totalPayment - receiveAmount;
+
+          return Math.max(0, roundDecimal(calcAmount));
         },
       };
     }),
