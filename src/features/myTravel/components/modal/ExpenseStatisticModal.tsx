@@ -2,7 +2,7 @@
  * @file: ExpenseStatisticModal.tsx
  * @author: chad
  * @since: 2026.05.11 ~
- * @description: ExpenseStatisticModal 컴포넌트
+ * @description: 가계부 통계 모달
  */
 
 import { useState } from 'react';
@@ -48,7 +48,7 @@ export default function ExpenseStatisticModal({
     >
       <div className="flex h-full flex-col gap-3">
         <div className="flex items-start justify-between">
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <p className="font-bold">여행 총 지출</p>
             <span className="text-state-error text-xxl font-bold">
               {convertComma(totalSpend())}원

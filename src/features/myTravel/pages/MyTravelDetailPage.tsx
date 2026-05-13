@@ -36,6 +36,7 @@ import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
 import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import ExpenseStatisticModal from '@/features/myTravel/components/modal/ExpenseStatisticModal';
+import ExpenseSettleUpModal from '@/features/myTravel/components/modal/ExpenseSettleUpModal';
 
 // interface IMyTravelDetailPage {}
 
@@ -99,6 +100,7 @@ export default function MyTravelDetailPage() {
   const [isOpenLocalInfoModal, setIsOpenLocalInfoModal] = useState(false);
   const [isOpenCheckListModal, setIsOpenCheckListModal] = useState(false);
   const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
+  const [isOpenSettelUpModal, setIsOpenSettelUpModal] = useState(false);
 
   /** 여행 기간 날짜 포멧 */
   const formattedValue = useMemo(() => {
@@ -176,7 +178,11 @@ export default function MyTravelDetailPage() {
               >
                 통계
               </Button>
-              <Button variant="gray" size="xs">
+              <Button
+                variant="gray"
+                size="xs"
+                onClick={() => setIsOpenSettelUpModal(true)}
+              >
                 정산
               </Button>
             </div>
@@ -222,6 +228,12 @@ export default function MyTravelDetailPage() {
       <ExpenseStatisticModal
         isOpen={isOpenStatisticModal}
         handleClose={() => setIsOpenStatisticModal(false)}
+      />
+
+      {/* 정산 모달 */}
+      <ExpenseSettleUpModal
+        isOpen={isOpenSettelUpModal}
+        handleClose={() => setIsOpenSettelUpModal(false)}
       />
     </div>
   );
