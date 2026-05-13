@@ -129,13 +129,13 @@ export const convertCategory = (category: EXPENSES_CATEGORY_TYPE) => {
     case EXPENSES_CATEGORY_TYPE.BUS:
       return '교통';
     case EXPENSES_CATEGORY_TYPE.TOUR:
-      return '관광명소';
+      return '관광';
     case EXPENSES_CATEGORY_TYPE.SHOPPING:
       return '쇼핑';
     case EXPENSES_CATEGORY_TYPE.HOUSE:
-      return '숙박시설';
+      return '숙박';
     case EXPENSES_CATEGORY_TYPE.FOOD:
-      return '음식점';
+      return '음식';
     case EXPENSES_CATEGORY_TYPE.ETC:
       return '기타';
     default:
