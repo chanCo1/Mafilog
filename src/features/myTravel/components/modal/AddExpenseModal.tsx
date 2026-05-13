@@ -106,12 +106,15 @@ export default function AddExpenseModal({
     if (isModify && !timeLineData) return;
     if (!expenseName) return;
 
+    /** 지출자 각자에게 지출 금액, 원화 금액,  */
     const withAmountSpender = selectedSepnder.map((spender) => ({
       ...spender,
       amount: roundDecimal(expenseAmount / selectedSepnder.length),
       calcExchangeAmount: roundDecimal(
         calcExchangeAmount / selectedSepnder.length,
       ),
+      currencyCode: selectedExchangeRate.currencyCode,
+      category: selectedCategory,
     }));
 
     const saveData = {

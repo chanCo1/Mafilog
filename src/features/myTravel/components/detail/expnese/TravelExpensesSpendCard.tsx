@@ -27,10 +27,10 @@ export default function TravelExpensesSpendCard({
     getAllTotalSpend,
     getDailyMySpend,
     getAllTotalMySpend,
-    getAllTotalSpendByCurrency,
-    getDailyAllSpendByCurrency,
-    getAllTotalMySpendByCurrency,
-    getDailyMySpendByCurrency,
+    // getAllTotalSpendByCurrency,
+    // getDailyAllSpendByCurrency,
+    // getAllTotalMySpendByCurrency,
+    // getDailyMySpendByCurrency,
   } = useTravelExpenseStore();
 
   /** 일정별 지출 */
@@ -45,17 +45,17 @@ export default function TravelExpensesSpendCard({
       ? getAllTotalMySpend()
       : getDailyMySpend(selectedDay as number);
 
-  /** 모든날 통화별 지출 */
-  const dailySpendByCurrency =
-    selectedDay === ALL_DAY
-      ? getAllTotalSpendByCurrency()
-      : getDailyAllSpendByCurrency(selectedDay as number);
+  // /** 모든날 통화별 지출 */
+  // const dailySpendByCurrency =
+  //   selectedDay === ALL_DAY
+  //     ? getAllTotalSpendByCurrency()
+  //     : getDailyAllSpendByCurrency(selectedDay as number);
 
-  /** 일정별 통화별 내 지출 */
-  const mySpendByCurrency =
-    selectedDay === ALL_DAY
-      ? getAllTotalMySpendByCurrency()
-      : getDailyMySpendByCurrency(selectedDay as number);
+  // /** 일정별 통화별 내 지출 */
+  // const mySpendByCurrency =
+  //   selectedDay === ALL_DAY
+  //     ? getAllTotalMySpendByCurrency()
+  //     : getDailyMySpendByCurrency(selectedDay as number);
 
   const getExpenseName = useMemo(() => {
     if (selectedDay === ALL_DAY) {

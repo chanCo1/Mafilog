@@ -26,7 +26,7 @@ export interface IExpenseList {
   category: EXPENSES_CATEGORY_TYPE;
   paymentType: EXPENSES_PAYMENT_TYPE; // 결제 타입
   payer: ILabelValue; // 결제자
-  spender: ILabelValue[]; // 지출자
+  spender: ISpenderWithAmount[]; // 지출자
   time?: string;
   memo?: string;
   day: number;
@@ -49,6 +49,13 @@ export interface ISpendByCurrency {
   spend: number;
   calcSpend: number;
   category?: string;
+}
+
+export interface ISpenderWithAmount extends ILabelValue {
+  amount: number;
+  calcExchangeAmount: number;
+  currencyCode: ILabelValue;
+  category: EXPENSES_CATEGORY_TYPE;
 }
 
 /** 여행 가계부 전역 인터페이스 (actions) */

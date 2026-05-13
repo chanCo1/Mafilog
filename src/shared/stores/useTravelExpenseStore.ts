@@ -12,6 +12,7 @@ import {
   ITravelExpenseState,
   ITravelExpenseActions,
   ITravelExpenseGetters,
+  ISpenderWithAmount,
 } from '@/shared/interfaces/travelExpenseStore.interface';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
 import {
@@ -35,6 +36,22 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
       /** 타겟 일정 찾기 */
       const findTargetDay = (state: ITravelExpenseState, day: number) => {
         return state.expenses.find((e) => e.day === day);
+      };
+
+      /** 내 지출 가져오기 */
+      const getMySpendList = (_list: IExpenseList[]) => {
+        let mySpendedList: ISpenderWithAmount[] = [];
+        _list.forEach((list) => {
+          const findMySpend = list.spender.find(
+            // TODO: 내 지출 찾을 때 '나'가 아닌 로그인한 id로 찾을 것
+            (spender) => spender.label === '나',
+          );
+
+          if (findMySpend) {
+            mySpendedList.push(findMySpend);
+          }
+        });
+        return mySpendedList;
       };
 
       return {
@@ -202,12 +219,12 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
 
           if (!targetDay) return 0;
 
-          const filtered = targetDay.list.filter(
-            (list) => list.payer.value === '나',
-          );
+          const mySpendedList = getMySpendList(targetDay.list);
 
-          const dailyMySpend = filtered.reduce(
-            (sum, item) => sum + item.calcExchangeAmount,
+          if (!mySpendedList.length) return 0;
+
+          const dailyMySpend = mySpendedList.reduce(
+            (sum, item) => sum + item?.calcExchangeAmount || 0,
             0,
           );
 
@@ -255,13 +272,13 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
 
           if (!targetDay) return 0;
 
-          const filtered = targetDay.list.filter(
-            (list) => list.payer.value === '나',
-          );
+          const mySpendedList = getMySpendList(targetDay.list);
 
-          const reduceSpend = filtered.reduce(
+          if (!mySpendedList.length) return [];
+
+          const reduceSpend = mySpendedList.reduce(
             (acc, item) => {
-              const currencyLabel = item.exchangeRate.currencyCode.label;
+              const currencyLabel = item.currencyCode.label;
               const amount = item.amount;
               const calcExchangeAmount = item.calcExchangeAmount;
 
@@ -321,11 +338,9 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
             }),
           );
 
-          const filtered = catergoryItems.filter(
-            (list) => list.payer.value === '나',
-          );
+          const mySpendedList = getMySpendList(catergoryItems);
 
-          const categorySpendAmount = filtered.reduce(
+          const categorySpendAmount = mySpendedList.reduce(
             (sum, item) => sum + item.calcExchangeAmount,
             0,
           );
@@ -393,14 +408,16 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
             }),
           );
 
-          const filtered = catergoryItems.filter(
-            (list) => list.payer.value === '나',
-          );
+          // const filtered = catergoryItems.filter(
+          //   (list) => list.payer.value === '나',
+          // );
 
-          const reduceSpend = filtered.reduce(
+          const mySpendedList = getMySpendList(catergoryItems);
+
+          const reduceSpend = mySpendedList.reduce(
             (acc, item) => {
               const category = item.category;
-              const currencyLabel = item.exchangeRate.currencyCode.label;
+              const currencyLabel = item.currencyCode.label;
               const amount = item.amount;
               const calcExchangeAmount = item.calcExchangeAmount;
 
@@ -490,41 +507,41 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
           }));
         },
 
-        /** 모든날 통화 별 내 지출 */
-        getAllTotalMySpendByCurrency: () => {
-          const { expenses } = get();
+        // /** 모든날 통화 별 내 지출 */
+        // getAllTotalMySpendByCurrency: () => {
+        //   const { expenses } = get();
 
-          const reduceTotalSpend = expenses.reduce(
-            (acc, day) => {
-              day.list.forEach((item) => {
-                if (item.payer.value !== '나') return;
+        //   const reduceTotalSpend = expenses.reduce(
+        //     (acc, day) => {
+        //       day.list.forEach((item) => {
+        //         if (item.payer.value !== '나') return;
 
-                const currencyLabel = item.exchangeRate.currencyCode.label;
-                const amount = item.amount;
-                const calcAmount = item.calcExchangeAmount;
+        //         const currencyLabel = item.exchangeRate.currencyCode.label;
+        //         const amount = item.amount;
+        //         const calcAmount = item.calcExchangeAmount;
 
-                if (!acc[currencyLabel]) {
-                  acc[currencyLabel] = { totalAmount: 0, totalCalcAmount: 0 };
-                }
+        //         if (!acc[currencyLabel]) {
+        //           acc[currencyLabel] = { totalAmount: 0, totalCalcAmount: 0 };
+        //         }
 
-                acc[currencyLabel].totalAmount += amount;
-                acc[currencyLabel].totalCalcAmount += calcAmount;
-              });
+        //         acc[currencyLabel].totalAmount += amount;
+        //         acc[currencyLabel].totalCalcAmount += calcAmount;
+        //       });
 
-              return acc;
-            },
-            {} as Record<
-              string,
-              { totalAmount: number; totalCalcAmount: number }
-            >,
-          );
+        //       return acc;
+        //     },
+        //     {} as Record<
+        //       string,
+        //       { totalAmount: number; totalCalcAmount: number }
+        //     >,
+        //   );
 
-          return Object.entries(reduceTotalSpend).map(([currency, data]) => ({
-            currency,
-            spend: roundDecimal(data.totalAmount),
-            calcSpend: roundDecimal(data.totalCalcAmount),
-          }));
-        },
+        //   return Object.entries(reduceTotalSpend).map(([currency, data]) => ({
+        //     currency,
+        //     spend: roundDecimal(data.totalAmount),
+        //     calcSpend: roundDecimal(data.totalCalcAmount),
+        //   }));
+        // },
       };
     }),
     { name: 'expenses' },
