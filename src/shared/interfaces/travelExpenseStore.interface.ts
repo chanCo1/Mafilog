@@ -109,4 +109,10 @@ export interface ITravelExpenseGetters {
   getTotalSpendAmountByMember: (id: string) => number;
   /** 결제자, 지출자 리스트 */
   getSettlementList: () => { fromId: string; toId: string; amount: number }[];
+  /** 최종 정산 내역 */
+  getFinalSettlement: () => {
+    senderId: string;
+    receiverId: string;
+    amount: number;
+  }[];
 }

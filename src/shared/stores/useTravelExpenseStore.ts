@@ -597,7 +597,8 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
                   // 결제자와 지출자가 다르면 키 생성
                   const key = `${spenderInfo.value}_${payerInfo.value}`;
 
-                  settlementMap[key] = (settlementMap[key] || 0) + spender.calcExchangeAmount;
+                  settlementMap[key] =
+                    (settlementMap[key] || 0) + spender.calcExchangeAmount;
                 }
               });
             });
@@ -611,6 +612,47 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
               amount: roundDecimal(amount),
             };
           });
+        },
+
+        /** 최종 정산 내역 */
+        getFinalSettlement: () => {
+          const settlementList = get().getSettlementList();
+
+          const settlementMap: Record<string, number> = {};
+
+          settlementList.forEach((_list) => {
+            const { fromId, toId, amount } = _list;
+
+            // 정렬 후 키 생성
+            const sortedIds = [fromId, toId].sort();
+            const key = `${sortedIds[0]}_${sortedIds[1]}`;
+
+            if (!settlementMap[key]) settlementMap[key] = 0;
+
+            // 정렬된 순서에서 맨앞과 보낼 사람이 같으면 더하고, 다르면 빼기
+            if (fromId === sortedIds[0]) {
+              settlementMap[key] += amount;
+            } else {
+              settlementMap[key] -= amount;
+            }
+          });
+
+          return (
+            Object.entries(settlementMap)
+              .map(([key, finalAmount]) => {
+                const [id1, id2] = key.split('_');
+
+                return {
+                  // 결과값이 양수면 id1 -> id2 보냄
+                  // 결과값이 음수면 id2 -> id1 보냄
+                  senderId: finalAmount > 0 ? id1 : id2,
+                  receiverId: finalAmount > 0 ? id2 : id1,
+                  amount: Math.abs(roundDecimal(finalAmount)),
+                };
+              })
+              // 0원인 경우는 제외
+              .filter((item) => item.amount > 0)
+          );
         },
       };
     }),
