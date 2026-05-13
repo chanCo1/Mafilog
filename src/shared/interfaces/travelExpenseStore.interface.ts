@@ -91,4 +91,7 @@ export interface ITravelExpenseGetters {
   getCategoryMySpendByCurrency: (
     category: EXPENSES_CATEGORY_TYPE,
   ) => ISpendByCurrency[];
+
+  getTotalPaymentAmountByMember: (id: string) => number;
+  getTotalSpendAmountByMember: (id: string) => number;
 }

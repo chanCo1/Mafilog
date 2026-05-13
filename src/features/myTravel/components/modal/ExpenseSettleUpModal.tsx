@@ -22,7 +22,11 @@ export default function ExpenseSettleUpModal({
   isOpen,
   handleClose,
 }: IExpenseSettleUpModal) {
-  const { getAllTotalSpend } = useTravelExpenseStore();
+  const {
+    getAllTotalSpend,
+    getTotalPaymentAmountByMember,
+    getTotalSpendAmountByMember,
+  } = useTravelExpenseStore();
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
 
   return (
@@ -49,16 +53,21 @@ export default function ExpenseSettleUpModal({
             <p className="font-bold">개인별 지출</p>
             <Card className="flex flex-col gap-2">
               {travelInfo.member.map((member) => (
-                <div className="flex items-start justify-between">
+                <div
+                  key={member.id}
+                  className="flex items-start justify-between"
+                >
                   <div className="flex items-center gap-1">
                     <User size={20} className="text-primary" />
                     <span className="font-bold">{member.name}</span>
                   </div>
                   <div className="flex flex-col items-end">
                     <span className="text-state-error text-lg font-bold">
-                      {'NN'}원
+                      {convertComma(getTotalSpendAmountByMember(member.id))}원
                     </span>
-                    <span className="text-text-secondary">결제: {'NN'}원</span>
+                    <span className="text-text-secondary">
+                      결제: {convertComma(getTotalPaymentAmountByMember(member.id))}원
+                    </span>
                   </div>
                 </div>
               ))}
@@ -73,15 +82,21 @@ export default function ExpenseSettleUpModal({
             <Card className="flex flex-col gap-2">
               <div className="flex items-baseline gap-1">
                 <span>총 결제 금액:</span>
-                <span className="text-state-error text-lg font-bold">{'NN'}원</span>
+                <span className="text-state-error text-lg font-bold">
+                  {convertComma(getTotalPaymentAmountByMember(travelInfo.member[0]?.id))}원
+                </span>
               </div>
               <div className="flex items-baseline gap-1">
                 <span>받을 금액:</span>
-                <span className="text-state-success text-lg font-bold">{'NN'}원</span>
+                <span className="text-state-success text-lg font-bold">
+                  {'NN'}원
+                </span>
               </div>
               <div className="flex items-baseline gap-1">
                 <span>내 순수 지출:</span>
-                <span className="text-state-error text-lg font-bold">{'NN'}원</span>
+                <span className="text-state-error text-lg font-bold">
+                  {'NN'}원
+                </span>
               </div>
             </Card>
           </div>

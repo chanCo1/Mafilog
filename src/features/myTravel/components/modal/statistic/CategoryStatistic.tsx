@@ -22,8 +22,8 @@ interface ICategoryStatistic {
 export default function CategoryStatistic({
   isShowMySpend,
 }: ICategoryStatistic) {
+  const expenses = useTravelExpenseStore((state) => state.expenses);
   const {
-    expenses,
     getAllTotalSpend,
     getAllTotalMySpend,
     getCategorySpend,

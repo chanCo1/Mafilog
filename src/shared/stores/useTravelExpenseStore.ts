@@ -44,6 +44,7 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
         _list.forEach((list) => {
           const findMySpend = list.spender.find(
             // TODO: 내 지출 찾을 때 '나'가 아닌 로그인한 id로 찾을 것
+            // (spender) => spender.value === userId,
             (spender) => spender.label === '나',
           );
 
@@ -408,10 +409,6 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
             }),
           );
 
-          // const filtered = catergoryItems.filter(
-          //   (list) => list.payer.value === '나',
-          // );
-
           const mySpendedList = getMySpendList(catergoryItems);
 
           const reduceSpend = mySpendedList.reduce(
@@ -542,6 +539,38 @@ export const useTravelExpenseStore = create<ITravelExpenseStore>()(
         //     calcSpend: roundDecimal(data.totalCalcAmount),
         //   }));
         // },
+
+        // = = = = = = = = = = = = = = = = = = = = = = = = = = 정산 관련
+        /** 멤버별 총 결제 금액 */
+        getTotalPaymentAmountByMember: (id) => {
+          const { expenses } = get();
+
+          const totalAmount = expenses.reduce((acc, day) => {
+            const dayTotal = day.list
+              .filter((item) => item.payer.value === id)
+              .reduce((sum, item) => sum + item.calcExchangeAmount, 0);
+            return acc + dayTotal;
+          }, 0);
+
+          return roundDecimal(totalAmount);
+        },
+
+        /** 멤버별 총 지출 금액 */
+        getTotalSpendAmountByMember: (id: string) => {
+          const { expenses } = get();
+
+          const total = expenses.reduce((acc, day) => {
+            return (
+              acc +
+              day.list.reduce((dayAcc, item) => {
+                const mySpend = item.spender.find((s) => s.value === id);
+                return dayAcc + (mySpend ? mySpend.calcExchangeAmount : 0);
+              }, 0)
+            );
+          }, 0);
+
+          return roundDecimal(total);
+        },
       };
     }),
     { name: 'expenses' },
