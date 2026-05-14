@@ -16,3 +16,15 @@ export type TRAVEL_TYPE_LIST =
 /** 사진 업로드 수 */
 export const SINGLE_COUNT = 1;
 export const MULTIPLE_COUNT = 10;
+
+/** 사이드바 마이페이지 리스트 */
+export const MYPAGE_LIST = [
+  {
+    name: '계정 정보',
+    path: '/my-page/user-info',
+  },
+  {
+    name: '내 타임라인',
+    path: '/my-page/my-timeline',
+  },
+];
