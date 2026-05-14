@@ -16,7 +16,7 @@ import { cn } from '@/shared/lib/utils';
 import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
-import UserInfoModal from '@/features/home/components/modal/UserInfoModal';
+import UserInfoModal from '@/shared/components/modal/UserInfoModal';
 
 export default function Header() {
   const router = useRouter();
