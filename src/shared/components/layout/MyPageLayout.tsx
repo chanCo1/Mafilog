@@ -35,7 +35,7 @@ export default function MyPageLayout({ children }: IMyPageLayout) {
         description={`안녕하세요. ${'여행최고'}님!`}
       />
       <div className="max-mobile:flex-col flex h-full gap-5">
-        <Card className="text-text-secondary flex h-full w-50 flex-col gap-1 max-mobile:hidden">
+        <Card className="text-text-secondary max-mobile:hidden flex h-full w-50 flex-col gap-1 shrink-0">
           {MYPAGE_LIST.map((list) => (
             <p
               className={cn(
@@ -50,7 +50,7 @@ export default function MyPageLayout({ children }: IMyPageLayout) {
             </p>
           ))}
         </Card>
-        <div className="flex gap-1 mobile:hidden">
+        <div className="mobile:hidden flex gap-1">
           {MYPAGE_LIST.map((list) => (
             <Chip
               variant={path === list.path ? 'primary' : 'gray'}
@@ -61,7 +61,7 @@ export default function MyPageLayout({ children }: IMyPageLayout) {
           ))}
         </div>
 
-        <div>{children}</div>
+        {children}
       </div>
     </div>
   );
