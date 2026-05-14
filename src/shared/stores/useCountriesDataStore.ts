@@ -12,6 +12,7 @@ interface ICountriesDataStore {
   fetchCountires: () => void;
 }
 
+/** 전세계 국가 데이터 store */
 export const useCountriesDataStore = create<ICountriesDataStore>()(
   persist(
     (set) => ({

@@ -79,51 +79,135 @@ function CategoryIconEntity(
     switch (variant) {
       case 'check':
         return (
-          <Check className={size === 'sm' ? fourHalfSize : fiveSize} />
+          <Check
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
       case 'memo':
         return (
           <StickyNote
-            className={size === 'sm' ? fourHalfSize : fiveSize}
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
           />
         );
       case 'plus':
         return (
-          <Plus className={size === 'sm' ? fourHalfSize : fiveSize} />
+          <Plus
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
       case 'plane':
         return (
-          <Plane className={size === 'sm' ? fourHalfSize : fiveSize} />
+          <Plane
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
       case 'bus':
-        return <Bus className={size === 'sm' ? fourHalfSize : fiveSize} />;
+        return (
+          <Bus
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
+        );
       case 'food':
         return (
-          <Utensils className={size === 'sm' ? fourSize : fourHalfSize} />
+          <Utensils
+            className={
+              circled === 'none'
+                ? 'w-full pt-0.5'
+                : size === 'sm'
+                  ? fourSize
+                  : fourHalfSize
+            }
+          />
         );
       case 'shopping':
         return (
           <ShoppingBasket
-            className={size === 'sm' ? fourHalfSize : fiveSize}
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
           />
         );
       case 'tour':
         return (
-          <MapPin className={size === 'sm' ? fourHalfSize : fiveSize} />
+          <MapPin
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
       case 'house':
         return (
-          <House className={size === 'sm' ? fourHalfSize : fiveSize} />
+          <House
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
       case 'etc':
         return (
           <CircleEllipsis
-            className={size === 'sm' ? fourHalfSize : fiveSize}
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
           />
         );
       case 'x':
         return (
-          <X className={size === 'sm' ? fourHalfSize : fiveSize} />
+          <X
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
     }
   }, [variant, size]);

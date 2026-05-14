@@ -6,13 +6,14 @@ import {
   TRAVEL_PARTNER,
   TRAVEL_STYLE,
   PLACE_CATEGORY_TYPE,
-  EXPENSES_CATEGORY_TYPE,
 } from '@/shared/types/Enum';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 import {
   TRAVEL_PARTNER_LIST,
   TRAVEL_STYLE_LIST,
 } from '@/features/myTravel/constants';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
+import { EXPENSES_PAYMENT_TYPE } from '@/shared/types/expenseEnum';
 
 /** 조건부로 클래스 사용(clsx) + props로 받은 스타일이 기본 스타일을 덮어쓰기(twMerge) */
 export function cn(...inputs: ClassValue[]) {
@@ -106,17 +107,6 @@ export const convertTravelStyle = (style: TRAVEL_STYLE) => {
   return TRAVEL_STYLE_LIST.find((list) => list.value === style)?.label;
 };
 
-/** 숫자에 1,000 단위 콤마를 추가하는 함수 */
-export const convertComma = (value: number | string): string => {
-  if (!value && value !== 0) return '0';
-
-  const num = typeof value === 'string' ? Number(value) : value;
-
-  if (isNaN(num)) return '';
-
-  return new Intl.NumberFormat('ko-KR').format(num);
-};
-
 /** 장소 카테고리 가져오기 */
 export const getPlaceCategory = (types: IPlaceList['types']) => {
   if (!types) return '';
@@ -136,19 +126,67 @@ export const getPlaceCategory = (types: IPlaceList['types']) => {
 /** 장소/지출 카테고리 한글로 변환 */
 export const convertCategory = (category: EXPENSES_CATEGORY_TYPE) => {
   switch (category.toLocaleLowerCase()) {
-    case EXPENSES_CATEGORY_TYPE.TRANSPORT:
+    case EXPENSES_CATEGORY_TYPE.BUS:
       return '교통';
     case EXPENSES_CATEGORY_TYPE.TOUR:
-      return '관광명소';
+      return '관광';
     case EXPENSES_CATEGORY_TYPE.SHOPPING:
       return '쇼핑';
     case EXPENSES_CATEGORY_TYPE.HOUSE:
-      return '숙박시설';
+      return '숙박';
     case EXPENSES_CATEGORY_TYPE.FOOD:
-      return '음식점';
+      return '음식';
     case EXPENSES_CATEGORY_TYPE.ETC:
       return '기타';
     default:
       return '기타';
   }
+};
+
+/** 결제 타입 한글로 변환 */
+export const convertPaymentType = (paymentType: EXPENSES_PAYMENT_TYPE) => {
+  switch (paymentType) {
+    case EXPENSES_PAYMENT_TYPE.CARD:
+      return '카드';
+    case EXPENSES_PAYMENT_TYPE.CASH:
+      return '현금';
+    default:
+      return '알 수 없음';
+  }
+};
+
+// = = = = = = = = = = = = = = = = 금액 관련
+/** 숫자에 1,000 단위 콤마를 추가하는 함수 */
+export const convertComma = (value: number | string): string => {
+  if (!value && value !== 0) return '0';
+
+  const num = typeof value === 'string' ? Number(value) : value;
+  if (isNaN(num)) return '';
+
+  return new Intl.NumberFormat('ko-KR').format(num);
+};
+
+/** 소수점 2자리에서 반올림 처리 */
+export const roundDecimal = (number: number | string, decimal = 10): number => {
+  if (!number && number !== 0) return 0;
+
+  const num = typeof number === 'string' ? Number(number) : number;
+  if (isNaN(num)) return 0;
+
+  return Math.round(num * decimal) / decimal;
+};
+
+/** 퍼센트 구하기 */
+export const getPercent = ({
+  deno,
+  numer,
+  round = 10,
+}: {
+  numer: number;
+  deno: number;
+  round?: number;
+}) => {
+  if (!numer|| !deno) return 0;
+
+  return Math.round((numer / deno) * 100 * round) / round;
 };

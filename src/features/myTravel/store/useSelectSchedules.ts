@@ -30,11 +30,11 @@ export const useSelectSchedules = create<ISelectSchedules>((set) => ({
       } else {
         // 선택되지 않은 아이템들 합치기 (중복 방지)
         const combined = [...state.selectedSchedules, ...dayItems];
-        const unique = combined.filter(
+        const filteredItems = combined.filter(
           (value, index, array) =>
             array.findIndex((item) => item.id === value.id) === index,
         );
-        return { selectedSchedules: unique };
+        return { selectedSchedules: filteredItems };
       }
     }),
   toggleSelect: (item) =>

@@ -21,6 +21,9 @@ import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
+import { IMemberList } from '@/shared/interfaces';
+import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
+import { TRAVEL_TYPE_LIST } from '@/features/myTravel/constants';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -37,14 +40,23 @@ export default function CreateNewTravelModal({
 
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
+
+  const [travelType, setTravelType] = useState<string>(
+    TRAVEL_TYPE_LIST[0].value,
+  );
   const [selectedCities, setSelectedCities] = useState<IPlaceList[]>([]);
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
   );
   const [travelTitle, setTravelTitle] = useState('');
   const [selectedImage, setSelectedImage] = useState<File[]>([]);
-  const [travelCompanion, setTravelCompanion] = useState('alone');
-  const [travelStyle, setTravelStyle] = useState<string[]>([]);
+  const [travelPartner, setTravelPartner] = useState<TRAVEL_PARTNER>(
+    TRAVEL_PARTNER.ALONE,
+  );
+  const [travelStyle, setTravelStyle] = useState<TRAVEL_STYLE[]>([]);
+  const [travelMember, setTravelMember] = useState<IMemberList[]>([
+    { id: '1', name: '나' },
+  ]);
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -102,9 +114,10 @@ export default function CreateNewTravelModal({
       from: selectedDate?.from,
       to: selectedDate?.to,
       title: getTravelName(),
-      companion: travelCompanion,
+      companion: travelPartner,
       travelStyle: travelStyle,
       image: selectedImage,
+      member: travelMember,
     };
 
     // TODO: 임시
@@ -126,7 +139,7 @@ export default function CreateNewTravelModal({
     setSeletedDate(undefined);
     setTravelTitle('');
     setSelectedImage([]);
-    setTravelCompanion('alone');
+    setTravelPartner('alone');
     setTravelStyle([]);
   };
 
@@ -209,6 +222,8 @@ export default function CreateNewTravelModal({
       <div className="relative h-[calc(100%-65px)]">
         <FadeInOutStyled isShow={currentStep === 1}>
           <CreateNewTravelStep1
+            travelType={travelType}
+            setTravelType={setTravelType}
             selectedCities={selectedCities}
             setSelectedCities={setSelectedCities}
           />
@@ -223,12 +238,14 @@ export default function CreateNewTravelModal({
           <CreateNewTravelStep3
             title={travelTitle}
             setTravelTitle={setTravelTitle}
-            travelCompanion={travelCompanion}
-            setTravelCompanion={setTravelCompanion}
+            travelPartner={travelPartner}
+            setTravelPartner={setTravelPartner}
             travelStyle={travelStyle}
             setTravelStyle={setTravelStyle}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
+            travelMember={travelMember}
+            setTravelMember={setTravelMember}
           />
         </FadeInOutStyled>
       </div>

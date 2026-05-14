@@ -1,6 +1,7 @@
 import { ILabelValue } from '@/shared/interfaces';
 import { TTabTypes } from '@/features/home/types';
-import { EXPENSES_CATEGORY_TYPE, TRAVEL_TYPE } from '@/shared/types/Enum';
+import { TRAVEL_TYPE } from '@/shared/types/Enum';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 
 /** 서비스 간략 소개 탭 리스트 */
 export const TABLIST: ILabelValue<TTabTypes>[] = [
@@ -59,12 +60,12 @@ export const EXPNESES_INTRODUCE_LIST: string[] = [
 /** 가계부 목업 데이터 */
 export const EXPENSES_MOCK_DATA = [
   {
-    type: EXPENSES_CATEGORY_TYPE.TRANSPORT,
+    type: EXPENSES_CATEGORY_TYPE.BUS,
     name: '비행기 예약',
     payer: '나',
     spender: '나',
     paymentMethod: '카드',
-    currency: 'KRW(원)',
+    currency: 'KRW',
   },
   {
     type: EXPENSES_CATEGORY_TYPE.FOOD,
@@ -72,7 +73,7 @@ export const EXPENSES_MOCK_DATA = [
     payer: '나',
     spender: '1/N',
     paymentMethod: '현금',
-    currency: 'USD(달러)',
+    currency: 'USD',
   },
 ];
 

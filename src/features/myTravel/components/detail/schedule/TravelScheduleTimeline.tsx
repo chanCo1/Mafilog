@@ -10,7 +10,6 @@ import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
-import { Button } from '@/shared/components/ui/Button';
 import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { toast } from 'sonner';
@@ -19,12 +18,12 @@ import PlaceDeatilModal from '@/features/myTravel/components/modal/PlaceDeatilMo
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
 
 interface ITravelScheduleTimeline {
   timeLineData?: IScheduleList;
   dailyAllSchedule?: IScheduleList[];
   currentIndex?: number;
-  day?: number;
   selectMode?: boolean;
 }
 
@@ -32,7 +31,6 @@ export default function TravelScheduleTimeline({
   timeLineData,
   dailyAllSchedule,
   currentIndex,
-  day,
   selectMode,
 }: ITravelScheduleTimeline) {
   const displayCount = useTimelineDiscplayCount({
@@ -44,26 +42,35 @@ export default function TravelScheduleTimeline({
     (state) => state.setDeleteScheduleList,
   );
   const { selectedSchedules, toggleSelect } = useSelectSchedules();
+  const { openDialog } = useDialogStore();
 
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
 
-  const isSelected = selectedSchedules.some((s) => s.id === timeLineData?.id);
+  const isSelected = selectedSchedules.some(
+    (schedule) => schedule.id === timeLineData?.id,
+  );
 
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (day === undefined || currentIndex === undefined) return;
+    if (timeLineData?.day.value === undefined || currentIndex === undefined)
+      return;
     const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
-    try {
-      setDeleteScheduleList({ day, index: currentIndex });
-    } catch (error) {
-      console.log(error);
-    }
-
-    toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
+    openDialog({
+      message: `${isPlace ? '장소' : '메모'}를 삭제할까요?`,
+      type: 'confirm',
+      okLabel: '삭제',
+      onOk: () => {
+        setDeleteScheduleList({
+          day: timeLineData?.day.value as number,
+          id: timeLineData?.id as string,
+        });
+        toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
+      },
+    });
   };
 
   const onClickCard = () => {
@@ -106,12 +113,14 @@ export default function TravelScheduleTimeline({
                   <span className="text-lg font-bold">
                     {timeLineData.place?.name}
                   </span>
-                  <span className="text-text-secondary text-sm">
-                    {<>{getPlaceCategory(_place?.types!)}</>}
-                    {_place?.country.name && (
-                      <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
-                    )}
-                  </span>
+                  {_place && (
+                    <span className="text-text-secondary text-sm">
+                      {<>{getPlaceCategory(_place.types)}</>}
+                      {_place.country.name && (
+                        <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
+                      )}
+                    </span>
+                  )}
                 </div>
               </TravelTimelineCard>
             ) : (
@@ -145,8 +154,7 @@ export default function TravelScheduleTimeline({
       <PlaceDeatilModal
         isOpen={isOpenDatilModal}
         handleClose={() => setIsOpenDatilModal(false)}
-        data={timeLineData}
-        day={day}
+        timeLineData={timeLineData}
       />
     </div>
   );

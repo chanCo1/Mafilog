@@ -183,60 +183,65 @@ export const TRAVEL_DETAIL_MOCK_DATA = {
       timezone: 'Australia/Sydney',
     },
   ],
-  schedule: [
-    {
-      day: 1,
-      date: 'Mon May 04 2026 00:00:00 GMT+0900',
-      places: [
-        {
-          id: 1,
-          type: 'place',
-          name: '아사쿠사 규카츠',
-          latlng: {
-            lat: 0,
-            lng: 0,
-          },
-          placeMemo: null,
-          time: null,
-        },
-        {
-          id: 2,
-          type: 'memo',
-          name: null,
-          memo: '약국에서 약 사기!',
-          latlng: null,
-          placeMemo: null,
-          time: null,
-        },
-        {
-          id: 3,
-          type: 'place',
-          name: '센소지',
-          latlng: {
-            lat: 0,
-            lng: 0,
-          },
-          placeMemo: null,
-          time: null,
-        },
-      ],
-    },
-    {
-      day: 2,
-      date: 'Mon May 05 2026 00:00:00 GMT+0900',
-      places: null,
-    },
-    {
-      day: 3,
-      date: 'Mon May 06 2026 00:00:00 GMT+0900',
-      places: null,
-    },
-    {
-      day: 4,
-      date: 'Mon May 07 2026 00:00:00 GMT+0900',
-      places: null,
-    },
+  member: [
+    { id: 'mflid-1', name: '나' },
+    { id: 'mflid-2', name: '같이간친구A' },
+    { id: 'mflid-3', name: '같이간친구B' },
   ],
+  // schedule: [
+  //   {
+  //     day: 1,
+  //     date: 'Mon May 04 2026 00:00:00 GMT+0900',
+  //     places: [
+  //       {
+  //         id: 1,
+  //         type: 'place',
+  //         name: '아사쿠사 규카츠',
+  //         latlng: {
+  //           lat: 0,
+  //           lng: 0,
+  //         },
+  //         placeMemo: null,
+  //         time: null,
+  //       },
+  //       {
+  //         id: 2,
+  //         type: 'memo',
+  //         name: null,
+  //         memo: '약국에서 약 사기!',
+  //         latlng: null,
+  //         placeMemo: null,
+  //         time: null,
+  //       },
+  //       {
+  //         id: 3,
+  //         type: 'place',
+  //         name: '센소지',
+  //         latlng: {
+  //           lat: 0,
+  //           lng: 0,
+  //         },
+  //         placeMemo: null,
+  //         time: null,
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     day: 2,
+  //     date: 'Mon May 05 2026 00:00:00 GMT+0900',
+  //     places: null,
+  //   },
+  //   {
+  //     day: 3,
+  //     date: 'Mon May 06 2026 00:00:00 GMT+0900',
+  //     places: null,
+  //   },
+  //   {
+  //     day: 4,
+  //     date: 'Mon May 07 2026 00:00:00 GMT+0900',
+  //     places: null,
+  //   },
+  // ],
   image: null,
 };
 

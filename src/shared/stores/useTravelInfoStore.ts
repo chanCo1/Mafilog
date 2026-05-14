@@ -18,6 +18,7 @@ import {
   TRAVEL_STYLE,
   TRAVEL_PARTNER,
 } from '@/shared/types/Enum';
+import { getTravelDay } from '@/shared/lib/utils';
 
 type ITravelInfoStore = ITravelInfoState &
   ITravelInfoActions &
@@ -34,6 +35,8 @@ const initialState = {
     travelStyles: [TRAVEL_STYLE.HEAL],
     travelPartner: TRAVEL_PARTNER.ALONE,
     cities: [],
+    member: [],
+    dayRange: 0,
   },
 };
 
@@ -50,7 +53,15 @@ export const useTravelInfoStore = create<ITravelInfoStore>()(
        */
       /** 여행 초기값 설정 */
       setInitTravelInfo: (data) =>
-        set({ travelInfo: data }, false, 'travel/setInitTravel'),
+        set(
+          (state) => {
+            state.travelInfo = {
+              ...data,
+            };
+          },
+          false,
+          'travel/setInitTravel',
+        ),
 
       /** 리셋 */
       reset: () => set(initialState),

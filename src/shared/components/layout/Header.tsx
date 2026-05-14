@@ -7,7 +7,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { LogoText } from '@/shared/components/ui/LogoText';
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
@@ -16,6 +16,7 @@ import { cn } from '@/shared/lib/utils';
 import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
+import UserInfoModal from '@/shared/components/modal/UserInfoModal';
 
 export default function Header() {
   const router = useRouter();
@@ -25,6 +26,8 @@ export default function Header() {
   const isMyMapPage = path.includes('my-map');
 
   const { isLoggedIn } = useAuthManagerStore();
+
+  const [isOpenUserInfoModal, setIsOpenUserInfoModal] = useState(false);
 
   return (
     <header className="border-border-active border-b-2 bg-white">
@@ -53,7 +56,10 @@ export default function Header() {
                 추억 채우기
               </Link>
             </div>
-            <Menu className="text-primary h-7 w-7 cursor-pointer" />
+            <Menu
+              className="text-primary cursor-pointer"
+              onClick={() => setIsOpenUserInfoModal(true)}
+            />
           </div>
         ) : (
           <Button size="sm" onClick={() => router.push('/login')}>
@@ -61,6 +67,10 @@ export default function Header() {
           </Button>
         )}
       </div>
+      <UserInfoModal
+        isOpen={isOpenUserInfoModal}
+        handleClose={() => setIsOpenUserInfoModal(false)}
+      />
     </header>
   );
 }

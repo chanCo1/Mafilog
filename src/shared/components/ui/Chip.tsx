@@ -18,8 +18,8 @@ const chipVariants = cva(
         secondary: 'bg-secondary',
         gray: 'bg-gray-2 text-text-primary',
         ghost: 'hover:bg-gray-1 text-text-primary',
-        primaryOutline: 'border border-priamry text-primary',
-        redOutline: 'border border-state-error text-state-error',
+        primaryOutline: 'ring ring-inset ring-priamry text-primary',
+        redOutline: 'ring ring-inset ring-state-error text-state-error',
         none: 'bg-transparent text-text-primary',
       },
       size: {

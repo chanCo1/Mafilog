@@ -21,3 +21,8 @@ export interface ICountryCurrency {
     symbol: string;
   };
 }
+
+export interface IMemberList {
+  id: string;
+  name: string;
+}

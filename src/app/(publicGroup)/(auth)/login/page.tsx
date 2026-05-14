@@ -1,5 +1,5 @@
 import LoginPage from "@/features/auth/pages/LoginPage"
 
-export default function Login() {
+export default function Page() {
   return <LoginPage />
 }

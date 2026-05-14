@@ -12,6 +12,7 @@ interface IUseFetchGooglePlaces {
   search: string;
 }
 
+/** 구글 장소 검색 react query */
 export const useFetchGooglePlaces = ({ search }: IUseFetchGooglePlaces) => {
   const query = useQuery({
     queryKey: ['googlePlaces', search],

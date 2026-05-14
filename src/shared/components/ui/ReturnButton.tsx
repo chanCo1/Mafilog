@@ -95,4 +95,4 @@ function ReturnButtonEntity({
   );
 }
 
-export const ReturnButton = forwardRef(ReturnButtonEntity);
+export const ReturnButton = ReturnButtonEntity;

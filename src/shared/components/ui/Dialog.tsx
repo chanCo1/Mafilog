@@ -7,42 +7,19 @@
 
 import { ForwardedRef, forwardRef, useEffect } from 'react';
 import { cn } from '@/shared/lib/utils';
-import { cva, VariantProps } from 'class-variance-authority';
 import { Button } from '@/shared/components/ui/Button';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { createPortal } from 'react-dom';
 import Dimmed from '@/shared/components/ui/Dimmed';
+import { useIsMounted } from '@/shared/hooks/useIsMounted';
 
-const dialogVariants = cva(
-  'z-50 transition duration-800 ease absolute flex items-center justify-cetner flex-col gap-2.5 rounded-lg bg-white p-2.5 shadow-md',
-  {
-    variants: {
-      variant: {
-        default: '',
-        error: '',
-      },
-      size: {
-        lg: 'w-100',
-        md: 'w-75',
-        sm: 'w-50',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  },
-);
-
-interface IDialog extends VariantProps<typeof dialogVariants> {
+interface IDialog {
   className?: string;
 }
 
-function DialogEntity(
-  { size, variant, className }: IDialog,
-  ref: ForwardedRef<HTMLDivElement>,
-) {
+function DialogEntity({ className }: IDialog) {
   const { isOpen, options, closeDialog } = useDialogStore();
+  const isMounted = useIsMounted();
 
   const handleOk = () => {
     options?.onOk?.();
@@ -65,12 +42,14 @@ function DialogEntity(
     };
   }, [isOpen]);
 
+  if (!isMounted) return null;
+
   const isConfirm = options?.type === 'confirm';
 
   return createPortal(
     <div
       className={cn(
-        'absolute z-100 flex h-full w-full items-center justify-center',
+        'fixed z-100 flex h-full w-full items-center justify-center',
         isOpen ? 'visible opacity-100' : 'invisible opacity-0',
       )}
     >
@@ -80,11 +59,11 @@ function DialogEntity(
       />
       <div
         className={cn(
+          'ease justify-cetner absolute z-50 flex w-75 flex-col items-center gap-2.5 rounded-lg bg-white p-2.5 shadow-md transition duration-200',
           isOpen ? 'visible opacity-100' : 'invisible opacity-0',
-          dialogVariants({ variant, size }),
+          options?.type === 'error' && 'border-state-error border-2',
           className,
         )}
-        ref={ref}
       >
         <p className="w-full py-7 text-center">{options?.message}</p>
         <div
@@ -105,7 +84,11 @@ function DialogEntity(
           {isConfirm && <span className="text-gray-2">|</span>}
           <Button
             variant="ghost"
-            className={cn('text-primary', isConfirm ? 'w-1/2' : 'w-1/3')}
+            className={cn(
+              'text-primary',
+              isConfirm ? 'w-1/2' : 'w-1/3',
+              options?.type === 'error' && 'text-state-error',
+            )}
             onClick={handleOk}
           >
             {options?.okLabel || '확인'}
@@ -117,4 +100,4 @@ function DialogEntity(
   );
 }
 
-export const Dialog = forwardRef(DialogEntity);
+export const Dialog = DialogEntity;

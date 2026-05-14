@@ -15,7 +15,7 @@ const cardVariants = cva('rounded-lg bg-white', {
   variants: {
     variant: {
       default: 'bg-gray-1',
-      outline: 'border border-border-primary',
+      outline: 'ring ring-inset ring-border-primary',
       shadowed: 'bg-gray-1 shadow-md',
       white: '',
       shadowedWhite: 'shadow-md',
@@ -63,7 +63,7 @@ function CardEntity(
         select ? 'cursor-pointer' : '',
         disabled && 'pointer-events-none opacity-50',
         readonly && 'pointer-events-none',
-        isSelected && 'border-border-active border-2',
+        isSelected && 'ring-border-active ring-2 ring-inset',
         className,
       )}
       ref={ref}

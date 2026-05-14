@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import AmchartMap from '@/shared/components/map/AmchartMap';
 import Selectbox from '@/shared/components/ui/Selectbox';
-import { TRAVEL_TYPE_LIST } from '@/shared/constants';
+import { MAP_TRAVEL_TYPE_LIST } from '@/shared/constants';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
 
@@ -19,7 +19,7 @@ import { TRAVEL_TYPE } from '@/shared/types/Enum';
 
 export default function MapContainer() {
   const [selectedMap, setSelectedMap] = useState<ILabelValue>(
-    TRAVEL_TYPE_LIST[0],
+    MAP_TRAVEL_TYPE_LIST[0],
   );
 
   const isWorld = selectedMap.value === TRAVEL_TYPE.WORLD;
@@ -36,7 +36,7 @@ export default function MapContainer() {
       <div className="w-25">
         <Selectbox
           variant="none"
-          options={TRAVEL_TYPE_LIST}
+          options={MAP_TRAVEL_TYPE_LIST}
           value={selectedMap}
           addValueText="지도"
           onChange={(value) => setSelectedMap(value)}

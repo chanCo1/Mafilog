@@ -10,7 +10,10 @@
 import { useState, useMemo, useEffect } from 'react';
 import { cn, convertTravelStyle } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
-import { TRAVEL_DETAIL_MOCK_DATA, CHECKLIST_MOCK_DATA } from '@/features/myTravel/data';
+import {
+  TRAVEL_DETAIL_MOCK_DATA,
+  CHECKLIST_MOCK_DATA,
+} from '@/features/myTravel/data';
 import TravelStatus from '@/features/myTravel/components/detail/TravelStatus';
 import {
   convertFormattedDate,
@@ -23,7 +26,7 @@ import { TRAVEL_TAB_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_TAB } from '@/shared/types/Enum';
 import { Button } from '@/shared/components/ui/Button';
 import TravelScheduleView from '@/features/myTravel/components/detail/schedule/TravelScheduleView';
-import TravelExpensesView from '@/features/myTravel/components/detail/expneses/TravelExpensesView';
+import TravelExpensesView from '@/features/myTravel/components/detail/expnese/TravelExpensesView';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
@@ -31,18 +34,25 @@ import LocalInfoModal from '@/features/myTravel/components/modal/LocalInfoModal'
 import CheckListModal from '@/features/myTravel/components/modal/CheckListModal';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
-import { useTravelExpenseListStore } from '@/shared/stores/useTravelExpenseStore';
+import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
+import ExpenseStatisticModal from '@/features/myTravel/components/modal/ExpenseStatisticModal';
+import ExpenseSettleUpModal from '@/features/myTravel/components/modal/ExpenseSettleUpModal';
 
 // interface IMyTravelDetailPage {}
 
 export default function MyTravelDetailPage() {
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const setInitTravelInfo = useTravelInfoStore((state) => state.setInitTravelInfo);
+  const setInitTravelInfo = useTravelInfoStore(
+    (state) => state.setInitTravelInfo,
+  );
 
-  const setInitSchedules = useTravelScheduleStore((state) => state.setInitSchedules)
-  const setInitExpense = useTravelExpenseListStore((state) => state.setInitExpense)
-  const setInitCheckList = useTravelCheckListStore((state) => state.setInitCheckList)
-
+  const setInitSchedules = useTravelScheduleStore(
+    (state) => state.setInitSchedules,
+  );
+  const setInitExpense = useTravelExpenseStore((state) => state.setInitExpense);
+  const setInitCheckList = useTravelCheckListStore(
+    (state) => state.setInitCheckList,
+  );
 
   useEffect(() => {
     /** TODO: 임시 데이터 */
@@ -55,8 +65,9 @@ export default function MyTravelDetailPage() {
       travelPartner,
       travelStyles,
       image,
-      schedule,
+      // schedule,
       cities,
+      member,
     } = TRAVEL_DETAIL_MOCK_DATA;
 
     setInitTravelInfo({
@@ -69,6 +80,7 @@ export default function MyTravelDetailPage() {
       travelPartner,
       travelPeriod: getTravelDay(from, to),
       travelStyles,
+      member,
     });
     setInitSchedules({ from, to });
     setInitExpense({ from, to });
@@ -87,6 +99,8 @@ export default function MyTravelDetailPage() {
   const [isOpenTravelModify, setIsOpenTravelModify] = useState(false);
   const [isOpenLocalInfoModal, setIsOpenLocalInfoModal] = useState(false);
   const [isOpenCheckListModal, setIsOpenCheckListModal] = useState(false);
+  const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
+  const [isOpenSettelUpModal, setIsOpenSettelUpModal] = useState(false);
 
   /** 여행 기간 날짜 포멧 */
   const formattedValue = useMemo(() => {
@@ -122,7 +136,7 @@ export default function MyTravelDetailPage() {
           <div className="max-mobile:flex-col mobile:gap-1 max-mobile:items-start flex items-center">
             <span>{formattedValue}</span>
             <span className="max-mobile:hidden">|</span>
-            <div className="text-md flex gap-1">
+            <div className="text-md max-mobile:text-sm flex gap-1">
               <div>{convertTravelPartner(travelInfo.travelPartner)}</div>
               {travelInfo.travelStyles.length &&
                 travelInfo.travelStyles.map((style) => (
@@ -157,10 +171,18 @@ export default function MyTravelDetailPage() {
             </Button>
           ) : (
             <div className="flex gap-1">
-              <Button variant="gray" size="xs">
+              <Button
+                variant="gray"
+                size="xs"
+                onClick={() => setIsOpenStatisticModal(true)}
+              >
                 통계
               </Button>
-              <Button variant="gray" size="xs">
+              <Button
+                variant="gray"
+                size="xs"
+                onClick={() => setIsOpenSettelUpModal(true)}
+              >
                 정산
               </Button>
             </div>
@@ -179,7 +201,7 @@ export default function MyTravelDetailPage() {
           <TravelScheduleView />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.EXPENSES}>
-          <TravelExpensesView from={travelInfo.from} to={travelInfo.to} />
+          <TravelExpensesView />
         </FadeInOutStyled>
       </div>
 
@@ -200,6 +222,18 @@ export default function MyTravelDetailPage() {
       <LocalInfoModal
         isOpen={isOpenLocalInfoModal}
         handleClose={() => setIsOpenLocalInfoModal(false)}
+      />
+
+      {/* 통계 모달 */}
+      <ExpenseStatisticModal
+        isOpen={isOpenStatisticModal}
+        handleClose={() => setIsOpenStatisticModal(false)}
+      />
+
+      {/* 정산 모달 */}
+      <ExpenseSettleUpModal
+        isOpen={isOpenSettelUpModal}
+        handleClose={() => setIsOpenSettelUpModal(false)}
       />
     </div>
   );

@@ -5,7 +5,7 @@
  * @description: PlaceDeatilModal 컴포넌트, 일정 상세 모달
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Selectbox from '@/shared/components/ui/Selectbox';
@@ -19,21 +19,20 @@ import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TimePicker from '@/shared/components/ui/TimePicker';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
 
 interface IPlaceDeatilModal {
   isOpen: boolean;
   handleClose: () => void;
-  data: IScheduleList | undefined;
-  day: number | undefined;
+  timeLineData: IScheduleList | undefined;
 }
 
 export default function PlaceDeatilModal({
   isOpen,
   handleClose,
-  data,
-  day,
+  timeLineData,
 }: IPlaceDeatilModal) {
-  const isPlace = data?.type === SCHEDULE_TYPE.PLACE;
+  const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
   const travelInfo = useTravelInfoStore((state) => state.travelInfo);
   const setDeleteScheduleList = useTravelScheduleStore(
@@ -43,6 +42,7 @@ export default function PlaceDeatilModal({
     from: travelInfo.from,
     to: travelInfo.to,
   });
+  const { openDialog } = useDialogStore();
 
   /** 일정 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>(
@@ -58,28 +58,46 @@ export default function PlaceDeatilModal({
     resetData();
   };
 
-  const resetData = () => {
-    if (day) {
-      setSelectedDay(travelDaysList[day - 1]);
+  /** 일정 삭제 핸들러 */
+  const handleDeleteSchedule = () => {
+    if (timeLineData?.day === undefined) return;
+
+    openDialog({
+      message: `${isPlace ? '장소' : '메모'}를 삭제할까요?`,
+      type: 'confirm',
+      okLabel: '삭제',
+      onOk: () => {
+        setDeleteScheduleList({
+          day: timeLineData.day.value as number,
+          id: timeLineData?.id as string,
+        });
+        toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
+      },
+    });
+  };
+
+  const resetData = useCallback(() => {
+    if (timeLineData?.day.value) {
+      setSelectedDay(travelDaysList[(timeLineData.day.value as number) - 1]);
     }
 
-    setSelectedTime(data?.time ?? '');
-    setInputMemo(data?.memo ?? '');
-  };
+    setSelectedTime(timeLineData?.time ?? '');
+    setInputMemo(timeLineData?.memo ?? '');
+  }, []);
 
   /** 초기값 대입 */
   useEffect(() => {
     resetData();
-  }, [day, travelDaysList]);
+  }, [timeLineData?.day.value, travelDaysList, resetData]);
 
   return (
     <SideModal
       isOpen={isOpen}
-      title={isPlace ? `${data.place?.name}` : '메모 수정'}
+      title={isPlace ? `${timeLineData.place?.name}` : '메모 수정'}
       handleClose={onClickCloseBtn}
       footer={
         <div className="flex w-full justify-between">
-          <Button variant="redOutline">삭제</Button>
+          <Button variant="redOutline" onClick={handleDeleteSchedule}>삭제</Button>
           <div className="flex gap-1">
             <Button variant="gray" onClick={onClickCloseBtn}>
               취소
@@ -90,14 +108,14 @@ export default function PlaceDeatilModal({
       }
     >
       <div className="flex h-full flex-col gap-2">
-        {data?.place && (
+        {timeLineData?.place && (
           <div className="mb-4 flex flex-col gap-1">
-            <p>
-              {data.place.address} | {data.place.country.name}
-            </p>
-            <span className="text-text-secondary">
-              {getPlaceCategory(data.place.types)}
-            </span>
+            <p>{timeLineData.place.address}</p>
+            <div className="text-text-secondary flex gap-1">
+              <span>{timeLineData.place.country.name}</span>
+              <span className="text-gray-2"> | </span>
+              <span>{getPlaceCategory(timeLineData.place.types)}</span>
+            </div>
           </div>
         )}
         <div className="flex gap-1">

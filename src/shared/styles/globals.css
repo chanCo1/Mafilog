@@ -67,7 +67,7 @@
 }
 
 :root {
-  line-height: 1.2;
+  line-height: 1;
   font-weight: 500;
   font-size: var(--text-md);
   font-family: 'Pretendard', sans-serif;
@@ -79,7 +79,7 @@
   /* 모바일 설정 */
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  /* user-select: none; */
+  user-select: none;
 
   --text-primary: #676767;
   --background: #ffffff;

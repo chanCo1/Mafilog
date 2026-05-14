@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type DialogType = 'alert' | 'confirm';
+export type DialogType = 'alert' | 'confirm' | 'error';
 
 export interface DialogOptions {
   type?: DialogType;

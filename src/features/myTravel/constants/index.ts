@@ -3,6 +3,7 @@ import {
   TRAVEL_PARTNER,
   TRAVEL_STYLE,
   TRAVEL_TAB,
+  TRAVEL_TYPE,
 } from '@/shared/types/Enum';
 
 /** 여행 생성 스텝 리스트 */
@@ -10,6 +11,12 @@ export const CREATE_TRAVEL_STEP_LIST = [
   { id: 1, label: '여행지 선택', isComplete: false },
   { id: 2, label: '날짜 선택', isComplete: false },
   { id: 3, label: '여행 정보', isComplete: false },
+];
+
+/** 여행 타입 리스트 */
+export const TRAVEL_TYPE_LIST = [
+  { label: '해외여행', value: TRAVEL_TYPE.WORLD },
+  { label: '국내여행', value: TRAVEL_TYPE.DOMESTIC },
 ];
 
 /** 여행 동반자 리스트 */

@@ -51,24 +51,25 @@ function SideModalEntity({
   // useEffect(() => {
   //   // SSR 에러 방지
   //   if (isOpen) {
-  //     setIsMounted(true);
-
-  //     // const timer = setTimeout(() => {
-  //     //   setIsVisible(true);
-  //     // }, 10);
+  //     setIsRender(true);
+  //     // 첫 번째 프레임: DOM 생성 인식
+  //     requestAnimationFrame(() => {
+  //       // 두 번째 프레임: 스타일 변경 인식 (애니메이션 보장)
+  //       requestAnimationFrame(() => {
+  //         setIsVisible(true);
+  //       });
+  //     });
 
   //     document.body.style.overflow = 'hidden';
-  //     // return () => clearTimeout(timer);
   //   } else {
-  //     // setIsVisible(false);
-  //     setIsMounted(false);
+  //     setIsVisible(false);
 
-  //     // const timer = setTimeout(() => {
-  //     //   setIsRender(false);
-  //     // }, 800);
+  //     const timer = setTimeout(() => {
+  //       setIsRender(false);
+  //     }, 800);
 
   //     document.body.style.overflow = 'unset';
-  //     // return () => clearTimeout(timer);
+  //     return () => clearTimeout(timer);
   //   }
   // }, [isOpen]);
 
@@ -86,20 +87,23 @@ function SideModalEntity({
   }, [isOpen]);
 
   if (!isMounted) return null;
+  // if (!isRender) return null;
 
   return createPortal(
     <>
       <Dimmed
         className={cn(
           isOpen ? 'visible opacity-100' : 'invisible opacity-0',
+          // isVisible ? 'visible opacity-100' : 'invisible opacity-0',
         )}
         // onClick={handleClose}
       />
       <div
         className={cn(
           sideModalVariants({ size }),
-          'max-mobile:w-11/12',
+          'max-mobile:w-full max-mobile:rounded-l-none',
           `${isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
+          // `${isVisible ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
         )}
       >
         <div className="item-center flex justify-between">
@@ -107,7 +111,7 @@ function SideModalEntity({
           <ReturnButton size="lg" onClick={handleClose} />
         </div>
         <div className="min-h-0 flex-1">{children}</div>
-        <div className="flex items-center justify-end gap-1 border-t border-border-secondary pt-2">
+        <div className="border-border-secondary flex items-center justify-end gap-1 border-t pt-2">
           {/* 커스텀 푸터 */}
           {footer}
         </div>
@@ -117,4 +121,4 @@ function SideModalEntity({
   );
 }
 
-export const SideModal = forwardRef(SideModalEntity);
+export const SideModal = SideModalEntity;

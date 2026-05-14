@@ -147,7 +147,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   }, [clickPlaceData]);
 
   /** 장소 추가 핸들링 */
-  const handelAddPlace = () => {
+  const handleAddPlace = () => {
     if (!selectedDay) return;
 
     try {
@@ -174,7 +174,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={!selectedPlaces.length} onClick={handelAddPlace}>
+          <Button disabled={!selectedPlaces.length} onClick={handleAddPlace}>
             장소 추가
           </Button>
         </>

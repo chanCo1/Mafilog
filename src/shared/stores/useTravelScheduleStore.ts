@@ -16,6 +16,7 @@ import {
 } from '@/shared/interfaces/travelScheduleStore.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
+import { nanoid } from 'nanoid';
 
 type ITravelSchduleStore = ITravelScheduleState &
   ITravelScheduleActions &
@@ -68,21 +69,23 @@ export const useTravelScheduleStore = create<ITravelSchduleStore>()(
                 data.places?.forEach((_place) => {
                   targetSchedule.list.push({
                     // TODO: (임시)
-                    id: `${_place.id}-${new Date().getTime()}`,
+                    id: nanoid(),
                     type: data.type,
                     place: _place,
                     memo: data.memo,
                     time: data.time,
+                    day: data.day,
                   });
                 });
               } else {
                 // 메모 추가
                 targetSchedule.list.push({
                   // TODO: (임시)
-                  id: `${data.day.value}-${data.type}-${data.memo}-${new Date().getTime()}`,
+                  id: nanoid(),
                   type: data.type,
                   memo: data.memo,
                   time: data.time,
+                  day: data.day,
                 });
               }
             }
@@ -101,7 +104,7 @@ export const useTravelScheduleStore = create<ITravelSchduleStore>()(
 
             if (targetSchedule) {
               targetSchedule.list = targetSchedule.list.filter(
-                (_, index) => index !== data.index,
+                (list) => list.id !== data.id,
               );
             }
           },
