@@ -13,7 +13,7 @@ import { Button } from '@/shared/components/ui/Button';
 import {
   registerShema,
   TRegisterShema,
-} from '@/features/auth/lib/registerSchema';
+} from '@/features/auth/schema/register.schema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';

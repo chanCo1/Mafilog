@@ -16,7 +16,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, loginSchemaType } from '@/features/auth/lib/loginSchema';
+import { loginSchema, loginSchemaType } from '@/features/auth/schema/login.schema';
 import { toast } from 'sonner';
 import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
 
