@@ -9,13 +9,12 @@ import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/Button';
 import { Input } from '@/shared/components/ui/Input';
-import { ChevronDown } from 'lucide-react';
 
 export default function UserInfoPage() {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 pt-4">
       <div className="flex flex-col gap-1">
-        <h3 className="text-lg font-bold">내 계정</h3>
+        <h3 className="text-lg font-bold">프로필 변경</h3>
         <span>프로필</span>
         <div className="flex gap-3">
           <div className="relative">

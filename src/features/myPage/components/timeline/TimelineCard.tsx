@@ -14,15 +14,20 @@ import { convertComma } from '@/shared/lib/utils';
 interface ITimelineCard {
   className?: string;
   index: number;
+  isSelected: boolean;
 }
 
-export default function TimelineCard({ className, index = 1 }: ITimelineCard) {
+export default function TimelineCard({
+  className,
+  index = 1,
+  isSelected,
+}: ITimelineCard) {
   return (
-    <div className={cn("flex flex-col gap-1", className)}>
+    <div className={cn('flex flex-col gap-1', className)}>
       <div className="flex items-center">
         <span>YYYY-MM-DD ~ YYYY-MM-DD (DD일)</span>
       </div>
-      <Card select className="flex flex-col gap-3">
+      <Card select className="flex flex-col gap-3" isSelected={isSelected}>
         <div className="flex flex-col gap-2">
           <div className="flex items-baseline gap-1">
             <span className="text-text-secondary font-bold">#{index}</span>
