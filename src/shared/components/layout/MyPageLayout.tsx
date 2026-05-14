@@ -29,13 +29,13 @@ export default function MyPageLayout({ children }: IMyPageLayout) {
   };
 
   return (
-    <div className="flex h-full flex-col gap-5">
+    <div className="flex flex-col gap-2">
       <PageHeader
         title="마이페이지"
         description={`안녕하세요. ${'여행최고'}님!`}
       />
-      <div className="max-mobile:flex-col flex h-full gap-5">
-        <Card className="text-text-secondary max-mobile:hidden flex h-full w-50 flex-col gap-1 shrink-0">
+      <div className="max-mobile:flex-col flex gap-5 max-mobile:gap-1">
+        <Card className="text-text-secondary max-mobile:hidden flex w-50 flex-col gap-1 shrink-0 sticky top-13 h-50 mt-4">
           {MYPAGE_LIST.map((list) => (
             <p
               className={cn(
