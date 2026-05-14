@@ -6,12 +6,12 @@ export const DEFAULT_LAYOUT_CLASSNAME =
   'desktop:w-desktop tablet:w-tablet mx-auto';
 
 /** 여행 지도 타입 */
-export const TRAVEL_TYPE_LIST: ILabelValue[] = [
+export const MAP_TRAVEL_TYPE_LIST: ILabelValue[] = [
   { label: '세계', value: TRAVEL_TYPE.WORLD },
   { label: '국내', value: TRAVEL_TYPE.DOMESTIC },
 ];
-export type TRAVEL_TYPE_LIST =
-  (typeof TRAVEL_TYPE_LIST)[keyof typeof TRAVEL_TYPE_LIST];
+export type MAP_TRAVEL_TYPE_LIST =
+  (typeof MAP_TRAVEL_TYPE_LIST)[keyof typeof MAP_TRAVEL_TYPE_LIST];
 
 /** 사진 업로드 수 */
 export const SINGLE_COUNT = 1;
