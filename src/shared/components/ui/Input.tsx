@@ -111,7 +111,7 @@ function InputEntity(
           )}
           ref={ref}
         >
-          {prefix && <span className="mr-1">{prefix}</span>}
+          {prefix && <span className="mr-1 shrink-0">{prefix}</span>}
           <input
             type={isPassword ? passwordType : type}
             className={cn('w-full outline-none focus:ring-0', inputClassName)}
@@ -135,7 +135,7 @@ function InputEntity(
               )}
             </div>
           )}
-          {suffix && <span className="ml-1">{suffix}</span>}
+          {suffix && <span className="shrink-0 ml-1">{suffix}</span>}
         </div>
       </div>
       {description && (
