@@ -23,6 +23,7 @@ import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { IMemberList } from '@/shared/interfaces';
 import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
+import { TRAVEL_TYPE_LIST } from '@/features/myTravel/constants';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -39,6 +40,10 @@ export default function CreateNewTravelModal({
 
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
+
+  const [travelType, setTravelType] = useState<string>(
+    TRAVEL_TYPE_LIST[0].value,
+  );
   const [selectedCities, setSelectedCities] = useState<IPlaceList[]>([]);
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
@@ -217,6 +222,8 @@ export default function CreateNewTravelModal({
       <div className="relative h-[calc(100%-65px)]">
         <FadeInOutStyled isShow={currentStep === 1}>
           <CreateNewTravelStep1
+            travelType={travelType}
+            setTravelType={setTravelType}
             selectedCities={selectedCities}
             setSelectedCities={setSelectedCities}
           />

@@ -9,19 +9,25 @@ import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { Chip } from '@/shared/components/ui/Chip';
 import { Input } from '@/shared/components/ui/Input';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
-import { Search } from 'lucide-react';
+import { Search, Plane, Bus } from 'lucide-react';
 import { Loading } from '@/shared/components/ui/Loading';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import tzlookup from 'tz-lookup';
 import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
+import { TRAVEL_TYPE_LIST } from '@/features/myTravel/constants';
+import { TRAVEL_TYPE } from '@/shared/types/Enum';
 
 interface ICreateNewTravelStep1 {
+  travelType: string;
+  setTravelType: Dispatch<SetStateAction<string>>;
   selectedCities: IPlaceList[];
   setSelectedCities: Dispatch<SetStateAction<IPlaceList[]>>;
 }
 
 export default function CreateNewTravelStep1({
+  travelType,
+  setTravelType,
   selectedCities,
   setSelectedCities,
 }: ICreateNewTravelStep1) {
@@ -100,10 +106,29 @@ export default function CreateNewTravelStep1({
   };
 
   return (
-    <div className="flex h-full flex-col gap-2">
+    <div className="flex h-full flex-col gap-3">
+      <div className="flex flex-col gap-1">
+        <span>어떤 여행인가요?</span>
+        <div className="flex gap-1">
+          {TRAVEL_TYPE_LIST.map((list) => (
+            <Chip
+              variant={travelType === list.value ? 'primary' : 'primaryOutline'}
+              onClick={() => setTravelType(list.value)}
+              prefix={
+                list.value === TRAVEL_TYPE.WORLD ? (
+                  <Plane size={16} />
+                ) : (
+                  <Bus size={16} />
+                )
+              }
+            >
+              {list.label}
+            </Chip>
+          ))}
+        </div>
+      </div>
       <Input
         label="도시 검색"
-        placeholder="도시명으로 검색"
         isRequired
         onChange={(e) => setSearchCity(e.target.value)}
         value={searchCity}
