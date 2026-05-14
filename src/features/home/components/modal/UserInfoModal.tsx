@@ -10,6 +10,7 @@ import Separator from '@/shared/components/ui/Separator';
 import { Button } from '@/shared/components/ui/Button';
 import { Card } from '@/shared/components/ui/Card';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface IUserInfoModal {
   isOpen: boolean;
@@ -17,10 +18,17 @@ interface IUserInfoModal {
 }
 
 export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
+  const router = useRouter();
+
+  /** 페이지 이동 핸들링 */
+  const handelLinkPage = (path: string) => {
+    router.push(path);
+    handleClose();
+  };
+
   return (
     <SideModal
       isOpen={isOpen}
-      title=""
       handleClose={handleClose}
       footer={
         <div className="flex w-full justify-between">
@@ -31,7 +39,7 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
         </div>
       }
     >
-      <div className="flex flex-col gap-3">
+      <div className="flex h-full flex-col gap-3">
         <div className="flex gap-1">
           <div className="h-24 w-24 rounded-full bg-amber-50" />
           <div className="flex flex-col">
@@ -40,22 +48,24 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
           </div>
         </div>
         <Separator position="horizontal" />
-        <div className="flex flex-col gap-1">
-          <span className="font-bold">마이페이지</span>
-          <Card className="text-text-secondary flex flex-col">
-            <Link
-              href="/my-page/user-info"
-              className="hover:bg-gray-2 cursor-pointer p-2 rounded-lg"
-            >
-              계정 정보
-            </Link>
-            <Link
-              href="/my-page/my-timeline"
-              className="hover:bg-gray-2 cursor-pointer p-2 rounded-lg"
-            >
-              내 타임라인
-            </Link>
-          </Card>
+        <div className="scrollbar-hide flex flex-col gap-4 overflow-auto">
+          <div className="flex flex-col gap-1">
+            <span className="font-bold">마이페이지</span>
+            <Card className="text-text-secondary flex flex-col">
+              <p
+                className="hover:bg-gray-2 cursor-pointer rounded-lg p-2"
+                onClick={() => handelLinkPage('/my-page/user-info')}
+              >
+                계정 정보
+              </p>
+              <p
+                onClick={() => handelLinkPage('/my-page/my-timeline')}
+                className="hover:bg-gray-2 cursor-pointer rounded-lg p-2"
+              >
+                내 타임라인
+              </p>
+            </Card>
+          </div>
         </div>
       </div>
     </SideModal>
