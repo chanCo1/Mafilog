@@ -80,7 +80,7 @@ export default function DoughnutChart({
   };
 
   return (
-    <div className="max-mobile:h-65 relative h-70 w-full">
+    <div className="max-mobile:h-70 relative h-75 w-full">
       <div className="h-full">
         <Doughnut data={dataOptions} options={options} />
       </div>
