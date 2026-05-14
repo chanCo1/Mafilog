@@ -36,6 +36,7 @@ export default function MyMapPage() {
       <div className="flex gap-1">
         {MAP_TRAVEL_TYPE_LIST.map((list) => (
           <Chip
+            key={list.value}
             size="lg"
             variant={selectedMap.value === list.value ? 'primary' : 'gray'}
             onClick={() => setSelectedMap(list)}
