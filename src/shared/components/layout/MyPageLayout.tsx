@@ -13,6 +13,7 @@ import PageHeader from '@/shared/components/ui/PageHeader';
 import { Card } from '@/shared/components/ui/Card';
 import { useRouter, usePathname } from 'next/navigation';
 import { cn } from '@/shared/lib/utils';
+import { Chip } from '@/shared/components/ui/Chip';
 
 interface IMyPageLayout {
   children: ReactNode;
@@ -33,8 +34,8 @@ export default function MyPageLayout({ children }: IMyPageLayout) {
         title="마이페이지"
         description={`안녕하세요. ${'여행최고'}님!`}
       />
-      <div className="flex h-full gap-5">
-        <Card className="text-text-secondary h-full w-50 flex flex-col gap-1">
+      <div className="max-mobile:flex-col flex h-full gap-5">
+        <Card className="text-text-secondary flex h-full w-50 flex-col gap-1 max-mobile:hidden">
           {MYPAGE_LIST.map((list) => (
             <p
               className={cn(
@@ -49,6 +50,16 @@ export default function MyPageLayout({ children }: IMyPageLayout) {
             </p>
           ))}
         </Card>
+        <div className="flex gap-1 mobile:hidden">
+          {MYPAGE_LIST.map((list) => (
+            <Chip
+              variant={path === list.path ? 'primary' : 'gray'}
+              onClick={() => handelLinkPage(list.path)}
+            >
+              {list.name}
+            </Chip>
+          ))}
+        </div>
 
         <div>{children}</div>
       </div>
