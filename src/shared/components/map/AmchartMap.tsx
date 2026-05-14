@@ -14,7 +14,6 @@ import * as am5map from '@amcharts/amcharts5/map';
 import am5geodata_worldLow from '@amcharts/amcharts5-geodata/worldLow';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5geodata_lang_ko from '@amcharts/amcharts5-geodata/lang/KO';
-import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
 
 interface IAmchartMap {
   isWheel?: boolean;
@@ -27,7 +26,6 @@ export default function AmchartMap({
   isDomestic = false,
   readonly = false,
 }: IAmchartMap) {
-  const { isLoggedIn } = useAuthManagerStore();
 
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<am5map.MapChart | null>(null);
@@ -213,21 +211,6 @@ export default function AmchartMap({
   return (
     <>
       <div ref={mapRef} className="h-full w-full" />
-      {isLoggedIn && (
-        <div className="flex items-center justify-center font-bold">
-          {isDomestic ? (
-            <div>
-              국내 <span className="text-primary">{0}개 도시</span>가 추억으로
-              채워졌어요
-            </div>
-          ) : (
-            <div>
-              해외 <span className="text-primary">{0}개국</span>이 추억으로
-              채워졌어요
-            </div>
-          )}
-        </div>
-      )}
     </>
   );
 }
