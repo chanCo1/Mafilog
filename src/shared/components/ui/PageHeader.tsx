@@ -10,7 +10,7 @@ import { ReactNode } from 'react';
 interface IPageHeader {
   ruby?: ReactNode;
   title: string;
-  description?: string;
+  description?: ReactNode;
   titleBtn?: ReactNode;
 }
 
@@ -24,7 +24,7 @@ export default function PageHeader({
     <div className="flex flex-col">
       {ruby}
       <div className="flex gap-1">
-        <h3 className="text-h3 font-bold">{title}</h3>
+        <h3 className="text-h3 font-bold max-mobile:text-xxl">{title}</h3>
         {titleBtn}
       </div>
       {description && (

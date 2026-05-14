@@ -9,15 +9,15 @@ import { useMemo } from 'react';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
-import { EXPENSES_CATEGORY_TYPE, ICON_TYPE } from '@/shared/types/Enum';
-import { TIconList } from '@/shared/types';
+import { ICON_TYPE } from '@/shared/types/Enum';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 
 interface IExpensesCard {
   type: string;
   name: string;
-  payer: string;
-  spender: string;
-  paymentMethod: string;
+  payer: string; // 결제자
+  spender: string; // 지줄차
+  paymentMethod: string; // 결제 방식
   currency: string;
 }
 
@@ -32,7 +32,7 @@ export default function ExpensesCard({
   /** 아이콘 타입 가져오기 */
   const getCategoryType = useMemo(() => {
     switch (type) {
-      case EXPENSES_CATEGORY_TYPE.TRANSPORT:
+      case EXPENSES_CATEGORY_TYPE.BUS:
         return ICON_TYPE.BUS;
       case EXPENSES_CATEGORY_TYPE.HOUSE:
         return ICON_TYPE.HOUSE;
@@ -53,7 +53,7 @@ export default function ExpensesCard({
     <div className="flex w-full gap-3">
       <div className="flex items-center justify-center">
         <div className="shrink-0">
-          <CategoryIcon variant={getCategoryType as TIconList} />
+          <CategoryIcon variant={getCategoryType as EXPENSES_CATEGORY_TYPE} />
         </div>
       </div>
       <div className="w-full">

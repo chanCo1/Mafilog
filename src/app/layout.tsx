@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Akaya_Telivigala } from 'next/font/google';
 import '@/shared/styles/globals.css';
 import DefaultLayout from '@/shared/components/layout/DefaultLayout';
-import Toast from '@/shared/components/ui/Toast';
+import Providers from '@/shared/components/Providers';
 
 /** 로고용 폰트 */
 const fontAkaya = Akaya_Telivigala({
@@ -27,6 +27,9 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
     title: 'Mafilog',
   },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
   formatDetection: {
     telephone: false, // 숫자 클릭 시 전화걸기 팝업 방지
   },
@@ -40,8 +43,9 @@ export default function RootLayout({
   return (
     <html lang="ko" className={fontAkaya.variable}>
       <body className="flex flex-col">
-        <DefaultLayout>{children}</DefaultLayout>
-        <Toast />
+        <Providers>
+          <DefaultLayout>{children}</DefaultLayout>
+        </Providers>
       </body>
     </html>
   );

@@ -33,13 +33,13 @@ const radioVariants = cva('flex gap-1 cursor-pointer items-center w-fit', {
 
 interface IRadio
   extends
-    Omit<React.HTMLAttributes<HTMLDivElement>, 'color' | 'onChange'>,
+    Omit<React.HTMLAttributes<HTMLDivElement>, 'color' | 'onChange' | 'id'>,
     VariantProps<typeof radioVariants> {
   className?: string;
   label?: string;
   labelPosition?: 'top' | 'left';
   isRequired?: boolean;
-  radioOptions: ILabelValue[];
+  radioOptions?: ILabelValue[];
   disabled?: boolean;
   description?: string;
   errorMsg?: string;
@@ -47,6 +47,7 @@ interface IRadio
   value: ILabelValue;
   onChange: (value: ILabelValue) => void;
   isUserIcon?: boolean;
+  id: ILabelValue;
 }
 
 function RadioEntity(
@@ -64,6 +65,7 @@ function RadioEntity(
     value,
     onChange,
     isUserIcon,
+    id,
     ...props
   }: IRadio,
   ref: React.ForwardedRef<HTMLInputElement>,
@@ -73,6 +75,22 @@ function RadioEntity(
     if (disabled) return;
 
     if (onChange) onChange(value);
+  };
+
+  const renderIcon = (isSelected: boolean) => {
+    if (isUserIcon) {
+      return isSelected ? (
+        <User className="h-5 w-5 fill-current" />
+      ) : (
+        <User className="h-5 w-5" />
+      );
+    }
+
+    return isSelected ? (
+      <CircleCheckBig className="h-5 w-5" />
+    ) : (
+      <Circle className="h-5 w-5" />
+    );
   };
 
   return (
@@ -90,44 +108,46 @@ function RadioEntity(
           {isRequired && <RequireDot />}
         </div>
       )}
+
       <div
         className={cn(
           'flex gap-1.5',
           direction === 'horizontal' ? 'flex-row' : 'flex-col',
         )}
       >
-        {radioOptions.map((option) => (
+        {/* 옵션 리스트가 있을 때 (여러 개) */}
+        {radioOptions?.length ? (
+          radioOptions.map((option) => (
+            <div
+              key={option.value}
+              className={cn(
+                radioVariants({ color }),
+                disabled && 'cursor-default',
+                className,
+              )}
+              onClick={() => onClickRadio(option)}
+            >
+              {renderIcon(value?.value === option.value)}
+              <span className="text-text-primary">{option.label}</span>
+            </div>
+          ))
+        ) : (
           <div
-            key={option.value}
-            ref={ref}
             className={cn(
               radioVariants({ color }),
               disabled && 'cursor-default',
               className,
             )}
-            onClick={() => onClickRadio(option)}
-            {...props}
+            /** 옵션이 없을 땐 id로 값 만들기 */
+            onClick={() =>
+              onClickRadio({ label: id.label || '', value: id.value || '' })
+            }
           >
-            {value?.value === option.value ? (
-              <>
-                {isUserIcon ? (
-                  <UserCheck className="h-5 w-5" />
-                ) : (
-                  <CircleCheckBig className="h-5 w-5" />
-                )}
-              </>
-            ) : (
-              <>
-                {isUserIcon ? (
-                  <User className="h-5 w-5" />
-                ) : (
-                  <Circle className="h-5 w-5" />
-                )}
-              </>
-            )}
-            <span className="text-text-primary">{option.label}</span>
+            {/* 단일로 사용할 때는 id 값으로 구분 */}
+            {renderIcon(value?.value === id.value)}
+            {label && <span className="text-text-primary">{label}</span>}
           </div>
-        ))}
+        )}
       </div>
 
       {/* 설명 */}

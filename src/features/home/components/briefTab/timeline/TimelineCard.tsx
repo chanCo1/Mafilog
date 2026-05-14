@@ -11,7 +11,7 @@ import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { Chip } from '@/shared/components/ui/Chip';
 import { TRAVEL_TYPE, ICON_TYPE } from '@/shared/types/Enum';
-import { TIconList } from '@/shared/types';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 
 interface ITimelineCard {
   name: string;
@@ -30,9 +30,9 @@ export default function TimelineCard({
 }: ITimelineCard) {
   const getTravelType = useMemo(() => {
     switch (type) {
-      case TRAVEL_TYPE.INTERNATIONAL:
+      case TRAVEL_TYPE.WORLD:
         return ICON_TYPE.PLANE;
-      case TRAVEL_TYPE.INTERNATIONAL:
+      case TRAVEL_TYPE.DOMESTIC:
         return ICON_TYPE.BUS;
       default:
         return ICON_TYPE.BUS;
@@ -43,7 +43,7 @@ export default function TimelineCard({
     <div className="flex w-full gap-3">
       <div className="flex flex-col items-center">
         <div className="shrink-0">
-          <CategoryIcon variant={getTravelType as TIconList} />
+          <CategoryIcon variant={getTravelType as EXPENSES_CATEGORY_TYPE} />
         </div>
         <div
           className={cn(

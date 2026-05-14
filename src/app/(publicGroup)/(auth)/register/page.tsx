@@ -1,5 +1,5 @@
 import RegisterPage from "@/features/auth/pages/RegisterPage"
 
-export default function Register() {
+export default function Page() {
   return <RegisterPage />
 }

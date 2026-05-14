@@ -1,6 +1,7 @@
 import { ILabelValue } from '@/shared/interfaces';
 import { TTabTypes } from '@/features/home/types';
-import { EXPENSES_CATEGORY_TYPE, TRAVEL_TYPE } from '@/shared/types/Enum';
+import { TRAVEL_TYPE } from '@/shared/types/Enum';
+import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 
 /** 서비스 간략 소개 탭 리스트 */
 export const TABLIST: ILabelValue<TTabTypes>[] = [
@@ -24,7 +25,7 @@ export const SCHEDULE_INTRODUCE_LIST: string[] = [
 export const SCHEDULE_MOCK_DATA = [
   {
     name: '아사쿠사 규카츠',
-    type: 'location',
+    type: 'place',
     category: '음식점',
     country: '일본',
     city: '아사쿠사',
@@ -38,7 +39,7 @@ export const SCHEDULE_MOCK_DATA = [
   },
   {
     name: '센소지',
-    type: 'location',
+    type: 'place',
     category: '관광명소',
     country: '일본',
     city: '아사쿠사',
@@ -59,12 +60,12 @@ export const EXPNESES_INTRODUCE_LIST: string[] = [
 /** 가계부 목업 데이터 */
 export const EXPENSES_MOCK_DATA = [
   {
-    type: EXPENSES_CATEGORY_TYPE.TRANSPORT,
+    type: EXPENSES_CATEGORY_TYPE.BUS,
     name: '비행기 예약',
     payer: '나',
     spender: '나',
     paymentMethod: '카드',
-    currency: 'KRW(원)',
+    currency: 'KRW',
   },
   {
     type: EXPENSES_CATEGORY_TYPE.FOOD,
@@ -72,7 +73,7 @@ export const EXPENSES_MOCK_DATA = [
     payer: '나',
     spender: '1/N',
     paymentMethod: '현금',
-    currency: 'USD(달러)',
+    currency: 'USD',
   },
 ];
 
@@ -94,19 +95,19 @@ export const TIMELINE_INTRODUCE_LIST: string[] = [
 /** 타임라인 목업 데이터 */
 export const TIMELINE_MOCK_DATA = [
   {
-    type: TRAVEL_TYPE.INTERNATIONAL,
+    type: TRAVEL_TYPE.WORLD,
     name: '도쿄 먹방 여행',
     partner: '연인과',
     style: ['먹방'],
   },
   {
-    type: TRAVEL_TYPE.LOCAL,
+    type: TRAVEL_TYPE.DOMESTIC,
     name: '속초 겨울 바다',
     partner: '친구와',
     style: ['먹방', '힐링/휴식'],
   },
   {
-    type: TRAVEL_TYPE.LOCAL,
+    type: TRAVEL_TYPE.DOMESTIC,
     name: '부산 당일치기',
     partner: '친구와',
     style: ['먹방'],

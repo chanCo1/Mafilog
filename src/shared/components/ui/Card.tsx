@@ -11,14 +11,15 @@ import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
-const cardVariants = cva('rounded-lg cursor-pointer', {
+const cardVariants = cva('rounded-lg bg-white', {
   variants: {
     variant: {
       default: 'bg-gray-1',
-      outline: 'border border-border-primary',
+      outline: 'ring ring-inset ring-border-primary',
       shadowed: 'bg-gray-1 shadow-md',
-      white: 'bg-white',
-      shadowedWhite: 'bg-white shadow-md',
+      white: '',
+      shadowedWhite: 'shadow-md',
+      dashed: 'border border-dashed border-border-primary',
     },
     size: {
       md: 'p-2.5',
@@ -38,13 +39,14 @@ interface ICard
   className?: string;
   disabled?: boolean;
   readonly?: boolean;
+  select?: boolean; // 선택 사용
+  isSelected?: boolean; // 선택되었는지 여부
 }
 
 function CardEntity(
-  { className, disabled, variant, size, readonly, ...props }: ICard,
+  { className, disabled, variant, size, readonly, select, isSelected, ...props }: ICard,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
-  const [isSelected, setIsSelected] = React.useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (disabled) return;
@@ -52,17 +54,16 @@ function CardEntity(
     if (props.onClick) {
       props.onClick(e);
     }
-
-    setIsSelected(!isSelected);
   };
 
   return (
     <div
       className={cn(
         cardVariants({ variant, size }),
+        select ? 'cursor-pointer' : '',
         disabled && 'pointer-events-none opacity-50',
         readonly && 'pointer-events-none',
-        isSelected && 'outline-border-active outline',
+        isSelected && 'ring-border-active ring-2 ring-inset',
         className,
       )}
       ref={ref}

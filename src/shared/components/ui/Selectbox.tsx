@@ -5,14 +5,21 @@
  * @description: Selectbox 컴포넌트
  */
 
-import React from 'react';
+import {
+  useState,
+  ReactNode,
+  useLayoutEffect,
+  InputHTMLAttributes,
+} from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/Input';
 import { ChevronDown } from 'lucide-react';
 import { ILabelValue } from '@/shared/interfaces';
+import { useOutsideClick } from '@/shared/hooks/useOutsideClick';
+import { useDropdownDirection } from '@/shared/hooks/useDropdownDirection';
 
 interface ISelectbox extends Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
+  InputHTMLAttributes<HTMLInputElement>,
   'prefix' | 'size' | 'value' | 'onChange'
 > {
   className?: string;
@@ -22,32 +29,34 @@ interface ISelectbox extends Omit<
   description?: string;
   errorMsg?: string;
   options: ILabelValue[];
-  prefix?: React.ReactNode;
+  prefix?: ReactNode;
   size?: 'md' | 'sm';
   variant?: 'outline' | 'none';
-  value: ILabelValue;
+  value: ILabelValue | undefined;
+  addValueText?: string;
   onChange: (value: ILabelValue) => void;
 }
 
-function SelectboxEntity(
-  {
-    className,
-    label,
-    labelPosition = 'top',
-    isRequired,
-    description,
-    errorMsg,
-    options,
-    prefix,
-    size = 'md',
-    variant = 'outline',
-    value,
-    onChange,
-    ...props
-  }: ISelectbox,
-  ref: React.ForwardedRef<HTMLInputElement>,
-) {
-  const [isOpen, setIsOpen] = React.useState(false);
+export default function Selectbox({
+  className,
+  label,
+  labelPosition = 'top',
+  isRequired,
+  description,
+  errorMsg,
+  options,
+  prefix,
+  size = 'md',
+  variant = 'outline',
+  value,
+  onChange,
+  addValueText,
+  ...props
+}: ISelectbox) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useOutsideClick(() => setIsOpen(false));
+
+  const direction = useDropdownDirection({ isOpen, ref: dropdownRef });
 
   const handleFocus = () => {
     // handleBlur();
@@ -66,22 +75,23 @@ function SelectboxEntity(
   };
 
   return (
-    <div
-      className={cn('relative', className)}
-      ref={ref}
-    >
+    <div className={cn('relative', className)} ref={dropdownRef}>
       <Input
         label={label}
         labelPosition={labelPosition}
         placeholder={props.placeholder}
         prefix={prefix}
-        suffix={<ChevronDown className="h-4 w-4" />}
+        suffix={
+          <ChevronDown className={cn('h-4 w-4 stroke-3 transition duration-200', isOpen ? 'rotate-180' : '')} />
+        }
         isRequired={isRequired}
         description={description}
         errorMsg={errorMsg}
         readOnly
         inputClassName="cursor-pointer"
-        value={value.label}
+        value={
+          value?.label ? `${value?.label ?? ''} ${addValueText ?? ''}` : ''
+        }
         variant={variant}
         size={size}
         onBlur={handleBlur}
@@ -90,28 +100,31 @@ function SelectboxEntity(
       />
 
       {/* 셀렉트박스 */}
-      {isOpen && (
-        <div className="absolute top-10 z-50 flex w-full flex-col gap-1 rounded-lg bg-white p-2 shadow-md">
-          {options.map((option) => (
-            <span
-              key={option.value}
+      {isOpen && options && (
+        <ul
+          className={cn(
+            'scrollbar-hide absolute z-50 flex max-h-50 w-full flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
+            direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
+          )}
+        >
+          {options.map((option, index) => (
+            <li
+              key={`${option.value}-${index}`}
               className={cn(
                 'hover:bg-gray-1 cursor-pointer rounded-md p-1.5',
-                option.value === value.value
-                  ? 'text-text-primary'
+                option.value === value?.value
+                  ? 'text-text-primary font-bold'
                   : 'text-text-secondary',
               )}
               onMouseDown={() => {
                 onClickOption(option);
               }}
             >
-              {option.label}
-            </span>
+              {option.label} {addValueText ?? ''}
+            </li>
           ))}
-        </div>
+        </ul>
       )}
     </div>
   );
 }
-
-export const Selectbox = React.forwardRef(SelectboxEntity);

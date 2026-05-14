@@ -12,6 +12,7 @@ import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { SCHEDULE_MOCK_DATA } from '@/features/home/constants';
+import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 
 interface IScheduleCard {
   name: string;
@@ -20,7 +21,6 @@ interface IScheduleCard {
   country?: string;
   city?: string;
   count?: number;
-  // TODO: 타입 정의할 것
   allSchedules: SCHEDULE_MOCK_DATA[];
 }
 
@@ -34,25 +34,19 @@ export const ScheduleCard = ({
   count,
   allSchedules,
 }: IScheduleCard) => {
-  /** 메모를 제외한 일정 카운트 */
-  const getDisplayCount = useMemo(() => {
-    if (type !== SCHEDULE_TYPE.LOCATION) return;
-
-    const sliced = allSchedules?.slice(0, count! + 1);
-
-    const filltered = sliced.filter((schedule) => {
-      return schedule.type === SCHEDULE_TYPE.LOCATION
-    });
-
-    return filltered.length;
-  }, [type, allSchedules, count]);
+  const displayCount = useTimelineDiscplayCount({
+    currentIndex: count,
+    // TODO: 타입 안맞는것 수정할 것
+    dailyAllSchedule: allSchedules,
+    type: type as SCHEDULE_TYPE,
+  });
 
   return (
     <div className="flex w-full gap-3">
       <div className="flex flex-col items-center">
         <div className="shrink-0">
-          {type === SCHEDULE_TYPE.LOCATION ? (
-            <CircledNumber number={getDisplayCount!} />
+          {type === SCHEDULE_TYPE.PLACE ? (
+            <CircledNumber number={displayCount} />
           ) : (
             <CategoryIcon variant="memo" />
           )}
@@ -66,26 +60,20 @@ export const ScheduleCard = ({
         >
           <p
             className={cn(
-              type === SCHEDULE_TYPE.LOCATION
+              type === SCHEDULE_TYPE.PLACE
                 ? 'text-lg font-bold'
                 : 'text-text-secondary text-sm',
             )}
           >
             {name}
           </p>
-          <div className="text-text-secondary text-sm">
-            {category && (
-              <>
-                <span>{category}</span>&nbsp;&#8226;&nbsp;
-              </>
-            )}
-            {city && (
-              <>
-                <span>{city}</span>&nbsp;&#8226;&nbsp;
-              </>
-            )}
-            {country && <span>{country}</span>}
-          </div>
+          {type === SCHEDULE_TYPE.PLACE ? (
+            <div className="text-text-secondary text-sm">
+              <span>{category}</span>&nbsp;&#8226;&nbsp;
+              <span>{city}</span>&nbsp;&#8226;&nbsp;
+              {country && <span>{country}</span>}
+            </div>
+          ) : null}
         </Card>
       </div>
     </div>

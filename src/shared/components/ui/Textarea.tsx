@@ -81,7 +81,7 @@ function TextareaEntity(
           ref={ref}
         >
           <textarea
-            className="w-full outline-none focus:ring-0"
+            className="w-full outline-none focus:ring-0 h-30"
             {...props}
             onFocus={handleFocus}
             onBlur={handleBlur}

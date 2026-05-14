@@ -18,13 +18,13 @@ import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
 
 interface IAmchartMap {
   isWheel?: boolean;
-  isLocal?: boolean;
+  isDomestic?: boolean;
   readonly?: boolean;
 }
 
 export default function AmchartMap({
   isWheel = true,
-  isLocal = false,
+  isDomestic = false,
   readonly = false,
 }: IAmchartMap) {
   const { isLoggedIn } = useAuthManagerStore();
@@ -52,7 +52,7 @@ export default function AmchartMap({
     const polygonSeries = _mapChart.series.push(
       am5map.MapPolygonSeries.new(
         root,
-        isLocal
+        isDomestic
           ? {}
           : {
               geoJSON: am5geodata_worldLow,
@@ -63,7 +63,7 @@ export default function AmchartMap({
     );
 
     // 국내 지도일 경우 국내 geojson 가져오기
-    if (isLocal) {
+    if (isDomestic) {
       fetch('/data/kr_simple.geojson')
         .then((response) => response.json())
         .then((data) => {
@@ -73,7 +73,7 @@ export default function AmchartMap({
 
     // 폴리곤 기본 색상
     polygonSeries.mapPolygons.template.setAll({
-      tooltipText: isLocal ? '{korName}' : '{name}',
+      tooltipText: isDomestic ? '{korName}' : '{name}',
       interactive: true,
       fill: am5.color(0xd1d3dc),
       stroke: am5.color(0xffffff),
@@ -121,7 +121,7 @@ export default function AmchartMap({
     // labelSeries.bullets.push(function () {
     //   return am5.Bullet.new(root, {
     //     sprite: am5.Label.new(root, {
-    //       text: isLocal ? '{korName}' : '{name}',
+    //       text: isDomestic ? '{korName}' : '{name}',
     //       centerX: am5.p50,
     //       centerY: am5.p50,
     //       fontSize: 12,
@@ -215,7 +215,7 @@ export default function AmchartMap({
       <div ref={mapRef} className="h-full w-full" />
       {isLoggedIn && (
         <div className="flex items-center justify-center font-bold">
-          {isLocal ? (
+          {isDomestic ? (
             <div>
               국내 <span className="text-primary">{0}개 도시</span>가 추억으로
               채워졌어요

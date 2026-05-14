@@ -15,7 +15,7 @@
   --color-gray-5: #8193ae;
   --color-gray-4: #adb9c9;
   --color-gray-3: #d1d3dc;
-  --color-gray-2: #d6e0f0;
+  --color-gray-2: #ebf0f8;
   --color-gray-1: #fafbff;
 
   /** State Colors */
@@ -52,7 +52,8 @@
   --font-weight-medium: 500;
   --font-weight-regular: 400;
 
-  /** Responsive layout */
+  /** 브레이크 포인트는 기본 min으로 작동 */
+  /** 브레이크 포인트 안에서 작업 필요시 max- 붙여야 함 ex)max-mobile: */
   --breakpoint-mobile: 639px;
   --breakpoint-tablet: 767px;
   --breakpoint-desktop: 1023px;
@@ -66,7 +67,7 @@
 }
 
 :root {
-  line-height: 1.2;
+  line-height: 1;
   font-weight: 500;
   font-size: var(--text-md);
   font-family: 'Pretendard', sans-serif;
@@ -95,6 +96,7 @@
   [data-sonner-toast] {
     border-radius: 12px !important;
     font-size: 14px !important;
+    font-weight: 700 !important;
     display: flex !important;
     justify-content: center !important; /* 가로 중앙 */
     align-items: center !important;     /* 세로 중앙 */
@@ -103,30 +105,41 @@
 
   /* Success */
   [data-sonner-toast][data-type='success'] {
-    --success-bg: #6f9dd3;
-    --success-border: none;
+    --success-bg: #80B2FF;
+    --success-border: #80B2FF;
     --success-text: #fff;
   }
 
   /* Info */
   [data-sonner-toast][data-type='info'] {
     --info-bg: #61E4C5;
-    --info-border: none;
+    --info-border: #61E4C5;
     --info-text: #fff;
   }
 
   /* Warning */
   [data-sonner-toast][data-type='warning'] {
     --warning-bg: #FFDB81;
-    --warning-border: none;
+    --warning-border: #FFDB81;
     --warning-text: #fff;
   }
 
   /* Error */
   [data-sonner-toast][data-type='error'] {
     --error-bg: #FF9692;
-    --error-border: none;
+    --error-border: #FF9692;
     --error-text: #fff;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
   }
 }
 
@@ -148,4 +161,5 @@ html::-webkit-scrollbar {
 body {
   background: var(--background);
   color: var(--text-primary);
+  word-break: break-all;
 }

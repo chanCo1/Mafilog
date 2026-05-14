@@ -9,7 +9,6 @@ import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import {
-  NotebookPen,
   Plus,
   Plane,
   Bus,
@@ -18,6 +17,9 @@ import {
   MapPin,
   House,
   CircleEllipsis,
+  Check,
+  X,
+  StickyNote,
 } from 'lucide-react';
 
 const categoryIconVariants = cva(
@@ -25,6 +27,8 @@ const categoryIconVariants = cva(
   {
     variants: {
       variant: {
+        x: '',
+        check: '',
         memo: '',
         plus: '',
         plane: '',
@@ -41,7 +45,7 @@ const categoryIconVariants = cva(
       },
       size: {
         md: 'w-[30px] h-[30px]',
-        sm: 'w-[26px] h-[26px]',
+        sm: 'w-[24px] h-[24px]',
       },
     },
     defaultVariants: {
@@ -63,54 +67,146 @@ interface ICategoryIcon
 }
 
 function CategoryIconEntity(
-  { className, size, variant, circled, children }: ICategoryIcon,
+  { className, size, variant, circled, children, ...props }: ICategoryIcon,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   /** variant별 아이콘 크기 */
   const GetIconType = React.useMemo(() => {
     const fiveSize = 'h-5 w-5';
-    const fourPointFiveSize = 'h-4.5 w-4.5';
+    const fourHalfSize = 'h-4.5 w-4.5';
     const fourSize = 'h-4 w-4';
 
     switch (variant) {
+      case 'check':
+        return (
+          <Check
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
+        );
       case 'memo':
         return (
-          <NotebookPen
-            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+          <StickyNote
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
           />
         );
       case 'plus':
         return (
-          <Plus className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <Plus
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
       case 'plane':
         return (
-          <Plane className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <Plane
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
       case 'bus':
-        return <Bus className={size === 'sm' ? fourPointFiveSize : fiveSize} />;
+        return (
+          <Bus
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
+        );
       case 'food':
         return (
-          <Utensils className={size === 'sm' ? fourSize : fourPointFiveSize} />
+          <Utensils
+            className={
+              circled === 'none'
+                ? 'w-full pt-0.5'
+                : size === 'sm'
+                  ? fourSize
+                  : fourHalfSize
+            }
+          />
         );
       case 'shopping':
         return (
           <ShoppingBasket
-            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
           />
         );
       case 'tour':
         return (
-          <MapPin className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <MapPin
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
       case 'house':
         return (
-          <House className={size === 'sm' ? fourPointFiveSize : fiveSize} />
+          <House
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
         );
       case 'etc':
         return (
           <CircleEllipsis
-            className={size === 'sm' ? fourPointFiveSize : fiveSize}
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
+          />
+        );
+      case 'x':
+        return (
+          <X
+            className={
+              circled === 'none'
+                ? 'w-full'
+                : size === 'sm'
+                  ? fourHalfSize
+                  : fiveSize
+            }
           />
         );
     }
@@ -123,6 +219,7 @@ function CategoryIconEntity(
         className,
       )}
       ref={ref}
+      onClick={props.onClick}
     >
       {children}
       {GetIconType}

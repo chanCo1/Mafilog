@@ -1,0 +1,74 @@
+.rdp-months {
+  max-width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.rdp-today:not(.rdp-outside) {
+  color: var(--color-primary);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.rdp-outside {
+  color: var(--color-gray-5);
+}
+
+.rdp-caption_label {
+  width: 100%;
+  justify-content: center;
+  z-index: 0;
+  border-bottom: 1px solid var(--color-gray-3);
+}
+
+.rdp-nav {
+  width: 60%;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+  right: 20%;
+}
+
+.rdp-chevron {
+  fill: var(--color-gray-5);
+  padding: 4px;
+}
+
+.rdp-selected {
+  font-weight: 500;
+  font-size: 16px;
+  background: var(--color-primary);
+  border-radius: 100%;
+  color: white;
+}
+
+.rdp-selected .rdp-day_button {
+  width: 100%;
+  border: none;
+}
+
+.rdp-range_start {
+  background: var(--color-gray-2);
+  border-radius: 100% 0 0 100%;
+}
+
+.rdp-range_end {
+  background: var(--color-gray-2);
+  border-radius: 0 100% 100% 0;
+}
+
+.rdp-range_start .rdp-day_button {
+  background: var(--color-primary);
+  border: none;
+}
+
+.rdp-range_end .rdp-day_button {
+  /* background: #6f9dd3; */
+  background: var(--color-primary);
+  border: none;
+}
+
+.rdp-range_middle {
+  background: var(--color-gray-2);
+  border-radius: 0;
+}

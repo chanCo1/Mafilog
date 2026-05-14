@@ -18,7 +18,7 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        outline: 'border-1 border-border-secondary rounded-md',
+        outline: 'border border-border-secondary rounded-md',
         none: 'border-none',
       },
       size: {
@@ -72,7 +72,7 @@ function InputEntity(
   const [passwordType, setPassowrdType] = useState('password');
 
   const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (props.disabled) return;
+    if (props.disabled || props.readOnly) return;
 
     setIsFocused(true);
 
@@ -82,7 +82,7 @@ function InputEntity(
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (props.disabled) return;
+    if (props.disabled || props.readOnly) return;
 
     setIsFocused(false);
 
@@ -92,7 +92,7 @@ function InputEntity(
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       <div
         className={cn('flex gap-1', labelPosition === 'top' ? 'flex-col' : '')}
       >
@@ -111,7 +111,7 @@ function InputEntity(
           )}
           ref={ref}
         >
-          {prefix && <span className="mr-1">{prefix}</span>}
+          {prefix && <span className="mr-1 shrink-0">{prefix}</span>}
           <input
             type={isPassword ? passwordType : type}
             className={cn('w-full outline-none focus:ring-0', inputClassName)}
@@ -135,7 +135,7 @@ function InputEntity(
               )}
             </div>
           )}
-          {suffix && <span className="ml-1">{suffix}</span>}
+          {suffix && <span className="shrink-0 ml-1">{suffix}</span>}
         </div>
       </div>
       {description && (
