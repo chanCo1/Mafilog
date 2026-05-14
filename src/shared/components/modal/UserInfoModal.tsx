@@ -54,6 +54,7 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
             <Card className="text-text-secondary flex flex-col">
               {MYPAGE_LIST.map((list) => (
                 <p
+                  key={list.path}
                   className="hover:bg-gray-2 cursor-pointer rounded-lg p-2"
                   onClick={() => handelLinkPage(list.path)}
                 >

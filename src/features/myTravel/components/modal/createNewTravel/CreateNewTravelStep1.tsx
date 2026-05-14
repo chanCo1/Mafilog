@@ -108,10 +108,11 @@ export default function CreateNewTravelStep1({
   return (
     <div className="flex h-full flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <span>어떤 여행인가요?</span>
+        <span>어디로 가는 여행인가요?</span>
         <div className="flex gap-1">
           {TRAVEL_TYPE_LIST.map((list) => (
             <Chip
+              key={list.value}
               variant={travelType === list.value ? 'primary' : 'primaryOutline'}
               onClick={() => setTravelType(list.value)}
               prefix={
