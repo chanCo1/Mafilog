@@ -5,17 +5,22 @@
  * @description: FillMemoryStep1 컴포넌트
  */
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Chip } from '@/shared/components/ui/Chip';
 import { MAP_MOCK_DATA } from '@/features/myMap/data/mockData';
 import MemoryScheduleDay from '@/features/myMap/components/modal/fillMemory/MemoryScheduleDay';
 
-interface IFillMemoryStep1 {}
+interface IFillMemoryStep1 {
+  selectedTravel: boolean;
+  setSelectedTravel: Dispatch<SetStateAction<boolean>>;
+}
 
-export default function FillMemoryStep1() {
-  const [selectedTravel, setSelectedTravel] = useState(true);
+export default function FillMemoryStep1({
+  selectedTravel,
+  setSelectedTravel,
+}: IFillMemoryStep1) {
   const [selectedDay, setSelectedDay] = useState(1);
 
   const filteredSchedule = MAP_MOCK_DATA.schedules.filter(
@@ -27,7 +32,9 @@ export default function FillMemoryStep1() {
       <Selectbox
         label="여행 불러오기"
         isRequired
+        value={selectedTravel}
         description="여행 일정을 선택해주세요"
+        onChange={(value) => setSelectedTravel(value)}
       />
 
       {selectedTravel ? (

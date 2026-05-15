@@ -5,7 +5,7 @@
  * @description: 추억채우기 모달 컴포넌트
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CREATE_MEMORY_STEP_LIST } from '@/features/myMap/constants/myMap.constant';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { Button } from '@/shared/components/ui/Button';
@@ -14,6 +14,8 @@ import { ChevronLeft } from 'lucide-react';
 import Step from '@/shared/components/ui/Step';
 import { DateRange } from 'react-day-picker';
 import FillMemoryStep1 from '@/features/myMap/components/modal/fillMemory/FillMemoryStep1';
+import FillMemoryStep2 from '@/features/myMap/components/modal/fillMemory/FillmemoryStep2';
+import FillMemoryStep3 from '@/features/myMap/components/modal/fillMemory/FillMemoryStep3';
 
 interface ICreateFillMemoryModal {
   isOpen: boolean;
@@ -29,9 +31,15 @@ export default function CreateFillMemoryModal({
   const [stepData, setStepData] = useState(CREATE_MEMORY_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
 
+  const [selectedTravel, setSelectedTravel] = useState(true);
+
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
   );
+
+  const [memoryTitle, setMemoryTitle] = useState('');
+  const [selectedImage, setSelectedImage] = useState<File[]>([]);
+  const [memoryMemo, setMemoryMemo] = useState('');
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -58,6 +66,17 @@ export default function CreateFillMemoryModal({
   };
 
   const handelCreateNewMemory = () => {};
+
+  useEffect(() => {
+    /** 날짜 선택 완료 후 지웠을 경우 */
+    if (stepData[1].isComplete && !selectedDate) {
+      setStepData((prev) =>
+        prev.map((step, index) =>
+          index === 1 ? { ...step, isComplete: false } : step,
+        ),
+      );
+    }
+  }, [selectedDate]);
 
   return (
     <SideModal
@@ -112,33 +131,30 @@ export default function CreateFillMemoryModal({
         stepOptions={stepData}
         currentStep={currentStep}
         onClickStep={setCurrentStep}
-        className='pb-4'
+        className="pb-4"
       />
       <div className="relative h-[calc(100%-170px)]">
         <FadeInOutStyled isShow={currentStep === 1}>
-          <FillMemoryStep1 />
+          <FillMemoryStep1
+            selectedTravel={selectedTravel}
+            setSelectedTravel={setSelectedTravel}
+          />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={currentStep === 2}>
-          <div>asd</div>
-          {/* <CreateNewTravelStep2
+          <FillMemoryStep2
             selectedDate={selectedDate}
             setSeletedDate={setSeletedDate}
-          /> */}
+          />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={currentStep === 3}>
-          <div>asd</div>
-          {/* <CreateNewTravelStep3
-            title={travelTitle}
-            setTravelTitle={setTravelTitle}
-            travelPartner={travelPartner}
-            setTravelPartner={setTravelPartner}
-            travelStyle={travelStyle}
-            setTravelStyle={setTravelStyle}
+          <FillMemoryStep3
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
-            travelMember={travelMember}
-            setTravelMember={setTravelMember}
-          /> */}
+            memoryTitle={memoryTitle}
+            setMemoryTitle={setMemoryTitle}
+            memoryMemo={memoryMemo}
+            setMemoryMemo={setMemoryMemo}
+          />
         </FadeInOutStyled>
       </div>
     </SideModal>
