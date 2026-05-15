@@ -7,7 +7,7 @@ export const DEFAULT_LAYOUT_CLASSNAME =
 
 /** 여행 지도 타입 */
 export const MAP_TRAVEL_TYPE_LIST: ILabelValue[] = [
-  { label: '세계', value: TRAVEL_TYPE.WORLD },
+  { label: '해외', value: TRAVEL_TYPE.WORLD },
   { label: '국내', value: TRAVEL_TYPE.DOMESTIC },
 ];
 export type MAP_TRAVEL_TYPE_LIST =

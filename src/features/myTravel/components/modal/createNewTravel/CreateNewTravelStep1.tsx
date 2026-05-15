@@ -108,10 +108,11 @@ export default function CreateNewTravelStep1({
   return (
     <div className="flex h-full flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <span>어떤 여행인가요?</span>
+        <span>어디로 가는 여행인가요?</span>
         <div className="flex gap-1">
           {TRAVEL_TYPE_LIST.map((list) => (
             <Chip
+              key={list.value}
               variant={travelType === list.value ? 'primary' : 'primaryOutline'}
               onClick={() => setTravelType(list.value)}
               prefix={
@@ -151,7 +152,7 @@ export default function CreateNewTravelStep1({
         }
         description="여행하고 싶은 도시를 검색해주세요."
       />
-      <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
+      <div className="scrollbar-hide flex h-full flex-col gap-2 overflow-auto">
         {cityList.length ? (
           cityList.map((list) => (
             <div

@@ -11,9 +11,9 @@ import { Input } from '@/shared/components/ui/Input';
 import PageTemplate from '@/features/auth/components/PageTemplate';
 import { Button } from '@/shared/components/ui/Button';
 import {
-  registerShema,
-  TRegisterShema,
-} from '@/features/auth/lib/registerSchema';
+  registerSchema,
+  TRegisterSchema,
+} from '@/features/auth/schema/register.schema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -24,8 +24,8 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TRegisterShema>({
-    resolver: zodResolver(registerShema),
+  } = useForm<TRegisterSchema>({
+    resolver: zodResolver(registerSchema),
     mode: 'onChange',
     defaultValues: {
       email: '',
@@ -40,7 +40,7 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   /** 회원가입 */
-  const onSubmit = (value: TRegisterShema) => {
+  const onSubmit = (value: TRegisterSchema) => {
     console.log(value);
     setIsLoading(true);
 

@@ -218,8 +218,9 @@ export default function CreateNewTravelModal({
         stepOptions={stepData}
         currentStep={currentStep}
         onClickStep={setCurrentStep}
+        className='pb-4'
       />
-      <div className="relative h-[calc(100%-65px)]">
+      <div className="relative h-[calc(100%-81px)]">
         <FadeInOutStyled isShow={currentStep === 1}>
           <CreateNewTravelStep1
             travelType={travelType}

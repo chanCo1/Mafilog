@@ -61,7 +61,7 @@ function TextareaEntity(
   const handleBlur = () => setIsFocused(false);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col bg-white">
       <div
         className={cn('flex gap-1', labelPosition === 'top' ? 'flex-col' : '')}
       >
@@ -81,7 +81,7 @@ function TextareaEntity(
           ref={ref}
         >
           <textarea
-            className="w-full outline-none focus:ring-0 h-30"
+            className="w-full outline-none focus:ring-0 h-20 resize-none"
             {...props}
             onFocus={handleFocus}
             onBlur={handleBlur}

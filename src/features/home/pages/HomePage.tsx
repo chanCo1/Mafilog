@@ -51,7 +51,11 @@ export default function HomePage() {
                   <Button size="lg" onClick={() => router.push('/my-travel')}>
                     내 여행
                   </Button>
-                  <Button variant="secondary" size="lg">
+                  <Button
+                    variant="secondary"
+                    size="lg"
+                    onClick={() => router.push('/my-map')}
+                  >
                     추억 채우기
                   </Button>
                 </div>

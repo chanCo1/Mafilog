@@ -47,18 +47,36 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
             <span className="text-text-secondary">{'test@test.com'}</span>
           </div>
         </div>
+
         <Separator position="horizontal" />
+
+        <div className="tablet:hidden flex flex-col gap-2">
+          <span
+            className="py-1 font-bold"
+            onClick={() => handelLinkPage('/my-travel')}
+          >
+            내 여행
+          </span>
+          <span
+            className="py-1 font-bold"
+            onClick={() => handelLinkPage('/my-map')}
+          >
+            추억 채우기
+          </span>
+        </div>
+
         <div className="scrollbar-hide flex flex-col gap-4 overflow-auto">
           <div className="flex flex-col gap-1">
             <span className="font-bold">마이페이지</span>
             <Card className="text-text-secondary flex flex-col">
-              {MYPAGE_LIST.map((list) => (
-                <p
-                  className="hover:bg-gray-2 cursor-pointer rounded-lg p-2"
+              {MYPAGE_LIST.map((list, index) => (
+                <div
+                  key={`${list.name}-${index}`}
+                  className="hover:bg-gray-2 flex cursor-pointer items-center gap-1 rounded-lg p-2"
                   onClick={() => handelLinkPage(list.path)}
                 >
                   {list.name}
-                </p>
+                </div>
               ))}
             </Card>
           </div>
