@@ -7,28 +7,34 @@
  * @description: AmchartMap 컴포넌트
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { SetStateAction, useEffect, useRef, useState, Dispatch } from 'react';
 import { cn } from '@/shared/lib/utils';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import am5geodata_worldLow from '@amcharts/amcharts5-geodata/worldLow';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import am5geodata_lang_ko from '@amcharts/amcharts5-geodata/lang/KO';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { ILabelValue } from '@/shared/interfaces';
+import { MAP_TRAVEL_TYPE_LIST } from '@/shared/constants';
 
 interface IAmchartMap {
   isWheel?: boolean;
   isDomestic?: boolean;
   readonly?: boolean;
+  setSelectedMap?: Dispatch<SetStateAction<ILabelValue>>;
 }
 
 export default function AmchartMap({
   isWheel = true,
   isDomestic = false,
   readonly = false,
+  setSelectedMap,
 }: IAmchartMap) {
-
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<am5map.MapChart | null>(null);
+
+  const { openDialog } = useDialogStore();
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -138,6 +144,18 @@ export default function AmchartMap({
 
       // 해당 폴리곤의 데이터가 있을 경우
       if (dataItem) {
+        // 선택한 폴리곤 정보
+        const dataContext = dataItem.dataContext as {
+          korName?: string;
+          name?: string;
+          id?: string;
+        };
+
+        if (dataContext?.id === 'KR') {
+          setSelectedMap?.(MAP_TRAVEL_TYPE_LIST[1]);
+          return;
+        }
+
         // 이전 활성 폴리곤 해제
         if (activePolygon && activePolygon !== target) {
           activePolygon.set('active', false);
@@ -151,12 +169,16 @@ export default function AmchartMap({
           dataItem as am5.DataItem<am5map.IMapPolygonSeriesDataItem>,
         );
 
-        // 선택한 폴리곤의 이름
-        // const dataContext = dataItem.dataContext as {
-        //   korName?: string;
-        //   id?: string;
-        // };
-        // setSelectedCountryName(dataContext?.korName ?? null);
+        if (readonly) return;
+
+        openDialog({
+          type: 'confirm',
+          message: `${isDomestic ? dataContext.korName : dataContext.name}에 추억을 남길까요?`,
+          okLabel: '남기기',
+          onCancel: () => {
+            target?.set('active', false);
+          },
+        });
       }
     });
 
@@ -202,15 +224,10 @@ export default function AmchartMap({
 
     mapInstanceRef.current = _mapChart;
 
-    /** 메모리 누수방지 */
     return () => {
       root.dispose();
     };
   }, []);
 
-  return (
-    <>
-      <div ref={mapRef} className="h-full w-full" />
-    </>
-  );
+  return <div ref={mapRef} className="h-full w-full rounded-lg!" />;
 }

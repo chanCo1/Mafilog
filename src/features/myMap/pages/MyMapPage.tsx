@@ -52,7 +52,7 @@ export default function MyMapPage() {
             <span className="text-text-secondary text-center break-keep">
               추억이 비어있어요. 나만의 세계 여행 지도를 채워보세요.
             </span>
-            <AmchartMap />
+            <AmchartMap setSelectedMap={setSelectedMap} />
           </div>
         )}
         {/* {isDomestic && <AmchartMap isDomestic />} */}

@@ -45,8 +45,8 @@ export default function MapContainer() {
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
-      {isWorld && <AmchartMap />}
-      {isDomestic && <AmchartMap isDomestic />}
+      {isWorld && <AmchartMap readonly />}
+      {isDomestic && <AmchartMap isDomestic readonly />}
       {isLoggedIn && (
         <div className="flex items-center justify-center font-bold">
           {isDomestic ? (

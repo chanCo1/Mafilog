@@ -38,6 +38,7 @@ export default function MyPageLayout({ children }: IMyPageLayout) {
         <Card className="text-text-secondary max-mobile:hidden flex w-50 flex-col gap-1 shrink-0 sticky top-13 h-50 mt-4">
           {MYPAGE_LIST.map((list) => (
             <p
+              key={list.path}
               className={cn(
                 'cursor-pointer rounded-lg p-2',
                 path === list.path
@@ -53,6 +54,7 @@ export default function MyPageLayout({ children }: IMyPageLayout) {
         <div className="mobile:hidden flex gap-1">
           {MYPAGE_LIST.map((list) => (
             <Chip
+              key={list.path}
               variant={path === list.path ? 'primary' : 'gray'}
               onClick={() => handelLinkPage(list.path)}
             >
