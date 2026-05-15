@@ -6,7 +6,6 @@
  */
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { CREATE_MEMORY_STEP_LIST } from '@/features/myMap/constants/myMap.constant';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { Button } from '@/shared/components/ui/Button';
@@ -14,6 +13,7 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { ChevronLeft } from 'lucide-react';
 import Step from '@/shared/components/ui/Step';
 import { DateRange } from 'react-day-picker';
+import FillMemoryStep1 from '@/features/myMap/components/modal/fillMemory/FillMemoryStep1';
 
 interface ICreateFillMemoryModal {
   isOpen: boolean;
@@ -112,16 +112,11 @@ export default function CreateFillMemoryModal({
         stepOptions={stepData}
         currentStep={currentStep}
         onClickStep={setCurrentStep}
+        className='pb-4'
       />
-      <div className="relative h-[calc(100%-65px)]">
+      <div className="relative h-[calc(100%-170px)]">
         <FadeInOutStyled isShow={currentStep === 1}>
-          <div>asd</div>
-          {/* <CreateNewTravelStep1
-            travelType={travelType}
-            setTravelType={setTravelType}
-            selectedCities={selectedCities}
-            setSelectedCities={setSelectedCities}
-          /> */}
+          <FillMemoryStep1 />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={currentStep === 2}>
           <div>asd</div>

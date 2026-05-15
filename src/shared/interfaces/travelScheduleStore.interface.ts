@@ -12,7 +12,7 @@ export interface ISchedule {
 export interface IScheduleList {
   id: string;
   type: SCHEDULE_TYPE;
-  place?: IPlaceList;
+  place?: IPlaceList | null;
   time?: string;
   memo?: string;
   day: ILabelValue;
