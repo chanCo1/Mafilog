@@ -65,7 +65,7 @@ function DialogEntity({ className }: IDialog) {
           className,
         )}
       >
-        <p className="w-full py-7 text-center">{options?.message}</p>
+        <div className="w-full py-7 text-center">{options?.message}</div>
         <div
           className={cn(
             'flex w-full items-center gap-1',

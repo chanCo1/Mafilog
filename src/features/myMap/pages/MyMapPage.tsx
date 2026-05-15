@@ -52,21 +52,22 @@ export default function MyMapPage() {
         {isWorld && (
           <div className="flex h-full flex-col">
             <span className="text-text-secondary text-center break-keep">
-              추억이 비어있어요. 나만의 세계 여행 지도를 채워보세요.
+              지도가 비어있어요. 나만의 세계 여행 지도를 채워보세요.
             </span>
             <AmchartMap
+              isOpenFillModal={isOpenFillModal}
               setSelectedMap={setSelectedMap}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
             />
           </div>
         )}
-        {/* {isDomestic && <AmchartMap isDomestic />} */}
         {isDomestic && (
           <div className="flex h-full flex-col">
             <span className="text-text-secondary text-center break-keep">
               아직 채워진 도시가 없어요. 소중한 첫 번째 추억을 남겨보세요.
             </span>
             <AmchartMap
+              isOpenFillModal={isOpenFillModal}
               isDomestic
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
             />

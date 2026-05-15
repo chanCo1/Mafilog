@@ -23,6 +23,7 @@ interface IAmchartMap {
   isDomestic?: boolean;
   readonly?: boolean;
   setSelectedMap?: Dispatch<SetStateAction<ILabelValue>>;
+  isOpenFillModal: boolean;
   setIsOpenFillModal: () => void;
 }
 
@@ -31,10 +32,12 @@ export default function AmchartMap({
   isDomestic = false,
   readonly = false,
   setSelectedMap,
+  isOpenFillModal,
   setIsOpenFillModal,
 }: IAmchartMap) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<am5map.MapChart | null>(null);
+  const activePolygonRef = useRef<am5map.MapPolygon | null>(null);
 
   const { openDialog } = useDialogStore();
 
@@ -139,7 +142,6 @@ export default function AmchartMap({
     // });
 
     // = = = = = = = = = = = = = = = = = = 폴리곤(지역) 클릭 활성화 = = = //
-    let activePolygon: am5map.MapPolygon | null = null;
     polygonSeries.mapPolygons.template.events.on('click', (event) => {
       const target = event.target;
       const dataItem = target.dataItem;
@@ -159,13 +161,13 @@ export default function AmchartMap({
         }
 
         // 이전 활성 폴리곤 해제
-        if (activePolygon && activePolygon !== target) {
-          activePolygon.set('active', false);
+        if (activePolygonRef.current && activePolygonRef.current !== target) {
+          activePolygonRef.current.set('active', false);
         }
 
         // 현재 폴리곤 활성화
         target.set('active', true);
-        activePolygon = target;
+        activePolygonRef.current = target;
 
         polygonSeries.zoomToDataItem(
           dataItem as am5.DataItem<am5map.IMapPolygonSeriesDataItem>,
@@ -233,7 +235,9 @@ export default function AmchartMap({
     });
 
     // 홈 버튼 클릭 시 활성화된 폴리곤 비활성화
-    homeButton.events.on('click', () => activePolygon?.set('active', false));
+    homeButton.events.on('click', () =>
+      activePolygonRef.current?.set('active', false),
+    );
 
     mapInstanceRef.current = _mapChart;
 
@@ -241,6 +245,15 @@ export default function AmchartMap({
       root.dispose();
     };
   }, []);
+
+  useEffect(() => {
+    if (!isOpenFillModal) {
+      if (activePolygonRef.current) {
+        activePolygonRef.current.set('active', false);
+        activePolygonRef.current = null;
+      }
+    }
+  }, [isOpenFillModal]);
 
   return <div ref={mapRef} className="h-full w-full rounded-lg!" />;
 }
