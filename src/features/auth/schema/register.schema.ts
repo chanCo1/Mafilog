@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 /** 회원가입 스키마 */
-export const registerShema = z
+export const registerSchema = z
   .object({
     email: z
       .string()
@@ -26,4 +26,4 @@ export const registerShema = z
     message: '비밀번호가 일치하지 않아요',
     path: ['passwordConfirm'],
   });
-export type TRegisterShema = z.infer<typeof registerShema>;
+export type TRegisterSchema = z.infer<typeof registerSchema>;

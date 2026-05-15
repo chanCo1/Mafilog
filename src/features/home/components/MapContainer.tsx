@@ -14,10 +14,13 @@ import Selectbox from '@/shared/components/ui/Selectbox';
 import { MAP_TRAVEL_TYPE_LIST } from '@/shared/constants';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
+import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
 
 // interface IMapContainer {}
 
 export default function MapContainer() {
+  const { isLoggedIn } = useAuthManagerStore();
+
   const [selectedMap, setSelectedMap] = useState<ILabelValue>(
     MAP_TRAVEL_TYPE_LIST[0],
   );
@@ -42,8 +45,23 @@ export default function MapContainer() {
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
-      {isWorld && <AmchartMap />}
-      {isDomestic && <AmchartMap isDomestic />}
+      {isWorld && <AmchartMap readonly />}
+      {isDomestic && <AmchartMap isDomestic readonly />}
+      {isLoggedIn && (
+        <div className="flex items-center justify-center font-bold">
+          {isDomestic ? (
+            <div>
+              국내 <span className="text-primary">{0}개 도시</span>가 추억으로
+              채워졌어요
+            </div>
+          ) : (
+            <div>
+              해외 <span className="text-primary">{0}개국</span>이 추억으로
+              채워졌어요
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
