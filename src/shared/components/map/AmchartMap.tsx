@@ -23,6 +23,7 @@ interface IAmchartMap {
   isDomestic?: boolean;
   readonly?: boolean;
   setSelectedMap?: Dispatch<SetStateAction<ILabelValue>>;
+  setIsOpenFillModal: () => void;
 }
 
 export default function AmchartMap({
@@ -30,6 +31,7 @@ export default function AmchartMap({
   isDomestic = false,
   readonly = false,
   setSelectedMap,
+  setIsOpenFillModal,
 }: IAmchartMap) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<am5map.MapChart | null>(null);
@@ -173,10 +175,21 @@ export default function AmchartMap({
 
         openDialog({
           type: 'confirm',
-          message: `${isDomestic ? dataContext.korName : dataContext.name}에 추억을 남길까요?`,
+          message: (
+            <div>
+              <span className="font-bold">
+                {isDomestic ? dataContext.korName : dataContext.name}
+              </span>
+              에 추억을 남길까요?
+            </div>
+          ),
           okLabel: '남기기',
           onCancel: () => {
+            mapInstanceRef.current?.goHome();
             target?.set('active', false);
+          },
+          onOk: () => {
+            setIsOpenFillModal();
           },
         });
       }
