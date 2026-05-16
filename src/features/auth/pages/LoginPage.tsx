@@ -16,9 +16,13 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, loginSchemaType } from '@/features/auth/schema/login.schema';
+import {
+  loginSchema,
+  loginSchemaType,
+} from '@/features/auth/schema/login.schema';
 import { toast } from 'sonner';
 import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
+import { signIn } from 'next-auth/react';
 
 interface ILoginPage {}
 
@@ -39,12 +43,31 @@ export default function LoginPage() {
   });
 
   const [saveEmail, setSaveEmail] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  /** 로그인 */
-  const onSubmit = () => {
-    login();
-    router.push('/');
-    toast.success('로그인에 성공했어요');
+  /** 로그인 요청 */
+  const onSubmit = async (value: loginSchemaType) => {
+    setIsLoading(true);
+
+    try {
+      const result = await signIn('credentials', {
+        email: value.email,
+        password: value.password,
+        redirect: false,
+      });
+
+      if (result.error) {
+        toast.error('이메일 또는 비밀번호를 확인해주세요');
+        return;
+      }
+
+      router.push('/');
+      toast.success('로그인에 성공했어요');
+    } catch (error: any) {
+      toast.error('로그인 도중 문제가 발생하였습니다');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -57,6 +80,7 @@ export default function LoginPage() {
             placeholder="이메일을 입력해주세요"
             errorMsg={errors.email?.message}
             description="example@example.com"
+            disabled={isLoading}
             {...register('email')}
           />
           <Input
@@ -67,6 +91,7 @@ export default function LoginPage() {
             errorMsg={errors.password?.message}
             description="영문 + 숫자 + 특수문자 조합"
             isPassword
+            disabled={isLoading}
             {...register('password')}
           />
         </div>
@@ -75,7 +100,13 @@ export default function LoginPage() {
           value={saveEmail}
           onChange={(v) => setSaveEmail(v as boolean)}
         />
-        <Button type="submit" className="w-full" size="lg">
+        <Button
+          type="submit"
+          className="w-full"
+          size="lg"
+          isLoading={isLoading}
+          disabled={isLoading}
+        >
           로그인
         </Button>
       </form>
