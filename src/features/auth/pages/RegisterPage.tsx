@@ -65,7 +65,7 @@ export default function RegisterPage() {
   /** 회원가입 */
   const onSubmit = async (value: TRegisterSchema) => {
     await postAccountRegister(value);
-    toast.success('회원가을 완료했어요');
+    toast.success('회원가입을 완료했어요');
     router.push('/login');
   };
 
