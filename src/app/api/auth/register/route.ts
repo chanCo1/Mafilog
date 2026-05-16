@@ -6,18 +6,16 @@
  */
 
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/shared/lib/prisma';
 import bcrypt from 'bcrypt';
-import { IRegisterRequest } from '@/features/auth/interfaces/register.interface';
 
-const prisma = new PrismaClient();
-
-export async function POST(request: IRegisterRequest) {
-  const { email, name, password, passwordConfirm } = request;
+export async function POST(request: Request) {
+  const body = await request.json();
+  const { email, name, password, passwordConfirm } = body;
 
   try {
     // 입력 유효성 검사
-    if (!email || !name || !password || passwordConfirm) {
+    if (!email || !name || !password || !passwordConfirm) {
       return NextResponse.json(
         { message: '입력되지 않은 항목이 있습니다.' },
         { status: 400 },
@@ -46,6 +44,7 @@ export async function POST(request: IRegisterRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // 회원가입 생성
     await prisma.user.create({
       data: {
         email,
