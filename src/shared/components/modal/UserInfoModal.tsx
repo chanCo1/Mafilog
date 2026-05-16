@@ -11,6 +11,7 @@ import { Button } from '@/shared/components/ui/Button';
 import { Card } from '@/shared/components/ui/Card';
 import { MYPAGE_LIST } from '@/shared/constants';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 
 interface IUserInfoModal {
   isOpen: boolean;
@@ -26,13 +27,21 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
     handleClose();
   };
 
+  /** 로그아웃 */
+  const handleLogout = async () => {
+    await signOut({
+      redirect: true,
+      callbackUrl: '/login',
+    });
+  };
+
   return (
     <SideModal
       isOpen={isOpen}
       handleClose={handleClose}
       footer={
         <div className="flex w-full justify-between">
-          <Button variant="redOutline">로그아웃</Button>
+          <Button variant="redOutline" onClick={handleLogout}>로그아웃</Button>
           <Button variant="gray" onClick={handleClose}>
             닫기
           </Button>
