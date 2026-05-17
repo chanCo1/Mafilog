@@ -16,7 +16,7 @@ datasource db {
  */
 model User {
   // pk
-  id              Int      @id @default(autoincrement())
+  id              String   @id @default(cuid())
   // 이메일
   email           String   @unique
   // 비밀번호
@@ -52,7 +52,7 @@ model Social {
   // 소셜 고유 아이디
   providerAccountId String
   // fk
-  userId            Int
+  userId            String
   // 유저 정보
   user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -64,9 +64,11 @@ model Social {
  */
 model Travel {
   // pk
-  id            Int                 @id @default(autoincrement())
+  id            String              @id @default(cuid())
   // 여행 이름
   title         String
+  // 여행 타입 (해외, 국내)
+  travelType    String
   // 여행 시작일
   from          DateTime
   // 여행 종료일
@@ -74,7 +76,7 @@ model Travel {
   // 사진 주소 
   imageUrl      String?
   // 여행 기간
-  travelPeriod  Int
+  travelPeriod  String
   // 여행 스타일
   travelStyles  String[]
   // 여행 파트너
@@ -90,9 +92,11 @@ model Travel {
   // 체크리스트
   checkList     ChecklistCategory[]
   // fk
-  userId        Int
+  userId        String
   // 유저 정보
   user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 생성일
+  createdAt     DateTime            @default(now())
 }
 
 /**
@@ -124,7 +128,7 @@ model TravelPlace {
   // 생성일
   createdAt      DateTime       @default(now())
   // fk
-  travelId       Int
+  travelId       String
   // 여행 정보
   travel         Travel         @relation(fields: [travelId], references: [id], onDelete: Cascade)
 }
@@ -134,21 +138,21 @@ model TravelPlace {
  */
 model TravelMember {
   // pk
-  id        Int      @id @default(autoincrement())
+  id        String   @id
   // 멤버 이름
   name      String
   // fk
-  userId    Int?
+  userId    String?
   // fk
-  travelId  Int
+  travelId  String
   // 여행 정보
   travel    Travel   @relation(fields: [travelId], references: [id], onDelete: Cascade)
   // 생성일
   createdAt DateTime @default(now())
 
-  expenseId        Int
+  expenseId        Int?
   expenseList      ExpenseList[]    @relation("payer")
-  expenseSpenderId Int
+  expenseSpenderId Int?
   expenseSpender   ExpenseSpender[] @relation("spender")
 }
 
@@ -163,7 +167,7 @@ model ChecklistCategory {
   // 체크리스트 아이템
   items    ChecklistItem[]
   // fk
-  travelId Int
+  travelId String
   // 여행 정보
   travel   Travel          @relation(fields: [travelId], references: [id], onDelete: Cascade)
 }
@@ -197,7 +201,7 @@ model TravelSchedule {
   // 리스트
   scheduleList ScheduleList[]
   // fk
-  travelId     Int
+  travelId     String
   // 여행 정보
   travel       Travel         @relation(fields: [travelId], references: [id], onDelete: Cascade)
 }
@@ -237,7 +241,7 @@ model TravelExpense {
   // 해당 일정에 대한 지출
   dailyExpense Float?
   // fk
-  travelId     Int
+  travelId     String
   // 여행 정보
   travel       Travel        @relation(fields: [travelId], references: [id], onDelete: Cascade)
 }
@@ -247,7 +251,7 @@ model TravelExpense {
  */
 model ExpenseList {
   // pk
-  id          Int     @id
+  id          Int     @id @default(autoincrement())
   // 지출명
   name        String
   // 결제 방식
@@ -277,7 +281,7 @@ model ExpenseList {
   exchangeRateAmount Float
 
   // 결제자 id
-  payerId Int
+  payerId String
   payer   TravelMember @relation("payer", fields: [payerId], references: [id], onDelete: Cascade)
 
   spender ExpenseSpender[]
@@ -306,7 +310,7 @@ model ExpenseSpender {
   currencyCountry    String
 
   // 맴버 연동
-  memberId Int
+  memberId String
   member   TravelMember @relation("spender", fields: [memberId], references: [id], onDelete: Cascade)
 
   // 지출 내역 연동
