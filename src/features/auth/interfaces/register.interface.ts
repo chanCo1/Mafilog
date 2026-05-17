@@ -12,3 +12,12 @@ export interface ILoginRequest {
   password: string;
   rememberMe: boolean;
 }
+
+/** 소셜 로그인 요청 */
+export interface ISocialLoginRequest {
+  provider: string;
+  email: string;
+  name: string;
+  providerAccountId: string;
+  profileImageUrl: string;
+}
