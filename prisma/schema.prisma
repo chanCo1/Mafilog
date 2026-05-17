@@ -54,7 +54,7 @@ model Social {
   // 유저 정보
   user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId], name: "providerKey")
+  @@unique([provider, providerAccountId])
 }
 
 /**
