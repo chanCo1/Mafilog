@@ -71,8 +71,6 @@ model Travel {
   from          DateTime
   // 여행 종료일
   to            DateTime
-  // 여행 상태
-  status        String
   // 사진 주소 
   imageUrl      String?
   // 여행 기간
