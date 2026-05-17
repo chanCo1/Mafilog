@@ -29,8 +29,8 @@ interface ICreateNewTravelStep3 {
   setSelectedImage: Dispatch<SetStateAction<File[]>>;
   travelPartner: TRAVEL_PARTNER;
   setTravelPartner: Dispatch<SetStateAction<TRAVEL_PARTNER>>;
-  travelStyle: TRAVEL_STYLE[];
-  setTravelStyle: Dispatch<SetStateAction<TRAVEL_STYLE[]>>;
+  travelStyles: TRAVEL_STYLE[];
+  setTravelStyles: Dispatch<SetStateAction<TRAVEL_STYLE[]>>;
   travelMember: IMemberList[];
   setTravelMember: Dispatch<SetStateAction<IMemberList[]>>;
 }
@@ -42,8 +42,8 @@ export default function CreateNewTravelStep3({
   setSelectedImage,
   travelPartner,
   setTravelPartner,
-  travelStyle,
-  setTravelStyle,
+  travelStyles,
+  setTravelStyles,
   travelMember,
   setTravelMember,
 }: ICreateNewTravelStep3) {
@@ -53,13 +53,13 @@ export default function CreateNewTravelStep3({
   const { data: userInfo } = useSession();
 
   /** 여행 스타일 핸들링 */
-  const handleTravelStyle = (value: TRAVEL_STYLE) => {
-    const isChecked = travelStyle.some((_value) => _value === value);
+  const handleTravelStyles = (value: TRAVEL_STYLE) => {
+    const isChecked = travelStyles.some((_value) => _value === value);
 
     if (isChecked) {
-      setTravelStyle(travelStyle.filter((_value) => _value !== value));
+      setTravelStyles(travelStyles.filter((_value) => _value !== value));
     } else {
-      setTravelStyle([...travelStyle, value]);
+      setTravelStyles([...travelStyles, value]);
     }
   };
 
@@ -199,11 +199,11 @@ export default function CreateNewTravelStep3({
               <Chip
                 key={list.value}
                 variant={
-                  travelStyle.find((style) => style === list.value)
+                  travelStyles.find((style) => style === list.value)
                     ? 'primary'
                     : 'primaryOutline'
                 }
-                onClick={() => handleTravelStyle(list.value)}
+                onClick={() => handleTravelStyles(list.value)}
               >
                 {list.label}
               </Chip>

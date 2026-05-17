@@ -76,11 +76,10 @@ export default function CreateNewTravelStep1({
           id: place.id,
           name: place.displayName.text,
           address: place.formattedAddress,
-          country,
-          location: {
-            lat: place.location.latitude,
-            lng: place.location.longitude,
-          },
+          countryName: country.name,
+          countryCode: country.code,
+          lat: place.location.latitude,
+          lng: place.location.longitude,
           types: place.types,
           timezone: tzlookup(place.location.latitude, place.location.longitude),
         };
@@ -165,11 +164,11 @@ export default function CreateNewTravelStep1({
                   {list.address}
                 </span>
                 <div className="flex items-center gap-1">
-                  {list.country.code && (
-                    <div>{countryData[list.country.code].flagEmoji}</div>
+                  {list.countryCode && (
+                    <div>{countryData[list.countryCode].flagEmoji}</div>
                   )}
                   <span className="text-text-secondary text-sm">
-                    {list.country.name && <>{list.country.name}</>}
+                    {list.countryName && <>{list.countryName}</>}
                   </span>
                 </div>
               </div>

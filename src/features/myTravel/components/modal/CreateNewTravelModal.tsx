@@ -19,11 +19,12 @@ import CreateNewTravelStep3 from '@/features/myTravel/components/modal/createNew
 import { ChevronLeft } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
-import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { IMemberList } from '@/shared/interfaces';
 import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
 import { TRAVEL_TYPE_LIST } from '@/features/myTravel/constants';
+import { useSession } from 'next-auth/react';
+import { getTravelDay } from '@/shared/lib/utils';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -36,7 +37,7 @@ export default function CreateNewTravelModal({
   handleClose,
   isModify = false,
 }: ICreateNewTravelModal) {
-  const { setUpcomingTravel } = useMyTravelListStore();
+  const { data: userInfo } = useSession();
 
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
@@ -53,9 +54,9 @@ export default function CreateNewTravelModal({
   const [travelPartner, setTravelPartner] = useState<TRAVEL_PARTNER>(
     TRAVEL_PARTNER.ALONE,
   );
-  const [travelStyle, setTravelStyle] = useState<TRAVEL_STYLE[]>([]);
+  const [travelStyles, setTravelStyles] = useState<TRAVEL_STYLE[]>([]);
   const [travelMember, setTravelMember] = useState<IMemberList[]>([
-    { id: '1', name: '나' },
+    { id: userInfo?.user?.id!, name: userInfo?.user?.name! },
   ]);
 
   /** 다음 핸들링 */
@@ -84,14 +85,14 @@ export default function CreateNewTravelModal({
 
   /** 새 여행 만들기 */
   const createNewTravel = () => {
-    const falseComplete = stepData.filter((step, index) => {
+    const notCompletedStep = stepData.filter((step, index) => {
       // 완료되지 않은 스텝이 있을 경우
       if (stepData.length - 1 > index + 1) {
         return !step.isComplete;
       }
     });
 
-    if (falseComplete.length) {
+    if (notCompletedStep.length) {
       toast.error('입력되지 않은 항목이 있습니다');
       return;
     }
@@ -100,8 +101,7 @@ export default function CreateNewTravelModal({
     const getTravelName = () => {
       if (travelTitle) return travelTitle;
 
-      // TODO: const로도 값이 변경되는지 확인
-      let cityName: string[] = [];
+      const cityName: string[] = [];
       selectedCities.forEach((city) => {
         cityName.push(city.name);
       });
@@ -109,19 +109,26 @@ export default function CreateNewTravelModal({
       return `${cityName.join(', ')} 여행`;
     };
 
-    const params = {
-      cities: selectedCities,
-      from: selectedDate?.from,
-      to: selectedDate?.to,
-      title: getTravelName(),
-      companion: travelPartner,
-      travelStyle: travelStyle,
-      image: selectedImage,
-      member: travelMember,
-    };
+    const formData = new FormData();
 
-    // TODO: 임시
-    setUpcomingTravel(params);
+    formData.append('title', getTravelName());
+    formData.append('from', selectedDate?.from?.toISOString() || '');
+    formData.append('to', selectedDate?.to?.toISOString() || '');
+    formData.append('travelPartner', travelPartner);
+    formData.append('travelType', travelType);
+    formData.append(
+      'travelPeriod',
+      getTravelDay(selectedDate?.from, selectedDate?.to).toString(),
+    );
+
+    formData.append('cities', JSON.stringify(selectedCities));
+    formData.append('travelStyles', JSON.stringify(travelStyles));
+    formData.append('member', JSON.stringify(travelMember));
+
+    selectedImage.forEach((file) => {
+      formData.append('imageUrl', file);
+    });
+
 
     onClickCloseBtn();
     toast.success('새 여행을 만들었어요');
@@ -140,7 +147,7 @@ export default function CreateNewTravelModal({
     setTravelTitle('');
     setSelectedImage([]);
     setTravelPartner('alone');
-    setTravelStyle([]);
+    setTravelStyles([]);
   };
 
   useEffect(() => {
@@ -218,7 +225,7 @@ export default function CreateNewTravelModal({
         stepOptions={stepData}
         currentStep={currentStep}
         onClickStep={setCurrentStep}
-        className='pb-4'
+        className="pb-4"
       />
       <div className="relative h-[calc(100%-81px)]">
         <FadeInOutStyled isShow={currentStep === 1}>
@@ -241,8 +248,8 @@ export default function CreateNewTravelModal({
             setTravelTitle={setTravelTitle}
             travelPartner={travelPartner}
             setTravelPartner={setTravelPartner}
-            travelStyle={travelStyle}
-            setTravelStyle={setTravelStyle}
+            travelStyles={travelStyles}
+            setTravelStyles={setTravelStyles}
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
             travelMember={travelMember}
