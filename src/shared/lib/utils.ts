@@ -40,7 +40,7 @@ const setResetHour = (date: Date): Date => {
 };
 
 /** 여행 기간 구하기 */
-export const getTravelDay = (from: Date, to: Date) => {
+export const getTravelDay = (from: Date | undefined, to: Date | undefined) => {
   if (!from || !to) return 0;
 
   const startDate = setResetHour(from);
