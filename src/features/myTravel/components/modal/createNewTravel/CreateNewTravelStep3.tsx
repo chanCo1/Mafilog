@@ -20,6 +20,7 @@ import { User, CircleX } from 'lucide-react';
 import { IMemberList } from '@/shared/interfaces';
 import { nanoid } from 'nanoid';
 import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
+import { useSession } from 'next-auth/react';
 
 interface ICreateNewTravelStep3 {
   title: string;
@@ -48,6 +49,8 @@ export default function CreateNewTravelStep3({
 }: ICreateNewTravelStep3) {
   const [isAciveAddTravelMember, setIsActiveAddTravelMember] = useState(false);
   const [addMemberName, setAddMemberName] = useState('');
+
+  const { data: userInfo } = useSession();
 
   /** 여행 스타일 핸들링 */
   const handleTravelStyle = (value: TRAVEL_STYLE) => {
@@ -95,21 +98,38 @@ export default function CreateNewTravelStep3({
         {/* TODO: 멤버 저장 어떻게 할지 고민 */}
         <div className="flex flex-col gap-1 p-1">
           <span>여행 멤버</span>
-          {travelMember.map((member, index) => (
-            <div key={`${member}-${index}`} className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                <User size="18" className="text-primary fill-current" />
-                <span className="font-bold">{member.name}</span>
+          {travelMember.map((member, index) => {
+            const isMe = member.id === userInfo?.user?.id;
+
+            return (
+              <div
+                key={`${member}-${index}`}
+                className="flex items-center gap-1"
+              >
+                <div className="flex items-center gap-1">
+                  {isMe ? (
+                    <div
+                      className={cn('h-6 w-6 rounded-full')}
+                      style={{ backgroundColor: `#${userInfo?.user?.hexCode}` }}
+                    />
+                  ) : (
+                    <User size="22" className="text-primary fill-current" />
+                  )}
+                  <span className="font-bold">
+                    {member.name}&nbsp;
+                    {isMe ? '(나)' : ''}
+                  </span>
+                </div>
+                {!isMe && (
+                  <CircleX
+                    className="text-text-secondary cursor-pointer"
+                    size={20}
+                    onClick={() => handelDeleteMember(member.id)}
+                  />
+                )}
               </div>
-              {member.name !== '나' && (
-                <CircleX
-                  className="text-text-secondary cursor-pointer"
-                  size={18}
-                  onClick={() => handelDeleteMember(member.id)}
-                />
-              )}
-            </div>
-          ))}
+            );
+          })}
           <div className="flex items-center gap-1">
             <CategoryIcon
               variant="plus"
