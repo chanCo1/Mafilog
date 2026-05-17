@@ -23,8 +23,6 @@ import {
 import { toast } from 'sonner';
 import { signIn } from 'next-auth/react';
 
-interface ILoginPage {}
-
 export default function LoginPage() {
   const router = useRouter();
   const {
@@ -40,7 +38,7 @@ export default function LoginPage() {
     },
   });
 
-  const [saveEmail, setSaveEmail] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   /** 로그인 요청 */
@@ -52,6 +50,7 @@ export default function LoginPage() {
         email: value.email,
         password: value.password,
         redirect: false,
+        rememberMe: rememberMe ? 'true' : 'false',
       });
 
       if (result.error) {
@@ -94,9 +93,9 @@ export default function LoginPage() {
           />
         </div>
         <Checkbox
-          checkboxLabel="이메일 저장"
-          value={saveEmail}
-          onChange={(v) => setSaveEmail(v as boolean)}
+          checkboxLabel="로그인 유지"
+          value={rememberMe}
+          onChange={(value) => setRememberMe(value as boolean)}
         />
         <Button
           type="submit"

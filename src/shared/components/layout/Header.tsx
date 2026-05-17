@@ -25,9 +25,7 @@ export default function Header() {
   const isMyTravelPage = path.includes('my-travel');
   const isMyMapPage = path.includes('my-map');
 
-  const { data, status } = useSession();
-  console.log(data);
-  console.log(status);
+  const { data } = useSession();
 
   const [isOpenUserInfoModal, setIsOpenUserInfoModal] = useState(false);
 

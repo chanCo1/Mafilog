@@ -12,7 +12,7 @@ import jwt from 'jsonwebtoken';
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { email, password } = body;
+  const { email, password, rememberMe } = body;
 
   try {
     // 입력 유효성 검사
@@ -45,16 +45,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const tokenPayload = {
+    const userInfoForToken = {
       id: findUser.id,
       email: findUser.email,
       name: findUser.name,
     };
 
     const accessToken = jwt.sign(
-      tokenPayload,
+      userInfoForToken,
       process.env.JWT_SECRET as string,
-      { expiresIn: '1d' }, // 토큰 유효기간 1일
+      { expiresIn: rememberMe ? '30d' : '1d' },
     );
 
     return NextResponse.json(

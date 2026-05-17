@@ -35,7 +35,7 @@ export default function MapContainer() {
         isDomestic ? 'max-mobile:h-80' : 'max-mobile:h-60',
       )}
     >
-      <p className="text-xl font-bold">지난 추억들</p>
+      <p className="text-xl font-bold">채워진 추억들</p>
       <div className="w-25">
         <Selectbox
           variant="none"
