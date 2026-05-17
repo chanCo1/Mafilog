@@ -23,8 +23,8 @@ interface IAmchartMap {
   isDomestic?: boolean;
   readonly?: boolean;
   setSelectedMap?: Dispatch<SetStateAction<ILabelValue>>;
-  isOpenFillModal: boolean;
-  setIsOpenFillModal: () => void;
+  isOpenFillModal?: boolean;
+  setIsOpenFillModal?: () => void;
 }
 
 export default function AmchartMap({
@@ -191,7 +191,7 @@ export default function AmchartMap({
             target?.set('active', false);
           },
           onOk: () => {
-            setIsOpenFillModal();
+            setIsOpenFillModal?.();
           },
         });
       }
