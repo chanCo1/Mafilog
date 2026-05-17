@@ -11,8 +11,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const { email, password, rememberMe } = body;
+  const { email, password, rememberMe } = await request.json();
 
   try {
     // 입력 유효성 검사
@@ -64,7 +63,7 @@ export async function POST(request: Request) {
           id: findUser.id,
           email: findUser.email,
           name: findUser.name,
-          imageURL: findUser.profileImageUrl,
+          profileImageUrl: findUser.profileImageUrl,
           accessToken,
         },
       },

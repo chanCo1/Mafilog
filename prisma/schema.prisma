@@ -43,7 +43,7 @@ model User {
 model Social {
   // pk
   id                Int    @id @default(autoincrement())
-  // 로그인 타입
+  // 로그인 타입 (oauth / cridentails)
   type              String
   // 소셜 플랫폼
   provider          String
