@@ -22,7 +22,7 @@ import {
 } from '@/features/auth/schema/login.schema';
 import { toast } from 'sonner';
 import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
-import { signIn } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react';
 
 interface ILoginPage {}
 
@@ -60,6 +60,9 @@ export default function LoginPage() {
         toast.error('이메일 또는 비밀번호를 확인해주세요');
         return;
       }
+
+      const session = await getSession();
+      console.log(' >>>> ', session);
 
       router.push('/');
       toast.success('로그인에 성공했어요');

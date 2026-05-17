@@ -8,6 +8,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -36,6 +37,7 @@ export async function POST(request: Request) {
 
     const isPasswordMatch = await bcrypt.compare(password, findUser.password!);
 
+    // 비밀번호 확인
     if (!isPasswordMatch) {
       return NextResponse.json(
         { message: '이메일 또는 비밀번호를 다시 확인해주세요.' },
@@ -43,10 +45,28 @@ export async function POST(request: Request) {
       );
     }
 
+    const tokenPayload = {
+      id: findUser.id,
+      email: findUser.email,
+      name: findUser.name,
+    };
+
+    const accessToken = jwt.sign(
+      tokenPayload,
+      process.env.JWT_SECRET as string,
+      { expiresIn: '1d' }, // 토큰 유효기간 1일
+    );
+
     return NextResponse.json(
       {
         message: '로그인에 성공했습니다.',
-        user: { email: findUser.email, name: findUser.name },
+        user: {
+          id: findUser.id,
+          email: findUser.email,
+          name: findUser.name,
+          imageURL: findUser.profileImageUrl,
+          accessToken,
+        },
       },
       { status: 200 },
     );

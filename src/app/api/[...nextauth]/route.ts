@@ -38,11 +38,12 @@ const { handlers } = NextAuth({
           if (!_userInfo || !_userInfo.user) {
             return null;
           }
-
           return {
-            // id: user.id.toString(),
-            email: _userInfo.email,
-            name: _userInfo.name,
+            id: _userInfo.user.id,
+            email: _userInfo.user.email,
+            name: _userInfo.user.name,
+            accessToken: _userInfo.user.accessToken,
+            imageURL: _userInfo.user.imageURL,
           };
         } catch (error: any) {
           const serverMessage = error.response?.data?.message;
@@ -65,6 +66,8 @@ const { handlers } = NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.accessToken = (user as any).accessToken;
+        token.imageURL = (user as any).imageURL;
       }
       return token;
     },
@@ -72,6 +75,8 @@ const { handlers } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
+        (session as any).accessToken = token.accessToken;
+        (session.user as any).imageURL = token.imageURL;
       }
       return session;
     },

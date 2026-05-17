@@ -8,19 +8,21 @@ import { getSession, signOut } from 'next-auth/react';
 
 /** 요청 인터셉터 */
 const requestInterceptor = async (
-  config: InternalAxiosRequestConfig
+  config: InternalAxiosRequestConfig,
 ): Promise<InternalAxiosRequestConfig> => {
   // NextAuth 세션에서 토큰 가져오기
-  // if (typeof window !== 'undefined') {
-  //   try {
-  //     const session = await getSession();
-  //     if (session?.token) {
-  //       config.headers.Authorization = `Bearer ${session.token}`;
-  //     }
-  //   } catch (error) {
-  //     console.error('Failed to get session:', error);
-  //   }
-  // }
+  if (typeof window !== 'undefined') {
+    try {
+      const session = await getSession();
+      const token = (session as any)?.accessToken;
+
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    } catch (error) {
+      console.error('세션 실패:', error);
+    }
+  }
   return config;
 };
 
@@ -50,12 +52,12 @@ const responseErrorInterceptor = async (error: AxiosError) => {
 export function setInterceptors(axiosInstance: AxiosInstance): AxiosInstance {
   axiosInstance.interceptors.request.use(
     requestInterceptor,
-    requestErrorInterceptor
+    requestErrorInterceptor,
   );
 
   axiosInstance.interceptors.response.use(
     responseInterceptor,
-    responseErrorInterceptor
+    responseErrorInterceptor,
   );
 
   return axiosInstance;
