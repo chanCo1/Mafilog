@@ -14,12 +14,12 @@ import Selectbox from '@/shared/components/ui/Selectbox';
 import { MAP_TRAVEL_TYPE_LIST } from '@/shared/constants';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
-import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
+import { useSession } from 'next-auth/react';
 
 // interface IMapContainer {}
 
 export default function MapContainer() {
-  const { isLoggedIn } = useAuthManagerStore();
+  const { data } = useSession();
 
   const [selectedMap, setSelectedMap] = useState<ILabelValue>(
     MAP_TRAVEL_TYPE_LIST[0],
@@ -47,7 +47,7 @@ export default function MapContainer() {
       </div>
       {isWorld && <AmchartMap readonly />}
       {isDomestic && <AmchartMap isDomestic readonly />}
-      {isLoggedIn && (
+      {data && (
         <div className="flex items-center justify-center font-bold">
           {isDomestic ? (
             <div>

@@ -10,7 +10,7 @@ import Credentials from 'next-auth/providers/credentials';
 import AuthService from '@/features/auth/services/AuthService';
 import { ILoginRequest } from '@/features/auth/interfaces/register.interface';
 
-const { handlers } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       // 로그인 요청 시 전달받을 값의 타입을 정의합니다.

@@ -11,17 +11,17 @@ import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/Button';
 import { useRouter } from 'next/navigation';
-import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
+import { useSession } from 'next-auth/react';
 
 interface IUpcomingContainer {}
 
 export default function UpcomingContainer() {
+  const { data } = useSession();
   const router = useRouter();
-  const { isLoggedIn } = useAuthManagerStore();
 
   return (
     <>
-      {isLoggedIn ? (
+      {data ? (
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <p className="text-xl font-bold">다가오는 여행</p>

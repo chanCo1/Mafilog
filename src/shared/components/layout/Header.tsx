@@ -15,7 +15,7 @@ import { Button } from '@/shared/components/ui/Button';
 import { cn } from '@/shared/lib/utils';
 import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 import { useRouter, usePathname } from 'next/navigation';
-import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
+import { useSession } from 'next-auth/react';
 import UserInfoModal from '@/shared/components/modal/UserInfoModal';
 
 export default function Header() {
@@ -25,7 +25,9 @@ export default function Header() {
   const isMyTravelPage = path.includes('my-travel');
   const isMyMapPage = path.includes('my-map');
 
-  const { isLoggedIn } = useAuthManagerStore();
+  const { data, status } = useSession();
+  console.log(data);
+  console.log(status);
 
   const [isOpenUserInfoModal, setIsOpenUserInfoModal] = useState(false);
 
@@ -40,7 +42,7 @@ export default function Header() {
         <Link href={'/'}>
           <LogoText />
         </Link>
-        {isLoggedIn ? (
+        {data ? (
           <div className="flex items-center justify-between gap-3">
             <div className="max-mobile:hidden text-text-secondary flex items-center justify-between gap-3">
               <Link
