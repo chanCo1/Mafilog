@@ -7,7 +7,7 @@
 
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import AuthService from '@/features/auth/services/AuthService';
+import AuthService from '@/features/auth/services/Auth.Service';
 import { getTokenExpire } from '@/shared/lib/utils';
 import Kakao from 'next-auth/providers/kakao';
 

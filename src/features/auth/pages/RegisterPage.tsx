@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import AuthService from '@/features/auth/services/AuthService';
+import AuthService from '@/features/auth/services/Auth.Service';
 import { IRegisterRequest } from '@/features/auth/interfaces/register.interface';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { toast } from 'sonner';
