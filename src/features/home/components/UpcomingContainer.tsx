@@ -4,7 +4,7 @@
  * @file: UpcomingContainer.tsx
  * @author: chad
  * @since: 2026.04.23 ~
- * @description: UpcomingContainer 컴포넌트, 다가오는 여행 노출
+ * @description: 홈 > 다가오는 여행 노출
  */
 
 import { useState } from 'react';
@@ -12,10 +12,11 @@ import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-
-interface IUpcomingContainer {}
+import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 
 export default function UpcomingContainer() {
+  const [isOpenCreateNewModal, setIsOpenCretateNewModal] = useState(false);
+
   const { data } = useSession();
   const router = useRouter();
 
@@ -25,7 +26,7 @@ export default function UpcomingContainer() {
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">
             <p className="text-xl font-bold">다가오는 여행</p>
-            <Button size="sm" onClick={() => router.push('/')}>
+            <Button size="sm" onClick={() => setIsOpenCretateNewModal(true)}>
               여행 만들기
             </Button>
           </div>
@@ -47,6 +48,11 @@ export default function UpcomingContainer() {
           </Button>
         </div>
       )}
+
+      <CreateNewTravelModal
+        isOpen={isOpenCreateNewModal}
+        handleClose={() => setIsOpenCretateNewModal(false)}
+      />
     </>
   );
 }
