@@ -54,7 +54,7 @@ model Social {
   // 유저 정보
   user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId], name: "providerKey")
 }
 
 /**
@@ -145,12 +145,11 @@ model TravelMember {
   travel    Travel   @relation(fields: [travelId], references: [id], onDelete: Cascade)
   // 생성일
   createdAt DateTime @default(now())
-  
-  expenseId   Int
-  expenseList ExpenseList[] @relation("payer")
+
+  expenseId        Int
+  expenseList      ExpenseList[]    @relation("payer")
   expenseSpenderId Int
   expenseSpender   ExpenseSpender[] @relation("spender")
-
 }
 
 /**
