@@ -95,7 +95,6 @@ export default function CreateNewTravelStep3({
           setSelectedImage={setSelectedImage}
         />
 
-        {/* TODO: 멤버 저장 어떻게 할지 고민 */}
         <div className="flex flex-col gap-1 p-1">
           <span>여행 멤버</span>
           {travelMember.map((member, index) => {

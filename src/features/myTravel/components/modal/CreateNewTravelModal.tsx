@@ -25,6 +25,7 @@ import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
 import { TRAVEL_TYPE_LIST } from '@/features/myTravel/constants';
 import { useSession } from 'next-auth/react';
 import { getTravelDay } from '@/shared/lib/utils';
+import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -55,9 +56,13 @@ export default function CreateNewTravelModal({
     TRAVEL_PARTNER.ALONE,
   );
   const [travelStyles, setTravelStyles] = useState<TRAVEL_STYLE[]>([]);
-  const [travelMember, setTravelMember] = useState<IMemberList[]>([
-    { id: userInfo?.user?.id!, name: userInfo?.user?.name! },
-  ]);
+  const [travelMember, setTravelMember] = useState<IMemberList[]>([]);
+
+  useEffect(() => {
+    if (userInfo?.user?.id && userInfo?.user?.name) {
+      setTravelMember([{ id: userInfo.user.id, name: userInfo.user.name }]);
+    }
+  }, [userInfo]);
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -84,7 +89,7 @@ export default function CreateNewTravelModal({
   };
 
   /** 새 여행 만들기 */
-  const createNewTravel = () => {
+  const createNewTravel = async () => {
     const notCompletedStep = stepData.filter((step, index) => {
       // 완료되지 않은 스텝이 있을 경우
       if (stepData.length - 1 > index + 1) {
@@ -129,9 +134,14 @@ export default function CreateNewTravelModal({
       formData.append('imageUrl', file);
     });
 
+    try {
+      await MyTravelService.postCreateTravel(formData);
 
-    onClickCloseBtn();
-    toast.success('새 여행을 만들었어요');
+      onClickCloseBtn();
+      toast.success('새 여행을 만들었어요');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   /** 데이터 초기화 */
