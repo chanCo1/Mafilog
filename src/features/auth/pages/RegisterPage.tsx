@@ -64,9 +64,22 @@ export default function RegisterPage() {
 
   /** 회원가입 */
   const onSubmit = async (value: TRegisterSchema) => {
-    await postAccountRegister(value);
-    toast.success('회원가입을 완료했어요');
-    router.push('/login');
+    setIsLoading(true);
+
+    try {
+      await AuthService.postRegister(value);
+      toast.success('회원가입을 완료했어요');
+      router.push('/login');
+    } catch (error: any) {
+      const erorrData = error.response.data;
+
+      openDialog({
+        type: 'error',
+        message: erorrData.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

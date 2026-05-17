@@ -1,5 +1,5 @@
 /**
- * @file: AuthService.ts
+ * @file: Auth.service.ts
  * @author: chad
  * @since: 2026.05.16 ~
  * @description: 로그인, 회원가입 관련 api service

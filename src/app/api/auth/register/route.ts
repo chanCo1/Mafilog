@@ -44,14 +44,14 @@ export async function POST(request: Request) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    const hexCode = getHexCode();
     // 회원가입 생성
     await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         name: name,
-        hexCode: getHexCode(),
+        hexCode: hexCode || '6f9dd3',
       },
     });
 
