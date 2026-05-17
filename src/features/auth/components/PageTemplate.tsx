@@ -22,8 +22,8 @@ export default function PageTemplate({
   path,
 }: IPageTemplate) {
   return (
-    <div className="mx-auto flex flex-col items-center">
-      <div className="flex w-90 flex-col gap-4">
+    <div className="mx-auto flex flex-col items-center max-w-90">
+      <div className="flex flex-col gap-4 w-full">
         <ReturnButton label={backBtnLabel} size="sm" path={path} position='left' />
         <h1 className="text-xxl p-4 text-center font-bold">{title}</h1>
         {children}

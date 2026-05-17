@@ -9,9 +9,11 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import AuthService from '@/features/auth/services/AuthService';
 import { getTokenExpire } from '@/shared/lib/utils';
+import Kakao from 'next-auth/providers/kakao';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
+    Kakao,
     Credentials({
       credentials: {
         email: { label: 'Email', type: 'email' },
@@ -60,20 +62,41 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: 'jwt', maxAge: 1 * 24 * 60 * 60 },
   pages: {
     signIn: '/login',
+    error: '/login',
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
-        token.accessToken = (user as any).accessToken;
         token.imageURL = (user as any).imageURL;
 
-        const isRememberMe = (user as any).rememberMe;
+        if (account?.provider === 'kakao') {
+          try {
+            const response = await AuthService.postSocialLogin({
+              provider: 'kakao',
+              providerAccountId: account.providerAccountId.toString(),
+              email: '카카오 로그인',
+              name: user.name!,
+              profileImageUrl: '',
+            });
 
-        if (isRememberMe) {
-          token.exp = getTokenExpire(30);
+            token.accessToken = response.user.accessToken;
+            token.id = response.user.id.toString();
+            // 소셜로그인은 토큰 유효기간 30일
+            token.exp = getTokenExpire(30);
+          } catch (error) {
+            console.error('카카오 로그인 백엔드 연동 실패:', error);
+            throw new Error('SocialLoginError');
+          }
         } else {
-          token.exp = getTokenExpire();
+          token.accessToken = (user as any).accessToken;
+          const isRememberMe = (user as any).rememberMe;
+
+          if (isRememberMe) {
+            token.exp = getTokenExpire(30);
+          } else {
+            token.exp = getTokenExpire();
+          }
         }
       }
       return token;

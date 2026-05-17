@@ -67,6 +67,11 @@ export default function LoginPage() {
     }
   };
 
+  /** 카카오 로그인 */
+  const handleSocialLogin = (social: 'google' | 'kakao' | 'naver') => {
+    signIn(social, { redirectTo: '/' });
+  };
+
   return (
     <PageTemplate title="로그인" backBtnLabel="홈으로" path="/">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
@@ -113,27 +118,28 @@ export default function LoginPage() {
           SNS 계정으로 로그인 / 회원가입
         </span>
         <div className="flex gap-4">
-          <Image
+          {/* <Image
             src={'/google.jpeg'}
             alt="구글 소셜 로그인 이미지"
             width={36}
             height={36}
             className="cursor-pointer rounded-full object-contain"
-          />
+          /> */}
           <Image
-            src={'/kakao.png'}
-            alt="구글 소셜 로그인 이미지"
-            width={36}
-            height={36}
-            className="cursor-pointer rounded-full object-contain"
+            src={'/kakao_login_large_wide.png'}
+            alt="카카오 소셜 로그인 이미지"
+            width='300'
+            height='100'
+            className="cursor-pointer object-contain"
+            onClick={() => handleSocialLogin('kakao')}
           />
-          <Image
+          {/* <Image
             src={'/naver.png'}
-            alt="구글 소셜 로그인 이미지"
+            alt="네이버 소셜 로그인 이미지"
             width={36}
             height={36}
             className="cursor-pointer rounded-full object-contain"
-          />
+          /> */}
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-1">
