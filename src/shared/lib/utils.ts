@@ -186,7 +186,15 @@ export const getPercent = ({
   deno: number;
   round?: number;
 }) => {
-  if (!numer|| !deno) return 0;
+  if (!numer || !deno) return 0;
 
   return Math.round((numer / deno) * 100 * round) / round;
+};
+
+/** 
+ * 토큰 만료일 구하기
+ * @param {number} day 일수 (1일 = 1, 30일 = 30), 기본 1
+ */
+export const getTokenExpire = (day: number = 1) => {
+  return Math.floor(Date.now() / 1000) + day * 24 * 60 * 60;
 };
