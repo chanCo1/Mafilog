@@ -8,6 +8,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import bcrypt from 'bcrypt';
+import { getHexCode } from '@/shared/lib/utils';
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -50,6 +51,7 @@ export async function POST(request: Request) {
         email,
         password: hashedPassword,
         name: name,
+        hexCode: getHexCode(),
       },
     });
 

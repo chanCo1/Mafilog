@@ -8,6 +8,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import jwt from 'jsonwebtoken';
+import { getHexCode } from '@/shared/lib/utils';
 
 export async function POST(request: Request) {
   const { provider, providerAccountId, email, name, profileImageUrl } =
@@ -65,6 +66,7 @@ export async function POST(request: Request) {
           email,
           name,
           profileImageUrl,
+          hexCode: getHexCode(),
           social: {
             create: {
               type: 'oauth',
@@ -95,8 +97,9 @@ export async function POST(request: Request) {
           id: targetUser.id,
           email: targetUser.email,
           name: targetUser.name,
-          imageURL: targetUser.profileImageUrl,
+          profileImageUrl: targetUser.profileImageUrl,
           accessToken,
+          hexCode: targetUser.hexCode,
         },
       },
       { status: 200 },

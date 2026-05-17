@@ -65,6 +65,7 @@ export async function POST(request: Request) {
           name: findUser.name,
           profileImageUrl: findUser.profileImageUrl,
           accessToken,
+          hexCode: findUser.hexCode,
         },
       },
       { status: 200 },

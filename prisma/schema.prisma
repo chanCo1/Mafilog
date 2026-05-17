@@ -27,6 +27,8 @@ model User {
   phone           String?
   // 프로필 이미지 주소
   profileImageUrl String?
+  // 프로필 배경색
+  hexCode         String
   // 소셜 계정 정보
   social          Social[]
   // 여행

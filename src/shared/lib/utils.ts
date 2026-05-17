@@ -191,10 +191,17 @@ export const getPercent = ({
   return Math.round((numer / deno) * 100 * round) / round;
 };
 
-/** 
+/**
  * 토큰 만료일 구하기
  * @param {number} day 일수 (1일 = 1, 30일 = 30), 기본 1
  */
 export const getTokenExpire = (day: number = 1) => {
   return Math.floor(Date.now() / 1000) + day * 24 * 60 * 60;
+};
+
+/** 헥스코드 구하기 */
+export const getHexCode = () => {
+  return `${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, '0')}`;
 };

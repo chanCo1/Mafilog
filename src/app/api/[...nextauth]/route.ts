@@ -46,7 +46,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             email: _userInfo.user.email,
             name: _userInfo.user.name,
             accessToken: _userInfo.user.accessToken,
-            imageURL: _userInfo.user.imageURL,
+            profileImageUrl: _userInfo.user.profileImageUrl,
+            hexCode: _userInfo.user.hexCode,
             rememberMe,
           };
         } catch (error: any) {
@@ -60,7 +61,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   secret: process.env.AUTH_SECRET,
   session: { strategy: 'jwt', maxAge: 1 * 24 * 60 * 60 },
-  pages: {
+  pages: { 
     signIn: '/login',
     error: '/login',
   },
@@ -68,20 +69,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
-        token.imageURL = (user as any).imageURL;
+        token.profileImageUrl = (user as any).profileImageUrl;
+        token.email = user.email;
+        token.hexCode = (user as any).hexCode;
 
         if (account?.provider === 'kakao') {
           try {
+            const kakaoEmail = user.email || `kakao_${account.providerAccountId}@k`;
+
             const response = await AuthService.postSocialLogin({
               provider: 'kakao',
               providerAccountId: account.providerAccountId.toString(),
-              email: '카카오 로그인',
+              email: kakaoEmail,
               name: user.name!,
-              profileImageUrl: '',
+              profileImageUrl: user.image || '',
             });
 
             token.accessToken = response.user.accessToken;
+            token.email = response.user.email;
             token.id = response.user.id.toString();
+            token.profileImageUrl = response.user.profileImageUrl;
+            token.hexCode = response.user.hexCode;
             // 소셜로그인은 토큰 유효기간 30일
             token.exp = getTokenExpire(30);
           } catch (error) {
@@ -105,7 +113,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.id as string;
         (session as any).accessToken = token.accessToken;
-        (session.user as any).imageURL = token.imageURL;
+        session.user.image = token.profileImageUrl as string;
+        (session.user as any).hexCode = token.hexCode as string;
       }
       return session;
     },
