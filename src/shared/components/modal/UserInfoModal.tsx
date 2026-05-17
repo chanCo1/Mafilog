@@ -29,10 +29,9 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
 
   /** 로그아웃 */
   const handleLogout = async () => {
-    await signOut({
-      redirect: true,
-      callbackUrl: '/login',
-    });
+    await signOut({ redirect: false });
+    handleClose();
+    router.push('/login');
   };
 
   return (
@@ -41,7 +40,9 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
       handleClose={handleClose}
       footer={
         <div className="flex w-full justify-between">
-          <Button variant="redOutline" onClick={handleLogout}>로그아웃</Button>
+          <Button variant="redOutline" onClick={handleLogout}>
+            로그아웃
+          </Button>
           <Button variant="gray" onClick={handleClose}>
             닫기
           </Button>
