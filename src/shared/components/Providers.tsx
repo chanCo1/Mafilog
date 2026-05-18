@@ -19,7 +19,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider refetchInterval={0}>
-        <APIProvider apiKey={process.env.GOOGLE_API_KEY || ''}>
+        <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY || ''}>
           <Toast />
           <Dialog />
           {children}
