@@ -34,6 +34,17 @@ export const convertFormattedDate = (date: Date, format = 'yyyy-MM-dd') => {
   return formatDate(date, format, { locale: ko });
 };
 
+/** 여행 기간 포멧 노출 (YYYY.MM.DD ~ YYYY.MM.DD) */
+export const convertTravelDateRange = (from: Date, to: Date) => {
+  if (!from || !to) return '';
+
+  if (from === to) {
+    return `${convertFormattedDate(from)}(${getDay(from)}) (${getTravelDay(from, to)}일)`;
+  }
+
+  return `${convertFormattedDate(from)}(${getDay(from)}) ~ ${convertFormattedDate(to)}(${getDay(to)}) (${getTravelDay(from, to)}일)`;
+};
+
 /** 무슨 요일인지 구하기 */
 export const getDay = (date: Date) => {
   return formatDate(date, 'E', { locale: ko });
