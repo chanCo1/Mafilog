@@ -8,31 +8,48 @@
  */
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/Button';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
+import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
+import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 
 export default function UpcomingContainer() {
   const [isOpenCreateNewModal, setIsOpenCretateNewModal] = useState(false);
 
-  const { data } = useSession();
+  const { data: userInfo } = useSession();
   const router = useRouter();
+  const { upcomingTravel } = useMyTravelListStore();
 
   return (
     <>
-      {data ? (
-        <div className="flex flex-col gap-1">
+      {userInfo ? (
+        <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <p className="text-xl font-bold">다가오는 여행</p>
             <Button size="sm" onClick={() => setIsOpenCretateNewModal(true)}>
               여행 만들기
             </Button>
           </div>
-          <p className="text-text-secondary">
-            다가오는 여행이 없어요! 다음 여행지는 어디인가요?
-          </p>
+          {upcomingTravel.length ? (
+            <div className="mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 grid gap-4">
+              {upcomingTravel.map((travel) => (
+                <TravelListCard
+                  key={`${travel.id}`}
+                  name={travel.title}
+                  from={travel.from}
+                  to={travel.to}
+                  cities={travel.cities}
+                  onClick={() => router.push(`/my-travel/${travel.id}`)}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="text-text-secondary">
+              다가오는 여행이 없어요! 다음 여행지는 어디인가요?
+            </p>
+          )}
         </div>
       ) : (
         <div className="flex flex-col items-center gap-2.5">

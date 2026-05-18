@@ -8,7 +8,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { cn, getTravelStatus } from '@/shared/lib/utils';
 import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 import { LogoText } from '@/shared/components/ui/LogoText';
 import LogoDescription from '@/features/home/components/LogoDescription';
@@ -18,14 +18,52 @@ import MapContainer from '@/features/home/components/MapContainer';
 import UpcomingContainer from '@/features/home/components/UpcomingContainer';
 import { useRouter } from 'next/navigation';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
+import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
+import MyTravelService from '@/features/myTravel/services/MyTravel.service';
+import { TRAVEL_STATUS } from '@/shared/types/Enum';
 
 export default function HomePage() {
   const router = useRouter();
   const { fetchCountires } = useCountriesDataStore();
+  const {
+    progressTravel,
+    setProgressTravel,
+    upcomingTravel,
+    setUpcomingTravel,
+    setLastTravel,
+  } = useMyTravelListStore();
+
+  const getMyTravelList = async () => {
+    try {
+      const myTravelList = await MyTravelService.getMyTravelList();
+
+      const progress = myTravelList.filter(
+        (travel) =>
+          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.PROGRESS,
+      );
+
+      const upcoming = myTravelList.filter(
+        (travel) =>
+          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.UPCOMING,
+      );
+
+      const last = myTravelList.filter(
+        (travel) =>
+          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.LAST,
+      );
+
+      setProgressTravel(progress);
+      setUpcomingTravel(upcoming);
+      setLastTravel(last);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   /** 마운트시 한번만 호출 */
   useEffect(() => {
     fetchCountires();
+    getMyTravelList();
   }, []);
 
   return (

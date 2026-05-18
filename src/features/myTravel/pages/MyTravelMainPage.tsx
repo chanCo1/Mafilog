@@ -7,59 +7,18 @@
  * @description: MainPage 컴포넌트
  */
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
 import { Button } from '@/shared/components/ui/Button';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 import TravelListTemplate from '@/features/myTravel/components/main/TravelListTemplate';
-import MyTravelService from '@/features/myTravel/services/MyTravel.service';
-import { getTravelStatus } from '@/shared/lib/utils';
-import { TRAVEL_STATUS } from '@/shared/types/Enum';
 
 export default function MyTravelMainPage() {
-  const {
-    progressTravel,
-    setProgressTravel,
-    upcomingTravel,
-    setUpcomingTravel,
-    lastTravel,
-    setLastTravel,
-  } = useMyTravelListStore();
+  const { progressTravel, upcomingTravel, lastTravel } = useMyTravelListStore();
 
   const [isOpenModal, setIsOpenModal] = useState(false);
-
-  const getMyTravelList = async () => {
-    try {
-      const myTravelList = await MyTravelService.getMyTravelList();
-
-      const progress = myTravelList.filter(
-        (travel) =>
-          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.PROGRESS,
-      );
-
-      const upcoming = myTravelList.filter(
-        (travel) =>
-          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.UPCOMING,
-      );
-
-      const last = myTravelList.filter(
-        (travel) =>
-          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.LAST,
-      );
-
-      setProgressTravel(progress);
-      setUpcomingTravel(upcoming);
-      setLastTravel(last);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    getMyTravelList();
-  }, []);
 
   return (
     <>
@@ -76,8 +35,11 @@ export default function MyTravelMainPage() {
         >
           {upcomingTravel?.length ? (
             <div>
-              지금까지 <span className="text-primary font-bold">{lastTravel.length}번</span>의
-              여행을 다녀왔어요!
+              지금까지{' '}
+              <span className="text-primary font-bold">
+                {lastTravel.length}번
+              </span>
+              의 여행을 다녀왔어요!
             </div>
           ) : (
             <p className="text-text-secondary text-center text-lg break-keep">
