@@ -12,12 +12,11 @@ import { cn } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
 import { Button } from '@/shared/components/ui/Button';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
-import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 import TravelListTemplate from '@/features/myTravel/components/main/TravelListTemplate';
+import { useFetchMyTravelList } from '@/features/myTravel/hooks/rquery/useFetchMyTravelList';
 
 export default function MyTravelMainPage() {
-  const { progressTravel, upcomingTravel, lastTravel } = useMyTravelListStore();
-
+  const { data: travelList } = useFetchMyTravelList();
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   return (
@@ -30,14 +29,14 @@ export default function MyTravelMainPage() {
         <div
           className={cn(
             'flex flex-col items-center gap-1',
-            !upcomingTravel?.length && 'pt-20',
+            !travelList?.upcoming.length && 'pt-20',
           )}
         >
-          {upcomingTravel?.length ? (
+          {travelList?.upcoming?.length ? (
             <div>
               지금까지{' '}
               <span className="text-primary font-bold">
-                {lastTravel.length}번
+                {travelList?.last.length}번
               </span>
               의 여행을 다녀왔어요!
             </div>
@@ -54,14 +53,14 @@ export default function MyTravelMainPage() {
             새 여행 만들기
           </Button>
         </div>
-        {progressTravel.length ? (
-          <TravelListTemplate title="진행중인" list={progressTravel} />
+        {travelList?.progress.length ? (
+          <TravelListTemplate title="진행중인" list={travelList?.progress} />
         ) : null}
-        {upcomingTravel.length ? (
-          <TravelListTemplate title="다가오는" list={upcomingTravel} />
+        {travelList?.upcoming.length ? (
+          <TravelListTemplate title="다가오는" list={travelList?.upcoming} />
         ) : null}
-        {lastTravel.length ? (
-          <TravelListTemplate title="지난" list={lastTravel} />
+        {travelList?.last.length ? (
+          <TravelListTemplate title="지난" list={travelList?.last} />
         ) : null}
       </div>
       <CreateNewTravelModal

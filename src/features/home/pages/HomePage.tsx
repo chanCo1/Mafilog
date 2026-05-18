@@ -18,49 +18,16 @@ import MapContainer from '@/features/home/components/MapContainer';
 import UpcomingContainer from '@/features/home/components/UpcomingContainer';
 import { useRouter } from 'next/navigation';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
-import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
-import MyTravelService from '@/features/myTravel/services/MyTravel.service';
-import { TRAVEL_STATUS } from '@/shared/types/Enum';
 import ProgressTravelCard from '@/features/home/components/ProgressTravelCard';
 
 export default function HomePage() {
   const router = useRouter();
   const { fetchCountires } = useCountriesDataStore();
-  const { setProgressTravel, setUpcomingTravel, setLastTravel } =
-    useMyTravelListStore();
-
-  const getMyTravelList = async () => {
-    try {
-      const myTravelList = await MyTravelService.getMyTravelList();
-
-      const progress = myTravelList.filter(
-        (travel) =>
-          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.PROGRESS,
-      );
-
-      const upcoming = myTravelList.filter(
-        (travel) =>
-          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.UPCOMING,
-      );
-
-      const last = myTravelList.filter(
-        (travel) =>
-          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.LAST,
-      );
-
-      setProgressTravel(progress);
-      setUpcomingTravel(upcoming);
-      setLastTravel(last);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   /** 마운트시 한번만 호출 */
   useEffect(() => {
     fetchCountires();
-    getMyTravelList();
-  }, []);
+  }, [fetchCountires]);
 
   return (
     <>

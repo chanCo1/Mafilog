@@ -13,14 +13,15 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
-import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
+import { useFetchMyTravelList } from '@/features/myTravel/hooks/rquery/useFetchMyTravelList';
 
 export default function UpcomingContainer() {
   const [isOpenCreateNewModal, setIsOpenCretateNewModal] = useState(false);
 
   const { data: userInfo } = useSession();
+  const { data: travelList } = useFetchMyTravelList();
+
   const router = useRouter();
-  const { upcomingTravel } = useMyTravelListStore();
 
   return (
     <>
@@ -32,9 +33,9 @@ export default function UpcomingContainer() {
               여행 만들기
             </Button>
           </div>
-          {upcomingTravel.length ? (
+          {travelList?.upcoming.length ? (
             <div className="mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 grid gap-4">
-              {upcomingTravel.map((travel) => (
+              {travelList?.upcoming.map((travel) => (
                 <TravelListCard
                   key={`${travel.id}`}
                   name={travel.title}

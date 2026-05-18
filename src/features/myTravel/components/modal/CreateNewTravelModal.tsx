@@ -22,10 +22,9 @@ import { toast } from 'sonner';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { IMemberList } from '@/shared/interfaces';
 import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
-import { TRAVEL_TYPE_LIST } from '@/features/myTravel/constants';
 import { useSession } from 'next-auth/react';
 import { getTravelDay } from '@/shared/lib/utils';
-import MyTravelService from '@/features/myTravel/services/MyTravel.service';
+import { useMutateMyTravelList } from '@/features/myTravel/hooks/rquery/useMutateMyTravelList';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -56,6 +55,8 @@ export default function CreateNewTravelModal({
   );
   const [travelStyles, setTravelStyles] = useState<TRAVEL_STYLE[]>([]);
   const [travelMember, setTravelMember] = useState<IMemberList[]>([]);
+
+  const { mutateAsync: createTravelMutate } = useMutateMyTravelList();
 
   useEffect(() => {
     if (userInfo?.user?.id && userInfo?.user?.name) {
@@ -135,10 +136,8 @@ export default function CreateNewTravelModal({
     });
 
     try {
-      await MyTravelService.postCreateTravel(formData);
-
+      await createTravelMutate(formData);
       onClickCloseBtn();
-      toast.success('새 여행을 만들었어요');
     } catch (error) {
       console.log(error);
     } finally {
