@@ -70,7 +70,7 @@ export type ICON_TYPE = (typeof ICON_TYPE)[keyof typeof ICON_TYPE];
 
 /** 여행 상태 */
 export const TRAVEL_STATUS = {
-  PROGRESS: 'progress', // 진행중인
+  PROGRESS: 'progress', // 여행중
   UPCOMING: 'upcoming', // 다가오는
   LAST: 'last', // 지난
 } as const;

@@ -64,7 +64,7 @@ export const calcDDay = (from: Date) => {
   return diffDays;
 };
 
-/** 여행 일차 계산 */
+/** 여행 일차 계산 (오늘 여행 몇일차인지 계산) */
 export const getTravelCurrentDay = (from: Date, to: Date) => {
   if (!from || !to) return 0;
 
@@ -141,38 +141,6 @@ export const getPlaceCategory = (types: IPlaceList['types']) => {
   return convertCategory(resultCategory as EXPENSES_CATEGORY_TYPE);
 };
 
-/** 장소/지출 카테고리 한글로 변환 */
-export const convertCategory = (category: EXPENSES_CATEGORY_TYPE) => {
-  switch (category.toLocaleLowerCase()) {
-    case EXPENSES_CATEGORY_TYPE.BUS:
-      return '교통';
-    case EXPENSES_CATEGORY_TYPE.TOUR:
-      return '관광';
-    case EXPENSES_CATEGORY_TYPE.SHOPPING:
-      return '쇼핑';
-    case EXPENSES_CATEGORY_TYPE.HOUSE:
-      return '숙박';
-    case EXPENSES_CATEGORY_TYPE.FOOD:
-      return '음식';
-    case EXPENSES_CATEGORY_TYPE.ETC:
-      return '기타';
-    default:
-      return '기타';
-  }
-};
-
-/** 결제 타입 한글로 변환 */
-export const convertPaymentType = (paymentType: EXPENSES_PAYMENT_TYPE) => {
-  switch (paymentType) {
-    case EXPENSES_PAYMENT_TYPE.CARD:
-      return '카드';
-    case EXPENSES_PAYMENT_TYPE.CASH:
-      return '현금';
-    default:
-      return '알 수 없음';
-  }
-};
-
 // = = = = = = = = = = = = = = = = 금액 관련
 /** 숫자에 1,000 단위 콤마를 추가하는 함수 */
 export const convertComma = (value: number | string): string => {
@@ -223,3 +191,50 @@ export const getHexCode = () => {
     .toString(16)
     .padStart(6, '0')}`;
 };
+
+// = = = = = = = = = = = = = = = = 한글로 변환
+/** 장소/지출 카테고리 한글로 변환 */
+export const convertCategory = (category: EXPENSES_CATEGORY_TYPE) => {
+  switch (category.toLocaleLowerCase()) {
+    case EXPENSES_CATEGORY_TYPE.BUS:
+      return '교통';
+    case EXPENSES_CATEGORY_TYPE.TOUR:
+      return '관광';
+    case EXPENSES_CATEGORY_TYPE.SHOPPING:
+      return '쇼핑';
+    case EXPENSES_CATEGORY_TYPE.HOUSE:
+      return '숙박';
+    case EXPENSES_CATEGORY_TYPE.FOOD:
+      return '음식';
+    case EXPENSES_CATEGORY_TYPE.ETC:
+      return '기타';
+    default:
+      return '기타';
+  }
+};
+
+/** 결제 타입 한글로 변환 */
+export const convertPaymentType = (paymentType: EXPENSES_PAYMENT_TYPE) => {
+  switch (paymentType) {
+    case EXPENSES_PAYMENT_TYPE.CARD:
+      return '카드';
+    case EXPENSES_PAYMENT_TYPE.CASH:
+      return '현금';
+    default:
+      return '알 수 없음';
+  }
+};
+
+/** 여행 상태 한글로 변환 */
+export const convertTravelStatus = (status: TRAVEL_STATUS | '') => {
+  if (!status) return '알수없음';
+
+  switch (status) {
+    case TRAVEL_STATUS.PROGRESS:
+      return '여행중';
+    case TRAVEL_STATUS.UPCOMING:
+      return '다가오는';
+    default:
+      return '지난';
+  }
+}
