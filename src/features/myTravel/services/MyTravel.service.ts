@@ -5,12 +5,13 @@
  * @description: 내 여행 관련 api service
  */
 
-import { axiosInstance, axiosInstanceWithAuth } from '@/shared/lib/api';
+import { axiosInstanceWithAuth } from '@/shared/lib/api';
+import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
 
 const API_URL = '/travels';
 
 class _MyTravelService {
-  /** 회원가입 요청 */
+  /** 새 여행 생성 요청 */
   async postCreateTravel(data: FormData) {
     const response = await axiosInstanceWithAuth.post(`${API_URL}`, data, {
       headers: {
@@ -18,6 +19,12 @@ class _MyTravelService {
       },
     });
     return response.data;
+  }
+
+  /** 내 여행 조회 */
+  async getMyTravelList(): Promise<IMyTravelListResponse[]> {
+    const response = await axiosInstanceWithAuth.get(`${API_URL}`);
+    return response.data.data;
   }
 }
 
