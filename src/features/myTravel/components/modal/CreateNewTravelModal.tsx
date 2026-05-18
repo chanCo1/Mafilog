@@ -39,6 +39,7 @@ export default function CreateNewTravelModal({
   isModify = false,
 }: ICreateNewTravelModal) {
   const { data: userInfo } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
@@ -90,6 +91,7 @@ export default function CreateNewTravelModal({
 
   /** 새 여행 만들기 */
   const createNewTravel = async () => {
+    setIsLoading(true);
     const notCompletedStep = stepData.filter((step, index) => {
       // 완료되지 않은 스텝이 있을 경우
       if (stepData.length - 1 > index + 1) {
@@ -141,6 +143,8 @@ export default function CreateNewTravelModal({
       toast.success('새 여행을 만들었어요');
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -225,7 +229,7 @@ export default function CreateNewTravelModal({
               >
                 이전
               </Button>
-              <Button onClick={createNewTravel}>여행 만들기</Button>
+              <Button onClick={createNewTravel} isLoading={isLoading}>여행 만들기</Button>
             </>
           )}
         </div>
