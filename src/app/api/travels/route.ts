@@ -9,17 +9,16 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { IMemberList } from '@/shared/interfaces';
-import { auth } from '@/app/api/[...nextauth]/route';
+import { authGuard } from '@/shared/backend/lib/authGuard';
 
 export async function POST(request: Request) {
-  const session = await auth();
+  const authValidate = await authGuard(request);
 
-  if (!session || !session.user) {
-    return NextResponse.json(
-      { error: '인증되지 않은 사용자입니다.' },
-      { status: 401 },
-    );
+  if (!authValidate.isValid) {
+    return authValidate.errorResponse;
   }
+
+  const session = authValidate.session;
 
   try {
     const formData = await request.formData();
@@ -54,7 +53,7 @@ export async function POST(request: Request) {
         travelStyles,
         imageUrl: imageUrl || null,
         user: {
-          connect: { id: session.user.id },
+          connect: { id: session?.user?.id },
         },
       },
     });
@@ -99,7 +98,6 @@ export async function POST(request: Request) {
       { status: 200 },
     );
   } catch (error) {
-    console.log('error >>', error);
     return NextResponse.json({ message: 'server error' }, { status: 500 });
   }
 }
