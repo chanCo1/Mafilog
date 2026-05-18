@@ -134,18 +134,17 @@ model TravelCity {
  */
 model TravelMember {
   // pk
-  id        String   @id
+  id               String           @id @default(cuid())
   // 멤버 이름
-  name      String
+  name             String
   // fk
-  userId    String?
+  userId           String?
   // fk
-  travelId  String
+  travelId         String
   // 여행 정보
-  travel    Travel   @relation(fields: [travelId], references: [id], onDelete: Cascade)
+  travel           Travel           @relation(fields: [travelId], references: [id], onDelete: Cascade)
   // 생성일
-  createdAt DateTime @default(now())
-
+  createdAt        DateTime         @default(now())
   expenseId        Int?
   expenseList      ExpenseList[]    @relation("payer")
   expenseSpenderId Int?
@@ -279,21 +278,21 @@ model TravelExpense {
  */
 model ExpenseList {
   // pk
-  id          Int     @id @default(autoincrement())
+  id                 Int     @id @default(autoincrement())
   // 지출명
-  name        String
+  name               String
   // 결제 방식
-  paymentType String
+  paymentType        String
   // 지출 타입 (self, split 등)
-  spenderType String
+  spenderType        String
   // 지출 카테고리
-  category    String
+  category           String
   // 몇일차인지
-  day         Int
+  day                Int
   // 지출 시간
-  time        String?
+  time               String?
   // 메모
-  memo        String?
+  memo               String?
   // 지출 금액 (입력 금액)
   amount             Float
   // 입력된 계산식

@@ -2,7 +2,7 @@
  * @file: route.ts
  * @author: chad
  * @since: 2026.05.18 ~
- * @description: 회원가입 api
+ * @description: 내 여행 관련 api
  */
 
 import { NextResponse } from 'next/server';
@@ -11,6 +11,7 @@ import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { IMemberList } from '@/shared/interfaces';
 import { authGuard } from '@/shared/backend/lib/authGuard';
 
+/** 새 여행 만들기 */
 export async function POST(request: Request) {
   const authValidate = await authGuard(request);
 
@@ -36,6 +37,8 @@ export async function POST(request: Request) {
 
     const files = formData.getAll('image') as File[];
 
+    const currentUserId = session?.user?.id;
+
     let imageUrl = '';
     if (files && files.length > 0) {
       // imageUrl = await uploadToStorage(files[0]);
@@ -53,7 +56,7 @@ export async function POST(request: Request) {
         travelStyles,
         imageUrl: imageUrl || null,
         user: {
-          connect: { id: session?.user?.id },
+          connect: { id: currentUserId },
         },
       },
     });
@@ -81,15 +84,17 @@ export async function POST(request: Request) {
 
     if (member && member.length > 0) {
       await Promise.all(
-        member.map((member: IMemberList) =>
-          prisma.travelMember.create({
+        member.map((member: IMemberList) => {
+          const isMe = member.id === currentUserId;
+
+          return prisma.travelMember.create({
             data: {
-              id: member.id,
               name: member.name,
               travelId: newTravel.id,
+              userId: isMe ? currentUserId : null,
             },
-          }),
-        ),
+          });
+        }),
       );
     }
 
@@ -98,7 +103,37 @@ export async function POST(request: Request) {
       { status: 200 },
     );
   } catch (error) {
-    console.log('@@@@@@@@@@@@?? ', error)
+    console.error('@@ 내 여행 생성 에러 >>', error);
+    return NextResponse.json({ message: 'server error' }, { status: 500 });
+  }
+}
+
+/** 내 여행 리스트 조회 */
+export async function GET(request: Request) {
+  const authValidate = await authGuard(request);
+
+  if (!authValidate.isValid) {
+    return authValidate.errorResponse;
+  }
+
+  const session = authValidate.session;
+
+  try {
+    const myTravelList = await prisma.travel.findMany({
+      where: {
+        userId: session?.user?.id,
+      },
+      include: {
+        cities: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return NextResponse.json({ data: myTravelList }, { status: 200 });
+  } catch (error) {
+    console.error('@@ 내 여행 리스트 조회 에러 >>', error);
     return NextResponse.json({ message: 'server error' }, { status: 500 });
   }
 }
