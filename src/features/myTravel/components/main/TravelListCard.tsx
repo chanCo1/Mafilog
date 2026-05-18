@@ -46,13 +46,13 @@ export default function TravelListCard({
   /** 여행 도시 그룹화 [key]: value */
   const groupedTravelCity = cities.reduce(
     (acc, cur) => {
-      const countryCode = cur.country.code;
+      const _countryCode = cur.countryCode;
 
-      if (!acc[countryCode]) {
-        acc[countryCode] = [];
+      if (!acc[_countryCode]) {
+        acc[_countryCode] = [];
       }
 
-      acc[countryCode].push(cur);
+      acc[_countryCode].push(cur);
 
       return acc;
     },

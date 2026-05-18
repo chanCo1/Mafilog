@@ -90,20 +90,14 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
           comp?.types?.includes('country'),
         );
 
-        const country = {
-          name: getCountryCode?.longText,
-          code: getCountryCode?.shortText,
-        };
-
         return {
           id: place.id,
           name: place.displayName.text,
           address: place.formattedAddress,
-          country,
-          location: {
-            lat: place.location.latitude,
-            lng: place.location.longitude,
-          },
+          countryCode: getCountryCode?.shortText ?? '',
+          countryName: getCountryCode?.longText ?? '',
+          lat: place.location.latitude,
+          lng: place.location.longitude,
           types: place.types,
         };
       });
@@ -237,8 +231,8 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
                   </span>
                   <span className="text-text-secondary text-sm">
                     {<>{getPlaceCategory(list.types)}</>}
-                    {list.country.name && (
-                      <>&nbsp;&#8226;&nbsp;{list.country.name}</>
+                    {list.countryName && (
+                      <>&nbsp;&#8226;&nbsp;{list.countryName}</>
                     )}
                   </span>
                 </div>
