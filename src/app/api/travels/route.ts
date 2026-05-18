@@ -61,7 +61,7 @@ export async function POST(request: Request) {
     if (cities && cities.length > 0) {
       await Promise.all(
         cities.map((city: IPlaceList) =>
-          prisma.travelPlace.create({
+          prisma.travelCity.create({
             data: {
               id: city.id,
               name: city.name,
@@ -98,6 +98,7 @@ export async function POST(request: Request) {
       { status: 200 },
     );
   } catch (error) {
+    console.log('@@@@@@@@@@@@?? ', error)
     return NextResponse.json({ message: 'server error' }, { status: 500 });
   }
 }
