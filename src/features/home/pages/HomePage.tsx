@@ -21,17 +21,13 @@ import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 import { TRAVEL_STATUS } from '@/shared/types/Enum';
+import ProgressTravelCard from '@/features/home/components/ProgressTravelCard';
 
 export default function HomePage() {
   const router = useRouter();
   const { fetchCountires } = useCountriesDataStore();
-  const {
-    progressTravel,
-    setProgressTravel,
-    upcomingTravel,
-    setUpcomingTravel,
-    setLastTravel,
-  } = useMyTravelListStore();
+  const { setProgressTravel, setUpcomingTravel, setLastTravel } =
+    useMyTravelListStore();
 
   const getMyTravelList = async () => {
     try {
@@ -108,6 +104,7 @@ export default function HomePage() {
         <UpcomingContainer />
         <MapContainer />
       </div>
+      <ProgressTravelCard />
     </>
   );
 }
