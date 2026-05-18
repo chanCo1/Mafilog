@@ -21,6 +21,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/** 글자수 넘어가면 ... 표시 */
+export const truncateText = (text: string, maxLength: number = 18): string => {
+  if (!text) return '';
+
+  return text.length > maxLength ? `${text.slice(0, maxLength)}...` : text;
+};
+
 /** 날짜 포멧 변경 */
 export const convertFormattedDate = (date: Date, format = 'yyyy-MM-dd') => {
   if (!date) return '';
@@ -237,4 +244,4 @@ export const convertTravelStatus = (status: TRAVEL_STATUS | '') => {
     default:
       return '지난';
   }
-}
+};
