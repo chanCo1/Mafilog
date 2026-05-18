@@ -44,9 +44,7 @@ export default function CreateNewTravelModal({
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const [travelType, setTravelType] = useState<string>(
-    TRAVEL_TYPE_LIST[0].value,
-  );
+  const [travelType, setTravelType] = useState<string>('');
   const [selectedCities, setSelectedCities] = useState<IPlaceList[]>([]);
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
@@ -156,6 +154,7 @@ export default function CreateNewTravelModal({
       data.isComplete = false;
     });
     setCurrentStep(1);
+    setTravelType('');
     setSelectedCities([]);
     setSeletedDate(undefined);
     setTravelTitle('');
@@ -199,7 +198,7 @@ export default function CreateNewTravelModal({
                 취소
               </Button>
               <Button
-                disabled={!selectedCities.length}
+                disabled={!selectedCities.length || !travelType}
                 onClick={handelNextStep}
               >
                 {selectedCities.length}개 도시/다음
@@ -229,7 +228,9 @@ export default function CreateNewTravelModal({
               >
                 이전
               </Button>
-              <Button onClick={createNewTravel} isLoading={isLoading}>여행 만들기</Button>
+              <Button onClick={createNewTravel} isLoading={isLoading}>
+                여행 만들기
+              </Button>
             </>
           )}
         </div>
@@ -244,6 +245,7 @@ export default function CreateNewTravelModal({
       <div className="relative h-[calc(100%-81px)]">
         <FadeInOutStyled isShow={currentStep === 1}>
           <CreateNewTravelStep1
+            key={isOpen ? 'open' : 'closed'}
             travelType={travelType}
             setTravelType={setTravelType}
             selectedCities={selectedCities}
@@ -252,12 +254,14 @@ export default function CreateNewTravelModal({
         </FadeInOutStyled>
         <FadeInOutStyled isShow={currentStep === 2}>
           <CreateNewTravelStep2
+            key={isOpen ? 'open' : 'closed'}
             selectedDate={selectedDate}
             setSeletedDate={setSeletedDate}
           />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={currentStep === 3}>
           <CreateNewTravelStep3
+            key={isOpen ? 'open' : 'closed'}
             title={travelTitle}
             setTravelTitle={setTravelTitle}
             travelPartner={travelPartner}

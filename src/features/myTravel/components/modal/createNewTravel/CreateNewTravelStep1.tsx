@@ -17,6 +17,7 @@ import tzlookup from 'tz-lookup';
 import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
 import { TRAVEL_TYPE_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
+import RequireDot from '@/shared/components/ui/RequireDot';
 
 interface ICreateNewTravelStep1 {
   travelType: string;
@@ -37,6 +38,7 @@ export default function CreateNewTravelStep1({
   const [cityList, setCityList] = useState<IPlaceList[]>([]);
   const [resultMsg, setResultMsg] = useState('');
 
+  /** 입력될 때마다 호출 방지용 state */
   const [submitSearch, setSubmitSearch] = useState<string>('');
   const { data: searchData, isLoading } = useFetchGooglePlaces({
     search: submitSearch,
@@ -76,8 +78,8 @@ export default function CreateNewTravelStep1({
           id: place.id,
           name: place.displayName.text,
           address: place.formattedAddress,
-          countryName: country.name,
-          countryCode: country.code,
+          countryName: country.name ?? '',
+          countryCode: country.code ?? '',
           lat: place.location.latitude,
           lng: place.location.longitude,
           types: place.types,
@@ -107,7 +109,10 @@ export default function CreateNewTravelStep1({
   return (
     <div className="flex h-full flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <span>어디로 가는 여행인가요?</span>
+        <div className='flex items-center gap-1'>
+          <span>어디로 가는 여행인가요?</span>
+          <RequireDot />
+        </div>
         <div className="flex gap-1">
           {TRAVEL_TYPE_LIST.map((list) => (
             <Chip

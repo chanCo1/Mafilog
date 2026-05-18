@@ -76,7 +76,7 @@ export default function MyTravelMainPage() {
         >
           {upcomingTravel?.length ? (
             <div>
-              지금까지 <span className="text-primary font-bold">N번</span>의
+              지금까지 <span className="text-primary font-bold">{lastTravel.length}번</span>의
               여행을 다녀왔어요!
             </div>
           ) : (
