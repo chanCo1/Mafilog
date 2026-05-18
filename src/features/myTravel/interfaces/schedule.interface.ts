@@ -8,8 +8,8 @@ export interface IPlaceList {
   id: string;
   name: string;
   address: string;
-  countryName: string | undefined;
-  countryCode: string | undefined;
+  countryName: string;
+  countryCode: string;
   lat: number;
   lng: number;
   types: string[];

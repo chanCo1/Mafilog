@@ -1,30 +1,23 @@
-/** TODO: 임시 여행 리스트 스토어 */
-
 import { create } from 'zustand';
+import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
 
 interface IMyTravelList {
-  progressTravel: any[];
-  setProgressTravel: (value: any) => void;
-  upcomingTravel: any[];
-  setUpcomingTravel: (value: any) => void;
-  lastTravel: any[];
-  setLastTravel: (value: any) => void;
+  progressTravel: IMyTravelListResponse[];
+  setProgressTravel: (list: IMyTravelListResponse[]) => void;
+  upcomingTravel: IMyTravelListResponse[];
+  setUpcomingTravel: (list: IMyTravelListResponse[]) => void;
+  lastTravel: IMyTravelListResponse[];
+  setLastTravel: (list: IMyTravelListResponse[]) => void;
 }
 
 export const useMyTravelListStore = create<IMyTravelList>((set) => ({
   progressTravel: [],
-  setProgressTravel: (value) =>
-    set((state) => {
-      return { progressTravel: [...state.progressTravel, value] };
-    }),
   upcomingTravel: [],
-  setUpcomingTravel: (value) =>
-    set((state) => {
-      return { upcomingTravel: [...state.upcomingTravel, value] };
-    }),
   lastTravel: [],
-  setLastTravel: (value) =>
-    set((state) => {
-      return { lastTravel: [...state.lastTravel, value] };
-    }),
+  setProgressTravel: (list) => set({ progressTravel: list }),
+  setUpcomingTravel: (list) => set({ upcomingTravel: list }),
+  setLastTravel: (list) => set({ lastTravel: list }),
+
+  clearTravelLists: () =>
+    set({ progressTravel: [], upcomingTravel: [], lastTravel: [] }),
 }));

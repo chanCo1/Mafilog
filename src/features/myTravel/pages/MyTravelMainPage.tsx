@@ -7,19 +7,59 @@
  * @description: MainPage 컴포넌트
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
 import { Button } from '@/shared/components/ui/Button';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
-import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
 import TravelListTemplate from '@/features/myTravel/components/main/TravelListTemplate';
+import MyTravelService from '@/features/myTravel/services/MyTravel.service';
+import { getTravelStatus } from '@/shared/lib/utils';
+import { TRAVEL_STATUS } from '@/shared/types/Enum';
 
 export default function MyTravelMainPage() {
-  const { upcomingTravel, lastTravel, progressTravel } = useMyTravelListStore();
+  const {
+    progressTravel,
+    setProgressTravel,
+    upcomingTravel,
+    setUpcomingTravel,
+    lastTravel,
+    setLastTravel,
+  } = useMyTravelListStore();
 
   const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const getMyTravelList = async () => {
+    try {
+      const myTravelList = await MyTravelService.getMyTravelList();
+
+      const progress = myTravelList.filter(
+        (travel) =>
+          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.PROGRESS,
+      );
+
+      const upcoming = myTravelList.filter(
+        (travel) =>
+          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.UPCOMING,
+      );
+
+      const last = myTravelList.filter(
+        (travel) =>
+          getTravelStatus(travel.from, travel.to) === TRAVEL_STATUS.LAST,
+      );
+
+      setProgressTravel(progress);
+      setUpcomingTravel(upcoming);
+      setLastTravel(last);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getMyTravelList();
+  }, []);
 
   return (
     <>
