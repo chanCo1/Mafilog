@@ -13,13 +13,16 @@ import {
 } from '@/shared/lib/utils';
 import { useMyTravelListStore } from '@/shared/stores/useMyTravelListStrore';
 import Separator from '@/shared/components/ui/Separator';
-import { HandCoins } from 'lucide-react';
 import useTravelDateRange from '@/features/myTravel/hooks/useTravelDateRange';
+import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
+import { useState } from 'react';
 
 export default function ProgressTravelCard() {
+  const [isOpenExpenseModal, setIsOpenExpenseModal] = useState(false);
+
   const { progressTravel } = useMyTravelListStore();
-  const _from = progressTravel[0].from;
-  const _to = progressTravel[0].to;
+  const _from = progressTravel[0]?.from || '';
+  const _to = progressTravel[0]?.to || '';
 
   const travelDateRange = useTravelDateRange({ from: _from, to: _to });
 
@@ -38,13 +41,21 @@ export default function ProgressTravelCard() {
               <span className="text-xs">{travelDateRange}</span>
             </div>
             <Separator />
-            <div className="flex cursor-pointer flex-col items-center justify-center gap-1">
-              <HandCoins />
+            <div
+              className="flex cursor-pointer flex-col items-center justify-center gap-1"
+              onClick={() => setIsOpenExpenseModal(true)}
+            >
+              <span className='text-xl'>💸</span>
               <span className="text-sm font-bold">지출 추가</span>
             </div>
           </div>
         </div>
       ) : null}
+      {/* TODO: 진행중인 여행 특정한 후 작업 진행 */}
+      {/* <AddExpenseModal
+        isOpen={isOpenExpenseModal}
+        handleClose={() => setIsOpenExpenseModal(false)}
+      /> */}
     </>
   );
 }

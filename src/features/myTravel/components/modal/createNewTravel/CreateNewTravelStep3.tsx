@@ -78,7 +78,7 @@ export default function CreateNewTravelStep3({
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
+      <div className="scrollbar-hide flex flex-1 flex-col gap-6 overflow-auto">
         <Input
           label="제목 입력"
           placeholder="여행 제목을 입력해주세요"
@@ -114,7 +114,7 @@ export default function CreateNewTravelStep3({
                   ) : (
                     <User size="22" className="text-primary fill-current" />
                   )}
-                  <span className="font-bold">
+                  <span className="">
                     {member.name}&nbsp;
                     {isMe ? '(나)' : ''}
                   </span>
