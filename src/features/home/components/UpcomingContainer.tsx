@@ -38,10 +38,7 @@ export default function UpcomingContainer() {
               {travelList?.upcoming.map((travel) => (
                 <TravelListCard
                   key={`${travel.id}`}
-                  name={travel.title}
-                  from={travel.from}
-                  to={travel.to}
-                  cities={travel.cities}
+                  travel={travel}
                   onClick={() => router.push(`/my-travel/${travel.id}`)}
                 />
               ))}

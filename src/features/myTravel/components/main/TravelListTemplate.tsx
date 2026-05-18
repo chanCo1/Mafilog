@@ -34,10 +34,7 @@ export default function TravelListTemplate({
         {list.map((travel) => (
           <TravelListCard
             key={`${travel.id}`}
-            name={travel.title}
-            from={travel.from}
-            to={travel.to}
-            cities={travel.cities}
+            travel={travel}
             onClick={() => router.push(`/my-travel/${travel.id}`)}
           />
         ))}
