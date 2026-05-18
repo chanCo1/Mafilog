@@ -6,6 +6,7 @@ import {
   TRAVEL_PARTNER,
   TRAVEL_STYLE,
   PLACE_CATEGORY_TYPE,
+  TRAVEL_STATUS,
 } from '@/shared/types/Enum';
 import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 import {
@@ -95,6 +96,23 @@ export const getTravelDayOfWeek = (from: Date, to: Date) => {
   );
 
   return travelDays;
+};
+
+/** 날짜에 따른 여행 상태 구하기 */
+export const getTravelStatus = (from: Date, to: Date) => {
+  if (!from || !to) return '';
+
+  const today = setResetHour(new Date()).getTime();
+  const start = setResetHour(from).getTime();
+  const end = setResetHour(to).getTime();
+
+  if (today < start) {
+    return TRAVEL_STATUS.UPCOMING;
+  } else if (today >= start && today <= end) {
+    return TRAVEL_STATUS.PROGRESS;
+  } else {
+    return TRAVEL_STATUS.LAST;
+  }
 };
 
 /** 여행 동반자 변환 */
