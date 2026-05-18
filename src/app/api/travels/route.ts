@@ -10,6 +10,7 @@ import { prisma } from '@/shared/lib/prisma';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { IMemberList } from '@/shared/interfaces';
 import { authGuard } from '@/shared/backend/lib/authGuard';
+import { uploadCloudinary } from '@/shared/backend/lib/cloudinary';
 
 /** 새 여행 만들기 */
 export async function POST(request: Request) {
@@ -35,15 +36,12 @@ export async function POST(request: Request) {
     const travelStyles = JSON.parse(formData.get('travelStyles') as string);
     const member = JSON.parse(formData.get('member') as string);
 
-    const files = formData.getAll('image') as File[];
+    const files = formData.getAll('imageUrl') as File[];
 
     const currentUserId = session?.user?.id;
 
-    let imageUrl = '';
-    if (files && files.length > 0) {
-      // imageUrl = await uploadToStorage(files[0]);
-      imageUrl = '';
-    }
+    const uploadedUrls = await uploadCloudinary({ files });
+    const imageUrl = uploadedUrls.length ? uploadedUrls[0] : null;
 
     const newTravel = await prisma.travel.create({
       data: {
