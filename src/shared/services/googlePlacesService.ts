@@ -12,7 +12,7 @@ interface IGetGooglePlaces {
   searchPlace: string;
 }
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+const API_KEY = process.env.GOOGLE_API_KEY;
 
 export const getGooglePlaces = async ({ searchPlace }: IGetGooglePlaces): Promise<IGetGooglePlacesResponse> => {
   const url = 'https://places.googleapis.com/v1/places:searchText';

@@ -34,11 +34,11 @@ export default function MyTravelMainPage() {
         >
           {travelList?.upcoming?.length ? (
             <div>
-              지금까지{' '}
+              벌써{' '}
               <span className="text-primary font-bold">
                 {travelList?.last.length}번
-              </span>
-              의 여행을 다녀왔어요!
+              </span>{' '}
+              여행을 다녀왔어요!
             </div>
           ) : (
             <p className="text-text-secondary text-center text-lg break-keep">
