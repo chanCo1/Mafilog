@@ -39,7 +39,12 @@ export async function GET(
       where: { travelId },
       orderBy: { day: 'asc' },
       include: {
-        scheduleList: { include: { place: true } },
+        scheduleList: {
+          orderBy: {
+            createdAt: 'asc',
+          },
+          include: { place: true },
+        },
       },
     });
 
