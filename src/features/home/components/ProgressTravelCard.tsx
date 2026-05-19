@@ -30,8 +30,8 @@ export default function ProgressTravelCard() {
   return (
     <>
       {travelList?.progress.length ? (
-        <div className="max-mobile:bottom-6 max-mobile:left-0 max-mobile:flex max-mobile:w-full max-mobile:justify-center max-mobile:px-2 fixed right-10 bottom-10">
-          <div className="from-secondary to-primary flex gap-2 rounded-lg bg-linear-to-r p-3 text-white">
+        <div className="max-mobile:bottom-6 max-mobile:left-0 max-mobile:flex max-mobile:w-full max-mobile:justify-center max-mobile:px-2 fixed right-10 bottom-10 z-2">
+          <div className="from-secondary to-primary flex gap-2 rounded-lg bg-linear-to-r p-3 text-white shadow-lg">
             <div className="flex flex-col gap-1 font-bold">
               <div className="font-lg pb-1">
                 지금은 {convertTravelStatus(getTravelStatus(_from, _to))}
