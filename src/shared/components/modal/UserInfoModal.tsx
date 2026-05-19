@@ -12,9 +12,9 @@ import { Button } from '@/shared/components/ui/Button';
 import { Card } from '@/shared/components/ui/Card';
 import { MYPAGE_LIST } from '@/shared/constants';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { ChevronRight } from 'lucide-react';
 
 interface IUserInfoModal {
   isOpen: boolean;
@@ -62,7 +62,7 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
         </div>
       }
     >
-      <div className="flex h-full flex-col gap-3">
+      <div className="flex h-full flex-col gap-5">
         <div className="flex gap-1">
           <div className="h-24 w-24">
             {user?.image ? (
@@ -87,18 +87,20 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
 
         <Separator position="horizontal" />
 
-        <div className="tablet:hidden flex flex-col gap-2">
+        <div className="tablet:hidden flex flex-col gap-3">
           <span
-            className="py-1 font-bold"
+            className="py-1 font-bold flex gap-1 items-center justify-between"
             onClick={() => handelLinkPage('/my-travel')}
           >
             내 여행
+            <ChevronRight size={16} />
           </span>
           <span
-            className="py-1 font-bold"
+            className="py-1 font-bold flex gap-1 items-center justify-between"
             onClick={() => handelLinkPage('/my-map')}
           >
             추억 채우기
+            <ChevronRight size={16} />
           </span>
         </div>
 
