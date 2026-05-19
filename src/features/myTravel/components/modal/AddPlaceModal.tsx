@@ -210,7 +210,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
         <div className="max-mobile:h-40 h-60 overflow-hidden rounded-lg">
           {/* <GoogleMap
             places={clickedPlace}
-            id={process.env.GOOGLE_MAP_ID2 as string}
+            id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID2 as string}
             isSingle
           /> */}
         </div>

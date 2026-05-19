@@ -148,7 +148,7 @@ function TravelScheduleView() {
           <div className="max-mobile:h-60 h-110 overflow-hidden rounded-lg">
             {/* <GoogleMap
               places={getPlace}
-              id={process.env.GOOGLE_MAP_ID as string}
+              id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
             /> */}
           </div>
         }
