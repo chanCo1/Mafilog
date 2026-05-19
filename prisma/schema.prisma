@@ -64,7 +64,7 @@ model Social {
  */
 model Travel {
   // pk
-  id            Int              @id @default(autoincrement())
+  id            Int                 @id @default(autoincrement())
   // 여행 이름
   title         String
   // 여행 타입 (해외, 국내)
@@ -158,17 +158,17 @@ model TravelMember {
  */
 model ChecklistCategory {
   // pk
-  id       Int             @id @default(autoincrement())
+  id        Int             @id @default(autoincrement())
   // 체크리스트 라벨
-  label    String
+  label     String
   // 체크리스트 아이템
-  items    ChecklistItem[]
+  items     ChecklistItem[]
   // 생성일
-  createdAt        DateTime         @default(now())
+  createdAt DateTime        @default(now())
   // fk
-  travelId Int
+  travelId  Int
   // 여행 정보
-  travel   Travel          @relation(fields: [travelId], references: [id], onDelete: Cascade)
+  travel    Travel          @relation(fields: [travelId], references: [id], onDelete: Cascade)
 }
 
 /**
@@ -182,7 +182,7 @@ model ChecklistItem {
   // 체크 여부
   isChecked  Boolean           @default(false)
   // 생성일
-  createdAt        DateTime         @default(now())
+  createdAt  DateTime          @default(now())
   // fk
   categoryId Int
   // 카테고리 정보
@@ -202,7 +202,7 @@ model TravelSchedule {
   // 리스트
   scheduleList ScheduleList[]
   // 생성일
-  createdAt        DateTime         @default(now())
+  createdAt    DateTime       @default(now())
   // fk
   travelId     Int
   // 여행 정보
@@ -226,7 +226,9 @@ model ScheduleList {
   // 메모
   memo            String
   // 생성일
-  createdAt        DateTime         @default(now())
+  createdAt       DateTime       @default(now())
+  // 수정 시간
+  updatedAt       DateTime       @updatedAt
   // fk
   scheduleId      Int
   // // fk
@@ -278,7 +280,7 @@ model TravelExpense {
   // 해당 일정에 대한 지출
   dailyExpense Float?
   // 생성일
-  createdAt        DateTime         @default(now())
+  createdAt    DateTime      @default(now())
   // fk
   travelId     Int
   // 여행 정보
@@ -290,7 +292,7 @@ model TravelExpense {
  */
 model ExpenseList {
   // pk
-  id                 Int     @id @default(autoincrement())
+  id                 Int              @id @default(autoincrement())
   // 지출명
   name               String
   // 결제 방식
@@ -317,20 +319,18 @@ model ExpenseList {
   currencyCountry    String
   // 적용 환율
   exchangeRateAmount Float
-
   // 결제자 id
-  payerId String
-  payer   TravelMember @relation("payer", fields: [payerId], references: [id], onDelete: Cascade)
-
-  spender ExpenseSpender[]
-
+  payerId            String
+  payer              TravelMember     @relation("payer", fields: [payerId], references: [id], onDelete: Cascade)
+  spender            ExpenseSpender[]
   // 생성일
-  createdAt        DateTime         @default(now())
-
+  createdAt          DateTime         @default(now())
+  // 수정 시간
+  updatedAt          DateTime         @updatedAt
   // fk
-  travelExpenseId Int?
+  travelExpenseId    Int?
   // 지출 일정 정보
-  travelExpense   TravelExpense? @relation(fields: [travelExpenseId], references: [id], onDelete: Cascade)
+  travelExpense      TravelExpense?   @relation(fields: [travelExpenseId], references: [id], onDelete: Cascade)
 }
 
 /**
@@ -338,7 +338,7 @@ model ExpenseList {
  */
 model ExpenseSpender {
   // pk
-  id                 Int    @id @default(autoincrement())
+  id                 Int          @id @default(autoincrement())
   // 지출 금액
   amount             Float
   // 지출 원화 금액
@@ -350,13 +350,11 @@ model ExpenseSpender {
   // 통화 국가 코드
   currencyCountry    String
   // 생성일
-  createdAt        DateTime         @default(now())
-
+  createdAt          DateTime     @default(now())
   // 맴버 연동
-  memberId String
-  member   TravelMember @relation("spender", fields: [memberId], references: [id], onDelete: Cascade)
-
+  memberId           String
+  member             TravelMember @relation("spender", fields: [memberId], references: [id], onDelete: Cascade)
   // 지출 내역 연동
-  expenseListId Int
-  expenseList   ExpenseList @relation(fields: [expenseListId], references: [id], onDelete: Cascade)
+  expenseListId      Int
+  expenseList        ExpenseList  @relation(fields: [expenseListId], references: [id], onDelete: Cascade)
 }
