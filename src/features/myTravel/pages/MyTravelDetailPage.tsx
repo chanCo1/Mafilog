@@ -2,7 +2,7 @@
  * @file: MyTravelDetailPage.tsx
  * @author: chad
  * @since: 2026.04.27 ~
- * @description: MyTravelDetailPage 컴포넌트, 내 여행 상세 페이지
+ * @description: 내 여행 상세 페이지
  */
 
 'use client';
@@ -30,66 +30,11 @@ import ExpenseSettleUpModal from '@/features/myTravel/components/modal/ExpenseSe
 import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/useFetchMyTravelDetail';
 import { useParams } from 'next/navigation';
 
-// import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
-// import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
-// import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
-// import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
-
 export default function MyTravelDetailPage() {
   const params = useParams();
   const { data: myTravelDatail } = useFetchMyTravelDetail(
     params.travelId as string,
   );
-
-  // const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  // const setInitTravelInfo = useTravelInfoStore(
-  //   (state) => state.setInitTravelInfo,
-  // );
-
-  // const setInitSchedules = useTravelScheduleStore(
-  //   (state) => state.setInitSchedules,
-  // );
-  // const setInitExpense = useTravelExpenseStore((state) => state.setInitExpense);
-  // const setInitCheckList = useTravelCheckListStore(
-  //   (state) => state.setInitCheckList,
-  // );
-
-  // useEffect(() => {
-  //   /** TODO: 임시 데이터 */
-  //   const {
-  //     id,
-  //     title,
-  //     from,
-  //     to,
-  //     status,
-  //     travelPartner,
-  //     travelStyles,
-  //     image,
-  //     // schedule,
-  //     cities,
-  //     member,
-  //   } = TRAVEL_DETAIL_MOCK_DATA;
-
-  //   setInitTravelInfo({
-  //     id,
-  //     cities,
-  //     from,
-  //     status,
-  //     title,
-  //     to,
-  //     travelPartner,
-  //     travelPeriod: getTravelDay(from, to),
-  //     travelStyles,
-  //     member,
-  //   });
-  //   setInitSchedules({ from, to });
-  //   setInitExpense({ from, to });
-  //   setInitCheckList(CHECKLIST_MOCK_DATA);
-
-  //   return () => {
-  //     useTravelInfoStore.getState().reset();
-  //   };
-  // }, []);
 
   const [selectedTab, setSelectedTab] = useState<TRAVEL_TAB>(
     TRAVEL_TAB.SCHEDULE,
