@@ -1,0 +1,39 @@
+/**
+ * @file: useMutateSchedulePlace.ts
+ * @author: chad
+ * @since: 2026.05.19 ~
+ * @description: 일정 등록 Mutation
+ */
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { ISchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.interface';
+import MyTravelService from '@/features/myTravel/services/MyTravel.service';
+
+interface IUseMutateSchedulePlace {
+  travelId: string;
+  data: ISchedulePlaceRequest;
+}
+
+export const useMutateSchedulePlace = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ travelId, data }: IUseMutateSchedulePlace) => {
+      return await MyTravelService.postTravelSchedulePlace(travelId, data);
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['travelSchedules'],
+      });
+
+      toast.success('장소를 추가했어요');
+    },
+
+    onError: (error: any) => {
+      const errorMessage = error.response?.data.message;
+      toast.error(errorMessage || '장소를 추가하는 중 오류가 발생했습니다.');
+    },
+  });
+};
