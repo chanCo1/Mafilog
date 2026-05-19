@@ -13,6 +13,7 @@ export const useFetchTravelSchedules = (id: string) => {
     queryKey: ['travelSchedules', id],
     queryFn: async () => await MyTravelService.getTravelSchedules(id),
     enabled: !!id,
+    staleTime: 1000 * 60 * 5,
   });
 
   return {

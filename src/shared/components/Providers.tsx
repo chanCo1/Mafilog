@@ -18,7 +18,7 @@ import { SessionProvider } from 'next-auth/react';
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionProvider refetchInterval={0}>
+      <SessionProvider refetchInterval={5 * 60}>
         <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY || ''}>
           <Toast />
           <Dialog />

@@ -13,7 +13,7 @@ import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { toast } from 'sonner';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
-import PlaceDeatilModal from '@/features/myTravel/components/modal/PlaceDeatilModal';
+import PlaceDetailModal from '@/features/myTravel/components/modal/PlaceDetailModal';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
@@ -151,7 +151,7 @@ export default function TravelScheduleTimeline({
           </Card>
         )}
       </div>
-      <PlaceDeatilModal
+      <PlaceDetailModal
         isOpen={isOpenDatilModal}
         handleClose={() => setIsOpenDatilModal(false)}
         timeLineData={timeLineData}

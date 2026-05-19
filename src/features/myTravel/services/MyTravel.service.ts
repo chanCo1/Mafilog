@@ -13,6 +13,7 @@ import {
 import {
   IScheduleResponse,
   ISchedulePlaceRequest,
+  IUpdateSchedulePlaceRequest,
 } from '@/features/myTravel/interfaces/schedule.interface';
 
 const API_URL = '/travels';
@@ -51,6 +52,18 @@ class _MyTravelService {
   /** 일정 등록 */
   async postTravelSchedulePlace(travelId: string, data: ISchedulePlaceRequest) {
     const response = await axiosInstanceWithAuth.post(
+      `${API_URL}/${travelId}/schedules`,
+      data,
+    );
+    return response.data.data;
+  }
+
+  /** 일정 수정 */
+  async updateTravelSchedulePlace(
+    travelId: string,
+    data: IUpdateSchedulePlaceRequest,
+  ) {
+    const response = await axiosInstanceWithAuth.patch(
       `${API_URL}/${travelId}/schedules`,
       data,
     );
