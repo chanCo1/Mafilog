@@ -60,7 +60,7 @@ export default function TravelListCard({
   return (
     <Card
       className={cn(
-        'relative flex h-45 cursor-pointer flex-col items-center justify-center text-white bg-gray-6',
+        'relative flex h-45 cursor-pointer flex-col items-center justify-center text-white bg-gray-5',
         className,
       )}
       onClick={onClick}
