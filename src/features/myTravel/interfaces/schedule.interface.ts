@@ -43,3 +43,11 @@ export interface ISchedulePlaceRequest {
   memo?: string;
   place: IPlaceList[];
 }
+
+/** 일정 수정 요청 */
+export interface IUpdateSchedulePlaceRequest extends Pick<
+  ISchedulePlaceRequest,
+  'memo' | 'day' | 'time'
+> {
+  scheduleListId: number;
+}

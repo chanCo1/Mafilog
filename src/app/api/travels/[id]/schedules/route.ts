@@ -8,7 +8,10 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import { authGuard } from '@/shared/backend/lib/authGuard';
-import { ISchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.interface';
+import {
+  ISchedulePlaceRequest,
+  IUpdateSchedulePlaceRequest,
+} from '@/features/myTravel/interfaces/schedule.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
 /** 내 여행 상세 조회 */
@@ -141,6 +144,76 @@ export async function POST(
     );
   } catch (error) {
     console.error('@@ 일정 저장 에러 >>', error);
+    return NextResponse.json({ message: 'server error' }, { status: 500 });
+  }
+}
+
+/** 일정 수정 */
+export async function PATCH(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
+  const authValidate = await authGuard(request);
+  if (!authValidate.isValid) {
+    return authValidate.errorResponse;
+  }
+
+  const travelId = Number(params.id);
+
+  if (!travelId) {
+    return NextResponse.json(
+      { message: '잘 못 된 접근입니다.' },
+      { status: 403 },
+    );
+  }
+
+  try {
+    const body = (await request.json()) as IUpdateSchedulePlaceRequest;
+    const { scheduleListId, day, time, memo } = body;
+
+    if (!scheduleListId || !day || !travelId) {
+      return NextResponse.json(
+        { message: '필수 데이터가 누락되었습니다.' },
+        { status: 400 },
+      );
+    }
+
+    const targetSchedule = await prisma.travelSchedule.findFirst({
+      where: {
+        travelId,
+        day,
+      },
+    });
+
+    if (!targetSchedule) {
+      return NextResponse.json(
+        { message: '변경하려는 일정을 찾지 못했습니다.' },
+        { status: 404 },
+      );
+    }
+
+    const updatedItem = await prisma.scheduleList.update({
+      where: { id: scheduleListId },
+      data: {
+        day,
+        time: time || '',
+        memo: memo || '',
+        schedule: {
+          connect: { id: targetSchedule.id },
+        },
+      },
+      include: { place: true },
+    });
+
+    return NextResponse.json(
+      {
+        data: updatedItem,
+        message: '일정이 수정되었습니다.',
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error('@@ 일정 리스트 수정 에러 >>', error);
     return NextResponse.json({ message: 'server error' }, { status: 500 });
   }
 }
