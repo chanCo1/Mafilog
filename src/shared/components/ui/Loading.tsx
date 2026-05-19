@@ -27,13 +27,8 @@ interface ILoading extends VariantProps<typeof loadingVariants> {
   className?: string;
 }
 
-function LoadingEntity(
-  { className, size }: ILoading,
-  ref: LegacyRef<SVGSVGElement>,
-) {
-  return (
-    <Plane className={cn(loadingVariants({ size }), className)} ref={ref} />
-  );
+function LoadingEntity({ className, size }: ILoading) {
+  return <Plane className={cn(loadingVariants({ size }), className)} />;
 }
 
 export const Loading = LoadingEntity;
