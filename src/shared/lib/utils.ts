@@ -13,7 +13,10 @@ import {
   TRAVEL_PARTNER_LIST,
   TRAVEL_STYLE_LIST,
 } from '@/features/myTravel/constants';
-import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
+import {
+  IPlaceList,
+  IScheduleResponse,
+} from '@/features/myTravel/interfaces/schedule.interface';
 import { EXPENSES_PAYMENT_TYPE } from '@/shared/types/expenseEnum';
 
 /** 조건부로 클래스 사용(clsx) + props로 받은 스타일이 기본 스타일을 덮어쓰기(twMerge) */
@@ -144,12 +147,12 @@ export const getTravelStatus = (from: Date, to: Date) => {
 };
 
 /** 여행 기간에 따른 날짜 리스트 */
-export const getTravelDayList = (from: Date | string, to: Date | string) => {
-  if (!from || !to) return [];
-  const fromValue = typeof from === 'string' ? new Date(from) : from;
-  const topValue = typeof to === 'string' ? new Date(to) : to;
+export const getTravelDayList = (
+  scheduleList: IScheduleResponse[] | undefined,
+) => {
+  if (!scheduleList?.length) return [];
 
-  return getTravelDayOfWeek(fromValue, topValue).map((_day) => {
+  return scheduleList.map((_day) => {
     return {
       label: `${_day.day}일차 ${convertFormattedDate(_day.date, 'MM월 dd일')} (${getDay(_day.date)})`,
       value: _day.day,
