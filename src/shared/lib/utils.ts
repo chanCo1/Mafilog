@@ -144,10 +144,12 @@ export const getTravelStatus = (from: Date, to: Date) => {
 };
 
 /** 여행 기간에 따른 날짜 리스트 */
-export const getTravelDayList = (from: Date, to: Date) => {
+export const getTravelDayList = (from: Date | string, to: Date | string) => {
   if (!from || !to) return [];
+  const fromValue = typeof from === 'string' ? new Date(from) : from;
+  const topValue = typeof to === 'string' ? new Date(to) : to;
 
-  return getTravelDayOfWeek(from, to).map((_day) => {
+  return getTravelDayOfWeek(fromValue, topValue).map((_day) => {
     return {
       label: `${_day.day}일차 ${convertFormattedDate(_day.date, 'MM월 dd일')} (${getDay(_day.date)})`,
       value: _day.day,

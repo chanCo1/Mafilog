@@ -13,31 +13,31 @@ import { Loading } from '@/shared/components/ui/Loading';
 import { Search } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
-import { getPlaceCategory } from '@/shared/lib/utils';
+import { getPlaceCategory, getTravelDayList } from '@/shared/lib/utils';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { toast } from 'sonner';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
 
 interface IAddPlaceModal {
   isOpen: boolean;
   handleClose: () => void;
+  from: Date;
+  to: Date;
 }
 
-export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+export default function AddPlaceModal({
+  isOpen,
+  handleClose,
+  from,
+  to,
+}: IAddPlaceModal) {
   const setAddScheduleList = useTravelScheduleStore(
     (state) => state.setAddScheduleList,
   );
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
 
   /** 장소 검색 */
   const [searchPlace, setSearchPlace] = useState<string>('');
@@ -59,18 +59,14 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
     search: submitSearch,
   });
 
-  /** 일정 선택 초기값 */
-  // useEffect(() => {
-  //   if (travelInfo.from && travelInfo.to) {
-  //     setSelectedDay(
-  //       travelDaysList[getTravelCurrentDay(travelInfo.from, travelInfo.to) - 1],
-  //     );
-  //   }
-  // }, [travelInfo.from, travelInfo.to, travelDaysList]);
+  const travelDayList = getTravelDayList(from, to);
 
+  /** 일정 선택 초기값 */
   useEffect(() => {
-    setSelectedDay(travelDaysList[0]);
-  }, [travelDaysList]);
+    if (isOpen) {
+      setSelectedDay(travelDayList[0]);
+    }
+  }, [isOpen]);
 
   const handleSearch = async () => {
     try {
@@ -177,7 +173,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
       <div className="flex h-full flex-col gap-2">
         <Selectbox
           label="여행 일정 선택"
-          options={travelDaysList}
+          options={travelDayList}
           value={selectedDay}
           onChange={(value) => setSelectedDay(value)}
           placeholder="여행 일정을 선택해주세요"

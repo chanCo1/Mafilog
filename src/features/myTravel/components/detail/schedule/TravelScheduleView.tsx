@@ -123,6 +123,7 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
             {scheduleList?.map((schedule, index) => {
               return (
                 <TravelScheduleDay
+                  key={`${schedule.day}-${index}`}
                   schedule={schedule}
                   selectMode={selectModifyMode}
                 />
@@ -157,10 +158,14 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
       <AddPlaceModal
         isOpen={isOpenAddPlaceModel}
         handleClose={() => setIsOpenAddPlaceModal(false)}
+        from={from}
+        to={to}
       />
       <AddMemoModal
         isOpen={isOpenAddMemoModel}
         handleClose={() => setIsOpenAddMemoModal(false)}
+        from={from}
+        to={to}
       />
     </>
   );

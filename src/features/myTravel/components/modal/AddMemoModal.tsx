@@ -19,6 +19,8 @@ import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 interface IAddMemoModal {
   isOpen: boolean;
   handleClose: () => void;
+  from: Date;
+  to: Date;
 }
 
 export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
