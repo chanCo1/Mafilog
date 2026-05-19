@@ -14,7 +14,7 @@ import {
 } from '@/features/myTravel/interfaces/schedule.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
-/** 내 여행 상세 조회 */
+/** 여행 일정(스케줄) 조회 */
 export async function GET(
   request: Request,
   { params }: { params: { id: string } },
@@ -218,6 +218,56 @@ export async function PATCH(
     );
   } catch (error) {
     console.error('@@ 일정 리스트 수정 에러 >>', error);
+    return NextResponse.json({ message: 'server error' }, { status: 500 });
+  }
+}
+
+/** 일정 삭제 */
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
+  const authValidate = await authGuard(request);
+  if (!authValidate.isValid) {
+    return authValidate.errorResponse;
+  }
+
+  const travelId = Number(params.id);
+
+  if (!travelId) {
+    return NextResponse.json(
+      { message: '잘 못 된 접근입니다.' },
+      { status: 403 },
+    );
+  }
+
+  try {
+    const body = (await request.json()) as { deleteIds: number[] };
+    const { deleteIds } = body;
+
+    if (!deleteIds.length) {
+      return NextResponse.json(
+        { message: '삭제할 일정 ID가 없습니다.' },
+        { status: 400 },
+      );
+    }
+
+    await prisma.scheduleList.deleteMany({
+      where: {
+        id: {
+          in: deleteIds,
+        },
+      },
+    });
+
+    return NextResponse.json(
+      {
+        message: '삭제되었습니다.',
+      },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error('@@ 일정 리스트 삭제 에러 >>', error);
     return NextResponse.json({ message: 'server error' }, { status: 500 });
   }
 }
