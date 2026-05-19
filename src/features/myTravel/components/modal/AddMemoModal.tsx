@@ -11,36 +11,39 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Button } from '@/shared/components/ui/Button';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { toast } from 'sonner';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
+import { IScheduleResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { getTravelDayList } from '@/shared/lib/utils';
 
 interface IAddMemoModal {
   isOpen: boolean;
   handleClose: () => void;
-  from: Date;
-  to: Date;
+  scheduleList: IScheduleResponse[];
 }
 
-export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+export default function AddMemoModal({
+  isOpen,
+  handleClose,
+  scheduleList,
+}: IAddMemoModal) {
   const setAddScheduleList = useTravelScheduleStore(
     (state) => state.setAddScheduleList,
   );
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>();
   /** 메모 입력 */
   const [inputMemo, setInputMemo] = useState('');
 
+  const travelDayList = getTravelDayList(scheduleList);
+
+  /** 일정 선택 초기값 */
   useEffect(() => {
-    setSelectedDay(travelDaysList[0]);
-  }, [travelDaysList]);
+    if (isOpen) {
+      setSelectedDay(travelDayList[0]);
+    }
+  }, [isOpen]);
 
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
@@ -90,7 +93,7 @@ export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
       <div className="flex h-full flex-col gap-2">
         <Selectbox
           label="여행 일정 선택"
-          options={travelDaysList}
+          options={travelDayList}
           value={selectedDay}
           onChange={(value) => setSelectedDay(value)}
           placeholder="여행 일정을 선택해주세요"

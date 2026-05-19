@@ -63,6 +63,8 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
     return places.length > 0 ? places : [];
   }, [scheduleList, selectedDay]);
 
+  if (!scheduleList?.length) return;
+
   return (
     <>
       <TravelDetailTemplate
@@ -81,7 +83,7 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
                       </Button>
                     }
                   >
-                    {getTravelDayList(from, to).map((list) => (
+                    {getTravelDayList(scheduleList).map((list) => (
                       <span
                         key={list.value}
                         className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
@@ -158,14 +160,12 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
       <AddPlaceModal
         isOpen={isOpenAddPlaceModel}
         handleClose={() => setIsOpenAddPlaceModal(false)}
-        from={from}
-        to={to}
+        scheduleList={scheduleList}
       />
       <AddMemoModal
         isOpen={isOpenAddMemoModel}
         handleClose={() => setIsOpenAddMemoModal(false)}
-        from={from}
-        to={to}
+        scheduleList={scheduleList}
       />
     </>
   );

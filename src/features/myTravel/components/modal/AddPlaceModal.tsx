@@ -12,32 +12,32 @@ import { Input } from '@/shared/components/ui/Input';
 import { Loading } from '@/shared/components/ui/Loading';
 import { Search } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
-import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
+import {
+  IPlaceList,
+  IScheduleResponse,
+} from '@/features/myTravel/interfaces/schedule.interface';
 import { getPlaceCategory, getTravelDayList } from '@/shared/lib/utils';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
-import { toast } from 'sonner';
-import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
+import { useMutateSchedulePlace } from '@/features/myTravel/hooks/rquery/useMutateSchedulePlace';
+import { useParams } from 'next/navigation';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
 interface IAddPlaceModal {
   isOpen: boolean;
   handleClose: () => void;
-  from: Date;
-  to: Date;
+  scheduleList: IScheduleResponse[];
 }
 
 export default function AddPlaceModal({
   isOpen,
   handleClose,
-  from,
-  to,
+  scheduleList,
 }: IAddPlaceModal) {
-  const setAddScheduleList = useTravelScheduleStore(
-    (state) => state.setAddScheduleList,
-  );
+  const params = useParams();
 
   /** 장소 검색 */
   const [searchPlace, setSearchPlace] = useState<string>('');
@@ -59,7 +59,10 @@ export default function AddPlaceModal({
     search: submitSearch,
   });
 
-  const travelDayList = getTravelDayList(from, to);
+  const travelDayList = getTravelDayList(scheduleList);
+
+  const { mutateAsync: createSechdulePlace, isPending } =
+    useMutateSchedulePlace();
 
   /** 일정 선택 초기값 */
   useEffect(() => {
@@ -137,21 +140,25 @@ export default function AddPlaceModal({
   }, [clickPlaceData]);
 
   /** 장소 추가 핸들링 */
-  const handleAddPlace = () => {
+  const handleAddPlace = async () => {
     if (!selectedDay) return;
 
-    try {
-      setAddScheduleList({
-        type: 'place',
-        day: selectedDay,
-        places: selectedPlaces,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    const getScheduleId = scheduleList.find(
+      (list) => list.day === selectedDay.value,
+    )?.id;
 
-    onClickCloseBtn();
-    toast.success('장소를 추가했어요');
+    if (getScheduleId) {
+      await createSechdulePlace({
+        travelId: params.travelId as string,
+        data: {
+          type: SCHEDULE_TYPE.PLACE,
+          day: selectedDay.value as number,
+          place: selectedPlaces,
+          scheduleId: getScheduleId,
+        },
+      });
+      onClickCloseBtn();
+    }
   };
 
   return (
@@ -164,7 +171,11 @@ export default function AddPlaceModal({
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={!selectedPlaces.length} onClick={handleAddPlace}>
+          <Button
+            disabled={!selectedPlaces.length || isPending}
+            isLoading={isPending}
+            onClick={handleAddPlace}
+          >
             장소 추가
           </Button>
         </>
