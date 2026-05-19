@@ -64,7 +64,7 @@ model Social {
  */
 model Travel {
   // pk
-  id            String              @id @default(cuid())
+  id            Int              @id @default(autoincrement())
   // 여행 이름
   title         String
   // 여행 타입 (해외, 국내)
@@ -104,7 +104,7 @@ model Travel {
  */
 model TravelCity {
   // pk
-  id          String   @id
+  id          String
   // 장소 이름
   name        String
   // 장소 주소
@@ -124,9 +124,11 @@ model TravelCity {
   // 생성일
   createdAt   DateTime @default(now())
   // fk
-  travelId    String
+  travelId    Int
   // 여행 정보
   travel      Travel   @relation(fields: [travelId], references: [id], onDelete: Cascade)
+
+  @@id([id, travelId])
 }
 
 /**
@@ -140,7 +142,7 @@ model TravelMember {
   // fk
   userId           String?
   // fk
-  travelId         String
+  travelId         Int
   // 여행 정보
   travel           Travel           @relation(fields: [travelId], references: [id], onDelete: Cascade)
   // 생성일
@@ -162,7 +164,7 @@ model ChecklistCategory {
   // 체크리스트 아이템
   items    ChecklistItem[]
   // fk
-  travelId String
+  travelId Int
   // 여행 정보
   travel   Travel          @relation(fields: [travelId], references: [id], onDelete: Cascade)
 }
@@ -196,7 +198,7 @@ model TravelSchedule {
   // 리스트
   scheduleList ScheduleList[]
   // fk
-  travelId     String
+  travelId     Int
   // 여행 정보
   travel       Travel         @relation(fields: [travelId], references: [id], onDelete: Cascade)
 }
@@ -268,7 +270,7 @@ model TravelExpense {
   // 해당 일정에 대한 지출
   dailyExpense Float?
   // fk
-  travelId     String
+  travelId     Int
   // 여행 정보
   travel       Travel        @relation(fields: [travelId], references: [id], onDelete: Cascade)
 }
