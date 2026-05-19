@@ -11,10 +11,11 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Button } from '@/shared/components/ui/Button';
-import { toast } from 'sonner';
-import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { IScheduleResponse } from '@/features/myTravel/interfaces/schedule.interface';
 import { getTravelDayList } from '@/shared/lib/utils';
+import { useParams } from 'next/navigation';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { useMutateSchedulePlace } from '@/features/myTravel/hooks/rquery/useMutateSchedulePlace';
 
 interface IAddMemoModal {
   isOpen: boolean;
@@ -27,9 +28,7 @@ export default function AddMemoModal({
   handleClose,
   scheduleList,
 }: IAddMemoModal) {
-  const setAddScheduleList = useTravelScheduleStore(
-    (state) => state.setAddScheduleList,
-  );
+  const params = useParams();
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>();
@@ -37,6 +36,9 @@ export default function AddMemoModal({
   const [inputMemo, setInputMemo] = useState('');
 
   const travelDayList = getTravelDayList(scheduleList);
+
+  const { mutateAsync: createSechdulePlace, isPending } =
+    useMutateSchedulePlace(SCHEDULE_TYPE.PLACE);
 
   /** 일정 선택 초기값 */
   useEffect(() => {
@@ -57,21 +59,26 @@ export default function AddMemoModal({
   };
 
   /** 메모 추가 핸들링 */
-  const handelAddMemo = () => {
+  const handelAddMemo = async () => {
     if (!selectedDay) return;
 
-    try {
-      setAddScheduleList({
-        type: 'memo',
-        day: selectedDay,
-        memo: inputMemo,
+    const getScheduleId = scheduleList.find(
+      (list) => list.day === selectedDay.value,
+    )?.id;
+
+    if (getScheduleId) {
+      await createSechdulePlace({
+        travelId: params.travelId as string,
+        data: {
+          type: SCHEDULE_TYPE.MEMO,
+          memo: inputMemo,
+          day: selectedDay.value as number,
+          scheduleId: getScheduleId,
+        },
       });
-    } catch (error) {
-      console.log(error);
     }
 
     onClickCloseBtn();
-    toast.success('메모를 추가했어요');
   };
 
   return (
@@ -84,7 +91,11 @@ export default function AddMemoModal({
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={!inputMemo} onClick={handelAddMemo}>
+          <Button
+            disabled={isPending}
+            isLoading={isPending}
+            onClick={handelAddMemo}
+          >
             메모 추가
           </Button>
         </>

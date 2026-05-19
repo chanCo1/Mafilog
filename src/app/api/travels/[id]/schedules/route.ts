@@ -80,7 +80,7 @@ export async function POST(
     );
   }
 
-  if (type === SCHEDULE_TYPE.PLACE && !place.length) {
+  if (type === SCHEDULE_TYPE.PLACE && !place?.length) {
     return NextResponse.json(
       { message: '등록할 장소가 선택되지 않았습니다.' },
       { status: 400 },
@@ -89,16 +89,16 @@ export async function POST(
 
   try {
     const registSchedule = await prisma.$transaction(async (tx) => {
-      if (type === SCHEDULE_TYPE.PLACE && place.length > 0) {
+      if (type === SCHEDULE_TYPE.PLACE && place && place.length > 0) {
         const createdItems = await Promise.all(
           place.map((_place) => {
             return tx.scheduleList.create({
               data: {
                 type,
-                day: Number(day),
-                time: time || '',
-                memo: memo || '',
-                schedule: { connect: { id: Number(scheduleId) } },
+                day,
+                time,
+                memo,
+                schedule: { connect: { id: scheduleId } },
                 place: {
                   connectOrCreate: {
                     where: { id: _place.id },
@@ -126,9 +126,8 @@ export async function POST(
         const createdMemo = await tx.scheduleList.create({
           data: {
             type,
-            day: day,
-            time: time || '',
-            memo: memo || '',
+            day,
+            memo,
             schedule: { connect: { id: scheduleId } },
           },
         });

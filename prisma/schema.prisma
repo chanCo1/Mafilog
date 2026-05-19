@@ -219,6 +219,8 @@ model ScheduleList {
   type            String
   // 몇일차인지
   day             Int
+  // // fk
+  schedulePlaceId String?
   // 장소
   place           SchedulePlace? @relation(fields: [schedulePlaceId], references: [id])
   // 방문 시간
@@ -231,8 +233,6 @@ model ScheduleList {
   updatedAt       DateTime       @updatedAt
   // fk
   scheduleId      Int
-  // // fk
-  schedulePlaceId String?
   // 일정 정보
   schedule        TravelSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
 }

@@ -41,7 +41,7 @@ export interface ISchedulePlaceRequest {
   day: number;
   time?: string;
   memo?: string;
-  place: IPlaceList[];
+  place?: IPlaceList[];
 }
 
 /** 일정 수정 요청 */

@@ -62,7 +62,7 @@ export default function AddPlaceModal({
   const travelDayList = getTravelDayList(scheduleList);
 
   const { mutateAsync: createSechdulePlace, isPending } =
-    useMutateSchedulePlace();
+    useMutateSchedulePlace(SCHEDULE_TYPE.MEMO);
 
   /** 일정 선택 초기값 */
   useEffect(() => {
