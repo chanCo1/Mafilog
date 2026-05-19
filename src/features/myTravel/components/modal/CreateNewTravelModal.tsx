@@ -38,7 +38,6 @@ export default function CreateNewTravelModal({
   isModify = false,
 }: ICreateNewTravelModal) {
   const { data: userInfo } = useSession();
-  const [isLoading, setIsLoading] = useState(false);
 
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
@@ -56,7 +55,7 @@ export default function CreateNewTravelModal({
   const [travelStyles, setTravelStyles] = useState<TRAVEL_STYLE[]>([]);
   const [travelMember, setTravelMember] = useState<IMemberList[]>([]);
 
-  const { mutateAsync: createTravelMutate } = useMutateMyTravelList();
+  const { mutateAsync: createTravelMutate, isPending } = useMutateMyTravelList();
 
   useEffect(() => {
     if (userInfo?.user?.id && userInfo?.user?.name) {
@@ -90,7 +89,6 @@ export default function CreateNewTravelModal({
 
   /** 새 여행 만들기 */
   const createNewTravel = async () => {
-    setIsLoading(true);
     const notCompletedStep = stepData.filter((step, index) => {
       // 완료되지 않은 스텝이 있을 경우
       if (stepData.length - 1 > index + 1) {
@@ -135,14 +133,8 @@ export default function CreateNewTravelModal({
       formData.append('imageUrl', file);
     });
 
-    try {
-      await createTravelMutate(formData);
-      onClickCloseBtn();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+    await createTravelMutate(formData);
+    onClickCloseBtn();
   };
 
   /** 데이터 초기화 */
@@ -227,7 +219,7 @@ export default function CreateNewTravelModal({
               >
                 이전
               </Button>
-              <Button onClick={createNewTravel} isLoading={isLoading}>
+              <Button onClick={createNewTravel} isLoading={isPending}>
                 여행 만들기
               </Button>
             </>
