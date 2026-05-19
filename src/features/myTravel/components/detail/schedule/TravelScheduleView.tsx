@@ -2,33 +2,37 @@
  * @file: TravelScheduleView.tsx
  * @author: chad
  * @since: 2026.04.29 ~
- * @description: TravelScheduleView 컴포넌트, 여행 일정탭 하위 내용
+ * @description: 여행 일정 뷰
  */
 
 import { useMemo, useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
 import TravelScheduleDay from '@/features/myTravel/components/detail/schedule/TravelScheduleDay';
 import { Chip } from '@/shared/components/ui/Chip';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import AddMemoModal from '@/features/myTravel/components/modal/AddMemoModal';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import Dropdown from '@/shared/components/ui/Dropdown';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
-import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
-function TravelScheduleView() {
-  const schedules = useTravelScheduleStore((state) => state.schedules);
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+import { useFetchTravelSchedules } from '@/features/myTravel/hooks/rquery/useFetchTravelSchedules';
+import { useParams } from 'next/navigation';
+import { getTravelDayList } from '@/shared/lib/utils';
+
+interface ITravelScheduleView {
+  from: Date;
+  to: Date;
+}
+
+function TravelScheduleView({ from, to }: ITravelScheduleView) {
+  const params = useParams();
+  const { data: scheduleList } = useFetchTravelSchedules(
+    params.travelId as string,
+  );
+
   const { clearSelectedSchedules } = useSelectSchedules();
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState(1);
@@ -48,16 +52,16 @@ function TravelScheduleView() {
   };
 
   const getPlace = useMemo(() => {
-    const targetDay = schedules.find((s) => s.day === selectedDay);
+    const targetDay = scheduleList?.find((s) => s.day === selectedDay);
 
     if (!targetDay) return [];
 
-    const places = targetDay.list
+    const places = targetDay.scheduleList
       .filter((item) => item.type === 'place' && !!item.place)
       .map((item) => item.place as IPlaceList);
 
     return places.length > 0 ? places : [];
-  }, [schedules, selectedDay]);
+  }, [scheduleList, selectedDay]);
 
   return (
     <>
@@ -77,7 +81,7 @@ function TravelScheduleView() {
                       </Button>
                     }
                   >
-                    {travelDaysList.map((list) => (
+                    {getTravelDayList(from, to).map((list) => (
                       <span
                         key={list.value}
                         className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
@@ -116,13 +120,10 @@ function TravelScheduleView() {
         }
         dayTimelines={
           <>
-            {schedules.map((_day, index) => {
+            {scheduleList?.map((schedule, index) => {
               return (
                 <TravelScheduleDay
-                  key={`${_day.day}-${index}`}
-                  day={_day.day}
-                  date={_day.date}
-                  list={_day.list}
+                  schedule={schedule}
                   selectMode={selectModifyMode}
                 />
               );
@@ -131,7 +132,7 @@ function TravelScheduleView() {
         }
         dayButtons={
           <>
-            {schedules.map((_day, index) => (
+            {scheduleList?.map((_day, index) => (
               <Chip
                 key={`${_day.day}-${index}`}
                 size="md"

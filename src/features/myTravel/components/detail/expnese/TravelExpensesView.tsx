@@ -26,9 +26,12 @@ import { toast } from 'sonner';
 import { convertComma } from '@/shared/lib/utils';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 
-// interface ITravelExpensesView {}
+interface ITravelExpensesView {
+  from: Date;
+  to: Date;
+}
 
-function TravelExpensesView() {
+function TravelExpensesView({ from, to }: ITravelExpensesView) {
   /** 지출일 선택 */
   const [selectedDay, setSelectedDay] = useState<string | number>(
     TRAVEL_EXPENSES_BEFORE_LIST[0].value,
