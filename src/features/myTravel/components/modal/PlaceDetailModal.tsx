@@ -1,8 +1,8 @@
 /**
- * @file: PlaceDeatilModal.tsx
+ * @file: PlaceDetailModal.tsx
  * @author: chad
  * @since: 2026.05.02 ~
- * @description: PlaceDeatilModal 컴포넌트, 일정 상세 모달
+ * @description: 일정 상세 모달
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -20,33 +20,41 @@ import { getPlaceCategory } from '@/shared/lib/utils';
 import TimePicker from '@/shared/components/ui/TimePicker';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { useParams } from 'next/navigation';
+import { useFetchTravelSchedules } from '@/features/myTravel/hooks/rquery/useFetchTravelSchedules';
+import { getTravelDayList } from '@/shared/lib/utils';
+import { useUpdateSchedulePlace } from '@/features/myTravel/hooks/rquery/useUpdateSchedulePlace';
 
-interface IPlaceDeatilModal {
+interface IPlaceDetailModal {
   isOpen: boolean;
   handleClose: () => void;
   timeLineData: ISecheduleListResponse | undefined;
 }
 
-export default function PlaceDeatilModal({
+export default function PlaceDetailModal({
   isOpen,
   handleClose,
   timeLineData,
-}: IPlaceDeatilModal) {
+}: IPlaceDetailModal) {
   const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const params = useParams();
+  const { data: scheduleList } = useFetchTravelSchedules(
+    params.travelId as string,
+  );
+  const { mutateAsync: updateSchedule, isPending } = useUpdateSchedulePlace();
+
   const setDeleteScheduleList = useTravelScheduleStore(
     (state) => state.setDeleteScheduleList,
   );
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
+
+  const travelDayList = getTravelDayList(scheduleList);
+
   const { openDialog } = useDialogStore();
 
   /** 일정 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>(
-    travelDaysList?.[0],
+    travelDayList?.[0],
   );
   /** 시간 */
   const [selectedTime, setSelectedTime] = useState('');
@@ -55,7 +63,20 @@ export default function PlaceDeatilModal({
 
   const onClickCloseBtn = () => {
     handleClose();
-    resetData();
+  };
+
+  /** 일정 수정 */
+  const handleUpdateSchedule = async () => {
+    await updateSchedule({
+      travelId: params.travelId as string,
+      data: {
+        day: selectedDay.value as number,
+        memo: inputMemo,
+        time: selectedTime,
+        scheduleListId: timeLineData?.id as number,
+      },
+    });
+    onClickCloseBtn();
   };
 
   /** 일정 삭제 핸들러 */
@@ -78,17 +99,19 @@ export default function PlaceDeatilModal({
 
   const resetData = useCallback(() => {
     if (timeLineData?.day) {
-      setSelectedDay(travelDaysList[(timeLineData.day as number) - 1]);
+      setSelectedDay(travelDayList[(timeLineData.day as number) - 1]);
     }
 
-    setSelectedTime(timeLineData?.time ?? '');
-    setInputMemo(timeLineData?.memo ?? '');
+    setSelectedTime(timeLineData?.time || '');
+    setInputMemo(timeLineData?.memo || '');
   }, []);
 
   /** 초기값 대입 */
   useEffect(() => {
-    resetData();
-  }, [timeLineData?.day, travelDaysList, resetData]);
+    if (isOpen) {
+      resetData();
+    }
+  }, [isOpen]);
 
   return (
     <SideModal
@@ -97,12 +120,20 @@ export default function PlaceDeatilModal({
       handleClose={onClickCloseBtn}
       footer={
         <div className="flex w-full justify-between">
-          <Button variant="redOutline" onClick={handleDeleteSchedule}>삭제</Button>
+          <Button variant="redOutline" onClick={handleDeleteSchedule}>
+            삭제
+          </Button>
           <div className="flex gap-1">
             <Button variant="gray" onClick={onClickCloseBtn}>
               취소
             </Button>
-            <Button disabled={!inputMemo}>수정</Button>
+            <Button
+              disabled={isPending}
+              isLoading={isPending}
+              onClick={handleUpdateSchedule}
+            >
+              수정
+            </Button>
           </div>
         </div>
       }
@@ -121,7 +152,7 @@ export default function PlaceDeatilModal({
         <div className="flex gap-1">
           <Selectbox
             label="여행 일정"
-            options={travelDaysList}
+            options={travelDayList}
             value={selectedDay}
             onChange={(value) => setSelectedDay(value)}
             placeholder="여행 일정을 선택해주세요"
