@@ -219,16 +219,18 @@ model ScheduleList {
   type            String
   // 몇일차인지
   day             Int
-  // // fk
-  schedulePlaceId String         @unique
   // 장소
   place           SchedulePlace? @relation(fields: [schedulePlaceId], references: [id])
   // 방문 시간
   time            String
   // 메모
   memo            String
+  // 생성일
+  createdAt        DateTime         @default(now())
   // fk
   scheduleId      Int
+  // // fk
+  schedulePlaceId String         @unique
   // 일정 정보
   schedule        TravelSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
 }
@@ -322,6 +324,9 @@ model ExpenseList {
 
   spender ExpenseSpender[]
 
+  // 생성일
+  createdAt        DateTime         @default(now())
+
   // fk
   travelExpenseId Int?
   // 지출 일정 정보
@@ -344,6 +349,8 @@ model ExpenseSpender {
   currencyCode       String
   // 통화 국가 코드
   currencyCountry    String
+  // 생성일
+  createdAt        DateTime         @default(now())
 
   // 맴버 연동
   memberId String
