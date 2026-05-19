@@ -33,3 +33,13 @@ export interface ISecheduleListResponse {
   scheduleId: number;
   schedulePlaceId: string;
 }
+
+/** 일정(장소) 등록 요청 */
+export interface ISchedulePlaceRequest {
+  scheduleId: number;
+  type: SCHEDULE_TYPE;
+  day: number;
+  time?: string;
+  memo?: string;
+  place: IPlaceList[];
+}
