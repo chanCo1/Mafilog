@@ -69,6 +69,19 @@ class _MyTravelService {
     );
     return response.data.data;
   }
+
+  /** 일정 삭제 */
+  async deleteTravelSchedulePlace(travelId: string, deleteIds: number[]) {
+    const response = await axiosInstanceWithAuth.delete(
+      `${API_URL}/${travelId}/schedules`,
+      {
+        data: {
+          deleteIds,
+        },
+      },
+    );
+    return response.data.data;
+  }
 }
 
 const MyTravelService = new _MyTravelService();
