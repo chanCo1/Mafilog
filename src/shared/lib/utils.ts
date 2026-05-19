@@ -134,7 +134,8 @@ export const getTravelStatus = (from: Date, to: Date) => {
 };
 
 /** 여행 동반자 변환 */
-export const convertTravelPartner = (partner: TRAVEL_PARTNER) => {
+export const convertTravelPartner = (partner: TRAVEL_PARTNER | undefined) => {
+  if (!partner) return '';
   return TRAVEL_PARTNER_LIST.find((list) => list.value === partner)?.label;
 };
 
