@@ -11,8 +11,6 @@ import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
-import { toast } from 'sonner';
-import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import PlaceDetailModal from '@/features/myTravel/components/modal/PlaceDetailModal';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';

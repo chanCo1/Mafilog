@@ -2,17 +2,15 @@
  * @file: PlaceDetailModal.tsx
  * @author: chad
  * @since: 2026.05.02 ~
- * @description: 일정 상세 모달
+ * @description: 일정 상세 모달 (장소, 메모 상세 및 수정)
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Button } from '@/shared/components/ui/Button';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { toast } from 'sonner';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { ILabelValue } from '@/shared/interfaces';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
@@ -24,6 +22,7 @@ import { useParams } from 'next/navigation';
 import { useFetchTravelSchedules } from '@/features/myTravel/hooks/rquery/useFetchTravelSchedules';
 import { getTravelDayList } from '@/shared/lib/utils';
 import { useUpdateSchedulePlace } from '@/features/myTravel/hooks/rquery/useUpdateSchedulePlace';
+import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
 
 interface IPlaceDetailModal {
   isOpen: boolean;
@@ -43,10 +42,8 @@ export default function PlaceDetailModal({
     params.travelId as string,
   );
   const { mutateAsync: updateSchedule, isPending } = useUpdateSchedulePlace();
-
-  const setDeleteScheduleList = useTravelScheduleStore(
-    (state) => state.setDeleteScheduleList,
-  );
+  const { mutateAsync: deleteSchedule, isPending: deletePending } =
+    useDeleteSchedulePlace(params.travelId as string, timeLineData?.type!);
 
   const travelDayList = getTravelDayList(scheduleList);
 
@@ -87,24 +84,23 @@ export default function PlaceDetailModal({
       message: `${isPlace ? '장소' : '메모'}를 삭제할까요?`,
       type: 'confirm',
       okLabel: '삭제',
-      onOk: () => {
-        setDeleteScheduleList({
-          day: timeLineData.day as number,
-          id: timeLineData?.id,
+      onOk: async () => {
+        await deleteSchedule({
+          travelId: params.travelId as string,
+          deleteIds: [timeLineData.id],
         });
-        toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
       },
     });
   };
 
-  const resetData = useCallback(() => {
+  const resetData = () => {
     if (timeLineData?.day) {
       setSelectedDay(travelDayList[(timeLineData.day as number) - 1]);
     }
 
     setSelectedTime(timeLineData?.time || '');
     setInputMemo(timeLineData?.memo || '');
-  }, []);
+  };
 
   /** 초기값 대입 */
   useEffect(() => {
@@ -120,7 +116,12 @@ export default function PlaceDetailModal({
       handleClose={onClickCloseBtn}
       footer={
         <div className="flex w-full justify-between">
-          <Button variant="redOutline" onClick={handleDeleteSchedule}>
+          <Button
+            variant="redOutline"
+            disabled={deletePending}
+            isLoading={deletePending}
+            onClick={handleDeleteSchedule}
+          >
             삭제
           </Button>
           <div className="flex gap-1">
