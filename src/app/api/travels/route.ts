@@ -43,6 +43,32 @@ export async function POST(request: Request) {
     const uploadedUrls = await uploadCloudinary({ files });
     const imageUrl = uploadedUrls.length ? uploadedUrls[0] : null;
 
+    const newFromDate = new Date(from);
+    const newToDate = new Date(to);
+
+    // 겹치는 날짜 있는지 DB 조회
+    const travelConflict = await prisma.travel.findFirst({
+      where: {
+        userId: currentUserId,
+        // 기존 시작일이 새 종료일보다 작거나 같고
+        from: {
+          lte: newToDate,
+        },
+        // 기존 종료일이 새 시작일보다 크거나 같다
+        to: {
+          gte: newFromDate,
+        },
+      },
+    });
+
+    if (travelConflict) {
+      return NextResponse.json(
+        { message: '해당 날짜에는 이미 등록된 여행이 있습니다.' },
+        { status: 400 },
+      );
+    }
+
+    // 여행 테이블에 저장
     const newTravel = await prisma.travel.create({
       data: {
         title,
@@ -59,6 +85,7 @@ export async function POST(request: Request) {
       },
     });
 
+    // 도시 테이블에 저장
     if (cities && cities.length > 0) {
       await Promise.all(
         cities.map((city: IPlaceList) =>
@@ -80,6 +107,7 @@ export async function POST(request: Request) {
       );
     }
 
+    // 멤버 테이블에 저장
     if (member && member.length > 0) {
       await Promise.all(
         member.map((member: IMemberList) => {

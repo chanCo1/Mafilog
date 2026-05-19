@@ -21,13 +21,13 @@ export const useMutateMyTravelList = () => {
       queryClient.invalidateQueries({
         queryKey: ['myTravelList'],
       });
-      
+
       toast.success('새 여행을 만들었어요');
     },
-    
-    onError: (error) => {
-      console.error('여행 생성 실패:', error);
-      toast.error('여행을 생성하는 중 오류가 발생했습니다.');
+
+    onError: (error: any) => {
+      const errorMessage = error.response?.data.message;
+      toast.error(errorMessage || '여행을 생성하는 중 오류가 발생했습니다.');
     },
-  })
-}
+  });
+};
