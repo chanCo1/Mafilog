@@ -67,6 +67,7 @@ export default function UpcomingContainer() {
       <CreateNewTravelModal
         isOpen={isOpenCreateNewModal}
         handleClose={() => setIsOpenCretateNewModal(false)}
+        isNotTravelPage
       />
     </>
   );

@@ -25,17 +25,20 @@ import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
 import { useSession } from 'next-auth/react';
 import { getTravelDay } from '@/shared/lib/utils';
 import { useMutateMyTravelList } from '@/features/myTravel/hooks/rquery/useMutateMyTravelList';
+import { useRouter } from 'next/navigation';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
   handleClose: () => void;
   isModify?: boolean;
+  isNotTravelPage?: boolean;
 }
 
 export default function CreateNewTravelModal({
   isOpen,
   handleClose,
-  isModify = false,
+  isModify,
+  isNotTravelPage,
 }: ICreateNewTravelModal) {
   const { data: userInfo } = useSession();
 
@@ -55,7 +58,10 @@ export default function CreateNewTravelModal({
   const [travelStyles, setTravelStyles] = useState<TRAVEL_STYLE[]>([]);
   const [travelMember, setTravelMember] = useState<IMemberList[]>([]);
 
-  const { mutateAsync: createTravelMutate, isPending } = useMutateMyTravelList();
+  const { mutateAsync: createTravelMutate, isPending } =
+    useMutateMyTravelList();
+
+  const router = useRouter();
 
   useEffect(() => {
     if (userInfo?.user?.id && userInfo?.user?.name) {
@@ -85,6 +91,10 @@ export default function CreateNewTravelModal({
   const onClickCloseBtn = () => {
     handleClose();
     dataReset();
+
+    if (isNotTravelPage) {
+      router.push('/my-travel');
+    }
   };
 
   /** 새 여행 만들기 */
