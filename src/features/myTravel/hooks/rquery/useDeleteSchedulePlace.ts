@@ -17,7 +17,7 @@ interface IUseDeleteSchedulePlace {
 
 export const useDeleteSchedulePlace = (
   travelId: string,
-  type: SCHEDULE_TYPE,
+  type?: SCHEDULE_TYPE,
 ) => {
   const queryClient = useQueryClient();
 
@@ -34,11 +34,15 @@ export const useDeleteSchedulePlace = (
         queryKey: ['travelSchedules', travelId],
       });
 
-      toast.success(
-        type === SCHEDULE_TYPE.PLACE
-          ? '장소를 삭제했어요'
-          : '메모를 삭제했어요',
-      );
+      if (type) {
+        toast.success(
+          type === SCHEDULE_TYPE.PLACE
+            ? '장소를 삭제했어요'
+            : '메모를 삭제했어요',
+        );
+      } else {
+        toast.success('일정을 삭제했어요');
+      }
     },
 
     onError: (error: any) => {

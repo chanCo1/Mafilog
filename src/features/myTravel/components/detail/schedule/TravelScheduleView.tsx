@@ -20,19 +20,22 @@ import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { useFetchTravelSchedules } from '@/features/myTravel/hooks/rquery/useFetchTravelSchedules';
 import { useParams } from 'next/navigation';
 import { getTravelDayList } from '@/shared/lib/utils';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
 
-interface ITravelScheduleView {
-  from: Date;
-  to: Date;
-}
-
-function TravelScheduleView({ from, to }: ITravelScheduleView) {
+function TravelScheduleView() {
   const params = useParams();
   const { data: scheduleList } = useFetchTravelSchedules(
     params.travelId as string,
   );
+  const { mutateAsync: deleteSchedule, isPending: isDeletePending } =
+    useDeleteSchedulePlace(params.travelId as string);
 
-  const { clearSelectedSchedules } = useSelectSchedules();
+  const { selectedSchedules, clearSelectedSchedules } = useSelectSchedules();
+  console.log('selectedSchedules >> ', selectedSchedules)
+
+  const { openDialog } = useDialogStore();
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState(1);
@@ -51,13 +54,31 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
     }
   };
 
+  /** 선택 삭제 */
+  const handleDeleteSchedule = () => {
+    const deleteIds = selectedSchedules.map((selected) => selected.id);
+
+    openDialog({
+      message: `${deleteIds.length}개 장소(메모)를 삭제할까요?`,
+      type: 'confirm',
+      okLabel: '삭제',
+      onOk: async () => {
+        await deleteSchedule({
+          travelId: params.travelId as string,
+          deleteIds,
+        });
+        clearSelectedSchedules();
+      },
+    });
+  };
+
   const getPlace = useMemo(() => {
     const targetDay = scheduleList?.find((s) => s.day === selectedDay);
 
     if (!targetDay) return [];
 
     const places = targetDay.scheduleList
-      .filter((item) => item.type === 'place' && !!item.place)
+      .filter((item) => item.type === SCHEDULE_TYPE.PLACE && !!item.place)
       .map((item) => item.place as IPlaceList);
 
     return places.length > 0 ? places : [];
@@ -93,7 +114,13 @@ function TravelScheduleView({ from, to }: ITravelScheduleView) {
                       </span>
                     ))}
                   </Dropdown>
-                  <Button variant="redOutline" size="sm">
+                  <Button
+                    variant="redOutline"
+                    size="sm"
+                    disabled={isDeletePending}
+                    isLoading={isDeletePending}
+                    onClick={handleDeleteSchedule}
+                  >
                     선택 삭제
                   </Button>
                 </>
