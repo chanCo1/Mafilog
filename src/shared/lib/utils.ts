@@ -29,9 +29,15 @@ export const truncateText = (text: string, maxLength: number = 18): string => {
 };
 
 /** 날짜 포멧 변경 */
-export const convertFormattedDate = (date: Date, format = 'yyyy-MM-dd') => {
+export const convertFormattedDate = (
+  date: Date | string,
+  format = 'yyyy-MM-dd',
+) => {
   if (!date) return '';
-  return formatDate(date, format, { locale: ko });
+
+  const dateValue = typeof date === 'string' ? new Date(date) : date;
+
+  return formatDate(dateValue, format, { locale: ko });
 };
 
 /** 여행 기간 포멧 노출 (YYYY.MM.DD ~ YYYY.MM.DD) */
@@ -46,8 +52,10 @@ export const convertTravelDateRange = (from: Date, to: Date) => {
 };
 
 /** 무슨 요일인지 구하기 */
-export const getDay = (date: Date) => {
-  return formatDate(date, 'E', { locale: ko });
+export const getDay = (date: Date | string) => {
+  const dateValue = typeof date === 'string' ? new Date(date) : date;
+
+  return formatDate(dateValue, 'E', { locale: ko });
 };
 
 /** 시간을 0시 0분 0초로 초기화 */
