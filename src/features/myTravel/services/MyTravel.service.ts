@@ -10,7 +10,7 @@ import {
   IMyTravelListResponse,
   IMyTravelDetailResponse,
 } from '@/features/myTravel/interfaces/myTravel.interface';
-import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { IScheduleResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 const API_URL = '/travels';
 
@@ -38,7 +38,7 @@ class _MyTravelService {
   }
 
   /** 여행 일정 조회 */
-  async getTravelSchedules(id: string): Promise<IScheduleListResponse[]> {
+  async getTravelSchedules(id: string): Promise<IScheduleResponse[]> {
     const response = await axiosInstanceWithAuth.get(
       `${API_URL}/${id}/schedules`,
     );

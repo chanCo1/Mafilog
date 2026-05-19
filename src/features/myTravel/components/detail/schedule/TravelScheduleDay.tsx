@@ -5,39 +5,33 @@
  * @description: TravelScheduleDay 컴포넌트, 일차 컴포넌트
  */
 
-import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import TravelScheduleTimeline from '@/features/myTravel/components/detail/schedule/TravelScheduleTimeline';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
-import { ISchedule } from '@/shared/interfaces/travelScheduleStore.interface';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import { ILabelValue } from '@/shared/interfaces';
+import { IScheduleResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface ITravelScheduleDay {
-  day: number;
-  date: Date;
-  list: ISchedule['list'];
+  schedule: IScheduleResponse;
   selectMode: boolean;
 }
 
 export default function TravelScheduleDay({
-  day,
-  date,
-  list,
+  schedule,
   selectMode,
 }: ITravelScheduleDay) {
   const { selectedSchedules, toggleDayAll } = useSelectSchedules();
 
   // 현재 일차의 list 아이템들이 모두 selectedSchedules에 포함되어 있는지 확인
   const isAllSelected =
-    list.length > 0 &&
-    list.every((item) =>
+    schedule.scheduleList.length > 0 &&
+    schedule.scheduleList.every((item) =>
       selectedSchedules.some((selected) => selected.id === item.id),
     );
 
   const handleAllCheck = (checked: boolean | ILabelValue[]) => {
-    toggleDayAll(list, !checked as boolean);
+    toggleDayAll(schedule.scheduleList, !checked as boolean);
   };
 
   return (
@@ -46,19 +40,20 @@ export default function TravelScheduleDay({
         {selectMode && (
           <Checkbox value={isAllSelected} onChange={handleAllCheck} />
         )}
-        <span className="text-lg font-bold">{`${day}일차`}</span>
+        <span className="text-lg font-bold">{`${schedule.day}일차`}</span>
         <span className="text-text-secondary">
-          {convertFormattedDate(date, 'MM월 dd일')} ({getDay(date)})
+          {convertFormattedDate(schedule.date, 'MM월 dd일')} (
+          {getDay(schedule.date)})
         </span>
       </div>
       <div className="flex flex-col">
-        {list.length ? (
+        {schedule.scheduleList.length ? (
           <>
-            {list.map((_data, index) => (
+            {schedule.scheduleList.map((_data, index) => (
               <TravelScheduleTimeline
                 key={`${_data.place?.id}-${index}`}
                 timeLineData={_data}
-                dailyAllSchedule={list}
+                dailyAllSchedule={schedule.scheduleList}
                 currentIndex={index}
                 selectMode={selectMode}
               />

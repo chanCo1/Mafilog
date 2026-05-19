@@ -14,17 +14,17 @@ import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { toast } from 'sonner';
 import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { ILabelValue } from '@/shared/interfaces';
-import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TimePicker from '@/shared/components/ui/TimePicker';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface IPlaceDeatilModal {
   isOpen: boolean;
   handleClose: () => void;
-  timeLineData: IScheduleList | undefined;
+  timeLineData: ISecheduleListResponse | undefined;
 }
 
 export default function PlaceDeatilModal({
@@ -68,8 +68,8 @@ export default function PlaceDeatilModal({
       okLabel: '삭제',
       onOk: () => {
         setDeleteScheduleList({
-          day: timeLineData.day.value as number,
-          id: timeLineData?.id as string,
+          day: timeLineData.day as number,
+          id: timeLineData?.id,
         });
         toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
       },
@@ -77,8 +77,8 @@ export default function PlaceDeatilModal({
   };
 
   const resetData = useCallback(() => {
-    if (timeLineData?.day.value) {
-      setSelectedDay(travelDaysList[(timeLineData.day.value as number) - 1]);
+    if (timeLineData?.day) {
+      setSelectedDay(travelDaysList[(timeLineData.day as number) - 1]);
     }
 
     setSelectedTime(timeLineData?.time ?? '');
@@ -88,7 +88,7 @@ export default function PlaceDeatilModal({
   /** 초기값 대입 */
   useEffect(() => {
     resetData();
-  }, [timeLineData?.day.value, travelDaysList, resetData]);
+  }, [timeLineData?.day, travelDaysList, resetData]);
 
   return (
     <SideModal
@@ -112,7 +112,7 @@ export default function PlaceDeatilModal({
           <div className="mb-4 flex flex-col gap-1">
             <p>{timeLineData.place.address}</p>
             <div className="text-text-secondary flex gap-1">
-              <span>{timeLineData.place.country.name}</span>
+              <span>{timeLineData.place.countryName}</span>
               <span className="text-gray-2"> | </span>
               <span>{getPlaceCategory(timeLineData.place.types)}</span>
             </div>

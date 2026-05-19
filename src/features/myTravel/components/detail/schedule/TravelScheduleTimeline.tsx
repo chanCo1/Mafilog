@@ -10,7 +10,6 @@ import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
-import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { toast } from 'sonner';
 import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
@@ -19,10 +18,11 @@ import { getPlaceCategory } from '@/shared/lib/utils';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface ITravelScheduleTimeline {
-  timeLineData?: IScheduleList;
-  dailyAllSchedule?: IScheduleList[];
+  timeLineData?: ISecheduleListResponse;
+  dailyAllSchedule?: ISecheduleListResponse[];
   currentIndex?: number;
   selectMode?: boolean;
 }
@@ -55,7 +55,7 @@ export default function TravelScheduleTimeline({
     e.preventDefault();
     e.stopPropagation();
 
-    if (timeLineData?.day.value === undefined || currentIndex === undefined)
+    if (timeLineData?.day === undefined || currentIndex === undefined)
       return;
     const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
@@ -65,8 +65,8 @@ export default function TravelScheduleTimeline({
       okLabel: '삭제',
       onOk: () => {
         setDeleteScheduleList({
-          day: timeLineData?.day.value as number,
-          id: timeLineData?.id as string,
+          day: timeLineData?.day as number,
+          id: timeLineData?.id,
         });
         toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
       },
@@ -116,8 +116,8 @@ export default function TravelScheduleTimeline({
                   {_place && (
                     <span className="text-text-secondary text-sm">
                       {<>{getPlaceCategory(_place.types)}</>}
-                      {_place.country.name && (
-                        <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
+                      {_place.countryName && (
+                        <>&nbsp;&#8226;&nbsp;{_place.countryName}</>
                       )}
                     </span>
                   )}

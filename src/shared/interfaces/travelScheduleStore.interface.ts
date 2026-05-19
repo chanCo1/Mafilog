@@ -10,7 +10,7 @@ export interface ISchedule {
 }
 
 export interface IScheduleList {
-  id: string;
+  id: number;
   type: SCHEDULE_TYPE;
   place?: IPlaceList | null;
   time?: string;
