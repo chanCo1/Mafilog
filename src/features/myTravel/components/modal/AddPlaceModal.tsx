@@ -90,20 +90,14 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
           comp?.types?.includes('country'),
         );
 
-        const country = {
-          name: getCountryCode?.longText,
-          code: getCountryCode?.shortText,
-        };
-
         return {
           id: place.id,
           name: place.displayName.text,
           address: place.formattedAddress,
-          country,
-          location: {
-            lat: place.location.latitude,
-            lng: place.location.longitude,
-          },
+          countryCode: getCountryCode?.shortText ?? '',
+          countryName: getCountryCode?.longText ?? '',
+          lat: place.location.latitude,
+          lng: place.location.longitude,
           types: place.types,
         };
       });
@@ -216,7 +210,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
         <div className="max-mobile:h-40 h-60 overflow-hidden rounded-lg">
           {/* <GoogleMap
             places={clickedPlace}
-            id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID2 as string}
+            id={process.env.GOOGLE_MAP_ID2 as string}
             isSingle
           /> */}
         </div>
@@ -237,8 +231,8 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
                   </span>
                   <span className="text-text-secondary text-sm">
                     {<>{getPlaceCategory(list.types)}</>}
-                    {list.country.name && (
-                      <>&nbsp;&#8226;&nbsp;{list.country.name}</>
+                    {list.countryName && (
+                      <>&nbsp;&#8226;&nbsp;{list.countryName}</>
                     )}
                   </span>
                 </div>

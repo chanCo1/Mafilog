@@ -17,7 +17,7 @@ interface IGetWeatherByVisualCrossing {
   endDate: string;
 }
 
-const API_KEY = process.env.NEXT_PUBLIC_VISUALCROSSING_API_KEY;
+const API_KEY = process.env.VISUALCROSSING_API_KEY;
 
 export const getWeatherByVisualCrossing = async ({
   lat,

@@ -99,35 +99,35 @@
     font-weight: 700 !important;
     display: flex !important;
     justify-content: center !important; /* 가로 중앙 */
-    align-items: center !important;     /* 세로 중앙 */
+    align-items: center !important; /* 세로 중앙 */
     text-align: center !important;
   }
 
   /* Success */
   [data-sonner-toast][data-type='success'] {
-    --success-bg: #80B2FF;
-    --success-border: #80B2FF;
+    --success-bg: #80b2ff;
+    --success-border: #80b2ff;
     --success-text: #fff;
   }
 
   /* Info */
   [data-sonner-toast][data-type='info'] {
-    --info-bg: #61E4C5;
-    --info-border: #61E4C5;
+    --info-bg: #61e4c5;
+    --info-border: #61e4c5;
     --info-text: #fff;
   }
 
   /* Warning */
   [data-sonner-toast][data-type='warning'] {
-    --warning-bg: #FFDB81;
-    --warning-border: #FFDB81;
+    --warning-bg: #ffdb81;
+    --warning-border: #ffdb81;
     --warning-text: #fff;
   }
 
   /* Error */
   [data-sonner-toast][data-type='error'] {
-    --error-bg: #FF9692;
-    --error-border: #FF9692;
+    --error-bg: #ff9692;
+    --error-border: #ff9692;
     --error-text: #fff;
   }
 }
@@ -140,6 +140,11 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
+  }
+
+  .text-outline-white {
+    filter: drop-shadow(0 0.5px 0 #222) drop-shadow(0 -0.5px 0 #222)
+      drop-shadow(0.5px 0 0 #222) drop-shadow(-0.5px 0 0 #222);
   }
 }
 

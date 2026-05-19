@@ -20,6 +20,7 @@ import { User, CircleX } from 'lucide-react';
 import { IMemberList } from '@/shared/interfaces';
 import { nanoid } from 'nanoid';
 import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
+import { useSession } from 'next-auth/react';
 
 interface ICreateNewTravelStep3 {
   title: string;
@@ -28,8 +29,8 @@ interface ICreateNewTravelStep3 {
   setSelectedImage: Dispatch<SetStateAction<File[]>>;
   travelPartner: TRAVEL_PARTNER;
   setTravelPartner: Dispatch<SetStateAction<TRAVEL_PARTNER>>;
-  travelStyle: TRAVEL_STYLE[];
-  setTravelStyle: Dispatch<SetStateAction<TRAVEL_STYLE[]>>;
+  travelStyles: TRAVEL_STYLE[];
+  setTravelStyles: Dispatch<SetStateAction<TRAVEL_STYLE[]>>;
   travelMember: IMemberList[];
   setTravelMember: Dispatch<SetStateAction<IMemberList[]>>;
 }
@@ -41,22 +42,24 @@ export default function CreateNewTravelStep3({
   setSelectedImage,
   travelPartner,
   setTravelPartner,
-  travelStyle,
-  setTravelStyle,
+  travelStyles,
+  setTravelStyles,
   travelMember,
   setTravelMember,
 }: ICreateNewTravelStep3) {
   const [isAciveAddTravelMember, setIsActiveAddTravelMember] = useState(false);
   const [addMemberName, setAddMemberName] = useState('');
 
+  const { data: userInfo } = useSession();
+
   /** 여행 스타일 핸들링 */
-  const handleTravelStyle = (value: TRAVEL_STYLE) => {
-    const isChecked = travelStyle.some((_value) => _value === value);
+  const handleTravelStyles = (value: TRAVEL_STYLE) => {
+    const isChecked = travelStyles.some((_value) => _value === value);
 
     if (isChecked) {
-      setTravelStyle(travelStyle.filter((_value) => _value !== value));
+      setTravelStyles(travelStyles.filter((_value) => _value !== value));
     } else {
-      setTravelStyle([...travelStyle, value]);
+      setTravelStyles([...travelStyles, value]);
     }
   };
 
@@ -75,7 +78,7 @@ export default function CreateNewTravelStep3({
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
+      <div className="scrollbar-hide flex flex-1 flex-col gap-6 overflow-auto">
         <Input
           label="제목 입력"
           placeholder="여행 제목을 입력해주세요"
@@ -92,24 +95,40 @@ export default function CreateNewTravelStep3({
           setSelectedImage={setSelectedImage}
         />
 
-        {/* TODO: 멤버 저장 어떻게 할지 고민 */}
         <div className="flex flex-col gap-1 p-1">
           <span>여행 멤버</span>
-          {travelMember.map((member, index) => (
-            <div key={`${member}-${index}`} className="flex items-center gap-2">
-              <div className="flex items-center gap-1">
-                <User size="18" className="text-primary fill-current" />
-                <span className="font-bold">{member.name}</span>
+          {travelMember.map((member, index) => {
+            const isMe = member.id === userInfo?.user?.id;
+
+            return (
+              <div
+                key={`${member}-${index}`}
+                className="flex items-center gap-1"
+              >
+                <div className="flex items-center gap-1">
+                  {isMe ? (
+                    <div
+                      className={cn('h-6 w-6 rounded-full')}
+                      style={{ backgroundColor: `#${userInfo?.user?.hexCode}` }}
+                    />
+                  ) : (
+                    <User size="22" className="text-primary fill-current" />
+                  )}
+                  <span className="">
+                    {member.name}&nbsp;
+                    {isMe ? '(나)' : ''}
+                  </span>
+                </div>
+                {!isMe && (
+                  <CircleX
+                    className="text-text-secondary cursor-pointer"
+                    size={20}
+                    onClick={() => handelDeleteMember(member.id)}
+                  />
+                )}
               </div>
-              {member.name !== '나' && (
-                <CircleX
-                  className="text-text-secondary cursor-pointer"
-                  size={18}
-                  onClick={() => handelDeleteMember(member.id)}
-                />
-              )}
-            </div>
-          ))}
+            );
+          })}
           <div className="flex items-center gap-1">
             <CategoryIcon
               variant="plus"
@@ -179,11 +198,11 @@ export default function CreateNewTravelStep3({
               <Chip
                 key={list.value}
                 variant={
-                  travelStyle.find((style) => style === list.value)
+                  travelStyles.find((style) => style === list.value)
                     ? 'primary'
                     : 'primaryOutline'
                 }
-                onClick={() => handleTravelStyle(list.value)}
+                onClick={() => handleTravelStyles(list.value)}
               >
                 {list.label}
               </Chip>

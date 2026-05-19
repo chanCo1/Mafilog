@@ -4,34 +4,50 @@
  * @file: UpcomingContainer.tsx
  * @author: chad
  * @since: 2026.04.23 ~
- * @description: UpcomingContainer 컴포넌트, 다가오는 여행 노출
+ * @description: 홈 > 다가오는 여행 노출
  */
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/Button';
 import { useRouter } from 'next/navigation';
-import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
-
-interface IUpcomingContainer {}
+import { useSession } from 'next-auth/react';
+import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
+import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
+import { useFetchMyTravelList } from '@/features/myTravel/hooks/rquery/useFetchMyTravelList';
 
 export default function UpcomingContainer() {
+  const [isOpenCreateNewModal, setIsOpenCretateNewModal] = useState(false);
+
+  const { data: userInfo } = useSession();
+  const { data: travelList } = useFetchMyTravelList();
+
   const router = useRouter();
-  const { isLoggedIn } = useAuthManagerStore();
 
   return (
     <>
-      {isLoggedIn ? (
-        <div className="flex flex-col gap-1">
+      {userInfo ? (
+        <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <p className="text-xl font-bold">다가오는 여행</p>
-            <Button size="sm" onClick={() => router.push('/')}>
+            <Button size="sm" onClick={() => setIsOpenCretateNewModal(true)}>
               여행 만들기
             </Button>
           </div>
-          <p className="text-text-secondary">
-            다가오는 여행이 없어요! 다음 여행지는 어디인가요?
-          </p>
+          {travelList?.upcoming.length ? (
+            <div className="mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 grid gap-4">
+              {travelList?.upcoming.map((travel) => (
+                <TravelListCard
+                  key={`${travel.id}`}
+                  travel={travel}
+                  onClick={() => router.push(`/my-travel/${travel.id}`)}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="text-text-secondary">
+              다가오는 여행이 없어요! 다음 여행지는 어디인가요?
+            </p>
+          )}
         </div>
       ) : (
         <div className="flex flex-col items-center gap-2.5">
@@ -47,6 +63,12 @@ export default function UpcomingContainer() {
           </Button>
         </div>
       )}
+
+      <CreateNewTravelModal
+        isOpen={isOpenCreateNewModal}
+        handleClose={() => setIsOpenCretateNewModal(false)}
+        isNotTravelPage
+      />
     </>
   );
 }

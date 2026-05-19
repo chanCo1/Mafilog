@@ -1,0 +1,347 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/**
+ * 유저 모델
+ */
+model User {
+  // pk
+  id              String   @id @default(cuid())
+  // 이메일
+  email           String   @unique
+  // 비밀번호
+  password        String?
+  // 이름
+  name            String?
+  // 전화번호
+  phone           String?
+  // 프로필 이미지 주소
+  profileImageUrl String?
+  // 프로필 배경색
+  hexCode         String
+  // 소셜 계정 정보
+  social          Social[]
+  // 여행
+  travels         Travel[]
+  // 생성 시간
+  createdAt       DateTime @default(now())
+  // 수정 시간
+  updatedAt       DateTime @updatedAt
+}
+
+/**
+ * 계정 정보 모델
+ */
+model Social {
+  // pk
+  id                Int    @id @default(autoincrement())
+  // 로그인 타입 (oauth / cridentails)
+  type              String
+  // 소셜 플랫폼
+  provider          String
+  // 소셜 고유 아이디
+  providerAccountId String
+  // fk
+  userId            String
+  // 유저 정보
+  user              User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+/**
+ * 여행 모델
+ */
+model Travel {
+  // pk
+  id            Int              @id @default(autoincrement())
+  // 여행 이름
+  title         String
+  // 여행 타입 (해외, 국내)
+  travelType    String
+  // 여행 시작일
+  from          DateTime
+  // 여행 종료일
+  to            DateTime
+  // 사진 주소 
+  imageUrl      String?
+  // 여행 기간
+  travelPeriod  String
+  // 여행 스타일
+  travelStyles  String[]
+  // 여행 파트너
+  travelPartner String
+  // 여행 도시
+  cities        TravelCity[]
+  // 여행 멤버
+  member        TravelMember[]
+  // 일정
+  schedules     TravelSchedule[]
+  // 가계부 (지출)
+  expenses      TravelExpense[]
+  // 체크리스트
+  checkList     ChecklistCategory[]
+  // fk
+  userId        String
+  // 유저 정보
+  user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 생성일
+  createdAt     DateTime            @default(now())
+}
+
+/**
+ * 여행 도시
+ */
+model TravelCity {
+  // pk
+  id          String
+  // 장소 이름
+  name        String
+  // 장소 주소
+  address     String
+  // 국가 표준 시간대
+  timezone    String?
+  // google places에서 정의하는 장소 타입
+  types       String[]
+  // 위도
+  lat         Float
+  // 경도
+  lng         Float
+  // 국가 이름
+  countryName String
+  // 국가 코드
+  countryCode String
+  // 생성일
+  createdAt   DateTime @default(now())
+  // fk
+  travelId    Int
+  // 여행 정보
+  travel      Travel   @relation(fields: [travelId], references: [id], onDelete: Cascade)
+
+  @@id([id, travelId])
+}
+
+/**
+ * 여행 멤버
+ */
+model TravelMember {
+  // pk
+  id               String           @id @default(cuid())
+  // 멤버 이름
+  name             String
+  // fk
+  userId           String?
+  // fk
+  travelId         Int
+  // 여행 정보
+  travel           Travel           @relation(fields: [travelId], references: [id], onDelete: Cascade)
+  // 생성일
+  createdAt        DateTime         @default(now())
+  expenseId        Int?
+  expenseList      ExpenseList[]    @relation("payer")
+  expenseSpenderId Int?
+  expenseSpender   ExpenseSpender[] @relation("spender")
+}
+
+/**
+ * 체크리스트
+ */
+model ChecklistCategory {
+  // pk
+  id       Int             @id @default(autoincrement())
+  // 체크리스트 라벨
+  label    String
+  // 체크리스트 아이템
+  items    ChecklistItem[]
+  // fk
+  travelId Int
+  // 여행 정보
+  travel   Travel          @relation(fields: [travelId], references: [id], onDelete: Cascade)
+}
+
+/**
+ * 체크리스트 아이템
+ */
+model ChecklistItem {
+  // pk
+  id         Int               @id @default(autoincrement())
+  // 체크리스트 아이템 라벨
+  label      String
+  // 체크 여부
+  isChecked  Boolean           @default(false)
+  // fk
+  categoryId Int
+  // 카테고리 정보
+  category   ChecklistCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+}
+
+/**
+ * 일정 모델
+ */
+model TravelSchedule {
+  // pk
+  id           Int            @id @default(autoincrement())
+  // 일정
+  day          Int
+  // 날짜
+  date         DateTime
+  // 리스트
+  scheduleList ScheduleList[]
+  // fk
+  travelId     Int
+  // 여행 정보
+  travel       Travel         @relation(fields: [travelId], references: [id], onDelete: Cascade)
+}
+
+/**
+ * 스케줄 리스트
+ */
+model ScheduleList {
+  // pk
+  id              Int            @id @default(autoincrement())
+  // 입력 타입 place or memo
+  type            String
+  // 몇일차인지
+  day             Int
+  // // fk
+  schedulePlaceId String         @unique
+  // 장소
+  place           SchedulePlace? @relation(fields: [schedulePlaceId], references: [id])
+  // 방문 시간
+  time            String
+  // 메모
+  memo            String
+  // fk
+  scheduleId      Int
+  // 일정 정보
+  schedule        TravelSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+}
+
+/**
+ * 일정 장소
+ */
+model SchedulePlace {
+  // pk
+  id            String        @id
+  // 장소 이름
+  name          String
+  // 장소 주소
+  address       String
+  // 국가 표준 시간대
+  timezone      String?
+  // google places에서 정의하는 장소 타입
+  types         String[]
+  // 위도
+  lat           Float
+  // 경도
+  lng           Float
+  // 국가 이름
+  countryName   String
+  // 국가 코드
+  countryCode   String
+  // 생성일
+  createdAt     DateTime      @default(now())
+  // 일정 리스트 정보
+  scheduleLists ScheduleList?
+}
+
+/**
+ * 가계부 모델
+ */
+model TravelExpense {
+  // pk
+  id           Int           @id @default(autoincrement())
+  // 일정
+  day          Int
+  // 날짜
+  date         DateTime
+  // 리스트
+  expenseList  ExpenseList[]
+  // 해당 일정에 대한 지출
+  dailyExpense Float?
+  // fk
+  travelId     Int
+  // 여행 정보
+  travel       Travel        @relation(fields: [travelId], references: [id], onDelete: Cascade)
+}
+
+/**
+ * 지출 리스트
+ */
+model ExpenseList {
+  // pk
+  id                 Int     @id @default(autoincrement())
+  // 지출명
+  name               String
+  // 결제 방식
+  paymentType        String
+  // 지출 타입 (self, split 등)
+  spenderType        String
+  // 지출 카테고리
+  category           String
+  // 몇일차인지
+  day                Int
+  // 지출 시간
+  time               String?
+  // 메모
+  memo               String?
+  // 지출 금액 (입력 금액)
+  amount             Float
+  // 입력된 계산식
+  clacFormula        String
+  // 계산된 값 (원화)
+  calcExchangeAmount Float
+  // 통화 코드
+  currencyCode       String
+  // 통화 국가 코드
+  currencyCountry    String
+  // 적용 환율
+  exchangeRateAmount Float
+
+  // 결제자 id
+  payerId String
+  payer   TravelMember @relation("payer", fields: [payerId], references: [id], onDelete: Cascade)
+
+  spender ExpenseSpender[]
+
+  // fk
+  travelExpenseId Int?
+  // 지출 일정 정보
+  travelExpense   TravelExpense? @relation(fields: [travelExpenseId], references: [id], onDelete: Cascade)
+}
+
+/**
+ * 지출자
+ */
+model ExpenseSpender {
+  // pk
+  id                 Int    @id @default(autoincrement())
+  // 지출 금액
+  amount             Float
+  // 지출 원화 금액
+  calcExchangeAmount Float
+  // 지출 카테고리
+  category           String
+  // 통화 코드
+  currencyCode       String
+  // 통화 국가 코드
+  currencyCountry    String
+
+  // 맴버 연동
+  memberId String
+  member   TravelMember @relation("spender", fields: [memberId], references: [id], onDelete: Cascade)
+
+  // 지출 내역 연동
+  expenseListId Int
+  expenseList   ExpenseList @relation(fields: [expenseListId], references: [id], onDelete: Cascade)
+}

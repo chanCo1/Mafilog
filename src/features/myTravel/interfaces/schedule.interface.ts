@@ -7,12 +7,11 @@ interface ILocation {
 export interface IPlaceList {
   id: string;
   name: string;
-  location: ILocation;
   address: string;
-  country: {
-    code: string | undefined;
-    name: string | undefined;
-  };
+  countryName: string;
+  countryCode: string;
+  lat: number;
+  lng: number;
   types: string[];
   timezone?: string;
 }
