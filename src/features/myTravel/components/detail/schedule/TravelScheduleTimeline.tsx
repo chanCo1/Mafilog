@@ -19,6 +19,8 @@ import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTime
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
+import { useParams } from 'next/navigation';
 
 interface ITravelScheduleTimeline {
   timeLineData?: ISecheduleListResponse;
@@ -38,8 +40,11 @@ export default function TravelScheduleTimeline({
     dailyAllSchedule,
     type: timeLineData?.type,
   });
-  const setDeleteScheduleList = useTravelScheduleStore(
-    (state) => state.setDeleteScheduleList,
+
+  const params = useParams();
+  const { mutateAsync: deleteSchedule } = useDeleteSchedulePlace(
+    params.travelId as string,
+    timeLineData?.type!,
   );
   const { selectedSchedules, toggleSelect } = useSelectSchedules();
   const { openDialog } = useDialogStore();
@@ -55,24 +60,23 @@ export default function TravelScheduleTimeline({
     e.preventDefault();
     e.stopPropagation();
 
-    if (timeLineData?.day === undefined || currentIndex === undefined)
-      return;
+    if (timeLineData?.day === undefined || currentIndex === undefined) return;
     const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
     openDialog({
       message: `${isPlace ? '장소' : '메모'}를 삭제할까요?`,
       type: 'confirm',
       okLabel: '삭제',
-      onOk: () => {
-        setDeleteScheduleList({
-          day: timeLineData?.day as number,
-          id: timeLineData?.id,
+      onOk: async () => {
+        await deleteSchedule({
+          travelId: params.travelId as string,
+          deleteIds: [timeLineData.id],
         });
-        toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
       },
     });
   };
 
+  /** 카드 클릭 */
   const onClickCard = () => {
     if (selectMode && timeLineData) {
       toggleSelect(timeLineData); // 선택 모드일 땐 토글만
