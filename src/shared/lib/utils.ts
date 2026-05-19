@@ -103,6 +103,8 @@ export const getTravelCurrentDay = (from: Date, to: Date) => {
 
 /** 여행 기간에 따른 일차 & 날짜 구하기 */
 export const getTravelDayOfWeek = (from: Date, to: Date) => {
+  if (!from || !to) return [];
+
   const travelDays = Array.from({ length: getTravelDay(from, to) }).map(
     (_, index) => {
       const _day = index + 1;
@@ -131,6 +133,18 @@ export const getTravelStatus = (from: Date, to: Date) => {
   } else {
     return TRAVEL_STATUS.LAST;
   }
+};
+
+/** 여행 기간에 따른 날짜 리스트 */
+export const getTravelDayList = (from: Date, to: Date) => {
+  if (!from || !to) return [];
+
+  return getTravelDayOfWeek(from, to).map((_day) => {
+    return {
+      label: `${_day.day}일차 ${convertFormattedDate(_day.date, 'MM월 dd일')} (${getDay(_day.date)})`,
+      value: _day.day,
+    };
+  });
 };
 
 /** 여행 동반자 변환 */
