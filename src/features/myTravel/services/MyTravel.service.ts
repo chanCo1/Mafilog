@@ -10,6 +10,7 @@ import {
   IMyTravelListResponse,
   IMyTravelDetailResponse,
 } from '@/features/myTravel/interfaces/myTravel.interface';
+import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 const API_URL = '/travels';
 
@@ -31,8 +32,16 @@ class _MyTravelService {
   }
 
   /** 내 여행 상세 조회 */
-  async getMyTravelDetail(id: number): Promise<IMyTravelDetailResponse> {
+  async getMyTravelDetail(id: string): Promise<IMyTravelDetailResponse> {
     const response = await axiosInstanceWithAuth.get(`${API_URL}/${id}`);
+    return response.data.data;
+  }
+
+  /** 여행 일정 조회 */
+  async getTravelSchedules(id: string): Promise<IScheduleListResponse[]> {
+    const response = await axiosInstanceWithAuth.get(
+      `${API_URL}/${id}/schedules`,
+    );
     return response.data.data;
   }
 }

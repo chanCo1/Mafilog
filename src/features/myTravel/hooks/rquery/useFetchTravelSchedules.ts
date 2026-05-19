@@ -1,17 +1,17 @@
 /**
- * @file: useFetchMyTravelDetail.ts
+ * @file: useFetchTravelSchedules.ts
  * @author: chad
  * @since: 2026.05.19 ~
- * @description: 내 여행 상세 조회
+ * @description: 내 여행 일정 조회
  */
 
 import { useQuery } from '@tanstack/react-query';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 
-export const useFetchMyTravelDetail = (id: string) => {
+export const useFetchTravelSchedules = (id: string) => {
   const query = useQuery({
-    queryKey: ['myTravelDetail', id],
-    queryFn: async () => await MyTravelService.getMyTravelDetail(id),
+    queryKey: ['travelSchedules', id],
+    queryFn: async () => await MyTravelService.getTravelSchedules(id),
     enabled: !!id,
   });
 

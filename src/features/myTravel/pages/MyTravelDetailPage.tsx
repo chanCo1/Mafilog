@@ -38,7 +38,7 @@ import { useParams } from 'next/navigation';
 export default function MyTravelDetailPage() {
   const params = useParams();
   const { data: myTravelDatail } = useFetchMyTravelDetail(
-    Number(params.travelId),
+    params.travelId as string,
   );
 
   // const travelInfo = useTravelInfoStore((state) => state.travelInfo);
@@ -190,10 +190,16 @@ export default function MyTravelDetailPage() {
       </div>
       <div className="relative">
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.SCHEDULE}>
-          <TravelScheduleView />
+          <TravelScheduleView
+            from={myTravelDatail.from}
+            to={myTravelDatail.to}
+          />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.EXPENSES}>
-          <TravelExpensesView />
+          <TravelExpensesView
+            from={myTravelDatail.from}
+            to={myTravelDatail.to}
+          />
         </FadeInOutStyled>
       </div>
 
