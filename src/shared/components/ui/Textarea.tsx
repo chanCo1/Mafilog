@@ -53,7 +53,6 @@ function TextareaEntity(
     errorMsg,
     ...props
   }: ITextarea,
-  ref: React.ForwardedRef<HTMLDivElement>,
 ) {
   const [isFocused, setIsFocused] = React.useState(false);
 
@@ -78,7 +77,6 @@ function TextareaEntity(
             isFocused && 'border-border-active border',
             className,
           )}
-          ref={ref}
         >
           <textarea
             className="w-full outline-none focus:ring-0 h-20 resize-none"
@@ -98,4 +96,4 @@ function TextareaEntity(
   );
 }
 
-export const Textarea = React.forwardRef(TextareaEntity);
+export const Textarea = TextareaEntity;

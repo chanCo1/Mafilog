@@ -5,7 +5,7 @@
  * @description: Dialog 컴포넌트
  */
 
-import { ForwardedRef, forwardRef, useEffect } from 'react';
+import { useEffect } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/Button';
 import { useDialogStore } from '@/shared/stores/useDialogStore';

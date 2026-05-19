@@ -66,10 +66,14 @@ interface ICategoryIcon
   variant: TCategoryVariant;
 }
 
-function CategoryIconEntity(
-  { className, size, variant, circled, children, ...props }: ICategoryIcon,
-  ref: React.ForwardedRef<HTMLDivElement>,
-) {
+function CategoryIconEntity({
+  className,
+  size,
+  variant,
+  circled,
+  children,
+  ...props
+}: ICategoryIcon) {
   /** variant별 아이콘 크기 */
   const GetIconType = React.useMemo(() => {
     const fiveSize = 'h-5 w-5';
@@ -218,7 +222,6 @@ function CategoryIconEntity(
         categoryIconVariants({ size, circled, variant }),
         className,
       )}
-      ref={ref}
       onClick={props.onClick}
     >
       {children}
@@ -227,4 +230,4 @@ function CategoryIconEntity(
   );
 }
 
-export const CategoryIcon = React.forwardRef(CategoryIconEntity);
+export const CategoryIcon = CategoryIconEntity;

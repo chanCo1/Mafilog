@@ -45,7 +45,6 @@ interface ICard
 
 function CardEntity(
   { className, disabled, variant, size, readonly, select, isSelected, ...props }: ICard,
-  ref: React.ForwardedRef<HTMLDivElement>,
 ) {
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -66,7 +65,6 @@ function CardEntity(
         isSelected && 'ring-border-active ring-2 ring-inset',
         className,
       )}
-      ref={ref}
       onClick={handleClick}
     >
       {props.children}
@@ -74,4 +72,4 @@ function CardEntity(
   );
 }
 
-export const Card = React.forwardRef(CardEntity);
+export const Card = CardEntity;

@@ -49,31 +49,27 @@ interface IButton
   isLoading?: boolean;
 }
 
-function ButtonEntity(
-  {
-    className,
-    prefix,
-    suffix,
-    isLoading = false,
-    size,
-    variant,
-    type = 'button',
-    ...props
-  }: IButton,
-  ref: React.ForwardedRef<HTMLButtonElement>,
-) {
+function ButtonEntity({
+  className,
+  prefix,
+  suffix,
+  isLoading = false,
+  size,
+  variant,
+  type = 'button',
+  ...props
+}: IButton) {
   const isDisabled = isLoading || props.disabled;
 
   return (
     <button
       type={type}
       className={cn(buttonVariants({ variant, size }), className)}
-      ref={ref}
       disabled={isDisabled}
       {...props}
     >
       {/* 로딩 상태일 경우 노출 */}
-      {isLoading && <Loading className="w-4 h-4" />}
+      {isLoading && <Loading className="h-4 w-4" />}
       {/* prefix가 있고 로딩 상태가 아닐 때 노출 */}
       {prefix && !isLoading && (
         <span className="flex items-center">{prefix}</span>
@@ -88,5 +84,4 @@ function ButtonEntity(
   );
 }
 
-export const Button = React.forwardRef(ButtonEntity);
-Button.displayName = 'Button';
+export const Button = ButtonEntity;

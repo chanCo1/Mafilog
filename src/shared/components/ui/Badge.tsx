@@ -5,7 +5,7 @@
  * @description: Badge 컴포넌트
  */
 
-import { forwardRef, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -40,4 +40,4 @@ function BadgeEntity({ children, className, size }: IBadge) {
   );
 }
 
-export const Badge = forwardRef(BadgeEntity);
+export const Badge = BadgeEntity;

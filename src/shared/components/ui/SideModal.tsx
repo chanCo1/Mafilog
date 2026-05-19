@@ -5,7 +5,7 @@
  * @description: SideModal 컴포넌트, 오른쪽에서 슬라이드로 노출되는 모달
  */
 
-import { forwardRef, ReactNode, useState, useEffect } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';

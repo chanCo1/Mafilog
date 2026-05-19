@@ -9,24 +9,27 @@ import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
-const circledNumberVariants = cva('rounded-full flex items-center justify-center', {
-  variants: {
-    variant: {
-      primary: 'bg-primary text-white',
-      red: 'bg-state-error text-white',
-      primaryOutline: 'border-2 border-primary text-primary',
-      redOutline: 'border-2 border-state-error text-state-error',
+const circledNumberVariants = cva(
+  'rounded-full flex items-center justify-center',
+  {
+    variants: {
+      variant: {
+        primary: 'bg-primary text-white',
+        red: 'bg-state-error text-white',
+        primaryOutline: 'border-2 border-primary text-primary',
+        redOutline: 'border-2 border-state-error text-state-error',
+      },
+      size: {
+        md: 'w-[30px] h-[30px] text-lg',
+        sm: 'w-[24px] h-[24px]',
+      },
     },
-    size: {
-      md: 'w-[30px] h-[30px] text-lg',
-      sm: 'w-[24px] h-[24px]',
+    defaultVariants: {
+      variant: 'primary',
+      size: 'md',
     },
   },
-  defaultVariants: {
-    variant: 'primary',
-    size: 'md',
-  },
-});
+);
 
 interface ICircledNumber
   extends
@@ -36,18 +39,17 @@ interface ICircledNumber
   number: string | number;
 }
 
-function CircledNumberEntity(
-  { number, className, size, variant }: ICircledNumber,
-  ref: React.ForwardedRef<HTMLDivElement>,
-) {
+function CircledNumberEntity({
+  number,
+  className,
+  size,
+  variant,
+}: ICircledNumber) {
   return (
-    <div
-      className={cn(circledNumberVariants({ size, variant }), className)}
-      ref={ref}
-    >
+    <div className={cn(circledNumberVariants({ size, variant }), className)}>
       <span>{number}</span>
     </div>
   );
 }
 
-export const CircledNumber = React.forwardRef(CircledNumberEntity);
+export const CircledNumber = CircledNumberEntity;

@@ -49,25 +49,22 @@ interface IInput
   isPassword?: boolean;
 }
 
-function InputEntity(
-  {
-    className,
-    inputClassName,
-    prefix,
-    suffix,
-    label,
-    labelPosition = 'top',
-    variant,
-    size,
-    isRequired = false,
-    description,
-    errorMsg,
-    type = 'text',
-    isPassword,
-    ...props
-  }: IInput,
-  ref: React.ForwardedRef<HTMLInputElement>,
-) {
+function InputEntity({
+  className,
+  inputClassName,
+  prefix,
+  suffix,
+  label,
+  labelPosition = 'top',
+  variant,
+  size,
+  isRequired = false,
+  description,
+  errorMsg,
+  type = 'text',
+  isPassword,
+  ...props
+}: IInput) {
   const [isFocused, setIsFocused] = useState(false);
   const [passwordType, setPassowrdType] = useState('password');
 
@@ -92,7 +89,7 @@ function InputEntity(
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       <div
         className={cn('flex gap-1', labelPosition === 'top' ? 'flex-col' : '')}
       >
@@ -109,7 +106,6 @@ function InputEntity(
             isFocused && 'border-border-active border',
             className,
           )}
-          ref={ref}
         >
           {prefix && <span className="mr-1 shrink-0">{prefix}</span>}
           <input
@@ -121,7 +117,7 @@ function InputEntity(
           />
           {/* 패스워드 사용시 아이콘 노출 */}
           {isPassword && (
-            <div className='cursor-pointer'>
+            <div className="cursor-pointer">
               {passwordType === 'password' ? (
                 <Eye
                   className="text-gray-7 h-4 w-4"
@@ -135,7 +131,7 @@ function InputEntity(
               )}
             </div>
           )}
-          {suffix && <span className="shrink-0 ml-1">{suffix}</span>}
+          {suffix && <span className="ml-1 shrink-0">{suffix}</span>}
         </div>
       </div>
       {description && (
@@ -148,4 +144,4 @@ function InputEntity(
   );
 }
 
-export const Input = React.forwardRef(InputEntity);
+export const Input = InputEntity;

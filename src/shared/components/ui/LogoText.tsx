@@ -38,19 +38,12 @@ interface ILogoText
   className?: string;
 }
 
-function LogoTextEntity(
-  { className, color, size, ...props }: ILogoText,
-  ref: React.ForwardedRef<HTMLDivElement>,
-) {
+function LogoTextEntity({ className, color, size, ...props }: ILogoText) {
   return (
-    <div
-      ref={ref}
-      className={cn(logoVariants({ size, color }), className)}
-      {...props}
-    >
+    <div className={cn(logoVariants({ size, color }), className)} {...props}>
       Mafilog
     </div>
   );
 }
 
-export const LogoText = React.forwardRef(LogoTextEntity);
+export const LogoText = LogoTextEntity;

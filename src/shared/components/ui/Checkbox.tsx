@@ -63,8 +63,7 @@ function CheckboxEntity(
     isUserIcon,
     isCheckList = false,
     ...props
-  }: ICheckbox,
-  ref: React.ForwardedRef<HTMLInputElement>,
+  }: ICheckbox
 ) {
   /** 체크박스 클릭 */
   const onClickMultipleCheckbox = (_checkedOption: ILabelValue) => {
@@ -93,7 +92,6 @@ function CheckboxEntity(
         labelPosition === 'top' ? 'flex-col' : '',
         disabled && 'opacity-50',
       )}
-      ref={ref}
     >
       {/* 라벨 */}
       {label && (
@@ -165,7 +163,7 @@ function CheckboxEntity(
   );
 }
 
-export const Checkbox = React.forwardRef(CheckboxEntity);
+export const Checkbox = CheckboxEntity;
 
 /** 싱글 체크박스 컴포넌트 */
 interface ISingleCheckbox extends React.HTMLAttributes<HTMLDivElement> {
