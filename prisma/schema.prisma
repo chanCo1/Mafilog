@@ -163,6 +163,8 @@ model ChecklistCategory {
   label    String
   // 체크리스트 아이템
   items    ChecklistItem[]
+  // 생성일
+  createdAt        DateTime         @default(now())
   // fk
   travelId Int
   // 여행 정보
@@ -179,6 +181,8 @@ model ChecklistItem {
   label      String
   // 체크 여부
   isChecked  Boolean           @default(false)
+  // 생성일
+  createdAt        DateTime         @default(now())
   // fk
   categoryId Int
   // 카테고리 정보
@@ -197,6 +201,8 @@ model TravelSchedule {
   date         DateTime
   // 리스트
   scheduleList ScheduleList[]
+  // 생성일
+  createdAt        DateTime         @default(now())
   // fk
   travelId     Int
   // 여행 정보
@@ -264,11 +270,13 @@ model TravelExpense {
   // 일정
   day          Int
   // 날짜
-  date         DateTime
+  date         DateTime?
   // 리스트
   expenseList  ExpenseList[]
   // 해당 일정에 대한 지출
   dailyExpense Float?
+  // 생성일
+  createdAt        DateTime         @default(now())
   // fk
   travelId     Int
   // 여행 정보
