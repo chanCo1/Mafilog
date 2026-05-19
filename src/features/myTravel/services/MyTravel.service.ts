@@ -6,7 +6,10 @@
  */
 
 import { axiosInstanceWithAuth } from '@/shared/lib/api';
-import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
+import {
+  IMyTravelListResponse,
+  IMyTravelDetailResponse,
+} from '@/features/myTravel/interfaces/myTravel.interface';
 
 const API_URL = '/travels';
 
@@ -21,9 +24,15 @@ class _MyTravelService {
     return response.data;
   }
 
-  /** 내 여행 조회 */
+  /** 내 여행 리스트 조회 */
   async getMyTravelList(): Promise<IMyTravelListResponse[]> {
     const response = await axiosInstanceWithAuth.get(`${API_URL}`);
+    return response.data.data;
+  }
+
+  /** 내 여행 상세 조회 */
+  async getMyTravelDetail(id: number): Promise<IMyTravelDetailResponse> {
+    const response = await axiosInstanceWithAuth.get(`${API_URL}/${id}`);
     return response.data.data;
   }
 }
