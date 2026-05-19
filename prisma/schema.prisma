@@ -222,9 +222,9 @@ model ScheduleList {
   // 장소
   place           SchedulePlace? @relation(fields: [schedulePlaceId], references: [id])
   // 방문 시간
-  time            String
+  time            String?
   // 메모
-  memo            String
+  memo            String?
   // 생성일
   createdAt       DateTime       @default(now())
   // 수정 시간
@@ -232,7 +232,7 @@ model ScheduleList {
   // fk
   scheduleId      Int
   // // fk
-  schedulePlaceId String         @unique
+  schedulePlaceId String?
   // 일정 정보
   schedule        TravelSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
 }
@@ -262,7 +262,7 @@ model SchedulePlace {
   // 생성일
   createdAt     DateTime      @default(now())
   // 일정 리스트 정보
-  scheduleLists ScheduleList?
+  scheduleLists ScheduleList[]
 }
 
 /**
