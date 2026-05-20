@@ -23,12 +23,15 @@ import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useUpdateBulkScheduleDate } from '@/features/myTravel/hooks/rquery/useUpdateScheduleBulk';
 
 function TravelScheduleView() {
   const travelId = useGetTravelId();
   const { data: scheduleList } = useFetchTravelSchedules(travelId);
   const { mutateAsync: deleteSchedule, isPending: isDeletePending } =
     useDeleteSchedulePlace(travelId);
+  const { mutateAsync: moveSchedule, isPending: isMovePending } =
+    useUpdateBulkScheduleDate(travelId);
 
   const { selectedSchedules, clearSelectedSchedules } = useSelectSchedules();
 
@@ -61,6 +64,21 @@ function TravelScheduleView() {
       okLabel: '삭제',
       onOk: async () => {
         await deleteSchedule({ travelId, deleteIds });
+        clearSelectedSchedules();
+      },
+    });
+  };
+
+  /** 선택 이동 */
+  const handleMoveSchedule = (targetDay: number) => {
+    const moveIds = selectedSchedules.map((selected) => selected.id);
+
+    openDialog({
+      message: `${moveIds.length}개 장소(메모)를 이동할까요?`,
+      type: 'confirm',
+      okLabel: '이동',
+      onOk: async () => {
+        await moveSchedule({ travelId, data: { moveIds, targetDay } });
         clearSelectedSchedules();
       },
     });
@@ -102,7 +120,7 @@ function TravelScheduleView() {
                       <span
                         key={list.value}
                         className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
-                        onClick={() => console.log(list)}
+                        onClick={() => handleMoveSchedule(list.value)}
                       >
                         {list.label}
                       </span>

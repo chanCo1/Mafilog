@@ -9,13 +9,17 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { IUpdateSchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.interface';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
 interface IUseUpdateSchedulePlace {
   travelId: string;
   data: IUpdateSchedulePlaceRequest;
 }
 
-export const useUpdateSchedulePlace = (travelId: string) => {
+export const useUpdateSchedulePlace = (
+  travelId: string,
+  type: SCHEDULE_TYPE,
+) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -28,7 +32,11 @@ export const useUpdateSchedulePlace = (travelId: string) => {
         queryKey: ['travelSchedules', travelId],
       });
 
-      toast.success('장소를 수정했어요');
+      toast.success(
+        type === SCHEDULE_TYPE.PLACE
+          ? '장소를 수정했어요'
+          : '메모를 수정했어요',
+      );
     },
 
     onError: (error: any) => {
