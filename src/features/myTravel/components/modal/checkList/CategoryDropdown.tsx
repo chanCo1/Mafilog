@@ -6,35 +6,24 @@
  */
 
 import { ReactNode } from 'react';
-import { cn } from '@/shared/lib/utils';
-import { Pencil, Trash, Plus } from 'lucide-react';
-import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
-import { ICheckList } from '@/shared/interfaces/travelCheckListStore.interface';
+import { Pencil, Trash } from 'lucide-react';
+import { IChecklistResponse } from '@/features/myTravel/interfaces/checklist.interface';
+import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
 
 interface ICategoryDropdown {
-  target: ICheckList;
+  list: IChecklistResponse;
+  changeStatus: (id: number, status: TChecklistStatusType) => void;
 }
 
-export default function CategoryDropdown({ target }: ICategoryDropdown) {
-  const setChangeCategoryStatus = useTravelCheckListStore(
-    (state) => state.setChangeCategoryStatus,
-  );
-  const setDeleteCategory = useTravelCheckListStore(
-    (state) => state.setDeleteCategory,
-  );
-
-  /** 카테고리 수정 클릭 핸들링 */
-  const handleEditCategory = () => {
-    setChangeCategoryStatus(target, 'editCategory');
-  };
-
+export default function CategoryDropdown({ list, changeStatus }: ICategoryDropdown) {
   return (
     <div className="flex flex-col gap-2">
-      <CategoryDropdownMenu onClick={handleEditCategory}>
+      <CategoryDropdownMenu onClick={() => changeStatus(list.id, 'editCategory')}>
         <Pencil className="h-4 w-4" />
         카테고리 수정
       </CategoryDropdownMenu>
-      <CategoryDropdownMenu onClick={() => setDeleteCategory(target)}>
+      {/* TODO: 카테고리 삭제 해야함 */}
+      <CategoryDropdownMenu onClick={() => null}>
         <Trash className="h-4 w-4" />
         카테고리 삭제
       </CategoryDropdownMenu>

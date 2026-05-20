@@ -1,0 +1,1 @@
+export type TChecklistStatusType = 'editCategory' | 'addItem' | null;

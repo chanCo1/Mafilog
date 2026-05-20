@@ -6,26 +6,22 @@
  */
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
-import { ICheckList } from '@/shared/interfaces/travelCheckListStore.interface';
 import { Input } from '@/shared/components/ui/Input';
-import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
+import { IChecklistResponse } from '@/features/myTravel/interfaces/checklist.interface';
+import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
 
 interface IAddCheckListItem {
-  list: ICheckList;
+  list: IChecklistResponse;
+  changeStatus: (id: number, status: TChecklistStatusType) => void;
 }
 
-export default function AddCheckListItem({ list }: IAddCheckListItem) {
-  const setChangeCategoryStatus = useTravelCheckListStore(
-    (state) => state.setChangeCategoryStatus,
-  );
-  const setAddItem = useTravelCheckListStore((state) => state.setAddItem);
-
+export default function AddCheckListItem({
+  list,
+  changeStatus,
+}: IAddCheckListItem) {
   const [addItemName, setAddItemName] = useState('');
 
   const handleAddItem = () => {
-    setAddItem(list, addItemName);
-    setChangeCategoryStatus(list, null);
     setAddItemName('');
   };
 
@@ -43,13 +39,14 @@ export default function AddCheckListItem({ list }: IAddCheckListItem) {
       <div className="flex shrink-0 gap-3">
         <div
           className="text-primary cursor-pointer font-bold"
+          // TODO: 아이템 추가 해야함
           onClick={handleAddItem}
         >
           추가
         </div>
         <div
           className="text-text-secondary cursor-pointer font-bold"
-          onClick={() => setChangeCategoryStatus(list, null)}
+          onClick={() => changeStatus(list.id, null)}
         >
           취소
         </div>

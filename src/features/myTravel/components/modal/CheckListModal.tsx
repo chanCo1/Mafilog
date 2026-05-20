@@ -11,7 +11,6 @@ import Dropdown from '@/shared/components/ui/Dropdown';
 import { Chip } from '@/shared/components/ui/Chip';
 import { Button } from '@/shared/components/ui/Button';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
-import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
 import { EllipsisVertical } from 'lucide-react';
 import { Input } from '@/shared/components/ui/Input';
 import CategoryDropdown from '@/features/myTravel/components/modal/checkList/CategoryDropdown';
@@ -20,6 +19,7 @@ import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import AddCheckListItem from '@/features/myTravel/components/modal/checkList/AddCheckListItem';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useFetchChecklist } from '@/features/myTravel/hooks/rquery/useFetchChecklist';
+import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
 
 interface ICheckListModal {
   isOpen: boolean;
@@ -33,17 +33,9 @@ export default function CheckListModal({
   const travelId = useGetTravelId();
 
   const { data: checklist } = useFetchChecklist(travelId, isOpen);
-
-  // const setChangeCategoryStatus = useTravelCheckListStore(
-  //   (state) => state.setChangeCategoryStatus,
-  // );
-  // const setAddCategory = useTravelCheckListStore(
-  //   (state) => state.setAddCategory,
-  // );
-  // const setDeleteItem = useTravelCheckListStore((state) => state.setDeleteItem);
-  // const setCheckedItem = useTravelCheckListStore(
-  //   (state) => state.setCheckedItem,
-  // );
+  const [editStatus, setEditStatus] = useState<
+    Record<number, TChecklistStatusType>
+  >({});
 
   const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [isOpenAddCategory, setIsOpenAddCategory] = useState(false);
@@ -63,7 +55,12 @@ export default function CheckListModal({
     return checklist?.filter((list) => list.id === selectedCategory);
   }, [checklist, selectedCategory]);
 
-  // if (!checklist?.length) return;
+  const changeStatus = (id: number, status: TChecklistStatusType) => {
+    setEditStatus((prev) => ({
+      ...prev,
+      [id]: status,
+    }));
+  };
 
   return (
     <SideModal
@@ -118,6 +115,7 @@ export default function CheckListModal({
                   if (e.key === 'Enter') handleAddCategory();
                 }}
               />
+              {/* TODO: 카테고리 추가 해야함 */}
               <Button size="xs" onClick={handleAddCategory}>
                 추가
               </Button>
@@ -132,58 +130,69 @@ export default function CheckListModal({
           ) : null}
         </div>
         <div className="scrollbar-hide flex flex-1 flex-col gap-4 overflow-auto">
-          {filteredCheckList?.map((list, index) => (
-            <div key={index} className="flex flex-col gap-1">
-              <div className="flex items-center justify-between">
-                {/* {list.status === 'editCategory' ? (
-                  <EditCategoryName list={list} />
-                ) : (
-                  <p className="font-bold">{list.label}</p>
-                )}
-                {list.status !== 'editCategory' && (
-                  <Dropdown
-                    trigger={
-                      <EllipsisVertical className="h-4 w-4 cursor-pointer" />
-                    }
-                  >
-                    <CategoryDropdown target={list} />
-                  </Dropdown>
-                )} */}
-                <p className="font-bold">{list.label}</p>
-              </div>
-              <div className="flex flex-col gap-3">
-                {list.items.map((_list, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <Checkbox
-                      value={_list.isChecked}
-                      checkboxLabel={_list.label}
-                      onChange={() => null}
-                    />
-                    <div
-                      className="text-state-error cursor-pointer text-sm font-bold"
-                      onClick={() => null}
+          {filteredCheckList?.map((list, index) => {
+            const currentStatus = editStatus[list.id] || null;
+
+            return (
+              <div key={index} className="flex flex-col gap-1">
+                <div className="flex items-center justify-between">
+                  {currentStatus === 'editCategory' ? (
+                    <EditCategoryName target={list} changeStatus={changeStatus} />
+                  ) : (
+                    <p className="font-bold">{list.label}</p>
+                  )}
+                  {currentStatus !== 'editCategory' && (
+                    <Dropdown
+                      trigger={
+                        <EllipsisVertical className="h-4 w-4 cursor-pointer" />
+                      }
                     >
-                      삭제
+                      <CategoryDropdown
+                        list={list}
+                        changeStatus={changeStatus}
+                      />
+                    </Dropdown>
+                  )}
+                </div>
+                <div className="flex flex-col gap-3">
+                  {list.items.map((_list, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Checkbox
+                        value={_list.isChecked}
+                        checkboxLabel={_list.label}
+                        // TODO: 체크박스 해야함
+                        onChange={() => null}
+                      />
+                      <div
+                        className="text-state-error cursor-pointer text-sm font-bold"
+                        // 아이템 삭제 해야함
+                        onClick={() => null}
+                      >
+                        삭제
+                      </div>
                     </div>
+                  ))}
+                  <div className="flex items-center gap-1">
+                    <CategoryIcon
+                      variant="plus"
+                      size="sm"
+                      circled={currentStatus === 'addItem' ? 'none' : 'outline'}
+                      className={
+                        currentStatus === 'addItem' ? 'none' : 'cursor-pointer'
+                      }
+                      onClick={() => changeStatus(list.id, 'addItem')}
+                    />
+                    {currentStatus === 'addItem' && (
+                      <AddCheckListItem
+                        list={list}
+                        changeStatus={changeStatus}
+                      />
+                    )}
                   </div>
-                ))}
-                <div className="flex items-center gap-1">
-                  {/* <CategoryIcon
-                    variant="plus"
-                    size="sm"
-                    circled={list.status === 'addItem' ? 'none' : 'outline'}
-                    className={
-                      list.status === 'addItem' ? 'none' : 'cursor-pointer'
-                    }
-                    onClick={() => setChangeCategoryStatus(list, 'addItem')}
-                  />
-                  {list.status === 'addItem' && (
-                    <AddCheckListItem list={list} />
-                  )} */}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </SideModal>
