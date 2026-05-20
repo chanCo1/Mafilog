@@ -16,7 +16,10 @@ interface IUseMutateSchedulePlace {
   data: ISchedulePlaceRequest;
 }
 
-export const useMutateSchedulePlace = (type: SCHEDULE_TYPE) => {
+export const useMutateSchedulePlace = (
+  travelId: string,
+  type: SCHEDULE_TYPE,
+) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -26,7 +29,7 @@ export const useMutateSchedulePlace = (type: SCHEDULE_TYPE) => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['travelSchedules'],
+        queryKey: ['travelSchedules', travelId],
       });
 
       toast.success(

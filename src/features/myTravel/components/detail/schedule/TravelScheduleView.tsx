@@ -18,22 +18,19 @@ import Dropdown from '@/shared/components/ui/Dropdown';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
 import { useFetchTravelSchedules } from '@/features/myTravel/hooks/rquery/useFetchTravelSchedules';
-import { useParams } from 'next/navigation';
 import { getTravelDayList } from '@/shared/lib/utils';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 function TravelScheduleView() {
-  const params = useParams();
-  const { data: scheduleList } = useFetchTravelSchedules(
-    params.travelId as string,
-  );
+  const travelId = useGetTravelId();
+  const { data: scheduleList } = useFetchTravelSchedules(travelId);
   const { mutateAsync: deleteSchedule, isPending: isDeletePending } =
-    useDeleteSchedulePlace(params.travelId as string);
+    useDeleteSchedulePlace(travelId);
 
   const { selectedSchedules, clearSelectedSchedules } = useSelectSchedules();
-  console.log('selectedSchedules >> ', selectedSchedules)
 
   const { openDialog } = useDialogStore();
 
@@ -63,10 +60,7 @@ function TravelScheduleView() {
       type: 'confirm',
       okLabel: '삭제',
       onOk: async () => {
-        await deleteSchedule({
-          travelId: params.travelId as string,
-          deleteIds,
-        });
+        await deleteSchedule({ travelId, deleteIds });
         clearSelectedSchedules();
       },
     });

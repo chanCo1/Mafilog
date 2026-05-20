@@ -13,9 +13,9 @@ import Selectbox from '@/shared/components/ui/Selectbox';
 import { Button } from '@/shared/components/ui/Button';
 import { IScheduleResponse } from '@/features/myTravel/interfaces/schedule.interface';
 import { getTravelDayList } from '@/shared/lib/utils';
-import { useParams } from 'next/navigation';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useMutateSchedulePlace } from '@/features/myTravel/hooks/rquery/useMutateSchedulePlace';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface IAddMemoModal {
   isOpen: boolean;
@@ -28,17 +28,15 @@ export default function AddMemoModal({
   handleClose,
   scheduleList,
 }: IAddMemoModal) {
-  const params = useParams();
-
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>();
   /** 메모 입력 */
   const [inputMemo, setInputMemo] = useState('');
 
   const travelDayList = getTravelDayList(scheduleList);
-
+  const travelId = useGetTravelId();
   const { mutateAsync: createSechdulePlace, isPending } =
-    useMutateSchedulePlace(SCHEDULE_TYPE.PLACE);
+    useMutateSchedulePlace(travelId, SCHEDULE_TYPE.PLACE);
 
   /** 일정 선택 초기값 */
   useEffect(() => {
@@ -68,7 +66,7 @@ export default function AddMemoModal({
 
     if (getScheduleId) {
       await createSechdulePlace({
-        travelId: params.travelId as string,
+        travelId,
         data: {
           type: SCHEDULE_TYPE.MEMO,
           memo: inputMemo,

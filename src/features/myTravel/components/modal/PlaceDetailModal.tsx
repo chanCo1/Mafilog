@@ -18,11 +18,11 @@ import { getPlaceCategory } from '@/shared/lib/utils';
 import TimePicker from '@/shared/components/ui/TimePicker';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
-import { useParams } from 'next/navigation';
 import { useFetchTravelSchedules } from '@/features/myTravel/hooks/rquery/useFetchTravelSchedules';
 import { getTravelDayList } from '@/shared/lib/utils';
 import { useUpdateSchedulePlace } from '@/features/myTravel/hooks/rquery/useUpdateSchedulePlace';
 import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface IPlaceDetailModal {
   isOpen: boolean;
@@ -37,13 +37,12 @@ export default function PlaceDetailModal({
 }: IPlaceDetailModal) {
   const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
-  const params = useParams();
-  const { data: scheduleList } = useFetchTravelSchedules(
-    params.travelId as string,
-  );
-  const { mutateAsync: updateSchedule, isPending } = useUpdateSchedulePlace();
+  const travelId = useGetTravelId();
+  const { data: scheduleList } = useFetchTravelSchedules(travelId);
+  const { mutateAsync: updateSchedule, isPending } =
+    useUpdateSchedulePlace(travelId);
   const { mutateAsync: deleteSchedule, isPending: deletePending } =
-    useDeleteSchedulePlace(params.travelId as string, timeLineData?.type!);
+    useDeleteSchedulePlace(travelId, timeLineData?.type!);
 
   const travelDayList = getTravelDayList(scheduleList);
 
@@ -65,7 +64,7 @@ export default function PlaceDetailModal({
   /** 일정 수정 */
   const handleUpdateSchedule = async () => {
     await updateSchedule({
-      travelId: params.travelId as string,
+      travelId,
       data: {
         day: selectedDay.value as number,
         memo: inputMemo,
@@ -85,10 +84,7 @@ export default function PlaceDetailModal({
       type: 'confirm',
       okLabel: '삭제',
       onOk: async () => {
-        await deleteSchedule({
-          travelId: params.travelId as string,
-          deleteIds: [timeLineData.id],
-        });
+        await deleteSchedule({ travelId, deleteIds: [timeLineData.id] });
       },
     });
   };

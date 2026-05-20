@@ -28,13 +28,11 @@ import CheckListModal from '@/features/myTravel/components/modal/CheckListModal'
 import ExpenseStatisticModal from '@/features/myTravel/components/modal/ExpenseStatisticModal';
 import ExpenseSettleUpModal from '@/features/myTravel/components/modal/ExpenseSettleUpModal';
 import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/useFetchMyTravelDetail';
-import { useParams } from 'next/navigation';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 export default function MyTravelDetailPage() {
-  const params = useParams();
-  const { data: myTravelDatail } = useFetchMyTravelDetail(
-    params.travelId as string,
-  );
+  const travelId = useGetTravelId();
+  const { data: myTravelDatail } = useFetchMyTravelDetail(travelId);
 
   const [selectedTab, setSelectedTab] = useState<TRAVEL_TAB>(
     TRAVEL_TAB.SCHEDULE,
@@ -135,10 +133,7 @@ export default function MyTravelDetailPage() {
       </div>
       <div className="relative">
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.SCHEDULE}>
-          <TravelScheduleView
-            from={myTravelDatail.from}
-            to={myTravelDatail.to}
-          />
+          <TravelScheduleView />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.EXPENSES}>
           <TravelExpensesView

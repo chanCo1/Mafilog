@@ -5,6 +5,8 @@
  * @description: 여행 기간에 따른 날짜 리스트 hook
  */
 
+// TODO: 삭제 예정
+
 import { useMemo } from 'react';
 import {
   getTravelDayOfWeek,

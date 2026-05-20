@@ -23,8 +23,8 @@ import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
 import { useMutateSchedulePlace } from '@/features/myTravel/hooks/rquery/useMutateSchedulePlace';
-import { useParams } from 'next/navigation';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface IAddPlaceModal {
   isOpen: boolean;
@@ -37,7 +37,7 @@ export default function AddPlaceModal({
   handleClose,
   scheduleList,
 }: IAddPlaceModal) {
-  const params = useParams();
+  const travelId = useGetTravelId();
 
   /** 장소 검색 */
   const [searchPlace, setSearchPlace] = useState<string>('');
@@ -62,7 +62,7 @@ export default function AddPlaceModal({
   const travelDayList = getTravelDayList(scheduleList);
 
   const { mutateAsync: createSechdulePlace, isPending } =
-    useMutateSchedulePlace(SCHEDULE_TYPE.MEMO);
+    useMutateSchedulePlace(travelId, SCHEDULE_TYPE.MEMO);
 
   /** 일정 선택 초기값 */
   useEffect(() => {
@@ -149,7 +149,7 @@ export default function AddPlaceModal({
 
     if (getScheduleId) {
       await createSechdulePlace({
-        travelId: params.travelId as string,
+        travelId,
         data: {
           type: SCHEDULE_TYPE.PLACE,
           day: selectedDay.value as number,

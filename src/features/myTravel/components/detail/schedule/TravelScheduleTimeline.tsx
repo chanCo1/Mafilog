@@ -18,7 +18,7 @@ import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
-import { useParams } from 'next/navigation';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface ITravelScheduleTimeline {
   timeLineData?: ISecheduleListResponse;
@@ -39,9 +39,9 @@ export default function TravelScheduleTimeline({
     type: timeLineData?.type,
   });
 
-  const params = useParams();
+  const travelId = useGetTravelId();
   const { mutateAsync: deleteSchedule } = useDeleteSchedulePlace(
-    params.travelId as string,
+    travelId,
     timeLineData?.type!,
   );
   const { selectedSchedules, toggleSelect } = useSelectSchedules();
@@ -66,10 +66,7 @@ export default function TravelScheduleTimeline({
       type: 'confirm',
       okLabel: '삭제',
       onOk: async () => {
-        await deleteSchedule({
-          travelId: params.travelId as string,
-          deleteIds: [timeLineData.id],
-        });
+        await deleteSchedule({ travelId, deleteIds: [timeLineData.id] });
       },
     });
   };

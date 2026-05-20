@@ -15,7 +15,7 @@ interface IUseUpdateSchedulePlace {
   data: IUpdateSchedulePlaceRequest;
 }
 
-export const useUpdateSchedulePlace = () => {
+export const useUpdateSchedulePlace = (travelId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -25,7 +25,7 @@ export const useUpdateSchedulePlace = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['travelSchedules'],
+        queryKey: ['travelSchedules', travelId],
       });
 
       toast.success('장소를 수정했어요');
