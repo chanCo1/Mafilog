@@ -111,10 +111,16 @@ function TravelScheduleView() {
                 <>
                   <Dropdown
                     trigger={
-                      <Button variant="gray" size="sm">
+                      <Button
+                        variant="gray"
+                        size="sm"
+                        disabled={!selectedSchedules.length || isDeletePending}
+                        isLoading={isDeletePending}
+                      >
                         선택 날짜 이동
                       </Button>
                     }
+                    disabled={!selectedSchedules.length}
                   >
                     {getTravelDayList(scheduleList).map((list) => (
                       <span
@@ -129,7 +135,7 @@ function TravelScheduleView() {
                   <Button
                     variant="redOutline"
                     size="sm"
-                    disabled={isDeletePending}
+                    disabled={!selectedSchedules.length || isDeletePending}
                     isLoading={isDeletePending}
                     onClick={handleDeleteSchedule}
                   >

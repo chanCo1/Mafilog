@@ -13,9 +13,15 @@ interface IDropdown {
   trigger: ReactNode;
   className?: string;
   children: ReactNode;
+  disabled?: boolean;
 }
 
-export default function Dropdown({ trigger, className, children }: IDropdown) {
+export default function Dropdown({
+  trigger,
+  className,
+  children,
+  disabled,
+}: IDropdown) {
   const [isOpen, setIsOpen] = useState(false);
   const [direction, setDirection] = useState<'down' | 'up'>('down');
   const dropdownRef = useOutsideClick(() => setIsOpen(false));
@@ -36,12 +42,17 @@ export default function Dropdown({ trigger, className, children }: IDropdown) {
     }
   }, [isOpen]);
 
+  const handleTrigger = () => {
+    if (disabled) return;
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div
       ref={dropdownRef}
       className={cn('relative flex flex-col items-end', className)}
     >
-      <div onClick={() => setIsOpen(!isOpen)}>{trigger}</div>
+      <div onClick={handleTrigger}>{trigger}</div>
 
       {isOpen && (
         <div
