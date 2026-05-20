@@ -114,8 +114,8 @@ function TravelScheduleView() {
                       <Button
                         variant="gray"
                         size="sm"
-                        disabled={!selectedSchedules.length || isDeletePending}
-                        isLoading={isDeletePending}
+                        disabled={!selectedSchedules.length || isMovePending}
+                        isLoading={isMovePending}
                       >
                         선택 날짜 이동
                       </Button>
