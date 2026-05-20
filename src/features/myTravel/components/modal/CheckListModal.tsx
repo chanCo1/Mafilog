@@ -2,7 +2,7 @@
  * @file: CheckListModal.tsx
  * @author: chad
  * @since: 2026.05.04 ~
- * @description: CheckListModal 컴포넌트, 체크리스트 모달
+ * @description: 체크리스트 모달
  */
 
 import { useMemo, useState } from 'react';
@@ -18,6 +18,8 @@ import CategoryDropdown from '@/features/myTravel/components/modal/checkList/Cat
 import EditCategoryName from '@/features/myTravel/components/modal/checkList/EditCategoryName';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import AddCheckListItem from '@/features/myTravel/components/modal/checkList/AddCheckListItem';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useFetchChecklist } from '@/features/myTravel/hooks/rquery/useFetchChecklist';
 
 interface ICheckListModal {
   isOpen: boolean;
@@ -28,35 +30,40 @@ export default function CheckListModal({
   isOpen,
   handleClose,
 }: ICheckListModal) {
-  const checkList = useTravelCheckListStore((state) => state.checkList);
-  const setChangeCategoryStatus = useTravelCheckListStore(
-    (state) => state.setChangeCategoryStatus,
-  );
-  const setAddCategory = useTravelCheckListStore(
-    (state) => state.setAddCategory,
-  );
-  const setDeleteItem = useTravelCheckListStore((state) => state.setDeleteItem);
-  const setCheckedItem = useTravelCheckListStore(
-    (state) => state.setCheckedItem,
-  );
+  const travelId = useGetTravelId();
 
-  const [selectedCategory, setSelectedCategory] = useState<string | number>(0);
+  const { data: checklist } = useFetchChecklist(travelId, isOpen);
+
+  // const setChangeCategoryStatus = useTravelCheckListStore(
+  //   (state) => state.setChangeCategoryStatus,
+  // );
+  // const setAddCategory = useTravelCheckListStore(
+  //   (state) => state.setAddCategory,
+  // );
+  // const setDeleteItem = useTravelCheckListStore((state) => state.setDeleteItem);
+  // const setCheckedItem = useTravelCheckListStore(
+  //   (state) => state.setCheckedItem,
+  // );
+
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
   const [isOpenAddCategory, setIsOpenAddCategory] = useState(false);
 
-  /** 카테고리 추가 state */
+  /** 추가할 카테고리 이름 */
   const [addCategoryName, setAddCategoryName] = useState('');
 
-  /** 카테고리 추가 */
+  /** 카테고리 추가 핸들링 */
   const handleAddCategory = () => {
-    setAddCategory(addCategoryName);
+    // setAddCategory(addCategoryName);
     setIsOpenAddCategory(false);
     setAddCategoryName('');
   };
 
   const filteredCheckList = useMemo(() => {
-    if (selectedCategory === 0) return checkList;
-    return checkList.filter((list) => list.id === selectedCategory);
-  }, [checkList, selectedCategory]);
+    if (selectedCategory === 0) return checklist;
+    return checklist?.filter((list) => list.id === selectedCategory);
+  }, [checklist, selectedCategory]);
+
+  // if (!checklist?.length) return;
 
   return (
     <SideModal
@@ -79,7 +86,7 @@ export default function CheckListModal({
               >
                 전체
               </Chip>
-              {checkList.map((list, index) => (
+              {checklist?.map((list, index) => (
                 <Chip
                   key={index}
                   variant={
@@ -125,10 +132,10 @@ export default function CheckListModal({
           ) : null}
         </div>
         <div className="scrollbar-hide flex flex-1 flex-col gap-4 overflow-auto">
-          {filteredCheckList.map((list, index) => (
+          {filteredCheckList?.map((list, index) => (
             <div key={index} className="flex flex-col gap-1">
               <div className="flex items-center justify-between">
-                {list.status === 'editCategory' ? (
+                {/* {list.status === 'editCategory' ? (
                   <EditCategoryName list={list} />
                 ) : (
                   <p className="font-bold">{list.label}</p>
@@ -141,26 +148,27 @@ export default function CheckListModal({
                   >
                     <CategoryDropdown target={list} />
                   </Dropdown>
-                )}
+                )} */}
+                <p className="font-bold">{list.label}</p>
               </div>
               <div className="flex flex-col gap-3">
-                {list.list.map((_list, index) => (
+                {list.items.map((_list, index) => (
                   <div key={index} className="flex items-center gap-2">
                     <Checkbox
                       value={_list.isChecked}
                       checkboxLabel={_list.label}
-                      onChange={() => setCheckedItem(list, _list)}
+                      onChange={() => null}
                     />
                     <div
                       className="text-state-error cursor-pointer text-sm font-bold"
-                      onClick={() => setDeleteItem(list, _list)}
+                      onClick={() => null}
                     >
                       삭제
                     </div>
                   </div>
                 ))}
                 <div className="flex items-center gap-1">
-                  <CategoryIcon
+                  {/* <CategoryIcon
                     variant="plus"
                     size="sm"
                     circled={list.status === 'addItem' ? 'none' : 'outline'}
@@ -171,7 +179,7 @@ export default function CheckListModal({
                   />
                   {list.status === 'addItem' && (
                     <AddCheckListItem list={list} />
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>

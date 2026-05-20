@@ -26,7 +26,7 @@ export default function Providers({ children, session }: IProviders) {
     <QueryClientProvider client={queryClient}>
       <SessionProvider
         session={session}
-        refetchInterval={5 * 60}
+        refetchInterval={0}
         refetchOnWindowFocus={false}
       >
         <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY || ''}>
