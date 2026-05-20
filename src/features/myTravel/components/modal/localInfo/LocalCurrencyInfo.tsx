@@ -22,7 +22,7 @@ export default function LocalCurrencyInfo({
 }: ILocalCurrencyInfo) {
   const { lastUpdate } = useFetchCurrency();
   const getCurrency = useGetCurrencyByCountry(
-    selectedCity?.country.code,
+    selectedCity?.countryCode,
     CURRENCY_STANDARD_AMOUNT,
   );
 
@@ -31,7 +31,7 @@ export default function LocalCurrencyInfo({
       {getCurrency ? (
         <div className="break-keep">
           <span className="text-primary text-lg font-bold">
-            {selectedCity?.country.name}
+            {selectedCity?.countryName}
           </span>
           ({selectedCity?.name})의 환율은<br />
           <span className="text-text-secondary">

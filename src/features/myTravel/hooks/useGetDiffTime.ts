@@ -37,7 +37,7 @@ export const useGetDiffTime = ({ targetTimeZone }: IGetDiffTime) => {
       seoulTime: seoulTime.format('HH:mm'),
       targetDate: targetTime.format('YYYY-MM-DD'),
       targetTime: targetTime.format('HH:mm'),
-      diffHours,
+      diffHours: diffHours,
     };
   }, [targetTimeZone]);
 

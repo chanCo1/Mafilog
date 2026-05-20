@@ -16,6 +16,8 @@ import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/Lo
 import LocalTimeInfo from '@/features/myTravel/components/modal/localInfo/LocalTimeInfo';
 import Separator from '@/shared/components/ui/Separator';
 import LocalWeatherInfo from '@/features/myTravel/components/modal/localInfo/LocalWeatherInfo';
+import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/useFetchMyTravelDetail';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface ILocalInfoModal {
   isOpen: boolean;
@@ -26,12 +28,14 @@ export default function LocalInfoModal({
   handleClose,
   isOpen,
 }: ILocalInfoModal) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const travelId = useGetTravelId();
+  const { data: travelInfo } = useFetchMyTravelDetail(travelId);
+
   const [selectedCity, setSelectedCity] = useState<IPlaceList>();
 
   useEffect(() => {
     if (isOpen) {
-      setSelectedCity(travelInfo.cities[0]);
+      setSelectedCity(travelInfo?.cities[0]);
     }
   }, [isOpen]);
 
@@ -48,7 +52,7 @@ export default function LocalInfoModal({
     >
       <div className="flex flex-col gap-3">
         <div className="scrollbar-hide flex items-center gap-1 overflow-auto">
-          {travelInfo.cities.map((city) => (
+          {travelInfo?.cities.map((city) => (
             <Chip
               key={city.id}
               variant={
@@ -65,7 +69,7 @@ export default function LocalInfoModal({
           <Separator position="horizontal" />
           <LocalTimeInfo selectedCity={selectedCity} />
           <Separator position="horizontal" />
-          <LocalWeatherInfo selectedCity={selectedCity} />
+          {selectedCity && <LocalWeatherInfo selectedCity={selectedCity} />}
         </div>
       </div>
     </SideModal>

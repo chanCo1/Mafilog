@@ -10,10 +10,10 @@ import { convertFormattedDate } from '@/shared/lib/utils';
 import { getWeatherByVisualCrossing } from '@/shared/services/weatherService';
 
 interface IUseFetchWeather {
-  lat: number | undefined;
-  lng: number | undefined;
-  startDate: Date;
-  endDate: Date;
+  lat: number;
+  lng: number;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
 }
 
 /** 날씨 정보 호출 react query */

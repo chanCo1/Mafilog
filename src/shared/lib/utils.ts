@@ -33,7 +33,7 @@ export const truncateText = (text: string, maxLength: number = 18): string => {
 
 /** 날짜 포멧 변경 */
 export const convertFormattedDate = (
-  date: Date | string,
+  date: Date | string | undefined,
   format = 'yyyy-MM-dd',
 ) => {
   if (!date) return '';

@@ -7,16 +7,19 @@
 
 import { useGetWeather } from '@/shared/hooks/useGetWeather';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
+import { Loading } from '@/shared/components/ui/Loading';
 
 interface ILocalWeatherInfo {
-  selectedCity: IPlaceList | undefined;
+  selectedCity: IPlaceList;
 }
 
 export default function LocalWeatherInfo({ selectedCity }: ILocalWeatherInfo) {
-  const getWeather = useGetWeather({
-    lat: selectedCity?.location.lat,
-    lng: selectedCity?.location.lng,
+  const {getWeather, isLoading} = useGetWeather({
+    lat: selectedCity.lat,
+    lng: selectedCity.lng,
   });
+
+  if (isLoading) return <div className='flex justify-center'><Loading /></div>
 
   return (
     <div className="flex flex-col">
