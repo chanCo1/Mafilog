@@ -2,7 +2,7 @@
  * @file: useCreateCategory.ts
  * @author: chad
  * @since: 2026.05.19 ~
- * @description: 체크리스트 > 카테고리 등록
+ * @description: 체크리스트 > 카테고리(아이템) 등록
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -20,7 +20,7 @@ interface IUseMutateSchedulePlace {
   data: IChecklistRequest;
 }
 
-export const useCreateCategory = (travelId: string, type: TChecklistType) => {
+export const useCreateCategory = (travelId: string) => {
   const queryClient = useQueryClient();
   const queryKey = ['travelChecklist', travelId];
 

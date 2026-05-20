@@ -18,8 +18,9 @@ import EditCategoryName from '@/features/myTravel/components/modal/checkList/Edi
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import AddCheckListItem from '@/features/myTravel/components/modal/checkList/AddCheckListItem';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
-import { useFetchChecklist } from '@/features/myTravel/hooks/rquery/useFetchChecklist';
+import { useFetchChecklist } from '@/features/myTravel/hooks/rquery/checklist/useFetchChecklist';
 import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
+import { useCreateCategory } from '@/features/myTravel/hooks/rquery/checklist/useCreateCategory';
 
 interface ICheckListModal {
   isOpen: boolean;
@@ -31,6 +32,7 @@ export default function CheckListModal({
   handleClose,
 }: ICheckListModal) {
   const travelId = useGetTravelId();
+  const { mutate: addChecklistCategory } = useCreateCategory(travelId);
 
   const { data: checklist } = useFetchChecklist(travelId, isOpen);
   const [editStatus, setEditStatus] = useState<
@@ -45,7 +47,13 @@ export default function CheckListModal({
 
   /** 카테고리 추가 핸들링 */
   const handleAddCategory = () => {
-    // setAddCategory(addCategoryName);
+    addChecklistCategory({
+      travelId,
+      data: {
+        type: 'CATEGORY',
+        label: addCategoryName,
+      },
+    });
     setIsOpenAddCategory(false);
     setAddCategoryName('');
   };
@@ -137,7 +145,10 @@ export default function CheckListModal({
               <div key={index} className="flex flex-col gap-1">
                 <div className="flex items-center justify-between">
                   {currentStatus === 'editCategory' ? (
-                    <EditCategoryName target={list} changeStatus={changeStatus} />
+                    <EditCategoryName
+                      target={list}
+                      changeStatus={changeStatus}
+                    />
                   ) : (
                     <p className="font-bold">{list.label}</p>
                   )}

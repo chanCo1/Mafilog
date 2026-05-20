@@ -9,6 +9,8 @@ import { useState } from 'react';
 import { Input } from '@/shared/components/ui/Input';
 import { IChecklistResponse } from '@/features/myTravel/interfaces/checklist.interface';
 import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
+import { useCreateCategory } from '@/features/myTravel/hooks/rquery/checklist/useCreateCategory';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface IAddCheckListItem {
   list: IChecklistResponse;
@@ -20,8 +22,19 @@ export default function AddCheckListItem({
   changeStatus,
 }: IAddCheckListItem) {
   const [addItemName, setAddItemName] = useState('');
+  const travelId = useGetTravelId();
+  const { mutate: addChecklistItem } = useCreateCategory(travelId);
 
+  /** 체크리스트 아이템 추가 */
   const handleAddItem = () => {
+    addChecklistItem({
+      travelId,
+      data: {
+        type: 'ITEM',
+        label: addItemName,
+        categoryId: list.id,
+      },
+    });
     setAddItemName('');
   };
 
