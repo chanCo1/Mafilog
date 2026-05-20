@@ -82,6 +82,18 @@ class _MyTravelService {
     );
     return response.data.data;
   }
+
+  /** 일정 선택 이동 */
+  async updateBulkTravelScheduleDate(
+    travelId: string,
+    data: { moveIds: number[]; targetDay: number },
+  ) {
+    const response = await axiosInstanceWithAuth.patch(
+      `${API_URL}/${travelId}/schedules/bulk-move`,
+      data,
+    );
+    return response.data.data;
+  }
 }
 
 const MyTravelService = new _MyTravelService();
