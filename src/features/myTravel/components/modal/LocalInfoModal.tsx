@@ -16,7 +16,7 @@ import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/Lo
 import LocalTimeInfo from '@/features/myTravel/components/modal/localInfo/LocalTimeInfo';
 import Separator from '@/shared/components/ui/Separator';
 import LocalWeatherInfo from '@/features/myTravel/components/modal/localInfo/LocalWeatherInfo';
-import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/useFetchMyTravelDetail';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface ILocalInfoModal {
@@ -29,7 +29,7 @@ export default function LocalInfoModal({
   isOpen,
 }: ILocalInfoModal) {
   const travelId = useGetTravelId();
-  const { data: travelInfo } = useFetchMyTravelDetail(travelId);
+  const { data: travelInfo } = useGetMyTravelDetail(travelId);
 
   const [selectedCity, setSelectedCity] = useState<IPlaceList>();
 

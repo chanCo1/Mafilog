@@ -1,5 +1,5 @@
 /**
- * @file: useFetchMyTravelList.ts
+ * @file: useGetMyTravelList.ts
  * @author: chad
  * @since: 2026.05.04 ~
  * @description: 내 여행 리스트 조회
@@ -26,7 +26,7 @@ const getDiffMidnight = (): number => {
   return midnight.diff(now);
 };
 
-export const useFetchMyTravelList = (userId: string | undefined) => {
+export const useGetMyTravelList = (userId: string | undefined) => {
   const query = useQuery({
     queryKey: ['myTravelList'],
     queryFn: async () => await MyTravelService.getMyTravelList(),

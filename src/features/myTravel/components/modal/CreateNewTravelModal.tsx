@@ -24,9 +24,9 @@ import { IMemberList } from '@/shared/interfaces';
 import { TRAVEL_PARTNER, TRAVEL_STYLE, TRAVEL_TYPE } from '@/shared/types/Enum';
 import { useSession } from 'next-auth/react';
 import { getTravelDay } from '@/shared/lib/utils';
-import { useMutateMyTravelList } from '@/features/myTravel/hooks/rquery/useMutateMyTravelList';
+import { useCreateMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useCreateMyTravelList';
 import { useRouter } from 'next/navigation';
-import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/useFetchMyTravelDetail';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { truncateText } from '@/shared/lib/utils';
 import { useUpdateMyTravel } from '@/features/myTravel/hooks/rquery/myTravel/useUpdateMyTravel';
@@ -65,9 +65,9 @@ export default function CreateNewTravelModal({
   const [travelMember, setTravelMember] = useState<IMemberList[]>([]);
 
   const { mutateAsync: createTravelMutate, isPending } =
-    useMutateMyTravelList();
+    useCreateMyTravelList();
   const travelId = useGetTravelId();
-  const { data: travelDetail } = useFetchMyTravelDetail(travelId);
+  const { data: travelDetail } = useGetMyTravelDetail(travelId);
   const { mutateAsync: updateTravelDetail, isPending: isUpdatePending } =
     useUpdateMyTravel(travelId);
 
@@ -205,7 +205,7 @@ export default function CreateNewTravelModal({
         ),
       );
     }
-  }, [selectedCities]);
+  }, [selectedCities, stepData]);
 
   useEffect(() => {
     /** 날짜 선택 완료 후 지웠을 경우 */
@@ -216,14 +216,12 @@ export default function CreateNewTravelModal({
         ),
       );
     }
-  }, [selectedDate]);
+  }, [selectedDate, stepData]);
 
   /** 수정 시 상세 값 바인딩 */
   useEffect(() => {
     if (isOpen && isModify && travelDetail) {
-      setStepData(
-        stepData.map((step, index) => ({ ...step, isComplete: true })),
-      );
+      setStepData(stepData.map((step) => ({ ...step, isComplete: true })));
 
       setTravelType(travelDetail.travelType);
       setSelectedCities(travelDetail.cities);
@@ -237,9 +235,11 @@ export default function CreateNewTravelModal({
       setTravelStyles(travelDetail.travelStyles);
       setTravelMember(travelDetail.member);
 
-      travelDetail.imageUrl && setSelectedImage([travelDetail.imageUrl]);
+      if (travelDetail.imageUrl) {
+        setSelectedImage([travelDetail.imageUrl]);
+      }
     }
-  }, [travelId, isModify, isOpen]);
+  }, [travelId, isModify, isOpen, stepData, travelDetail]);
 
   const isDisabled = !travelType || !selectedCities || !selectedDate;
 

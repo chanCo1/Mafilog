@@ -15,12 +15,12 @@ import {
 import Separator from '@/shared/components/ui/Separator';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 import { useState } from 'react';
-import { useFetchMyTravelList } from '@/features/myTravel/hooks/rquery/useFetchMyTravelList';
+import { useGetMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelList';
 
 export default function ProgressTravelCard() {
   const [isOpenExpenseModal, setIsOpenExpenseModal] = useState(false);
 
-  const { data: travelList } = useFetchMyTravelList();
+  const { data: travelList } = useGetMyTravelList();
   if (!travelList?.progress.length) return;
 
   const _from = travelList?.progress[0]?.from;

@@ -16,10 +16,10 @@ import { getPlaceCategory } from '@/shared/lib/utils';
 import TimePicker from '@/shared/components/ui/TimePicker';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
-import { useFetchTravelSchedules } from '@/features/myTravel/hooks/rquery/useFetchTravelSchedules';
+import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
 import { getTravelDayList } from '@/shared/lib/utils';
-import { useUpdateSchedulePlace } from '@/features/myTravel/hooks/rquery/useUpdateSchedulePlace';
-import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
+import { useUpdateSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useUpdateSchedulePlace';
+import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useDeleteSchedulePlace';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface IPlaceDetailModal {
@@ -36,11 +36,11 @@ export default function PlaceDetailModal({
   const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
   const travelId = useGetTravelId();
-  const { data: scheduleList } = useFetchTravelSchedules(travelId);
+  const { data: scheduleList } = useGetTravelSchedules(travelId);
   const { mutateAsync: updateSchedule, isPending } =
     useUpdateSchedulePlace(travelId);
   const { mutateAsync: deleteSchedule, isPending: deletePending } =
-    useDeleteSchedulePlace(travelId, timeLineData?.type!);
+    useDeleteSchedulePlace(travelId, timeLineData?.type);
 
   const travelDayList = getTravelDayList(scheduleList);
 

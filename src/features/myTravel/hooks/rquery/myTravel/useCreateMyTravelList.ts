@@ -1,15 +1,15 @@
 /**
- * @file: useMutateMyTravelList.ts
+ * @file: useCreateMyTravelList.ts
  * @author: chad
  * @since: 2026.05.18 ~
- * @description: 새 여행 생성 Mutation 및 캐시 새로고침
+ * @description: 새 여행 생성 Mutation
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 import { toast } from 'sonner';
 
-export const useMutateMyTravelList = () => {
+export const useCreateMyTravelList = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

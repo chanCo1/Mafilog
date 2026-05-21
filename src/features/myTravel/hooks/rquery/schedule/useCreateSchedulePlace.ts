@@ -1,5 +1,5 @@
 /**
- * @file: useMutateSchedulePlace.ts
+ * @file: useCreateSchedulePlace.ts
  * @author: chad
  * @since: 2026.05.19 ~
  * @description: 일정 등록 Mutation
@@ -11,19 +11,19 @@ import { ISchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.i
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
-interface IUseMutateSchedulePlace {
+interface IUseCreateSchedulePlace {
   travelId: string;
   data: ISchedulePlaceRequest;
 }
 
-export const useMutateSchedulePlace = (
+export const useCreateSchedulePlace = (
   travelId: string,
   type: SCHEDULE_TYPE,
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ travelId, data }: IUseMutateSchedulePlace) => {
+    mutationFn: async ({ travelId, data }: IUseCreateSchedulePlace) => {
       return await MyTravelService.postTravelSchedulePlace(travelId, data);
     },
 

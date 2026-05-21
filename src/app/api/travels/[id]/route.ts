@@ -135,7 +135,6 @@ export async function PATCH(
       travelStyles,
       cities: cities.map((c: IPlaceList) => c.id),
       members: member.map((m: IMemberList) => m.name),
-      // 새 파일이면 무조건 업데이트 타도록 꼼수값('new') 부여, 아니면 기존 URL이나 null
       image: imageFiles.length > 0 ? 'new' : imageUrls[0] || null,
     });
 
@@ -209,40 +208,51 @@ export async function PATCH(
         );
       }
 
+      // 새로운 날짜
       const newDays = getTravelDayOfWeek(fromDate, toDate);
-      const newDateTimes = newDays.map((d) => d.date.getTime());
+      const newDateTimes = newDays.map((day) => day.date.getTime());
 
-      // 일정 동기화
+      // 해당 여행에 스케줄 정보
       const existingSchedules = await tx.travelSchedule.findMany({
         where: { travelId },
       });
 
+      // 기존 날짜가 새로운 날짜에 포함하고 있지 않으면 삭제 대상
       const schedulesToDelete = existingSchedules.filter(
-        (s) => s.date && !newDateTimes.includes(s.date.getTime()),
+        (schedule) =>
+          schedule.date && !newDateTimes.includes(schedule.date.getTime()),
       );
+
       if (schedulesToDelete.length > 0) {
+        // 다중 삭제
         await tx.travelSchedule.deleteMany({
-          where: { id: { in: schedulesToDelete.map((s) => s.id) } },
+          where: {
+            id: { in: schedulesToDelete.map((schedule) => schedule.id) },
+          },
         });
       }
 
+      // 새로운 날짜 반복
       for (const newDay of newDays) {
+        // 기존 날짜와 새로운 날짜가 같으면
         const existing = existingSchedules.find(
-          (s) => s.date?.getTime() === newDay.date.getTime(),
+          (schedule) => schedule.date?.getTime() === newDay.date.getTime(),
         );
+        // 날짜 업데이트
         if (existing) {
           await tx.travelSchedule.update({
             where: { id: existing.id },
             data: { day: newDay.day },
           });
         } else {
+          // 아니면 날짜 생성
           await tx.travelSchedule.create({
             data: { travelId, day: newDay.day, date: newDay.date },
           });
         }
       }
 
-      // 가계부 동기화
+      // 가계부
       const existingExpenses = await tx.travelExpense.findMany({
         where: { travelId },
       });
@@ -255,7 +265,7 @@ export async function PATCH(
           where: { id: { in: expensesToDelete.map((e) => e.id) } },
         });
       }
-      
+
       // 생성
       for (const newDay of newDays) {
         const existing = existingExpenses.find(

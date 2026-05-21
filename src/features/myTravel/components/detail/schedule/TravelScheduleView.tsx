@@ -17,17 +17,17 @@ import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules
 import Dropdown from '@/shared/components/ui/Dropdown';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
-import { useFetchTravelSchedules } from '@/features/myTravel/hooks/rquery/useFetchTravelSchedules';
+import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
 import { getTravelDayList } from '@/shared/lib/utils';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
-import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
+import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useDeleteSchedulePlace';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
-import { useUpdateBulkScheduleDate } from '@/features/myTravel/hooks/rquery/useUpdateScheduleBulk';
+import { useUpdateBulkScheduleDate } from '@/features/myTravel/hooks/rquery/schedule/useUpdateScheduleBulk';
 
 function TravelScheduleView() {
   const travelId = useGetTravelId();
-  const { data: scheduleList } = useFetchTravelSchedules(travelId);
+  const { data: scheduleList } = useGetTravelSchedules(travelId);
   const { mutateAsync: deleteSchedule, isPending: isDeletePending } =
     useDeleteSchedulePlace(travelId);
   const { mutateAsync: moveSchedule, isPending: isMovePending } =

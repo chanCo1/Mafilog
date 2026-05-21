@@ -22,7 +22,7 @@ import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
 import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
-import { useMutateSchedulePlace } from '@/features/myTravel/hooks/rquery/useMutateSchedulePlace';
+import { useCreateSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useCreateSchedulePlace';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
@@ -62,7 +62,7 @@ export default function AddPlaceModal({
   const travelDayList = getTravelDayList(scheduleList);
 
   const { mutateAsync: createSechdulePlace, isPending } =
-    useMutateSchedulePlace(travelId, SCHEDULE_TYPE.MEMO);
+    useCreateSchedulePlace(travelId, SCHEDULE_TYPE.MEMO);
 
   /** 일정 선택 초기값 */
   useEffect(() => {

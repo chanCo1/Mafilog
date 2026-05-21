@@ -13,12 +13,12 @@ import PageHeader from '@/shared/components/ui/PageHeader';
 import { Button } from '@/shared/components/ui/Button';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import TravelListTemplate from '@/features/myTravel/components/main/TravelListTemplate';
-import { useFetchMyTravelList } from '@/features/myTravel/hooks/rquery/useFetchMyTravelList';
+import { useGetMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelList';
 import { useSession } from 'next-auth/react';
 
 export default function MyTravelMainPage() {
   const { data: userInfo } = useSession();
-  const { data: travelList } = useFetchMyTravelList(userInfo?.user?.id);
+  const { data: travelList } = useGetMyTravelList(userInfo?.user?.id);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   return (

@@ -17,7 +17,7 @@ import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTime
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
-import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/useDeleteSchedulePlace';
+import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useDeleteSchedulePlace';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface ITravelScheduleTimeline {

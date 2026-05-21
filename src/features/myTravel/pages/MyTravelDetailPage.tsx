@@ -27,13 +27,13 @@ import LocalInfoModal from '@/features/myTravel/components/modal/LocalInfoModal'
 import CheckListModal from '@/features/myTravel/components/modal/CheckListModal';
 import ExpenseStatisticModal from '@/features/myTravel/components/modal/ExpenseStatisticModal';
 import ExpenseSettleUpModal from '@/features/myTravel/components/modal/ExpenseSettleUpModal';
-import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/useFetchMyTravelDetail';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { ReturnButton } from '@/shared/components/ui/ReturnButton';
 
 export default function MyTravelDetailPage() {
   const travelId = useGetTravelId();
-  const { data: myTravelDatail } = useFetchMyTravelDetail(travelId);
+  const { data: myTravelDatail } = useGetMyTravelDetail(travelId);
 
   const [selectedTab, setSelectedTab] = useState<TRAVEL_TAB>(
     TRAVEL_TAB.SCHEDULE,
