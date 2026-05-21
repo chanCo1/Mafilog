@@ -18,7 +18,6 @@ interface IUseUpdateSchedulePlace {
 
 export const useUpdateSchedulePlace = (
   travelId: string,
-  type: SCHEDULE_TYPE,
 ) => {
   const queryClient = useQueryClient();
 
@@ -32,11 +31,7 @@ export const useUpdateSchedulePlace = (
         queryKey: ['travelSchedules', travelId],
       });
 
-      toast.success(
-        type === SCHEDULE_TYPE.PLACE
-          ? '장소를 수정했어요'
-          : '메모를 수정했어요',
-      );
+      toast.success('수정되었어요');
     },
 
     onError: (error: any) => {

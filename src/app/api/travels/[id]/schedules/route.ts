@@ -5,7 +5,6 @@
  * @description: 내 여행 상세 > 일정 관련 api
  */
 
-import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import { authGuard } from '@/shared/backend/lib/authGuard';
 import {
@@ -13,6 +12,10 @@ import {
   IUpdateSchedulePlaceRequest,
 } from '@/features/myTravel/interfaces/schedule.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import {
+  successResponse,
+  errorResponse,
+} from '@/shared/backend/utils/apiResponse';
 
 /** 여행 일정(스케줄) 조회 */
 export async function GET(
@@ -20,19 +23,10 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   const authValidate = await authGuard(request);
-
-  if (!authValidate.isValid) {
-    return authValidate.errorResponse;
-  }
+  if (!authValidate.isValid) return authValidate.errorResponse;
 
   const travelId = Number(params.id);
-
-  if (!travelId) {
-    return NextResponse.json(
-      { message: '잘 못 된 접근입니다.' },
-      { status: 403 },
-    );
-  }
+  if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
 
   try {
     const schedule = await prisma.travelSchedule.findMany({
@@ -48,10 +42,10 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({ data: schedule }, { status: 200 });
+    return successResponse(schedule);
   } catch (error) {
     console.error('@@ 내 여행 상세 일정 조회 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }
 
@@ -61,35 +55,20 @@ export async function POST(
   { params }: { params: { id: string } },
 ) {
   const authValidate = await authGuard(request);
-
-  if (!authValidate.isValid) {
-    return authValidate.errorResponse;
-  }
+  if (!authValidate.isValid) return authValidate.errorResponse;
 
   const travelId = Number(params.id);
-
-  if (!travelId) {
-    return NextResponse.json(
-      { message: '잘 못 된 접근입니다.' },
-      { status: 403 },
-    );
-  }
+  if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
 
   const body = (await request.json()) as ISchedulePlaceRequest;
   const { day, memo, place, scheduleId, time, type } = body;
 
   if (!scheduleId || !day || !type) {
-    return NextResponse.json(
-      { message: '필수 데이터가 누락되었습니다.' },
-      { status: 400 },
-    );
+    return errorResponse('필수 데이터가 없습니다.', 400);
   }
 
   if (type === SCHEDULE_TYPE.PLACE && !place?.length) {
-    return NextResponse.json(
-      { message: '등록할 장소가 선택되지 않았습니다.' },
-      { status: 400 },
-    );
+    return errorResponse('등록할 장소가 선택되지 않았습니다.', 400);
   }
 
   try {
@@ -100,7 +79,7 @@ export async function POST(
         select: { order: true },
       });
 
-      const lastOrder = (lastSchedulePlace?.order ?? -1);
+      const lastOrder = lastSchedulePlace?.order ?? -1;
       if (type === SCHEDULE_TYPE.PLACE && place && place.length > 0) {
         const createdItems = await Promise.all(
           place.map((_place, index) => {
@@ -149,15 +128,10 @@ export async function POST(
       }
     });
 
-    return NextResponse.json(
-      {
-        data: registSchedule,
-      },
-      { status: 200 },
-    );
+    return successResponse(registSchedule);
   } catch (error) {
     console.error('@@ 일정 저장 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }
 
@@ -167,28 +141,17 @@ export async function PATCH(
   { params }: { params: { id: string } },
 ) {
   const authValidate = await authGuard(request);
-  if (!authValidate.isValid) {
-    return authValidate.errorResponse;
-  }
+  if (!authValidate.isValid) return authValidate.errorResponse;
 
   const travelId = Number(params.id);
-
-  if (!travelId) {
-    return NextResponse.json(
-      { message: '잘 못 된 접근입니다.' },
-      { status: 403 },
-    );
-  }
+  if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
 
   try {
     const body = (await request.json()) as IUpdateSchedulePlaceRequest;
     const { scheduleListId, day, time, memo } = body;
 
     if (!scheduleListId || !day || !travelId) {
-      return NextResponse.json(
-        { message: '필수 데이터가 누락되었습니다.' },
-        { status: 400 },
-      );
+      return errorResponse('필수 데이터가 없습니다.', 400);
     }
 
     const targetSchedule = await prisma.travelSchedule.findFirst({
@@ -199,10 +162,15 @@ export async function PATCH(
     });
 
     if (!targetSchedule) {
-      return NextResponse.json(
-        { message: '변경하려는 일정을 찾지 못했습니다.' },
-        { status: 404 },
-      );
+      return errorResponse('변경하려는 일정을 찾지 못했습니다.', 404);
+    }
+
+    const originSchedule = await prisma.scheduleList.findUnique({
+      where: { id: scheduleListId },
+    });
+
+    if (!originSchedule) {
+      return errorResponse('변경하려는 리스트 찾지 못했습니다.', 404);
     }
 
     const lastSchedulePlace = await prisma.scheduleList.findFirst({
@@ -211,13 +179,13 @@ export async function PATCH(
       select: { order: true },
     });
 
-    const lastOrder = (lastSchedulePlace?.order ?? -1);
+    const lastOrder = lastSchedulePlace?.order ?? -1;
 
     const updatedItem = await prisma.scheduleList.update({
       where: { id: scheduleListId },
       data: {
         day,
-        order: lastOrder + 1,
+        order: originSchedule.day === day ? originSchedule.day : lastOrder + 1,
         time: time || '',
         memo: memo || '',
         schedule: {
@@ -227,16 +195,10 @@ export async function PATCH(
       include: { place: true },
     });
 
-    return NextResponse.json(
-      {
-        data: updatedItem,
-        message: '일정이 수정되었습니다.',
-      },
-      { status: 200 },
-    );
+    return successResponse(updatedItem);
   } catch (error) {
     console.error('@@ 일정 리스트 수정 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }
 
@@ -246,28 +208,17 @@ export async function DELETE(
   { params }: { params: { id: string } },
 ) {
   const authValidate = await authGuard(request);
-  if (!authValidate.isValid) {
-    return authValidate.errorResponse;
-  }
+  if (!authValidate.isValid) return authValidate.errorResponse;
 
   const travelId = Number(params.id);
-
-  if (!travelId) {
-    return NextResponse.json(
-      { message: '잘 못 된 접근입니다.' },
-      { status: 403 },
-    );
-  }
+  if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
 
   try {
     const body = (await request.json()) as { deleteIds: number[] };
     const { deleteIds } = body;
 
     if (!deleteIds.length) {
-      return NextResponse.json(
-        { message: '삭제할 일정 ID가 없습니다.' },
-        { status: 400 },
-      );
+      return errorResponse('삭제할 아이디가 없습니다.', 400);
     }
 
     await prisma.scheduleList.deleteMany({
@@ -278,14 +229,9 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json(
-      {
-        message: '삭제되었습니다.',
-      },
-      { status: 200 },
-    );
+    return successResponse();
   } catch (error) {
     console.error('@@ 일정 리스트 삭제 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }
