@@ -21,7 +21,7 @@ class _ChecklistService {
   }
 
   /** 체크리스트 (카테고리/아이템) 등록 */
-  async postChecklist(travelId: string, data: IChecklistRequest) {
+  async createChecklist(travelId: string, data: IChecklistRequest) {
     const response = await axiosInstanceWithAuth.post(
       `${API_URL}/${travelId}/checklist`,
       data,
@@ -30,7 +30,7 @@ class _ChecklistService {
   }
 
   /** 체크리스트 (카테고리/아이템) 수정 */
-  async patchChecklist(travelId: string, data: IChecklistRequest) {
+  async updateChecklist(travelId: string, data: IChecklistRequest) {
     const response = await axiosInstanceWithAuth.patch(
       `${API_URL}/${travelId}/checklist`,
       data,

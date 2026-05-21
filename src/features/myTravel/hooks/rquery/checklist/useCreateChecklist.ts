@@ -14,7 +14,7 @@ import {
 import ChecklistService from '@/features/myTravel/services/Checklist.service';
 import { nanoid } from 'nanoid';
 
-interface IUseMutateSchedulePlace {
+interface IUseCreateChecklist {
   travelId: string;
   requestData: Pick<IChecklistRequest, 'type' | 'label' | 'categoryId'>;
 }
@@ -24,8 +24,8 @@ export const useCreateChecklist = (travelId: string) => {
   const queryKey = ['travelChecklist', travelId];
 
   return useMutation({
-    mutationFn: async ({ travelId, requestData }: IUseMutateSchedulePlace) => {
-      return await ChecklistService.postChecklist(travelId, requestData);
+    mutationFn: async ({ travelId, requestData }: IUseCreateChecklist) => {
+      return await ChecklistService.createChecklist(travelId, requestData);
     },
 
     onMutate: async ({ requestData }) => {
@@ -37,10 +37,12 @@ export const useCreateChecklist = (travelId: string) => {
       queryClient.setQueryData(queryKey, (old: IChecklistResponse[]) => {
         if (!old) return [];
 
+        // 카테고리 생성
         if (requestData.type === 'CATEGORY') {
           return [...old, { id: tempId, label: requestData.label, items: [] }];
         }
 
+        // 아이템 생성
         if (requestData.type === 'ITEM') {
           return old.map((category) => {
             return category.id === requestData.categoryId

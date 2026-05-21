@@ -2,7 +2,7 @@
  * @file: useDeleteChecklist.ts
  * @author: chad
  * @since: 2026.05.19 ~
- * @description: 체크리스트 > 카테고리(아이템) 등록
+ * @description: 체크리스트 > 카테고리(아이템) 삭제
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -14,7 +14,7 @@ import {
 import ChecklistService from '@/features/myTravel/services/Checklist.service';
 import { nanoid } from 'nanoid';
 
-interface IUseMutateSchedulePlace {
+interface IUseDeleteChecklist {
   travelId: string;
   requestData: Omit<IChecklistRequest, 'isChecked'>;
 }
@@ -24,7 +24,7 @@ export const useDeleteChecklist = (travelId: string) => {
   const queryKey = ['travelChecklist', travelId];
 
   return useMutation({
-    mutationFn: async ({ travelId, requestData }: IUseMutateSchedulePlace) => {
+    mutationFn: async ({ travelId, requestData }: IUseDeleteChecklist) => {
       return await ChecklistService.deleteChecklist(travelId, requestData);
     },
 
@@ -32,15 +32,16 @@ export const useDeleteChecklist = (travelId: string) => {
       await queryClient.cancelQueries({ queryKey });
       const previousData =
         queryClient.getQueryData<IChecklistResponse[]>(queryKey);
-      const tempId = nanoid();
 
       queryClient.setQueryData(queryKey, (old: IChecklistResponse[]) => {
         if (!old) return [];
 
+        // 카테고리 삭제
         if (requestData.type === 'CATEGORY') {
           return old.filter((category) => category.id !== requestData.categoryId);
         }
 
+        // 아이템 삭제
         if (requestData.type === 'ITEM') {
           return old.map((category) => {
             return category.id === requestData.categoryId
