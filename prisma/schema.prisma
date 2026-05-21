@@ -223,6 +223,8 @@ model ScheduleList {
   type            String
   // 몇일차인지
   day             Int
+  // 순서
+  order           Int            @default(0)
   // // fk
   schedulePlaceId String?
   // 장소
