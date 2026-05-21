@@ -1,5 +1,5 @@
 /**
- * @file: useFetchChecklist.ts
+ * @file: useGetChecklist.ts
  * @author: chad
  * @since: 2026.05.20 ~
  * @description: 여행 체크리스트 조회 react query
@@ -8,7 +8,7 @@
 import { useQuery } from '@tanstack/react-query';
 import ChecklistService from '@/features/myTravel/services/Checklist.service';
 
-export const useFetchChecklist = (travelId: string, isFetch: boolean) => {
+export const useGetChecklist = (travelId: string, isFetch: boolean) => {
   const query = useQuery({
     queryKey: ['travelChecklist', travelId],
     queryFn: async () => await ChecklistService.getTravelChecklist(travelId),
