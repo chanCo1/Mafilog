@@ -27,8 +27,8 @@ import { ANIMAL_EMOJI } from '@/shared/constants';
 interface ICreateNewTravelStep3 {
   title: string;
   setTravelTitle: Dispatch<SetStateAction<string>>;
-  selectedImage: File[];
-  setSelectedImage: Dispatch<SetStateAction<File[]>>;
+  selectedImage: (File | string)[];
+  setSelectedImage: Dispatch<SetStateAction<(File | string)[]>>;
   travelPartner: TRAVEL_PARTNER;
   setTravelPartner: Dispatch<SetStateAction<TRAVEL_PARTNER>>;
   travelStyles: TRAVEL_STYLE[];

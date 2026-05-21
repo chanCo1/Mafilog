@@ -57,7 +57,7 @@ export default function CreateNewTravelModal({
     undefined,
   );
   const [travelTitle, setTravelTitle] = useState('');
-  const [selectedImage, setSelectedImage] = useState<File[]>([]);
+  const [selectedImage, setSelectedImage] = useState<(File | string)[]>([]);
   const [travelPartner, setTravelPartner] = useState<TRAVEL_PARTNER>(
     TRAVEL_PARTNER.ALONE,
   );
@@ -194,10 +194,12 @@ export default function CreateNewTravelModal({
 
   /** 수정 시 상세 값 바인딩 */
   useEffect(() => {
-    if (isOpen && travelId && travelDetail) {
+    if (isOpen && isModify && travelDetail) {
       console.log(travelDetail);
 
-      setStepData(stepData.map((step) => ({ ...step, isComplete: true })));
+      setStepData(
+        stepData.map((step, index) => ({ ...step, isComplete: true })),
+      );
 
       setTravelType(travelDetail.travelType);
       setSelectedCities(travelDetail.cities);
@@ -207,14 +209,18 @@ export default function CreateNewTravelModal({
       setTravelPartner(travelDetail.travelPartner);
       setTravelStyles(travelDetail.travelStyles);
       setTravelMember(travelDetail.member);
+
+      travelDetail.imageUrl && setSelectedImage([travelDetail.imageUrl]);
     }
   }, [travelId, isOpen]);
+
+  const isDisabled = !travelType || !selectedCities || !selectedDate;
 
   return (
     <SideModal
       isOpen={isOpen}
       title={
-        travelId && travelDetail
+        isModify && travelDetail
           ? `${truncateText(travelDetail.title, 20)}`
           : '새 여행 만들기'
       }
@@ -257,8 +263,12 @@ export default function CreateNewTravelModal({
               >
                 이전
               </Button>
-              <Button onClick={createNewTravel} isLoading={isPending}>
-                여행 만들기
+              <Button
+                onClick={createNewTravel}
+                disabled={isDisabled || isPending}
+                isLoading={isPending}
+              >
+                {isModify ? '여행 수정' : '여행 만들기'}
               </Button>
             </>
           )}
