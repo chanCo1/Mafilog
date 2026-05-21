@@ -29,7 +29,7 @@ export default function AddCheckListItem({
   const handleAddItem = () => {
     addChecklistItem({
       travelId,
-      data: {
+      requestData: {
         type: 'ITEM',
         label: addItemName,
         categoryId: list.id,

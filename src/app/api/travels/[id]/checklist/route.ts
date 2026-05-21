@@ -172,18 +172,19 @@ export async function DELETE(
   const body = (await request.json()) as IChecklistRequest;
   const { type, categoryId, itemId } = body;
 
-  if (!type || !categoryId || !itemId) {
-    return NextResponse.json(
-      { message: '필수 항목이 없습니다' },
-      { status: 400 },
-    );
-  }
-
   try {
     if (type === 'CATEGORY') {
+      if (!type || !categoryId) {
+        return NextResponse.json(
+          { message: '필수 항목이 없습니다' },
+          { status: 400 },
+        );
+      }
+
       await prisma.checklistCategory.delete({
         where: { id: Number(categoryId) },
       });
+
       return NextResponse.json(
         { message: '카테고리가 삭제되었습니다.' },
         { status: 200 },
@@ -191,9 +192,17 @@ export async function DELETE(
     }
 
     if (type === 'ITEM') {
+      if (!type || !itemId) {
+        return NextResponse.json(
+          { message: '필수 항목이 없습니다' },
+          { status: 400 },
+        );
+      }
+
       await prisma.checklistItem.delete({
         where: { id: Number(itemId) },
       });
+
       return NextResponse.json(
         { message: '항목이 삭제되었습니다.' },
         { status: 200 },

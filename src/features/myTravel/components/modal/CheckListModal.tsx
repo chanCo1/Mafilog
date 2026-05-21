@@ -21,6 +21,7 @@ import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useFetchChecklist } from '@/features/myTravel/hooks/rquery/checklist/useFetchChecklist';
 import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
 import { useCreateChecklist } from '@/features/myTravel/hooks/rquery/checklist/useCreateChecklist';
+import { useDeleteChecklist } from '@/features/myTravel/hooks/rquery/checklist/useDeleteChecklist';
 
 interface ICheckListModal {
   isOpen: boolean;
@@ -33,6 +34,7 @@ export default function CheckListModal({
 }: ICheckListModal) {
   const travelId = useGetTravelId();
   const { mutate: addChecklistCategory } = useCreateChecklist(travelId);
+  const { mutate: deleteChecklistItem } = useDeleteChecklist(travelId);
 
   const { data: checklist } = useFetchChecklist(travelId, isOpen);
   const [editStatus, setEditStatus] = useState<
@@ -49,7 +51,7 @@ export default function CheckListModal({
   const handleAddCategory = () => {
     addChecklistCategory({
       travelId,
-      data: {
+      requestData: {
         type: 'CATEGORY',
         label: addCategoryName,
       },
@@ -123,7 +125,6 @@ export default function CheckListModal({
                   if (e.key === 'Enter') handleAddCategory();
                 }}
               />
-              {/* TODO: 카테고리 추가 해야함 */}
               <Button size="xs" onClick={handleAddCategory}>
                 추가
               </Button>
@@ -166,18 +167,27 @@ export default function CheckListModal({
                   )}
                 </div>
                 <div className="flex flex-col gap-3">
-                  {list.items.map((_list, index) => (
+                  {list.items.map((item, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <Checkbox
-                        value={_list.isChecked}
-                        checkboxLabel={_list.label}
+                        value={item.isChecked}
+                        checkboxLabel={item.label}
                         // TODO: 체크박스 해야함
                         onChange={() => null}
                       />
                       <div
                         className="text-state-error cursor-pointer text-sm font-bold"
                         // 아이템 삭제 해야함
-                        onClick={() => null}
+                        onClick={() =>
+                          deleteChecklistItem({
+                            travelId,
+                            requestData: {
+                              type: 'ITEM',
+                              categoryId: list.id,
+                              itemId: item.id,
+                            },
+                          })
+                        }
                       >
                         삭제
                       </div>

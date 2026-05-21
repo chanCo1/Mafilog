@@ -9,21 +9,40 @@ import { ReactNode } from 'react';
 import { Pencil, Trash } from 'lucide-react';
 import { IChecklistResponse } from '@/features/myTravel/interfaces/checklist.interface';
 import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
+import { useDeleteChecklist } from '@/features/myTravel/hooks/rquery/checklist/useDeleteChecklist';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface ICategoryDropdown {
   list: IChecklistResponse;
   changeStatus: (id: number, status: TChecklistStatusType) => void;
 }
 
-export default function CategoryDropdown({ list, changeStatus }: ICategoryDropdown) {
+export default function CategoryDropdown({
+  list,
+  changeStatus,
+}: ICategoryDropdown) {
+  const travelId = useGetTravelId();
+  const { mutate: deleteChecklistCategory } = useDeleteChecklist(travelId);
+
   return (
     <div className="flex flex-col gap-2">
-      <CategoryDropdownMenu onClick={() => changeStatus(list.id, 'editCategory')}>
+      <CategoryDropdownMenu
+        onClick={() => changeStatus(list.id, 'editCategory')}
+      >
         <Pencil className="h-4 w-4" />
         카테고리 수정
       </CategoryDropdownMenu>
-      {/* TODO: 카테고리 삭제 해야함 */}
-      <CategoryDropdownMenu onClick={() => null}>
+      <CategoryDropdownMenu
+        onClick={() =>
+          deleteChecklistCategory({
+            travelId,
+            requestData: {
+              type: 'CATEGORY',
+              categoryId: list.id,
+            },
+          })
+        }
+      >
         <Trash className="h-4 w-4" />
         카테고리 삭제
       </CategoryDropdownMenu>

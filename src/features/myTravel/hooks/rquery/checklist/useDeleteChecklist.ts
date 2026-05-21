@@ -1,5 +1,5 @@
 /**
- * @file: useCreateChecklist.ts
+ * @file: useDeleteChecklist.ts
  * @author: chad
  * @since: 2026.05.19 ~
  * @description: 체크리스트 > 카테고리(아이템) 등록
@@ -16,16 +16,16 @@ import { nanoid } from 'nanoid';
 
 interface IUseMutateSchedulePlace {
   travelId: string;
-  requestData: Pick<IChecklistRequest, 'type' | 'label' | 'categoryId'>;
+  requestData: Omit<IChecklistRequest, 'isChecked'>;
 }
 
-export const useCreateChecklist = (travelId: string) => {
+export const useDeleteChecklist = (travelId: string) => {
   const queryClient = useQueryClient();
   const queryKey = ['travelChecklist', travelId];
 
   return useMutation({
     mutationFn: async ({ travelId, requestData }: IUseMutateSchedulePlace) => {
-      return await ChecklistService.postChecklist(travelId, requestData);
+      return await ChecklistService.deleteChecklist(travelId, requestData);
     },
 
     onMutate: async ({ requestData }) => {
@@ -38,7 +38,7 @@ export const useCreateChecklist = (travelId: string) => {
         if (!old) return [];
 
         if (requestData.type === 'CATEGORY') {
-          return [...old, { id: tempId, label: requestData.label, items: [] }];
+          return old.filter((category) => category.id !== requestData.categoryId);
         }
 
         if (requestData.type === 'ITEM') {
@@ -46,15 +46,9 @@ export const useCreateChecklist = (travelId: string) => {
             return category.id === requestData.categoryId
               ? {
                   ...category,
-                  items: [
-                    ...category.items,
-                    {
-                      id: tempId,
-                      categoryId: requestData.categoryId,
-                      label: requestData.label,
-                      isChecked: false,
-                    },
-                  ],
+                  items: category.items.filter(
+                    (item) => item.id !== requestData.itemId,
+                  ),
                 }
               : category;
           });
@@ -70,7 +64,7 @@ export const useCreateChecklist = (travelId: string) => {
       context: { previousData: IChecklistResponse[] | undefined } | undefined,
     ) => {
       const errorMessage = error.response?.data.message;
-      toast.error(errorMessage || '장소를 추가하는 중 오류가 발생했습니다.');
+      toast.error(errorMessage || '삭제 중 오류가 발생했습니다.');
 
       if (context?.previousData) {
         return queryClient.setQueryData(queryKey, context.previousData);
