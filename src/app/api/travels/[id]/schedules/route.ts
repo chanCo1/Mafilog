@@ -12,7 +12,6 @@ import {
   IUpdateSchedulePlaceRequest,
 } from '@/features/myTravel/interfaces/schedule.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
-// TODO: 현재 이 route에만 적용, 추후 다른곳에도 적용
 import {
   successResponse,
   errorResponse,

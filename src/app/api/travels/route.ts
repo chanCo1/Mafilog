@@ -5,7 +5,6 @@
  * @description: 내 여행 관련 api
  */
 
-import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { IMemberList } from '@/shared/interfaces';
@@ -13,14 +12,15 @@ import { authGuard } from '@/shared/backend/lib/authGuard';
 import { uploadCloudinary } from '@/shared/backend/lib/cloudinary';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
 import { CHECKLIST_MOCK_DATA } from '@/shared/backend/data/mockupData';
+import {
+  successResponse,
+  errorResponse,
+} from '@/shared/backend/utils/apiResponse';
 
 /** 새 여행 만들기 */
 export async function POST(request: Request) {
   const authValidate = await authGuard(request);
-
-  if (!authValidate.isValid) {
-    return authValidate.errorResponse;
-  }
+  if (!authValidate.isValid) return authValidate.errorResponse;
 
   const session = authValidate.session;
 
@@ -41,10 +41,8 @@ export async function POST(request: Request) {
     const files = formData.getAll('imageUrl') as File[];
 
     const currentUserId = session?.user?.id;
-
     const uploadedUrls = await uploadCloudinary({ files });
     const imageUrl = uploadedUrls.length ? uploadedUrls[0] : null;
-
     const fromDate = new Date(from);
     const toDate = new Date(to);
 
@@ -53,22 +51,14 @@ export async function POST(request: Request) {
       where: {
         userId: currentUserId,
         // 기존 시작일이 새 종료일보다 작거나 같고
-        from: {
-          lte: toDate,
-        },
+        from: { lte: toDate },
         // 기존 종료일이 새 시작일보다 크거나 같다
-        to: {
-          gte: fromDate,
-        },
+        to: { gte: fromDate },
       },
     });
 
-    if (travelConflict) {
-      return NextResponse.json(
-        { message: '해당 날짜에는 이미 등록된 여행이 있습니다.' },
-        { status: 400 },
-      );
-    }
+    if (travelConflict)
+      return errorResponse('해당 날짜에는 이미 등록된 여행이 있습니다.', 400);
 
     await prisma.$transaction(async (tx) => {
       // 여행 테이블에 저장
@@ -181,13 +171,10 @@ export async function POST(request: Request) {
       );
     });
 
-    return NextResponse.json(
-      { success: true, message: '여행 저장 완료' },
-      { status: 200 },
-    );
+    return successResponse();
   } catch (error) {
     console.error('@@ 내 여행 생성 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }
 
@@ -195,9 +182,7 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   const authValidate = await authGuard(request);
 
-  if (!authValidate.isValid) {
-    return authValidate.errorResponse;
-  }
+  if (!authValidate.isValid) return authValidate.errorResponse;
 
   const session = authValidate.session;
 
@@ -214,9 +199,9 @@ export async function GET(request: Request) {
       },
     });
 
-    return NextResponse.json({ data: myTravelList }, { status: 200 });
+    return successResponse(myTravelList);
   } catch (error) {
     console.error('@@ 내 여행 리스트 조회 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }

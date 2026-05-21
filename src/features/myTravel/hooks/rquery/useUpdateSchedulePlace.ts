@@ -9,7 +9,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { IUpdateSchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.interface';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
-import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
 interface IUseUpdateSchedulePlace {
   travelId: string;

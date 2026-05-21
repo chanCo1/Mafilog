@@ -195,7 +195,6 @@ export default function CreateNewTravelModal({
   /** 수정 시 상세 값 바인딩 */
   useEffect(() => {
     if (isOpen && isModify && travelDetail) {
-      console.log(travelDetail);
 
       setStepData(
         stepData.map((step, index) => ({ ...step, isComplete: true })),
@@ -212,7 +211,7 @@ export default function CreateNewTravelModal({
 
       travelDetail.imageUrl && setSelectedImage([travelDetail.imageUrl]);
     }
-  }, [travelId, isOpen]);
+  }, [travelId, isModify, isOpen]);
 
   const isDisabled = !travelType || !selectedCities || !selectedDate;
 
