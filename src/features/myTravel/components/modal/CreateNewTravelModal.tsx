@@ -29,6 +29,8 @@ import { useRouter } from 'next/navigation';
 import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/useFetchMyTravelDetail';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { truncateText } from '@/shared/lib/utils';
+import { useUpdateMyTravel } from '@/features/myTravel/hooks/rquery/myTravel/useUpdateMyTravel';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -44,9 +46,7 @@ export default function CreateNewTravelModal({
   isNotTravelPage,
 }: ICreateNewTravelModal) {
   const { data: userInfo } = useSession();
-
-  const travelId = useGetTravelId();
-  const { data: travelDetail } = useFetchMyTravelDetail(travelId);
+  const { openDialog } = useDialogStore();
 
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
@@ -66,6 +66,10 @@ export default function CreateNewTravelModal({
 
   const { mutateAsync: createTravelMutate, isPending } =
     useMutateMyTravelList();
+  const travelId = useGetTravelId();
+  const { data: travelDetail } = useFetchMyTravelDetail(travelId);
+  const { mutateAsync: updateTravelDetail, isPending: isUpdatePending } =
+    useUpdateMyTravel(travelId);
 
   const router = useRouter();
 
@@ -97,10 +101,6 @@ export default function CreateNewTravelModal({
   const onClickCloseBtn = () => {
     handleClose();
     dataReset();
-
-    if (isNotTravelPage) {
-      router.push('/my-travel');
-    }
   };
 
   /** 새 여행 만들기 */
@@ -149,7 +149,33 @@ export default function CreateNewTravelModal({
       formData.append('imageUrl', file);
     });
 
-    await createTravelMutate(formData);
+    if (isModify) {
+      if (
+        travelDetail?.from !== selectedDate?.from ||
+        travelDetail?.to !== selectedDate?.to
+      ) {
+        openDialog({
+          type: 'confirm',
+          message:
+            '날짜 변경시 해당 날짜에 포함되지 않은 기존 일정과 지출은 삭제돼요. 수정할까요?',
+          okLabel: '수정',
+          onOk: async () => {
+            await updateTravelDetail(formData);
+            onClickCloseBtn();
+          },
+        });
+
+        return;
+      }
+      await updateTravelDetail(formData);
+    } else {
+      await createTravelMutate(formData);
+
+      if (isNotTravelPage) {
+        router.push('/my-travel');
+      }
+    }
+
     onClickCloseBtn();
   };
 
@@ -195,14 +221,16 @@ export default function CreateNewTravelModal({
   /** 수정 시 상세 값 바인딩 */
   useEffect(() => {
     if (isOpen && isModify && travelDetail) {
-
       setStepData(
         stepData.map((step, index) => ({ ...step, isComplete: true })),
       );
 
       setTravelType(travelDetail.travelType);
       setSelectedCities(travelDetail.cities);
-      setSeletedDate({ from: travelDetail.from, to: travelDetail.to });
+      setSeletedDate({
+        from: new Date(travelDetail.from),
+        to: new Date(travelDetail.to),
+      });
       setTravelTitle(travelDetail.title);
 
       setTravelPartner(travelDetail.travelPartner);
@@ -264,8 +292,8 @@ export default function CreateNewTravelModal({
               </Button>
               <Button
                 onClick={createNewTravel}
-                disabled={isDisabled || isPending}
-                isLoading={isPending}
+                disabled={isDisabled || isPending || isUpdatePending}
+                isLoading={isPending || isUpdatePending}
               >
                 {isModify ? '여행 수정' : '여행 만들기'}
               </Button>
