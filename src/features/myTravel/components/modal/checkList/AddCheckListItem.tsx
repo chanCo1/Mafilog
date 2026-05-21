@@ -2,7 +2,7 @@
  * @file: AddCheckListItem.tsx
  * @author: chad
  * @since: 2026.05.05 ~
- * @description: 체크리스트 > 준비물 컴포넌트
+ * @description: 체크리스트 > 아이템 추가 컴포넌트
  */
 
 import { useState } from 'react';
@@ -43,6 +43,7 @@ export default function AddCheckListItem({
       <Input
         size="sm"
         value={addItemName}
+        maxLength={15}
         onChange={(e) => setAddItemName(e.target.value)}
         onKeyDown={(e) => {
           if (e.nativeEvent.isComposing) return;

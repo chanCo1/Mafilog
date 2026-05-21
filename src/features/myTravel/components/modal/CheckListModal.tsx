@@ -18,10 +18,11 @@ import EditCategoryName from '@/features/myTravel/components/modal/checkList/Edi
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import AddCheckListItem from '@/features/myTravel/components/modal/checkList/AddCheckListItem';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
-import { useFetchChecklist } from '@/features/myTravel/hooks/rquery/checklist/useFetchChecklist';
+import { useGetChecklist } from '@/features/myTravel/hooks/rquery/checklist/useGetChecklist';
 import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
 import { useCreateChecklist } from '@/features/myTravel/hooks/rquery/checklist/useCreateChecklist';
 import { useDeleteChecklist } from '@/features/myTravel/hooks/rquery/checklist/useDeleteChecklist';
+import { useUpdateChecklist } from '@/features/myTravel/hooks/rquery/checklist/useUpdateChecklist';
 
 interface ICheckListModal {
   isOpen: boolean;
@@ -33,10 +34,11 @@ export default function CheckListModal({
   handleClose,
 }: ICheckListModal) {
   const travelId = useGetTravelId();
-  const { mutate: addChecklistCategory } = useCreateChecklist(travelId);
+  const { mutate: createChecklistCategory } = useCreateChecklist(travelId);
   const { mutate: deleteChecklistItem } = useDeleteChecklist(travelId);
+  const { mutate: updateChecklistItem } = useUpdateChecklist(travelId);
 
-  const { data: checklist } = useFetchChecklist(travelId, isOpen);
+  const { data: checklist } = useGetChecklist(travelId, isOpen);
   const [editStatus, setEditStatus] = useState<
     Record<number, TChecklistStatusType>
   >({});
@@ -49,7 +51,7 @@ export default function CheckListModal({
 
   /** 카테고리 추가 핸들링 */
   const handleAddCategory = () => {
-    addChecklistCategory({
+    createChecklistCategory({
       travelId,
       requestData: {
         type: 'CATEGORY',
@@ -124,8 +126,13 @@ export default function CheckListModal({
                   if (e.nativeEvent.isComposing) return;
                   if (e.key === 'Enter') handleAddCategory();
                 }}
+                maxLength={15}
               />
-              <Button size="xs" onClick={handleAddCategory}>
+              <Button
+                size="xs"
+                disabled={!addCategoryName}
+                onClick={handleAddCategory}
+              >
                 추가
               </Button>
               <Button
@@ -172,12 +179,20 @@ export default function CheckListModal({
                       <Checkbox
                         value={item.isChecked}
                         checkboxLabel={item.label}
-                        // TODO: 체크박스 해야함
-                        onChange={() => null}
+                        onChange={() =>
+                          updateChecklistItem({
+                            travelId,
+                            requestData: {
+                              type: 'ITEM',
+                              categoryId: list.id,
+                              itemId: item.id,
+                              isChecked: !item.isChecked,
+                            },
+                          })
+                        }
                       />
                       <div
                         className="text-state-error cursor-pointer text-sm font-bold"
-                        // 아이템 삭제 해야함
                         onClick={() =>
                           deleteChecklistItem({
                             travelId,
