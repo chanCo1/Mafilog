@@ -8,7 +8,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { ISchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.interface';
-import MyTravelService from '@/features/myTravel/services/MyTravel.service';
+import ScheduleService from '@/features/myTravel/services/Schedule.service';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
 interface IUseCreateSchedulePlace {
@@ -24,7 +24,7 @@ export const useCreateSchedulePlace = (
 
   return useMutation({
     mutationFn: async ({ travelId, data }: IUseCreateSchedulePlace) => {
-      return await MyTravelService.postTravelSchedulePlace(travelId, data);
+      return await ScheduleService.createTravelSchedulePlace(travelId, data);
     },
 
     onSuccess: () => {

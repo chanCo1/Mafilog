@@ -14,7 +14,7 @@ export const useCreateMyTravelList = () => {
 
   return useMutation({
     mutationFn: async (formData: FormData) => {
-      return await MyTravelService.postCreateTravel(formData);
+      return await MyTravelService.createCreateTravel(formData);
     },
 
     onSuccess: () => {

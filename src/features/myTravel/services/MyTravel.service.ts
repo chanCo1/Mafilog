@@ -10,17 +10,12 @@ import {
   IMyTravelListResponse,
   IMyTravelDetailResponse,
 } from '@/features/myTravel/interfaces/myTravel.interface';
-import {
-  IScheduleResponse,
-  ISchedulePlaceRequest,
-  IUpdateSchedulePlaceRequest,
-} from '@/features/myTravel/interfaces/schedule.interface';
 
 const API_URL = '/travels';
 
 class _MyTravelService {
   /** 새 여행 생성 요청 */
-  async postCreateTravel(data: FormData) {
+  async createCreateTravel(data: FormData) {
     const response = await axiosInstanceWithAuth.post(`${API_URL}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -51,60 +46,6 @@ class _MyTravelService {
           'Content-Type': 'multipart/form-data',
         },
       },
-    );
-    return response.data.data;
-  }
-
-  /** 여행 일정 조회 */
-  async getTravelSchedules(travelId: string): Promise<IScheduleResponse[]> {
-    const response = await axiosInstanceWithAuth.get(
-      `${API_URL}/${travelId}/schedules`,
-    );
-    return response.data.data;
-  }
-
-  /** 일정 등록 */
-  async postTravelSchedulePlace(travelId: string, data: ISchedulePlaceRequest) {
-    const response = await axiosInstanceWithAuth.post(
-      `${API_URL}/${travelId}/schedules`,
-      data,
-    );
-    return response.data.data;
-  }
-
-  /** 일정 수정 */
-  async updateTravelSchedulePlace(
-    travelId: string,
-    data: IUpdateSchedulePlaceRequest,
-  ) {
-    const response = await axiosInstanceWithAuth.patch(
-      `${API_URL}/${travelId}/schedules`,
-      data,
-    );
-    return response.data.data;
-  }
-
-  /** 일정 삭제 */
-  async deleteTravelSchedulePlace(travelId: string, deleteIds: number[]) {
-    const response = await axiosInstanceWithAuth.delete(
-      `${API_URL}/${travelId}/schedules`,
-      {
-        data: {
-          deleteIds,
-        },
-      },
-    );
-    return response.data.data;
-  }
-
-  /** 일정 선택 이동 */
-  async updateBulkTravelScheduleDate(
-    travelId: string,
-    data: { moveIds: number[]; targetDay: number },
-  ) {
-    const response = await axiosInstanceWithAuth.patch(
-      `${API_URL}/${travelId}/schedules/bulk-move`,
-      data,
     );
     return response.data.data;
   }

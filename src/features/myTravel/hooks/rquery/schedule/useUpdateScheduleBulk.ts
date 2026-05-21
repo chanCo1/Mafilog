@@ -7,7 +7,7 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import MyTravelService from '@/features/myTravel/services/MyTravel.service';
+import ScheduleService from '@/features/myTravel/services/Schedule.service';
 
 interface IUseUpdateBulkScheduleDate {
   travelId: string;
@@ -19,7 +19,7 @@ export const useUpdateBulkScheduleDate = (travelId: string) => {
 
   return useMutation({
     mutationFn: async ({ travelId, data }: IUseUpdateBulkScheduleDate) => {
-      return await MyTravelService.updateBulkTravelScheduleDate(
+      return await ScheduleService.updateBulkTravelScheduleDate(
         travelId,
         data,
       );

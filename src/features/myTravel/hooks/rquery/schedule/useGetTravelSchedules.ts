@@ -6,12 +6,12 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import MyTravelService from '@/features/myTravel/services/MyTravel.service';
+import ScheduleService from '@/features/myTravel/services/Schedule.service';
 
 export const useGetTravelSchedules = (id: string) => {
   const query = useQuery({
     queryKey: ['travelSchedules', id],
-    queryFn: async () => await MyTravelService.getTravelSchedules(id),
+    queryFn: async () => await ScheduleService.getTravelSchedules(id),
     enabled: !!id,
     staleTime: 1000 * 60 * 5,
   });
