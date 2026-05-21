@@ -58,7 +58,7 @@ export default function TravelStatus({ from, to }: ITravelStatus) {
       default:
         return '';
     }
-  }, [status]);
+  }, [from, to]);
 
   return (
     <div className="flex gap-0.5 font-bold">
