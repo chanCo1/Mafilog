@@ -179,6 +179,7 @@ export default function CheckListModal({
                       <Checkbox
                         value={item.isChecked}
                         checkboxLabel={item.label}
+                        isCheckList={item.isChecked}
                         onChange={() =>
                           updateChecklistItem({
                             travelId,
