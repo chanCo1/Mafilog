@@ -21,10 +21,12 @@ export default function PageHeader({
   ruby,
 }: IPageHeader) {
   return (
-    <div className="flex flex-col">
-      {ruby}
-      <div className="flex gap-1">
-        <h3 className="text-h3 font-bold max-mobile:text-xxl">{title}</h3>
+    <div className="flex flex-col gap-1">
+      <div className="flex items-center gap-1">
+        {ruby}
+      </div>
+      <div className="flex gap-1 items-baseline">
+        <h3 className="text-h3 max-mobile:text-xxl font-bold">{title}</h3>
         {titleBtn}
       </div>
       {description && (
