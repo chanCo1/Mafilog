@@ -97,6 +97,8 @@ model Travel {
   user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   // 생성일
   createdAt     DateTime            @default(now())
+  // 수정 시간
+  updatedAt     DateTime            @default(now()) @updatedAt
 }
 
 /**
@@ -211,6 +213,8 @@ model TravelSchedule {
   travelId     Int
   // 여행 정보
   travel       Travel         @relation(fields: [travelId], references: [id], onDelete: Cascade)
+  // 수정 시간
+  updatedAt    DateTime       @default(now()) @updatedAt
 }
 
 /**
@@ -218,29 +222,27 @@ model TravelSchedule {
  */
 model ScheduleList {
   // pk
-  id              Int            @id @default(autoincrement())
+  id         Int            @id @default(autoincrement())
   // 입력 타입 place or memo
-  type            String
+  type       String
   // 몇일차인지
-  day             Int
+  day        Int
   // 순서
-  order           Int            @default(0)
-  // // fk
-  schedulePlaceId String?
+  order      Int            @default(0)
   // 장소
-  place           SchedulePlace? @relation(fields: [schedulePlaceId], references: [id])
+  place      SchedulePlace?
   // 방문 시간
-  time            String?
+  time       String?
   // 메모
-  memo            String?
+  memo       String?
   // 생성일
-  createdAt       DateTime       @default(now())
+  createdAt  DateTime       @default(now())
   // 수정 시간
-  updatedAt       DateTime       @updatedAt
+  updatedAt  DateTime       @updatedAt
   // fk
-  scheduleId      Int
+  scheduleId Int
   // 일정 정보
-  schedule        TravelSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  schedule   TravelSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
 }
 
 /**
@@ -248,27 +250,31 @@ model ScheduleList {
  */
 model SchedulePlace {
   // pk
-  id            String         @id
+  id             Int          @id @default(autoincrement())
+  // 구글 id
+  placeId        String
   // 장소 이름
-  name          String
+  name           String
   // 장소 주소
-  address       String
+  address        String
   // 국가 표준 시간대
-  timezone      String?
+  timezone       String?
   // google places에서 정의하는 장소 타입
-  types         String[]
+  types          String[]
   // 위도
-  lat           Float
+  lat            Float
   // 경도
-  lng           Float
+  lng            Float
   // 국가 이름
-  countryName   String
+  countryName    String
   // 국가 코드
-  countryCode   String
+  countryCode    String
   // 생성일
-  createdAt     DateTime       @default(now())
+  createdAt      DateTime     @default(now())
+  // fk
+  scheduleListId Int          @unique
   // 일정 리스트 정보
-  scheduleLists ScheduleList[]
+  scheduleList   ScheduleList @relation(fields: [scheduleListId], references: [id], onDelete: Cascade)
 }
 
 /**
@@ -291,6 +297,8 @@ model TravelExpense {
   travelId     Int
   // 여행 정보
   travel       Travel        @relation(fields: [travelId], references: [id], onDelete: Cascade)
+  // 수정 시간
+  updatedAt    DateTime      @default(now()) @updatedAt
 }
 
 /**
