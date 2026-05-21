@@ -52,13 +52,93 @@ export async function PATCH(
       );
     }
 
-    await prisma.scheduleList.updateMany({
-      where: { id: { in: moveIds } },
-      data: {
-        day: targetDay,
-        scheduleId: targetSchedule.id,
-      },
+    const lastItem = await prisma.scheduleList.findFirst({
+      where: { scheduleId: targetSchedule.id },
+      orderBy: { order: 'desc' },
+      select: { order: true },
     });
+
+    if (!targetSchedule) {
+      return NextResponse.json(
+        { message: '이동하려는 일정의 순서를 찾을 수 없습니다.' },
+        { status: 404 },
+      );
+    }
+
+    const startOrder = (lastItem?.order ?? -1);
+
+    await prisma.$transaction(async (tx) => {
+      // TODO: 이동 전, 후로 order 재정렬 할건지 고민..
+      // // 이동 아이템들의 스케줄 아이디
+      // const movingItems = await tx.scheduleList.findMany({
+      //   where: { id: { in: moveIds } },
+      //   select: { scheduleId: true },
+      //   distinct: ['scheduleId'],
+      // });
+
+      // await Promise.all(
+      //   moveIds.map((id, index) =>
+      //     tx.scheduleList.update({
+      //       where: { id },
+      //       data: {
+      //         day: targetDay,
+      //         scheduleId: targetSchedule.id,
+      //         order: startOrder + index,
+      //       },
+      //     }),
+      //   ),
+      // );
+
+      // // 이동 아이템 빠진 스케줄의 재정렬
+      // await Promise.all(
+      //   movingItems.map(async ({ scheduleId,  }) => {
+      //     const remainItems = await tx.scheduleList.findMany({
+      //       where: { scheduleId },
+      //       orderBy: { order: 'asc' },
+      //       select: { id: true },
+      //     });
+
+      //     return Promise.all(
+      //       remainItems.map((item, index) =>
+      //         tx.scheduleList.update({
+      //           where: { id: item.id },
+      //           data: { order: index },
+      //         }),
+      //       ),
+      //     );
+      //   }),
+      // );
+
+      // // 이동된 스케줄에서 재정렬
+      // const afterItems = await tx.scheduleList.findMany({
+      //   where: { scheduleId: targetSchedule.id },
+      //   orderBy: { order: 'asc' },
+      //   select: { id: true },
+      // });
+
+      // await Promise.all(
+      //   afterItems.map((item, index) =>
+      //     tx.scheduleList.update({
+      //       where: { id: item.id },
+      //       data: { order: index },
+      //     }),
+      //   ),
+      // );
+
+      await Promise.all(
+        moveIds.map((id, index) =>
+          tx.scheduleList.update({
+            where: { id },
+            data: {
+              day: targetDay,
+              scheduleId: targetSchedule.id,
+              order: startOrder + index + 1,
+            },
+          }),
+        ),
+      );
+    });
+
 
     return NextResponse.json(
       {

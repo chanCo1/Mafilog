@@ -41,7 +41,7 @@ export async function GET(
       include: {
         scheduleList: {
           orderBy: {
-            createdAt: 'asc',
+            order: 'asc',
           },
           include: { place: true },
         },
@@ -94,13 +94,21 @@ export async function POST(
 
   try {
     const registSchedule = await prisma.$transaction(async (tx) => {
+      const lastSchedulePlace = await tx.scheduleList.findFirst({
+        where: { scheduleId },
+        orderBy: { order: 'desc' },
+        select: { order: true },
+      });
+
+      const lastOrder = (lastSchedulePlace?.order ?? -1);
       if (type === SCHEDULE_TYPE.PLACE && place && place.length > 0) {
         const createdItems = await Promise.all(
-          place.map((_place) => {
+          place.map((_place, index) => {
             return tx.scheduleList.create({
               data: {
                 type,
                 day,
+                order: lastOrder + index + 1,
                 time,
                 memo,
                 schedule: { connect: { id: scheduleId } },
@@ -132,6 +140,7 @@ export async function POST(
           data: {
             type,
             day,
+            order: lastOrder + 1,
             memo,
             schedule: { connect: { id: scheduleId } },
           },
@@ -196,10 +205,19 @@ export async function PATCH(
       );
     }
 
+    const lastSchedulePlace = await prisma.scheduleList.findFirst({
+      where: { scheduleId: targetSchedule.id },
+      orderBy: { order: 'desc' },
+      select: { order: true },
+    });
+
+    const lastOrder = (lastSchedulePlace?.order ?? -1);
+
     const updatedItem = await prisma.scheduleList.update({
       where: { id: scheduleListId },
       data: {
         day,
+        order: lastOrder + 1,
         time: time || '',
         memo: memo || '',
         schedule: {
