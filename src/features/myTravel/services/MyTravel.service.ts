@@ -41,6 +41,20 @@ class _MyTravelService {
     return response.data.data;
   }
 
+  /** 여행 상세 수정 */
+  async updateMyTravelDetail(travelId: string, data: FormData) {
+    const response = await axiosInstanceWithAuth.patch(
+      `${API_URL}/${travelId}`,
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+    return response.data.data;
+  }
+
   /** 여행 일정 조회 */
   async getTravelSchedules(travelId: string): Promise<IScheduleResponse[]> {
     const response = await axiosInstanceWithAuth.get(
