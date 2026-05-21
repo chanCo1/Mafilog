@@ -21,11 +21,14 @@ import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { IMemberList } from '@/shared/interfaces';
-import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
+import { TRAVEL_PARTNER, TRAVEL_STYLE, TRAVEL_TYPE } from '@/shared/types/Enum';
 import { useSession } from 'next-auth/react';
 import { getTravelDay } from '@/shared/lib/utils';
 import { useMutateMyTravelList } from '@/features/myTravel/hooks/rquery/useMutateMyTravelList';
 import { useRouter } from 'next/navigation';
+import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/useFetchMyTravelDetail';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { truncateText } from '@/shared/lib/utils';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -42,10 +45,13 @@ export default function CreateNewTravelModal({
 }: ICreateNewTravelModal) {
   const { data: userInfo } = useSession();
 
+  const travelId = useGetTravelId();
+  const { data: travelDetail } = useFetchMyTravelDetail(travelId);
+
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const [travelType, setTravelType] = useState<string>('');
+  const [travelType, setTravelType] = useState<TRAVEL_TYPE | ''>('');
   const [selectedCities, setSelectedCities] = useState<IPlaceList[]>([]);
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
@@ -186,10 +192,32 @@ export default function CreateNewTravelModal({
     }
   }, [selectedDate]);
 
+  /** 수정 시 상세 값 바인딩 */
+  useEffect(() => {
+    if (isOpen && travelId && travelDetail) {
+      console.log(travelDetail);
+
+      setStepData(stepData.map((step) => ({ ...step, isComplete: true })));
+
+      setTravelType(travelDetail.travelType);
+      setSelectedCities(travelDetail.cities);
+      setSeletedDate({ from: travelDetail.from, to: travelDetail.to });
+      setTravelTitle(travelDetail.title);
+
+      setTravelPartner(travelDetail.travelPartner);
+      setTravelStyles(travelDetail.travelStyles);
+      setTravelMember(travelDetail.member);
+    }
+  }, [travelId, isOpen]);
+
   return (
     <SideModal
       isOpen={isOpen}
-      title="새 여행 만들기"
+      title={
+        travelId && travelDetail
+          ? `${truncateText(travelDetail.title, 20)}`
+          : '새 여행 만들기'
+      }
       handleClose={onClickCloseBtn}
       footer={
         <div className="flex gap-1">

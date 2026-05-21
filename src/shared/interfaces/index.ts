@@ -25,4 +25,9 @@ export interface ICountryCurrency {
 export interface IMemberList {
   id: string;
   name: string;
+  expenseId?: number | null;
+  expenseSpenderId?: number | null;
+  travelId?: number;
+  userId?: string;
+  createdAt?: string;
 }
