@@ -7,7 +7,13 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import {
+  forwardRef,
+  useState,
+  ReactNode,
+  InputHTMLAttributes,
+  ForwardedRef,
+} from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import RequireDot from '@/shared/components/ui/RequireDot';
@@ -35,12 +41,12 @@ const inputVariants = cva(
 
 interface IInput
   extends
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'size'>,
+    Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'size'>,
     VariantProps<typeof inputVariants> {
   className?: string;
   inputClassName?: string;
-  prefix?: React.ReactNode;
-  suffix?: React.ReactNode;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
   label?: string;
   labelPosition?: 'left' | 'top';
   isRequired?: boolean;
@@ -49,22 +55,25 @@ interface IInput
   isPassword?: boolean;
 }
 
-function InputEntity({
-  className,
-  inputClassName,
-  prefix,
-  suffix,
-  label,
-  labelPosition = 'top',
-  variant,
-  size,
-  isRequired = false,
-  description,
-  errorMsg,
-  type = 'text',
-  isPassword,
-  ...props
-}: IInput) {
+function InputEntity(
+  {
+    className,
+    inputClassName,
+    prefix,
+    suffix,
+    label,
+    labelPosition = 'top',
+    variant,
+    size,
+    isRequired = false,
+    description,
+    errorMsg,
+    type = 'text',
+    isPassword,
+    ...props
+  }: IInput,
+  ref: ForwardedRef<HTMLInputElement>,
+) {
   const [isFocused, setIsFocused] = useState(false);
   const [passwordType, setPassowrdType] = useState('password');
 
@@ -109,6 +118,7 @@ function InputEntity({
         >
           {prefix && <span className="mr-1 shrink-0">{prefix}</span>}
           <input
+            ref={ref}
             type={isPassword ? passwordType : type}
             className={cn('w-full outline-none focus:ring-0', inputClassName)}
             {...props}
@@ -144,4 +154,4 @@ function InputEntity({
   );
 }
 
-export const Input = InputEntity;
+export const Input = forwardRef(InputEntity);
