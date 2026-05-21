@@ -26,12 +26,13 @@ const getDiffMidnight = (): number => {
   return midnight.diff(now);
 };
 
-export const useFetchMyTravelList = () => {
+export const useFetchMyTravelList = (userId: string | undefined) => {
   const query = useQuery({
     queryKey: ['myTravelList'],
     queryFn: async () => await MyTravelService.getMyTravelList(),
     staleTime: getDiffMidnight(),
     gcTime: 1000 * 60 * 60 * 36,
+    enabled: !!userId,
 
     select: (list): ITravelSections => {
       if (!list) return { progress: [], upcoming: [], last: [] };

@@ -19,7 +19,7 @@ export default function UpcomingContainer() {
   const [isOpenCreateNewModal, setIsOpenCretateNewModal] = useState(false);
 
   const { data: userInfo } = useSession();
-  const { data: travelList } = useFetchMyTravelList();
+  const { data: travelList } = useFetchMyTravelList(userInfo?.user?.id);
 
   const router = useRouter();
 
