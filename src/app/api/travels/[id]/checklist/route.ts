@@ -33,8 +33,9 @@ export async function GET(
   try {
     const checklist = await prisma.checklistCategory.findMany({
       where: { travelId },
+      orderBy: { createdAt: 'asc' },
       include: {
-        items: true,
+        items: { orderBy: { id: 'asc' } },
       },
     });
 
