@@ -172,7 +172,7 @@ export async function DELETE(
   const body = (await request.json()) as IChecklistRequest;
   const { type, categoryId, itemId } = body;
 
-  if (!type || !categoryId || itemId) {
+  if (!type || !categoryId || !itemId) {
     return NextResponse.json(
       { message: '필수 항목이 없습니다' },
       { status: 400 },

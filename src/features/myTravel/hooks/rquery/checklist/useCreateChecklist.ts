@@ -1,5 +1,5 @@
 /**
- * @file: useCreateCategory.ts
+ * @file: useCreateChecklist.ts
  * @author: chad
  * @since: 2026.05.19 ~
  * @description: 체크리스트 > 카테고리(아이템) 등록
@@ -20,7 +20,7 @@ interface IUseMutateSchedulePlace {
   data: IChecklistRequest;
 }
 
-export const useCreateCategory = (travelId: string) => {
+export const useCreateChecklist = (travelId: string) => {
   const queryClient = useQueryClient();
   const queryKey = ['travelChecklist', travelId];
 

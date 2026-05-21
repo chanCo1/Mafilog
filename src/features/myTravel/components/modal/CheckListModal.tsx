@@ -20,7 +20,7 @@ import AddCheckListItem from '@/features/myTravel/components/modal/checkList/Add
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useFetchChecklist } from '@/features/myTravel/hooks/rquery/checklist/useFetchChecklist';
 import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
-import { useCreateCategory } from '@/features/myTravel/hooks/rquery/checklist/useCreateCategory';
+import { useCreateChecklist } from '@/features/myTravel/hooks/rquery/checklist/useCreateChecklist';
 
 interface ICheckListModal {
   isOpen: boolean;
@@ -32,7 +32,7 @@ export default function CheckListModal({
   handleClose,
 }: ICheckListModal) {
   const travelId = useGetTravelId();
-  const { mutate: addChecklistCategory } = useCreateCategory(travelId);
+  const { mutate: addChecklistCategory } = useCreateChecklist(travelId);
 
   const { data: checklist } = useFetchChecklist(travelId, isOpen);
   const [editStatus, setEditStatus] = useState<
