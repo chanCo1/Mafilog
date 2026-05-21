@@ -29,6 +29,7 @@ import ExpenseStatisticModal from '@/features/myTravel/components/modal/ExpenseS
 import ExpenseSettleUpModal from '@/features/myTravel/components/modal/ExpenseSettleUpModal';
 import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/useFetchMyTravelDetail';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { ReturnButton } from '@/shared/components/ui/ReturnButton';
 
 export default function MyTravelDetailPage() {
   const travelId = useGetTravelId();
@@ -49,39 +50,48 @@ export default function MyTravelDetailPage() {
 
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader
-        title={myTravelDatail.title}
-        ruby={
-          <TravelStatus from={myTravelDatail.from} to={myTravelDatail.to} />
-        }
-        titleBtn={
-          <div
-            className="text-text-secondary shrink-0 cursor-pointer font-bold"
-            onClick={() => setIsOpenTravelModify(true)}
-          >
-            수정
-          </div>
-        }
-        description={
-          <div className="max-mobile:flex-col mobile:gap-1 max-mobile:items-start flex items-center">
-            <span className="max-mobile:text-md">
-              {convertTravelDateRange(myTravelDatail.from, myTravelDatail.to)}
-            </span>
-            <span className="max-mobile:hidden">|</span>
-            <div className="text-md max-mobile:text-sm flex gap-1">
-              <div>{convertTravelPartner(myTravelDatail.travelPartner)}</div>
-              {myTravelDatail.travelStyles.length ? (
-                <>
-                  {myTravelDatail.travelStyles.map((style) => (
-                    <div key={style}>#{convertTravelStyle(style)}</div>
-                  ))}
-                </>
-              ) : null}
-              여행
+      <div className="flex flex-col gap-1">
+        <ReturnButton
+          position="left"
+          className="text-text-secondary"
+          path="/my-travel"
+          label="뒤로가기"
+          size='sm'
+        />
+        <PageHeader
+          title={myTravelDatail.title}
+          ruby={
+            <TravelStatus from={myTravelDatail.from} to={myTravelDatail.to} />
+          }
+          titleBtn={
+            <div
+              className="text-text-secondary shrink-0 cursor-pointer font-bold"
+              onClick={() => setIsOpenTravelModify(true)}
+            >
+              수정
             </div>
-          </div>
-        }
-      />
+          }
+          description={
+            <div className="max-mobile:flex-col mobile:gap-1 max-mobile:items-start flex items-center">
+              <span className="max-mobile:text-md">
+                {convertTravelDateRange(myTravelDatail.from, myTravelDatail.to)}
+              </span>
+              <span className="max-mobile:hidden">|</span>
+              <div className="text-md max-mobile:text-sm flex gap-1">
+                <div>{convertTravelPartner(myTravelDatail.travelPartner)}</div>
+                {myTravelDatail.travelStyles.length ? (
+                  <>
+                    {myTravelDatail.travelStyles.map((style) => (
+                      <div key={style}>#{convertTravelStyle(style)}</div>
+                    ))}
+                  </>
+                ) : null}
+                여행
+              </div>
+            </div>
+          }
+        />
+      </div>
       <div className="flex items-end justify-between">
         <div className="flex items-center gap-1">
           {TRAVEL_TAB_LIST.map((list, index) => (
