@@ -8,7 +8,7 @@
 import { useMemo } from 'react';
 import { useFetchWeather } from '@/shared/hooks/rquery/useFetchWeather';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
-import { useFetchMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
 
 interface IGetWeather {
   lat: number;
@@ -19,7 +19,7 @@ type PrecipType = 'rain' | 'snow' | 'freezingrain' | 'ice';
 
 export const useGetWeather = ({ lat, lng }: IGetWeather) => {
   const travelId = useGetTravelId();
-  const { data: travelInfo } = useFetchMyTravelDetail(travelId);
+  const { data: travelInfo } = useGetMyTravelDetail(travelId);
 
   const { data, isLoading } = useFetchWeather({
     lat,
