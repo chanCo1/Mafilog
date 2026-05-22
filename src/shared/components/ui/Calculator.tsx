@@ -154,7 +154,7 @@ export default function Calculator({
         lastValidResult.current = calculated;
         return roundDecimal(calculated);
       }
-    } catch (e) {
+    } catch (error: any) {
       return lastValidResult.current;
     }
 

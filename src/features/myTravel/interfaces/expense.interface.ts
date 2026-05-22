@@ -31,28 +31,46 @@ export interface IExpenseList {
   currencyCode: string;
   exchangeRateAmount: number;
   payerId: string;
-  payer: any;
-  spender: any;
+  payer: IPayer;
+  spender: ISpender[];
   travelExpenseId: number;
 }
 
+export interface IPayer {
+  id: number;
+}
 
+export interface ISpender {
+  id: number;
+  amount: number;
+  calcExchangeAmount: number;
+  category: EXPENSES_CATEGORY_TYPE
+  currencyCode: string;
+  currencyCountry: string;
+}
 
+export interface IExpenseRequest {
+  name: string;
+  paymentType: string;
+  spenderType: string;
+  category: string;
+  day: number;
+  time?: string;
+  memo?: string;
+  amount: number;
+  calcFormula: string;
+  calcExchangeAmount: number;
+  currencyCode: string;
+  currencyCountry: string;
+  exchangeRateAmount: number;
+  payerId: string;
+  spenders: ISpenderRequest[]; // 지출 참여자 목록
+}
 
-// id: string;
-//   name: string; // 지출명
-//   spenderType: EXPENSES_SPENDER_TYPE;
-//   category: EXPENSES_CATEGORY_TYPE;
-//   paymentType: EXPENSES_PAYMENT_TYPE; // 결제 타입
-//   payer: ILabelValue; // 결제자
-//   spender: ISpenderWithAmount[]; // 지출자
-//   time?: string;
-//   memo?: string;
-//   day: number;
-//   amount: number; // 지출 금액
-//   calcExchangeAmount: number; // 한화 금액
-//   exchangeRate: {
-//     currencyCode: ILabelValue; // 통화 코드
-//     amount: number; // 환율금액
-//   };
-//   calcFormula: string;
+interface ISpenderRequest {
+  memberId: string;
+  amount: number;
+  calcExchangeAmount: number;
+  currencyCode: string;
+  category: string;
+}

@@ -14,6 +14,8 @@ import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import { ILabelValue } from '@/shared/interfaces';
 import { IMemberList } from '@/shared/interfaces';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
 
 interface ISelectSpenderType {
   selectedSpenderType: EXPENSES_SPENDER_TYPE;
@@ -31,14 +33,17 @@ export default function SelectSpenderType({
   selectedPayer,
   setSelectPayer,
 }: ISelectSpenderType) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const travelId = useGetTravelId();
+  const { data: travelInfo } = useGetMyTravelDetail(travelId);
 
   const getMembersOption = useMemo(() => {
-    return travelInfo.member.map((member) => ({
+    if (!travelInfo) return [];
+
+    return travelInfo?.member.map((member) => ({
       label: member.name,
       value: member.id,
     }));
-  }, [travelInfo.member]);
+  }, [travelInfo]);
 
   /** 1/N 선택 핸들링 */
   const handleSplitSpend = (value: ILabelValue) => {
@@ -87,7 +92,7 @@ export default function SelectSpenderType({
             </div>
           </div>
           <div className="border-border-secondary flex flex-col gap-2 rounded-lg border p-3">
-            {travelInfo.member.map((_member, index) => (
+            {travelInfo?.member.map((_member, index) => (
               <div
                 key={`${_member.id}-${index}`}
                 className="flex items-center justify-between"
