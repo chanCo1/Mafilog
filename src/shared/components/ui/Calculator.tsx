@@ -17,7 +17,8 @@ import { ILabelValue } from '@/shared/interfaces';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useGetCurrencyByCountry } from '@/shared/hooks/useGetCurrencyByCountry';
 import { CURRENCY_STANDARD_AMOUNT } from '@/features/myTravel/constants';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface ICalculator {
   onChangeValue?: (data: {
@@ -43,7 +44,8 @@ export default function Calculator({
   isModify = false,
   isOpen,
 }: ICalculator) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const travelId = useGetTravelId();
+  const { data: travelInfo } = useGetMyTravelDetail(travelId);
 
   const [inpuNumber, setInputNumber] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState<ILabelValue>();
@@ -56,11 +58,11 @@ export default function Calculator({
   );
 
   const currencyList = useMemo(() => {
-    if (!countryData || !travelInfo.cities.length) return [];
+    if (!countryData || !travelInfo?.cities.length) return [];
 
     /** 여행중인 나라만 추출 */
     const travelCountryCodes = Array.from(
-      new Set(travelInfo.cities.map((city) => city.country.code)),
+      new Set(travelInfo.cities.map((city) => city.countryCode)),
     );
 
     const filteredCountries = Object.values(countryData).filter(
@@ -80,7 +82,7 @@ export default function Calculator({
       label: Object.keys(country.currency)[0],
       value: country.code,
     }));
-  }, [countryData, travelInfo.cities]);
+  }, [countryData, travelInfo?.cities]);
 
   useEffect(() => {
     if (isModify) {
@@ -93,7 +95,14 @@ export default function Calculator({
       setSelectedCurrency(currencyList[0]);
       setInputNumber('');
     }
-  }, [currencyList, isModify, isOpen]);
+  }, [
+    currencyList,
+    isModify,
+    isOpen,
+    setInputNumber,
+    defaultValue?.inputNumber,
+    defaultValue?.selectedCurrency,
+  ]);
 
   /** 숫자 클릭 */
   const handleClickNumber = (num: string) => {
