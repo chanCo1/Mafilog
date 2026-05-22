@@ -324,7 +324,7 @@ model ExpenseList {
   // 지출 금액 (입력 금액)
   amount             Float
   // 입력된 계산식
-  clacFormula        String
+  calcFormula        String
   // 계산된 값 (원화)
   calcExchangeAmount Float
   // 통화 코드

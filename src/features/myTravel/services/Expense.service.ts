@@ -6,7 +6,7 @@
  */
 
 import { axiosInstanceWithAuth } from '@/shared/lib/api';
-import { IExpenseResponse } from '@/features/myTravel/interfaces/expense.interface';
+import { IExpenseResponse, IExpenseRequest } from '@/features/myTravel/interfaces/expense.interface';
 
 const API_URL = '/travels';
 
@@ -19,14 +19,14 @@ class _ExpenseService {
     return response.data.data;
   }
 
-  // /** 일정 등록 */
-  // async createTravelSchedulePlace(travelId: string, data: ISchedulePlaceRequest) {
-  //   const response = await axiosInstanceWithAuth.post(
-  //     `${API_URL}/${travelId}/schedules`,
-  //     data,
-  //   );
-  //   return response.data.data;
-  // }
+  /** 가계부 지출 등록 */
+  async createTravelExpense(travelId: string, data: IExpenseRequest) {
+    const response = await axiosInstanceWithAuth.post(
+      `${API_URL}/${travelId}/expenses`,
+      data,
+    );
+    return response.data.data;
+  }
 
   // /** 일정 수정 */
   // async updateTravelSchedulePlace(
