@@ -18,6 +18,7 @@ import {
   IScheduleResponse,
 } from '@/features/myTravel/interfaces/schedule.interface';
 import { EXPENSES_PAYMENT_TYPE } from '@/shared/types/expenseEnum';
+import { IExpenseResponse } from '@/features/myTravel/interfaces/expense.interface';
 
 /** 조건부로 클래스 사용(clsx) + props로 받은 스타일이 기본 스타일을 덮어쓰기(twMerge) */
 export function cn(...inputs: ClassValue[]) {
@@ -148,7 +149,7 @@ export const getTravelStatus = (from: Date, to: Date) => {
 
 /** 여행 기간에 따른 날짜 리스트 */
 export const getTravelDayList = (
-  scheduleList: IScheduleResponse[] | undefined,
+  scheduleList: IExpenseResponse[] | IScheduleResponse[] | undefined,
 ) => {
   if (!scheduleList?.length) return [];
 
