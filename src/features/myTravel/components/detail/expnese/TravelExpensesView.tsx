@@ -26,6 +26,8 @@ import { toast } from 'sonner';
 import { convertComma } from '@/shared/lib/utils';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
+import { getTravelDayList } from '@/shared/lib/utils';
 
 interface ITravelExpensesView {
   from: Date;
@@ -41,8 +43,8 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
   const [selectModifyMode, setSelectModifyMode] = useState(false);
   const [isOpenAddExpenseModal, setIsOpenAddExpneseModal] = useState(false);
 
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const expenses = useTravelExpenseStore((state) => state.expenses);
+  const travelId = useGetTravelId();
+  const { data: expenseList } = useGetTravelExpenses(travelId);
   const {
     setDeleteSelectedExpense,
     setMoveSelectedExpense,
@@ -51,11 +53,6 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
   } = useTravelExpenseStore();
   const selectedExpenses = useSelectExpenses((state) => state.selectedExpenses);
   const { clearSelectedExpenses } = useSelectExpenses();
-
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
 
   const { openDialog } = useDialogStore();
 
@@ -110,7 +107,10 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
                       </Button>
                     }
                   >
-                    {[TRAVEL_EXPENSE_BEFORE, ...travelDaysList].map((list) => (
+                    {[
+                      TRAVEL_EXPENSE_BEFORE,
+                      ...getTravelDayList(expenseList),
+                    ].map((list) => (
                       <span
                         key={list.value}
                         className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
@@ -144,12 +144,10 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
         }
         dayTimelines={
           <>
-            {expenses.map((_day, index) => (
+            {expenseList?.map((expense, index) => (
               <TravelExpensesDay
-                key={`${_day.day}-${index}`}
-                day={_day.day}
-                date={_day.date}
-                list={_day.list}
+                key={`${expense.day}-${index}`}
+                expense={expense}
                 selectMode={selectModifyMode}
               />
             ))}
@@ -169,7 +167,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
                 {list.label}
               </Chip>
             ))}
-            {expenses.map((_day, index) => {
+            {expenseList?.map((_day, index) => {
               if (_day.day === 0) return;
               return (
                 <Chip

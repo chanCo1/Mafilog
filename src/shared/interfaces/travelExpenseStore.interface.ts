@@ -64,8 +64,8 @@ export interface ITravelExpenseActions {
   setAddExpenseList: (data: IExpenseList & { day: number }) => void;
   setDeleteExpenseList: (data: { day: number; id: string | number }) => void;
   setUpdateExpense: (data: IExpenseList & { day: number }) => void;
-  setMoveSelectedExpense: (data: { day: number; id: string[] }) => void;
-  setDeleteSelectedExpense: (data: { id: string[] }) => void;
+  setMoveSelectedExpense: (data: { day: number; id: number[] }) => void;
+  setDeleteSelectedExpense: (data: { id: number[] }) => void;
   reset: () => void;
 }
 
