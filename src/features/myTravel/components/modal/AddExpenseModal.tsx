@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { cn, roundDecimal } from '@/shared/lib/utils';
+import { cn, roundDecimal, getTravelDayList } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
@@ -25,21 +25,22 @@ import ExpenseCategoryList from '@/features/myTravel/components/modal/addExpense
 import TimePicker from '@/shared/components/ui/TimePicker';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Calculator from '@/shared/components/ui/Calculator';
-import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
+import { IExpenseList } from '@/features/myTravel/interfaces/expense.interface';
 import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { toast } from 'sonner';
 import SelectSpenderType from '@/features/myTravel/components/modal/addExpense/SelectSpenderType';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
-import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.constant';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
+import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 
 interface IAddExpenseModal {
   isModify?: boolean;
   isOpen: boolean;
-  timeLineData?: IExpenseList;
+  expense?: IExpenseList;
   handleClose: () => void;
 }
 
@@ -47,7 +48,7 @@ export default function AddExpenseModal({
   isModify = false,
   isOpen,
   handleClose,
-  timeLineData,
+  expense,
 }: IAddExpenseModal) {
   /** 지출 명 */
   const [expenseName, setExpenseName] = useState('');
@@ -76,13 +77,13 @@ export default function AddExpenseModal({
   });
   /** 지출자 */
   const [selectedSepnder, setSelectedSepnder] = useState<ILabelValue[]>([]);
-  /** 환율 정보 */
-  const [selectedExchangeRate, setSelectedExchangeRate] = useState<
-    IExpenseList['exchangeRate']
-  >({
-    currencyCode: { label: '', value: '' },
-    amount: 0,
+  /** 환율 코드 */
+  const [currencyCode, setCurrencyCode] = useState<ILabelValue>({
+    label: '',
+    value: '',
   });
+  /** 환율 원화 금액 */
+  const [exchangeRateAmount, setExchangeRateAmount] = useState(0);
   /** 지출 금액 */
   const [expenseAmount, setExpenseAmount] = useState(0);
   /** 지출 환율 금액 */
@@ -90,20 +91,26 @@ export default function AddExpenseModal({
   /** 계산 수식 */
   const [calcFormula, setCalcFormula] = useState('');
 
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
+  const travelId = useGetTravelId();
+  const { data: travelInfo } = useGetMyTravelDetail(travelId);
+  const { data: expenseList } = useGetTravelExpenses(travelId);
 
-  const { setAddExpenseList, setUpdateExpense, setDeleteExpenseList } =
-    useTravelExpenseStore();
+  const { countryData } = useCountriesDataStore();
+
+  const travelDayList = useMemo(() => {
+    return getTravelDayList(expenseList).map((list) => {
+      return list.value === 0 ? { label: '여행전', value: 0 } : list;
+    });
+  }, [expenseList]);
+
+  // const { setAddExpenseList, setUpdateExpense, setDeleteExpenseList } =
+  //   useTravelExpenseStore();
 
   const { openDialog } = useDialogStore();
 
   /** 지출 추가 핸들링 */
   const handleExpense = () => {
-    if (isModify && !timeLineData) return;
+    if (isModify && !expense) return;
     if (!expenseName) return;
 
     /** 지출자 각자에게 지출 금액, 원화 금액,  */
@@ -113,12 +120,12 @@ export default function AddExpenseModal({
       calcExchangeAmount: roundDecimal(
         calcExchangeAmount / selectedSepnder.length,
       ),
-      currencyCode: selectedExchangeRate.currencyCode,
+      currencyCode: currencyCode,
       category: selectedCategory,
     }));
 
     const saveData = {
-      id: isModify ? timeLineData!.id : '',
+      id: isModify ? expense!.id : '',
       name: expenseName,
       spenderType: selectedSpenderType,
       category: selectedCategory,
@@ -130,15 +137,16 @@ export default function AddExpenseModal({
       paymentType: selectedPaymentType,
       amount: expenseAmount,
       calcExchangeAmount: calcExchangeAmount,
-      exchangeRate: selectedExchangeRate,
+      currencyCode: currencyCode,
+      exchangeRateAmount: exchangeRateAmount,
       calcFormula: calcFormula,
     };
 
-    if (isModify) {
-      setUpdateExpense(saveData);
-    } else {
-      setAddExpenseList(saveData);
-    }
+    // if (isModify) {
+    //   setUpdateExpense(saveData);
+    // } else {
+    //   setAddExpenseList(saveData);
+    // }
 
     onClickCloseBtn();
     toast.success(`지출을 ${isModify ? '수정' : '추가'}했어요`);
@@ -148,17 +156,17 @@ export default function AddExpenseModal({
   const handleDeleteExpense = () => {
     if (!isModify) return;
 
-    if (timeLineData?.day === undefined) return;
+    if (expense?.day === undefined) return;
 
     openDialog({
       message: '지출을 삭제할까요?',
       type: 'confirm',
       okLabel: '삭제',
       onOk: () => {
-        setDeleteExpenseList({
-          day: timeLineData.day,
-          id: timeLineData?.id as string,
-        });
+        // setDeleteExpenseList({
+        //   day: expense.day,
+        //   id: expense?.id as string,
+        // });
         toast.success(`지출을 삭제했어요`);
       },
     });
@@ -179,14 +187,12 @@ export default function AddExpenseModal({
       setSelectedCategory(EXPENSE_CATEGORY_LIST[2].value);
       setSelectedTime('');
       setInputMemo('');
-      setSelectedExchangeRate({
-        currencyCode: { label: '', value: '' },
-        amount: 0,
-      });
+      setCurrencyCode({ label: '', value: '' });
+      setExchangeRateAmount(0);
       setExpenseAmount(0);
       setCalcExchangeAmount(0);
       setCalcFormula('');
-      setSelectedDay(travelDaysList?.[0]);
+      setSelectedDay(travelDayList?.[0]);
       setSelectPayer({
         label: travelInfo.member[0].name,
         value: travelInfo.member[0].id,
@@ -198,7 +204,7 @@ export default function AddExpenseModal({
         },
       ]);
     }
-  }, [travelInfo, travelDaysList]);
+  }, [travelInfo, travelDayList]);
 
   /** 계산기에서 계산 된 값 가져오기 */
   const handleCalcChange = useCallback(
@@ -211,10 +217,8 @@ export default function AddExpenseModal({
     }) => {
       setExpenseAmount(data.amount);
       setCalcExchangeAmount(data.calcAmount);
-      setSelectedExchangeRate({
-        currencyCode: data.currencyCode,
-        amount: data.exchangeRate,
-      });
+      setCurrencyCode(data.currencyCode);
+      setExchangeRateAmount(data.exchangeRate);
       setCalcFormula(data.formula);
     },
     [],
@@ -227,55 +231,62 @@ export default function AddExpenseModal({
     !selectedSepnder.length ||
     !expenseAmount;
 
-  /** 지출 모든날 */
-  const travelAllDays = useMemo(() => {
-    return [TRAVEL_EXPENSE_BEFORE, ...travelDaysList];
-  }, [travelDaysList]);
-
   /** 계산기에 보낼 기본 값 */
   const calculatorDefaultValue = useMemo(() => {
-    if (isModify && timeLineData?.calcFormula) {
+    if (isModify && expense?.calcFormula) {
       return {
-        inputNumber: timeLineData.calcFormula,
-        selectedCurrency: timeLineData.exchangeRate.currencyCode,
+        inputNumber: expense.calcFormula,
+        selectedCurrency: {
+          label: expense.currencyCode,
+          value: countryData[expense.currencyCode],
+        },
       };
     }
     return undefined;
-  }, [isModify, timeLineData]);
+  }, [isModify, expense, countryData]);
 
   /** 초기값 대입 */
   useEffect(() => {
     if (!isOpen) return;
 
-    if (isModify && timeLineData) {
-      setExpenseName(timeLineData.name);
-      setSelectedSpenderType(timeLineData.spenderType);
-      setSelectedPaymentType(timeLineData.paymentType);
-      setSelectedCategory(timeLineData.category);
-      setSelectedDay(travelAllDays[timeLineData.day]);
-      setSelectedTime(timeLineData.time || '');
-      setInputMemo(timeLineData.memo || '');
-      setSelectPayer(timeLineData.payer);
-      setSelectedSepnder(timeLineData.spender);
-      setSelectedExchangeRate(timeLineData.exchangeRate);
-      setExpenseAmount(timeLineData.amount);
-      setCalcExchangeAmount(timeLineData.calcExchangeAmount);
-      setCalcFormula(timeLineData.calcFormula);
+    if (isModify && expense) {
+      setExpenseName(expense.name);
+      setSelectedSpenderType(expense.spenderType);
+      setSelectedPaymentType(expense.paymentType);
+      setSelectedCategory(expense.category);
+      // TODO: 지출 등록하면 초기값 작업할것
+      // setSelectedDay(travelDayList, expense.day);
+      setSelectedTime(expense.time || '');
+      setInputMemo(expense.memo || '');
+      setSelectPayer(expense.payer);
+      setSelectedSepnder(expense.spender);
+      setCurrencyCode({
+        label: expense.currencyCode,
+        value: countryData[expense.currencyCode],
+      });
+      setExchangeRateAmount(expense.exchangeRateAmount);
+      setExpenseAmount(expense.amount);
+      setCalcExchangeAmount(expense.calcExchangeAmount);
+      setCalcFormula(expense.calcFormula);
     } else {
       resetData();
     }
-  }, [isOpen, isModify, resetData, timeLineData, travelAllDays]);
+  }, [isOpen, isModify, resetData, expense, countryData]);
 
   const getMembersOption = useMemo(() => {
-    return travelInfo.member.map((member) => ({
+    if (!travelInfo) return [];
+
+    return travelInfo?.member.map((member) => ({
       label: member.name,
       value: member.id,
     }));
-  }, [travelInfo.member]);
+  }, [travelInfo]);
 
   // TODO: 지출자 타입 누를때마다 초기화 되는 부분 어떻게할지? 각자 따로 저장소를 가질지 고민
   /** 지출 타입 핸들링 */
   const handleSelectedSpenderType = (type: string) => {
+    if (!travelInfo) return;
+
     setSelectedSpenderType(type);
 
     if (type === EXPENSES_SPENDER_TYPE.SELF) {
@@ -389,7 +400,7 @@ export default function AddExpenseModal({
             <Selectbox
               label="지출 일"
               isRequired
-              options={travelAllDays}
+              options={travelDayList}
               className="w-3/5"
               value={selectedDay}
               onChange={(value) => setSelectedDay(value)}

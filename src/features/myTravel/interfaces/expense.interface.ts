@@ -26,7 +26,7 @@ export interface IExpenseList {
   time: string;
   memo: string;
   amount: number;
-  clacFormula: string;
+  calcFormula: string;
   calcExchangeAmount: number;
   currencyCode: string;
   exchangeRateAmount: number;

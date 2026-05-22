@@ -9,7 +9,7 @@ import { MouseEvent, useMemo, useState } from 'react';
 import { convertComma, convertPaymentType } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
-import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
+import { IExpenseList } from '@/features/myTravel/interfaces/expense.interface';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 import { EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
@@ -19,12 +19,12 @@ import { useDialogStore } from '@/shared/stores/useDialogStore';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 
 interface ITravelExpensesTimeline {
-  timeLineData?: IExpenseList;
+  expense?: IExpenseList;
   selectMode?: boolean;
 }
 
 export default function TravelExpensesTimeline({
-  timeLineData,
+  expense,
   selectMode,
 }: ITravelExpensesTimeline) {
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
@@ -36,7 +36,7 @@ export default function TravelExpensesTimeline({
   const { openDialog } = useDialogStore();
 
   const isSelected = selectedExpenses.some(
-    (expense) => expense.id === timeLineData?.id,
+    (_expense) => _expense.id === expense?.id,
   );
 
   /** 지출 삭제 핸들러 */
@@ -44,25 +44,25 @@ export default function TravelExpensesTimeline({
     e.stopPropagation();
     e.preventDefault();
 
-    if (timeLineData?.day === undefined) return;
+    if (expense?.day === undefined) return;
 
     openDialog({
       message: '지출을 삭제할까요?',
       type: 'confirm',
       okLabel: '삭제',
       onOk: () => {
-        setDeleteExpenseList({
-          day: timeLineData.day as number,
-          id: timeLineData?.id as string,
-        });
+        // setDeleteExpenseList({
+        //   day: expense.day as number,
+        //   id: expense?.id as string,
+        // });
         toast.success(`지출을 삭제했어요`);
       },
     });
   };
 
   const onClickCard = () => {
-    if (selectMode && timeLineData) {
-      toggleSelect(timeLineData); // 선택 모드일 땐 토글만
+    if (selectMode && expense) {
+      toggleSelect(expense); // 선택 모드일 땐 토글만
     } else {
       setIsOpenDatilModal(true); // 아닐 땐 모달
     }
@@ -70,8 +70,8 @@ export default function TravelExpensesTimeline({
 
   /** 지출자 가져오기 */
   const getSpender = useMemo(() => {
-    const type = timeLineData?.spenderType;
-    const spender = timeLineData?.spender || [];
+    const type = expense?.spenderType;
+    const spender = expense?.spender || [];
 
     if (!type || spender.length === 0) return '';
 
@@ -85,22 +85,22 @@ export default function TravelExpensesTimeline({
       default:
         return '';
     }
-  }, [timeLineData?.spenderType, timeLineData?.spender]);
+  }, [expense?.spenderType, expense?.spender]);
 
   return (
     <div className="flex w-full gap-3">
       <div className="flex flex-col items-center justify-center pb-2.5">
         <div className="shrink-0">
           <CategoryIcon
-            variant={timeLineData?.category ? timeLineData?.category : 'plus'}
+            variant={expense?.category ? expense?.category : 'plus'}
           />
         </div>
       </div>
       <div className="w-full pb-2.5">
-        {timeLineData ? (
+        {expense ? (
           <TravelTimelineCard
-            time={timeLineData.time!}
-            memo={timeLineData.memo!}
+            time={expense.time!}
+            memo={expense.memo!}
             onClickCard={onClickCard}
             onClickDelete={(e) => handleDeleteExpense(e)}
             selectMode={selectMode!}
@@ -109,23 +109,23 @@ export default function TravelExpensesTimeline({
             <div className="flex flex-col">
               <div className="flex items-baseline gap-1">
                 <span className="font-bold">
-                  {timeLineData.exchangeRate.currencyCode.label}
+                  {expense.currencyCode}
                 </span>
                 <span className="text-state-error text-lg font-bold">
-                  {convertComma(timeLineData.amount ?? 0)}
+                  {convertComma(expense.amount ?? 0)}
                 </span>
-                {timeLineData.exchangeRate.currencyCode.label !== 'KRW' && (
+                {expense.currencyCode !== 'KRW' && (
                   <span className="text-text-secondary text-sm font-bold">
-                    ({convertComma(timeLineData.calcExchangeAmount ?? 0)}원)
+                    ({convertComma(expense.calcExchangeAmount ?? 0)}원)
                   </span>
                 )}
               </div>
-              <p className="font-bold">{timeLineData.name}</p>
+              <p className="font-bold">{expense.name}</p>
               <div className="text-text-secondary text-sm">
                 <span className="font-bold">결제: </span>
                 <span>
-                  {timeLineData.payer.label} ·{' '}
-                  {convertPaymentType(timeLineData.paymentType)}
+                  {expense.payer.label} ·{' '}
+                  {convertPaymentType(expense.paymentType)}
                 </span>
                 {getSpender && (
                   <>
@@ -155,7 +155,7 @@ export default function TravelExpensesTimeline({
       <AddExpenseModal
         isOpen={isOpenDatilModal}
         handleClose={() => setIsOpenDatilModal(false)}
-        timeLineData={timeLineData}
+        expense={expense}
         isModify
       />
     </div>

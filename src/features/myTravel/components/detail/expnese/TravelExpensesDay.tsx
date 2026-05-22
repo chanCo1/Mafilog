@@ -67,13 +67,13 @@ export default function TravelExpensesDay({
       <div className="flex flex-col">
         {expense.expenseList.length ? (
           <>
-            {/* {expense.expenseList.map((_data, index) => (
+            {expense.expenseList.map((_data, index) => (
               <TravelExpensesTimeline
                 key={`${_data?.id}-${index}`}
-                timeLineData={_data}
+                expense={_data}
                 selectMode={selectMode}
               />
-            ))} */}
+            ))}
           </>
         ) : (
           <TravelExpensesTimeline />
