@@ -36,6 +36,7 @@ import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
+import { useCreateTravelExpense } from '@/features/myTravel/hooks/rquery/expense/useCreateTravelExpense';
 
 interface IAddExpenseModal {
   isModify?: boolean;
@@ -103,43 +104,48 @@ export default function AddExpenseModal({
     });
   }, [expenseList]);
 
+  const { mutateAsync: createExpense } = useCreateTravelExpense(travelId);
+
   // const { setAddExpenseList, setUpdateExpense, setDeleteExpenseList } =
   //   useTravelExpenseStore();
 
   const { openDialog } = useDialogStore();
 
   /** 지출 추가 핸들링 */
-  const handleExpense = () => {
+  const handleExpense = async () => {
     if (isModify && !expense) return;
     if (!expenseName) return;
 
     /** 지출자 각자에게 지출 금액, 원화 금액,  */
     const withAmountSpender = selectedSepnder.map((spender) => ({
       ...spender,
+      memberId: spender.value as string,
       amount: roundDecimal(expenseAmount / selectedSepnder.length),
       calcExchangeAmount: roundDecimal(
         calcExchangeAmount / selectedSepnder.length,
       ),
-      currencyCode: currencyCode,
+      currencyCode: currencyCode.label,
       category: selectedCategory,
     }));
 
     const saveData = {
-      id: isModify ? expense!.id : '',
+      // id: isModify ? expense!.id : '',
       name: expenseName,
+      paymentType: selectedPaymentType,
       spenderType: selectedSpenderType,
       category: selectedCategory,
       day: selectedDay.value as number,
       time: selectedTime,
       memo: inputMemo,
-      spender: withAmountSpender,
-      payer: selectedPayer,
-      paymentType: selectedPaymentType,
       amount: expenseAmount,
-      calcExchangeAmount: calcExchangeAmount,
-      currencyCode: currencyCode,
-      exchangeRateAmount: exchangeRateAmount,
       calcFormula: calcFormula,
+      payer: selectedPayer,
+      calcExchangeAmount: calcExchangeAmount,
+      currencyCode: currencyCode.label,
+      currencyCountry: currencyCode.value as string,
+      exchangeRateAmount: exchangeRateAmount,
+      spenders: withAmountSpender,
+      payerId: selectedPayer.value as string,
     };
 
     // if (isModify) {
@@ -148,8 +154,10 @@ export default function AddExpenseModal({
     //   setAddExpenseList(saveData);
     // }
 
+    await createExpense({ travelId, data: saveData });
+
     onClickCloseBtn();
-    toast.success(`지출을 ${isModify ? '수정' : '추가'}했어요`);
+    // toast.success(`지출을 ${isModify ? '수정' : '추가'}했어요`);
   };
 
   /** 지출 삭제 핸들러 */
@@ -258,8 +266,9 @@ export default function AddExpenseModal({
       // setSelectedDay(travelDayList, expense.day);
       setSelectedTime(expense.time || '');
       setInputMemo(expense.memo || '');
-      setSelectPayer(expense.payer);
-      setSelectedSepnder(expense.spender);
+      // TODO: 지출 등록하면 초기값 작업할것
+      // setSelectPayer(expense.payer);
+      // setSelectedSepnder(expense.spender);
       setCurrencyCode({
         label: expense.currencyCode,
         value: countryData[expense.currencyCode],
