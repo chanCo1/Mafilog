@@ -28,7 +28,6 @@ import { ILabelValue } from '@/shared/interfaces';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Calculator from '@/shared/components/ui/Calculator';
 import { IExpenseList } from '@/features/myTravel/interfaces/expense.interface';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { toast } from 'sonner';
 import SelectSpenderType from '@/features/myTravel/components/modal/addExpense/SelectSpenderType';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
@@ -106,9 +105,6 @@ export default function AddExpenseModal({
 
   const { mutateAsync: createExpense, isPending: isCreatePending } =
     useCreateTravelExpense(travelId);
-
-  // const { setAddExpenseList, setUpdateExpense, setDeleteExpenseList } =
-  //   useTravelExpenseStore();
 
   const { openDialog } = useDialogStore();
 

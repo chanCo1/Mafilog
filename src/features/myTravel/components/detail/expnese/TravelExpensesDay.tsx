@@ -5,15 +5,11 @@
  * @description: TravelExpensesDay 컴포넌트, 가계부 일차별 지출
  */
 
-import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { convertFormattedDate, getDay, convertComma } from '@/shared/lib/utils';
 import TravelExpensesTimeline from '@/features/myTravel/components/detail/expnese/TravelExpensesTimeline';
-import { IExpense } from '@/shared/interfaces/travelExpenseStore.interface';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import { ILabelValue } from '@/shared/interfaces';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { IExpenseResponse } from '@/features/myTravel/interfaces/expense.interface';
 
 interface ITravelExpensesDay {
@@ -26,9 +22,6 @@ export default function TravelExpensesDay({
   selectMode,
 }: ITravelExpensesDay) {
   const { selectedExpenses, toggleDayAll } = useSelectExpenses();
-  const { getDailyAllSpend } = useTravelExpenseStore();
-
-  const dailyAllAmount = getDailyAllSpend(expense.day);
 
   // 현재 일차의 list 아이템들이 모두 selectedSchedules에 포함되어 있는지 확인
   const isAllSelected =

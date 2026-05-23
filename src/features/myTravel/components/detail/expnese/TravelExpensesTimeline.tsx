@@ -14,7 +14,6 @@ import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTime
 import { EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import { toast } from 'sonner';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
@@ -32,9 +31,6 @@ export default function TravelExpensesTimeline({
   const { countryData } = useCountriesDataStore();
 
   const { selectedExpenses, toggleSelect } = useSelectExpenses();
-  const setDeleteExpenseList = useTravelExpenseStore(
-    (state) => state.setDeleteExpenseList,
-  );
   const { openDialog } = useDialogStore();
 
   const isSelected = selectedExpenses.some(
