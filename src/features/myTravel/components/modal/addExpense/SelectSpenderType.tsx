@@ -99,7 +99,7 @@ export default function SelectSpenderType({
                 key={`${_member.id}-${index}`}
                 className="flex items-center justify-between"
               >
-                <span className="font-bold">{_member.name}</span>
+                <span className="">{_member.name}</span>
                 <div className="flex items-center gap-5">
                   <Radio
                     id={{ label: _member.name, value: _member.userId }}

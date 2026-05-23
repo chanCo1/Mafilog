@@ -36,6 +36,7 @@ import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useCreateTravelExpense } from '@/features/myTravel/hooks/rquery/expense/useCreateTravelExpense';
+import { useDeleteExpense } from '@/features/myTravel/hooks/rquery/expense/useDeleteExpense';
 
 interface IAddExpenseModal {
   isModify?: boolean;
@@ -94,6 +95,8 @@ export default function AddExpenseModal({
   const travelId = useGetTravelId();
   const { data: travelInfo } = useGetMyTravelDetail(travelId);
   const { data: expenseList } = useGetTravelExpenses(travelId);
+  const { mutateAsync: deleteExpense, isPending: isDeletePending } =
+    useDeleteExpense(travelId);
 
   const { countryData } = useCountriesDataStore();
 
@@ -154,7 +157,6 @@ export default function AddExpenseModal({
     await createExpense({ travelId, data: saveData });
 
     onClickCloseBtn();
-    // toast.success(`지출을 ${isModify ? '수정' : '추가'}했어요`);
   };
 
   /** 지출 삭제 핸들러 */
@@ -164,15 +166,11 @@ export default function AddExpenseModal({
     if (expense?.day === undefined) return;
 
     openDialog({
-      message: '지출을 삭제할까요?',
+      message: '지출 내역을 삭제할까요?',
       type: 'confirm',
       okLabel: '삭제',
-      onOk: () => {
-        // setDeleteExpenseList({
-        //   day: expense.day,
-        //   id: expense?.id as string,
-        // });
-        toast.success(`지출을 삭제했어요`);
+      onOk: async () => {
+        await deleteExpense({ travelId, deleteIds: [expense.id] });
       },
     });
   };
@@ -243,7 +241,7 @@ export default function AddExpenseModal({
         inputNumber: expense.calcFormula,
         selectedCurrency: {
           label: expense.currencyCode,
-          value: countryData[expense.currencyCode],
+          value: countryData[expense.currencyCountry].code,
         },
       };
     }
@@ -259,13 +257,20 @@ export default function AddExpenseModal({
       setSelectedSpenderType(expense.spenderType);
       setSelectedPaymentType(expense.paymentType);
       setSelectedCategory(expense.category);
-      // TODO: 지출 등록하면 초기값 작업할것
-      // setSelectedDay(travelDayList, expense.day);
+      setSelectedDay(travelDayList[expense.day]);
       setSelectedTime(expense.time || '');
       setInputMemo(expense.memo || '');
-      // TODO: 지출 등록하면 초기값 작업할것
-      // setSelectPayer(expense.payer);
-      // setSelectedSepnder(expense.spender);
+      setSelectPayer({
+        label: expense.payer.name,
+        value: expense.payer.userId as string,
+      });
+
+      const spenderMember = expense.spender.map((spender) => ({
+        label: spender.member.name,
+        value: spender.member.userId,
+      }));
+
+      setSelectedSepnder(spenderMember);
       setCurrencyCode({
         label: expense.currencyCode,
         value: countryData[expense.currencyCode],
@@ -331,7 +336,12 @@ export default function AddExpenseModal({
           )}
         >
           {isModify && (
-            <Button variant="redOutline" onClick={handleDeleteExpense}>
+            <Button
+              variant="redOutline"
+              disabled={isDeletePending}
+              isLoading={isDeletePending}
+              onClick={handleDeleteExpense}
+            >
               삭제
             </Button>
           )}

@@ -213,7 +213,7 @@ export async function PATCH(
                 data: {
                   name: member.name,
                   travelId,
-                  userId: String(member.userId),
+                  userId: member.id,
                 },
               });
             }),
