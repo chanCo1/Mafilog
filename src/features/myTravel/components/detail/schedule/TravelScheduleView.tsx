@@ -23,7 +23,7 @@ import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useDeleteSchedulePlace';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
-import { useUpdateBulkScheduleDate } from '@/features/myTravel/hooks/rquery/schedule/useUpdateScheduleBulk';
+import { useUpdateBulkScheduleDate } from '@/features/myTravel/hooks/rquery/schedule/useUpdateBulkScheduleDate';
 
 function TravelScheduleView() {
   const travelId = useGetTravelId();

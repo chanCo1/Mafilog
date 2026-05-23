@@ -26,6 +26,7 @@ import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/u
 import { getTravelDayList } from '@/shared/lib/utils';
 import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
 import { useDeleteExpense } from '@/features/myTravel/hooks/rquery/expense/useDeleteExpense';
+import { useUpdateBulkExpenseDate } from '@/features/myTravel/hooks/rquery/expense/useUpdateBulkExpenseDate';
 
 function TravelExpensesView() {
   /** 지출일 선택 */
@@ -43,6 +44,8 @@ function TravelExpensesView() {
   );
   const { mutateAsync: deleteExpense, isPending: isDeletePending } =
     useDeleteExpense(travelId);
+  const { mutateAsync: moveExpense, isPending: isMovePending } =
+    useUpdateBulkExpenseDate(travelId);
 
   const selectedExpenses = useSelectExpenses((state) => state.selectedExpenses);
   const { clearSelectedExpenses } = useSelectExpenses();
@@ -75,10 +78,18 @@ function TravelExpensesView() {
   };
 
   /** 선택 이동 */
-  const handelMoveSelectedExpense = (day: ILabelValue) => {
-    const getExpenseId = selectedExpenses.map((expense) => expense.id);
-    // setMoveSelectedExpense({ day: day.value as number, id: getExpenseId });
-    clearSelectedExpenses();
+  const handelMoveExpense = (targetDay: number) => {
+    const moveIds = selectedExpenses.map((expense) => expense.id);
+
+    openDialog({
+      message: `${moveIds.length}개 지출을 이동할까요?`,
+      type: 'confirm',
+      okLabel: '이동',
+      onOk: async () => {
+        await moveExpense({ travelId, data: { moveIds, targetDay } });
+        clearSelectedExpenses();
+      },
+    });
   };
 
   return (
@@ -97,23 +108,20 @@ function TravelExpensesView() {
                       <Button
                         variant="gray"
                         size="sm"
-                        disabled={!selectedExpenses.length}
-                        isLoading={false}
+                        disabled={!selectedExpenses.length || isMovePending}
+                        isLoading={isMovePending}
                       >
                         선택 날짜 이동
                       </Button>
                     }
                   >
-                    {[
-                      TRAVEL_EXPENSE_BEFORE,
-                      ...getTravelDayList(expenseList),
-                    ].map((list) => (
+                    {getTravelDayList(expenseList).map((list, index) => (
                       <span
                         key={list.value}
                         className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
-                        onClick={() => handelMoveSelectedExpense(list)}
+                        onClick={() => handelMoveExpense(list.value)}
                       >
-                        {list.label}
+                        {index === 0 ? '여행전' :list.label}
                       </span>
                     ))}
                   </Dropdown>
@@ -130,7 +138,7 @@ function TravelExpensesView() {
               ) : (
                 <Button
                   // className="from-secondary to-primary w-35 bg-linear-to-r"
-                  className="w-35 bg-secondary"
+                  className="bg-secondary w-35"
                   variant="secondary"
                   size="sm"
                   onClick={() => setIsOpenAddExpneseModal(true)}
