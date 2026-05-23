@@ -161,8 +161,12 @@ export default function CreateNewTravelModal({
       ) {
         openDialog({
           type: 'confirm',
-          message:
-            '날짜 변경시 해당 날짜에 포함되지 않은 기존 일정과 지출은 삭제돼요. 수정할까요?',
+          message: (
+            <div className="flex flex-col gap-1">
+              <span className="">날짜 변경시 해당 날짜에 포함되지 않은</span>
+              <span className="">기존 일정과 지출은 삭제돼요. 수정할까요?</span>
+            </div>
+          ),
           okLabel: '수정',
           onOk: async () => {
             await updateTravelDetail(formData);

@@ -192,94 +192,123 @@ export async function PATCH(
       }
 
       // 멤버 저장
-      await tx.travelMember.deleteMany({ where: { travelId } });
       if (member.length) {
-        await Promise.all(
-          member.map((member: IMemberList) => {
-            return tx.travelMember.create({
-              data: {
-                name: member.name,
-                travelId,
-                userId: member.id,
-              },
-            });
-          }),
+        const existingMembers = await tx.travelMember.findMany({
+          where: { travelId },
+        });
+        // 현재 있는 멤버 정보
+        const existingUserIds = existingMembers.map((member) => member.userId);
+
+        // 새로운 멤버 찾기
+        const newMembers = member.filter(
+          (member: IMemberList) =>
+            !existingUserIds.includes(String(member.userId)),
         );
+
+        // 새로운 멤버 있으면 저장
+        if (newMembers.length > 0) {
+          await Promise.all(
+            newMembers.map((member: IMemberList) => {
+              return tx.travelMember.create({
+                data: {
+                  name: member.name,
+                  travelId,
+                  userId: String(member.userId),
+                },
+              });
+            }),
+          );
+        }
       }
 
-      // 새로운 날짜
+      // 새로운 여행 날짜 배열
       const newDays = getTravelDayOfWeek(fromDate, toDate);
-      const newDateTimes = newDays.map((day) => day.date.getTime());
 
-      // 해당 여행에 스케줄 정보
+      /** 스케줄(일정) */
       const existingSchedules = await tx.travelSchedule.findMany({
         where: { travelId },
       });
+      const matchedScheduleIds = new Set<number>();
 
-      // 기존 날짜가 새로운 날짜에 포함하고 있지 않으면 삭제 대상
-      const schedulesToDelete = existingSchedules.filter(
-        (schedule) =>
-          schedule.date && !newDateTimes.includes(schedule.date.getTime()),
-      );
+      // Day 0 (여행전)은 무조건 유지
+      existingSchedules.forEach((schedule) => {
+        if (schedule.day === 0) matchedScheduleIds.add(schedule.id);
+      });
 
-      if (schedulesToDelete.length > 0) {
-        // 다중 삭제
-        await tx.travelSchedule.deleteMany({
-          where: {
-            id: { in: schedulesToDelete.map((schedule) => schedule.id) },
-          },
-        });
-      }
-
-      // 새로운 날짜 반복
       for (const newDay of newDays) {
-        // 기존 날짜와 새로운 날짜가 같으면
+        // 일치하는 날짜 찾기
         const existing = existingSchedules.find(
-          (schedule) => schedule.date?.getTime() === newDay.date.getTime(),
+          (schedule) =>
+            schedule.date?.getTime() === newDay.date.getTime() ||
+            (!schedule.date && schedule.day === newDay.day),
         );
-        // 날짜 업데이트
+
         if (existing) {
+          matchedScheduleIds.add(existing.id);
+
+          // 일정 수정
           await tx.travelSchedule.update({
             where: { id: existing.id },
-            data: { day: newDay.day },
+            data: { day: newDay.day, date: newDay.date },
           });
         } else {
-          // 아니면 날짜 생성
+          // 일정 생성
           await tx.travelSchedule.create({
             data: { travelId, day: newDay.day, date: newDay.date },
           });
         }
       }
 
-      // 가계부
-      const existingExpenses = await tx.travelExpense.findMany({
-        where: { travelId },
-      });
-
-      const expensesToDelete = existingExpenses.filter(
-        (e) => e.date && !newDateTimes.includes(e.date.getTime()),
+      const schedulesToDelete = existingSchedules.filter(
+        (schedule) => !matchedScheduleIds.has(schedule.id),
       );
-      if (expensesToDelete.length > 0) {
-        await tx.travelExpense.deleteMany({
-          where: { id: { in: expensesToDelete.map((e) => e.id) } },
+      // 새로운 기간에 포함되지 않은 일정 삭제
+      if (schedulesToDelete.length > 0) {
+        await tx.travelSchedule.deleteMany({
+          where: { id: { in: schedulesToDelete.map((schedule) => schedule.id) } },
         });
       }
 
-      // 생성
+      /** 가계부(지출) */
+      const existingExpenses = await tx.travelExpense.findMany({
+        where: { travelId },
+      });
+      const matchedExpenseIds = new Set<number>();
+
+      // Day 0 (여행전)은 무조건 유지
+      existingExpenses.forEach((e) => {
+        if (e.day === 0) matchedExpenseIds.add(e.id);
+      });
+
       for (const newDay of newDays) {
+        // 일치하는 날짜 찾기
         const existing = existingExpenses.find(
-          (e) => e.date?.getTime() === newDay.date.getTime(),
+          (e) =>
+            e.date?.getTime() === newDay.date.getTime() ||
+            (!e.date && e.day === newDay.day),
         );
+
         if (existing) {
+          matchedExpenseIds.add(existing.id);
           await tx.travelExpense.update({
             where: { id: existing.id },
-            data: { day: newDay.day },
+            data: { day: newDay.day, date: newDay.date },
           });
         } else {
           await tx.travelExpense.create({
             data: { travelId, day: newDay.day, date: newDay.date },
           });
         }
+      }
+
+      const expensesToDelete = existingExpenses.filter(
+        (e) => !matchedExpenseIds.has(e.id),
+      );
+      // 새로운 기간에 포함되지 않은 지출 삭제
+      if (expensesToDelete.length > 0) {
+        await tx.travelExpense.deleteMany({
+          where: { id: { in: expensesToDelete.map((e) => e.id) } },
+        });
       }
     });
 

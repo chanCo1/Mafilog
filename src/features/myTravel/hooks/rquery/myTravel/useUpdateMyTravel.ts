@@ -21,6 +21,7 @@ export const useUpdateMyTravel = (travelId: string) => {
       queryClient.invalidateQueries({ queryKey: ['myTravelList'] });
       queryClient.invalidateQueries({ queryKey: ['myTravelDetail', travelId] });
       queryClient.invalidateQueries({ queryKey: ['travelSchedules', travelId] });
+      queryClient.invalidateQueries({ queryKey: ['travelExpenses', travelId] });
 
       toast.success('여행 정보가 수정되었어요');
     },
