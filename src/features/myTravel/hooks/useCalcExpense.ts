@@ -242,6 +242,7 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
         (acc, item) => {
           const category = item.category;
           const currencyLabel = item.currencyCode;
+          const currencyCountry = item.currencyCountry;
           const amount = item.amount;
           const calcExchangeAmount = item.calcExchangeAmount;
 
@@ -250,23 +251,31 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
               category: '',
               amount: 0,
               calcCurrencyAmount: 0,
+              currencyCountry: '',
             };
           }
 
           acc[currencyLabel].category = category;
           acc[currencyLabel].amount += amount;
           acc[currencyLabel].calcCurrencyAmount += calcExchangeAmount;
+          acc[currencyLabel].currencyCountry = currencyCountry;
           return acc;
         },
         {} as Record<
           string,
-          { category: string; amount: number; calcCurrencyAmount: number }
+          {
+            category: string;
+            amount: number;
+            calcCurrencyAmount: number;
+            currencyCountry: string;
+          }
         >,
       );
 
       return Object.entries(reduceSpend).map(([currency, spend]) => ({
         category,
         currency,
+        currencyCountry: spend.currencyCountry,
         spend: roundDecimal(spend.amount),
         calcSpend: roundDecimal(spend.calcCurrencyAmount),
       }));
@@ -292,6 +301,7 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
         (acc, item) => {
           const category = item.category;
           const currencyLabel = item.currencyCode;
+          const currencyCountry = item.currencyCountry;
           const amount = item.amount;
           const calcExchangeAmount = item.calcExchangeAmount;
 
@@ -300,23 +310,31 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
               category: '',
               amount: 0,
               calcCurrencyAmount: 0,
+              currencyCountry: '',
             };
           }
 
           acc[currencyLabel].category = category;
           acc[currencyLabel].amount += amount;
           acc[currencyLabel].calcCurrencyAmount += calcExchangeAmount;
+          acc[currencyLabel].currencyCountry = currencyCountry;
           return acc;
         },
         {} as Record<
           string,
-          { category: string; amount: number; calcCurrencyAmount: number }
+          {
+            category: string;
+            amount: number;
+            calcCurrencyAmount: number;
+            currencyCountry: string;
+          }
         >,
       );
 
       return Object.entries(reduceSpend).map(([currency, spend]) => ({
         category,
         currency,
+        currencyCountry: spend.currencyCountry,
         spend: roundDecimal(spend.amount),
         calcSpend: roundDecimal(spend.calcCurrencyAmount),
       }));
