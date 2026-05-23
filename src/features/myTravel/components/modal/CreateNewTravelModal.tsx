@@ -23,7 +23,7 @@ import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { IMemberList } from '@/shared/interfaces';
 import { TRAVEL_PARTNER, TRAVEL_STYLE, TRAVEL_TYPE } from '@/shared/types/Enum';
 import { useSession } from 'next-auth/react';
-import { getTravelDay } from '@/shared/lib/utils';
+import { getTravelDay, setResetHour } from '@/shared/lib/utils';
 import { useCreateMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useCreateMyTravelList';
 import { useRouter } from 'next/navigation';
 import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
@@ -150,9 +150,13 @@ export default function CreateNewTravelModal({
     });
 
     if (isModify) {
+      if (!travelDetail || !selectedDate?.from || !selectedDate?.to) return;
+
       if (
-        travelDetail?.from !== selectedDate?.from ||
-        travelDetail?.to !== selectedDate?.to
+        setResetHour(travelDetail?.from).getTime() !==
+          setResetHour(selectedDate.from).getTime() ||
+        setResetHour(travelDetail?.to).getTime() !==
+          setResetHour(selectedDate.to).getTime()
       ) {
         openDialog({
           type: 'confirm',
@@ -205,7 +209,7 @@ export default function CreateNewTravelModal({
         ),
       );
     }
-  }, [selectedCities, stepData]);
+  }, [selectedCities]);
 
   useEffect(() => {
     /** 날짜 선택 완료 후 지웠을 경우 */
@@ -216,7 +220,7 @@ export default function CreateNewTravelModal({
         ),
       );
     }
-  }, [selectedDate, stepData]);
+  }, [selectedDate]);
 
   /** 수정 시 상세 값 바인딩 */
   useEffect(() => {
@@ -239,7 +243,7 @@ export default function CreateNewTravelModal({
         setSelectedImage([travelDetail.imageUrl]);
       }
     }
-  }, [travelId, isModify, isOpen, stepData, travelDetail]);
+  }, [travelId, isModify, isOpen, travelDetail]);
 
   const isDisabled = !travelType || !selectedCities || !selectedDate;
 

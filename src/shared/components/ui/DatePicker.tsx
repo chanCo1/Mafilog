@@ -19,14 +19,15 @@ interface IDatePicker {
 
 export default function DatePicker({ selected, onSelected }: IDatePicker) {
   const [month, setMonth] = useState<Date | undefined>(
-    selected?.from || new Date()
+    selected?.from || new Date(),
   );
 
   useEffect(() => {
-    if (selected?.from) {
-      setMonth(selected.from);
+    const fromDate = selected?.from;
+    if (fromDate) {
+      setMonth(fromDate);
     }
-  }, [selected]);
+  }, [selected?.from]);
 
   return (
     <div className="">

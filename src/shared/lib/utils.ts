@@ -63,7 +63,7 @@ export const getDay = (date: Date | string) => {
 };
 
 /** 시간을 0시 0분 0초로 초기화 */
-const setResetHour = (date: Date): Date => {
+export const setResetHour = (date: Date): Date => {
   const _date = new Date(date);
   _date.setHours(0, 0, 0, 0);
 
