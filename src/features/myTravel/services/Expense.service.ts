@@ -54,16 +54,16 @@ class _ExpenseService {
   }
 
   // /** 일정 선택 이동 */
-  // async updateBulkTravelScheduleDate(
-  //   travelId: string,
-  //   data: { moveIds: number[]; targetDay: number },
-  // ) {
-  //   const response = await axiosInstanceWithAuth.patch(
-  //     `${API_URL}/${travelId}/schedules/bulk-move`,
-  //     data,
-  //   );
-  //   return response.data.data;
-  // }
+  async updateBulkTravelExpenseDate(
+    travelId: string,
+    data: { moveIds: number[]; targetDay: number },
+  ) {
+    const response = await axiosInstanceWithAuth.patch(
+      `${API_URL}/${travelId}/expenses/bulk-move`,
+      data,
+    );
+    return response.data.data;
+  }
 }
 
 const ExpenseService = new _ExpenseService();
