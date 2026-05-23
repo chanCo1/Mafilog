@@ -1,8 +1,8 @@
 /**
  * @file: route.ts
  * @author: chad
- * @since: 2026.05.20 ~
- * @description: 여행 일정 선택 이동
+ * @since: 2026.05.24 ~
+ * @description: 여행 가계부(지출) 선택 이동
  */
 
 import { prisma } from '@/shared/lib/prisma';
@@ -33,14 +33,14 @@ export async function PATCH(
     if (!moveIds?.length || targetDay === undefined)
       return errorResponse('필수 데이터가 누락되었습니다.', 400);
 
-    const targetSchedule = await prisma.travelSchedule.findFirst({
+    const targetExpense = await prisma.travelExpense.findFirst({
       where: { travelId, day: targetDay },
     });
-    if (!targetSchedule)
+    if (!targetExpense)
       return errorResponse('이동하려는 일정을 찾을 수 없습니다.', 404);
 
-    const lastItem = await prisma.scheduleList.findFirst({
-      where: { scheduleId: targetSchedule.id },
+    const lastItem = await prisma.expenseList.findFirst({
+      where: { travelExpenseId: targetExpense.id },
       orderBy: { order: 'desc' },
       select: { order: true },
     });
@@ -50,7 +50,7 @@ export async function PATCH(
     await prisma.$transaction(async (tx) => {
       // TODO: 이동 전, 후로 order 재정렬 할건지 고민..
       // // 이동 아이템들의 스케줄 아이디
-      // const movingItems = await tx.scheduleList.findMany({
+      // const movingItems = await tx.travelExpense.findMany({
       //   where: { id: { in: moveIds } },
       //   select: { scheduleId: true },
       //   distinct: ['scheduleId'],
@@ -58,7 +58,7 @@ export async function PATCH(
 
       // await Promise.all(
       //   moveIds.map((id, index) =>
-      //     tx.scheduleList.update({
+      //     tx.travelExpense.update({
       //       where: { id },
       //       data: {
       //         day: targetDay,
@@ -72,7 +72,7 @@ export async function PATCH(
       // // 이동 아이템 빠진 스케줄의 재정렬
       // await Promise.all(
       //   movingItems.map(async ({ scheduleId,  }) => {
-      //     const remainItems = await tx.scheduleList.findMany({
+      //     const remainItems = await tx.travelExpense.findMany({
       //       where: { scheduleId },
       //       orderBy: { order: 'asc' },
       //       select: { id: true },
@@ -90,7 +90,7 @@ export async function PATCH(
       // );
 
       // // 이동된 스케줄에서 재정렬
-      // const afterItems = await tx.scheduleList.findMany({
+      // const afterItems = await tx.travelExpense.findMany({
       //   where: { scheduleId: targetSchedule.id },
       //   orderBy: { order: 'asc' },
       //   select: { id: true },
@@ -98,7 +98,7 @@ export async function PATCH(
 
       // await Promise.all(
       //   afterItems.map((item, index) =>
-      //     tx.scheduleList.update({
+      //     tx.travelExpense.update({
       //       where: { id: item.id },
       //       data: { order: index },
       //     }),
@@ -107,11 +107,11 @@ export async function PATCH(
 
       await Promise.all(
         moveIds.map((id, index) =>
-          tx.scheduleList.update({
+          tx.expenseList.update({
             where: { id },
             data: {
               day: targetDay,
-              scheduleId: targetSchedule.id,
+              travelExpenseId: targetExpense.id,
               order: startOrder + index + 1,
             },
           }),
@@ -121,7 +121,7 @@ export async function PATCH(
 
     return successResponse();
   } catch (error) {
-    console.error('@@ 다중 일정 이동 에러 >>', error);
+    console.error('@@ 다중 지출 이동 에러 >>', error);
     return errorResponse();
   }
 }
