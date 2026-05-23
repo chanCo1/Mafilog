@@ -330,7 +330,12 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
 
   /** 모든날 총 지출 */
   const getAllTotalSpend = useMemo(() => {
-    const totalSpend = expenses.reduce((acc, cur) => acc + cur.dailyExpense, 0);
+    const expensesRange = expenses.length;
+
+    let totalSpend = 0;
+    for (let i = 0; i < expensesRange; i++) {
+      totalSpend += getDailyAllSpend(i);
+    }
 
     return Math.max(0, roundDecimal(totalSpend));
   }, [expenses]);
