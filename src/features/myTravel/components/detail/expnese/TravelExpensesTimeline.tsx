@@ -104,6 +104,7 @@ export default function TravelExpensesTimeline({
             onClickDelete={(e) => handleDeleteExpense(e)}
             selectMode={selectMode!}
             isSelected={isSelected}
+            isLoading={isDeletePending}
           >
             <div className="flex flex-col">
               <div className="flex items-baseline gap-1">

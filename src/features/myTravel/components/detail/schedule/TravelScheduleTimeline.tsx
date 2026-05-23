@@ -40,7 +40,7 @@ export default function TravelScheduleTimeline({
   });
 
   const travelId = useGetTravelId();
-  const { mutateAsync: deleteSchedule } = useDeleteSchedulePlace(
+  const { mutateAsync: deleteSchedule, isPending: isDeletePending } = useDeleteSchedulePlace(
     travelId,
     timeLineData?.type!,
   );
@@ -107,6 +107,7 @@ export default function TravelScheduleTimeline({
                 onClickDelete={(e) => handleDeleteSchedule(e)}
                 selectMode={selectMode!}
                 isSelected={isSelected}
+                isLoading={isDeletePending}
               >
                 <div className="flex flex-col">
                   <span className="text-lg font-bold">
@@ -131,6 +132,7 @@ export default function TravelScheduleTimeline({
                 selectMode={selectMode!}
                 isMemo
                 isSelected={isSelected}
+                isLoading={isDeletePending}
               >
                 <span className="text-text-secondary">{timeLineData.memo}</span>
               </TravelTimelineCard>

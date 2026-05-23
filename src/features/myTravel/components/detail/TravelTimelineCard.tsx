@@ -21,6 +21,7 @@ interface ITravelTimelineCard {
   isMemo?: boolean;
   selectMode: boolean;
   isSelected: boolean;
+  isLoading?: boolean;
 }
 
 export default function TravelTimelineCard({
@@ -33,6 +34,7 @@ export default function TravelTimelineCard({
   selectMode,
   isMemo,
   isSelected,
+  isLoading,
 }: ITravelTimelineCard) {
   return (
     <div className={cn('felx flex-col', className)}>
@@ -50,6 +52,7 @@ export default function TravelTimelineCard({
               variant="redOutline"
               size="xs"
               onClick={onClickDelete}
+              isLoading={isLoading}
             >
               삭제
             </Button>
