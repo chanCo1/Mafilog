@@ -2,7 +2,7 @@
  * @file: useCalcExpense.tsx
  * @author: chad
  * @since: 2026.05.23 ~
- * @description: 가계부 지출 계산 커스텀훅
+ * @description: 가계부 지출 계산 커스텀 훅
  */
 
 import { useMemo, useCallback } from 'react';
@@ -43,18 +43,21 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
   // = = = = = = = = = = = = = = = = = = = = = = = = = =
 
   /** 일정 별 지출 총액 */
-  const getDailyAllSpend = useCallback((day: number) => {
-    const targetDay = findTargetDay(expenses, day);
+  const getDailyAllSpend = useCallback(
+    (day: number) => {
+      const targetDay = findTargetDay(expenses, day);
 
-    if (!targetDay) return 0;
+      if (!targetDay) return 0;
 
-    // const dailySpend = targetDay.expenseList.reduce(
-    //   (sum, item) => sum + item.calcExchangeAmount,
-    //   0,
-    // );
+      // const dailySpend = targetDay.expenseList.reduce(
+      //   (sum, item) => sum + item.calcExchangeAmount,
+      //   0,
+      // );
 
-    return Math.max(0, roundDecimal(targetDay.dailyExpense));
-  }, [expenses]);
+      return Math.max(0, roundDecimal(targetDay.dailyExpense));
+    },
+    [expenses],
+  );
 
   /** 일정 별 내 지출 */
   const getDailyMySpend = useCallback(
@@ -85,22 +88,36 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
       const reduceSpend = targetDay.expenseList.reduce(
         (acc, item) => {
           const currencyCode = item.currencyCode;
+          const currencyCountry = item.currencyCountry;
           const amount = item.amount;
           const calcExchangeAmount = item.calcExchangeAmount;
 
           if (!acc[currencyCode]) {
-            acc[currencyCode] = { amount: 0, calcCurrencyAmount: 0 };
+            acc[currencyCode] = {
+              amount: 0,
+              calcCurrencyAmount: 0,
+              currencyCountry: '',
+            };
           }
 
           acc[currencyCode].amount += amount;
           acc[currencyCode].calcCurrencyAmount += calcExchangeAmount;
+          acc[currencyCode].currencyCountry = currencyCountry;
           return acc;
         },
-        {} as Record<string, { amount: number; calcCurrencyAmount: number }>,
+        {} as Record<
+          string,
+          {
+            amount: number;
+            calcCurrencyAmount: number;
+            currencyCountry: string;
+          }
+        >,
       );
 
       return Object.entries(reduceSpend).map(([currency, spend]) => ({
         currency,
+        currencyCountry: spend.currencyCountry,
         spend: roundDecimal(spend.amount),
         calcSpend: roundDecimal(spend.calcCurrencyAmount),
       }));
@@ -122,22 +139,36 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
       const reduceSpend = mySpendedList.reduce(
         (acc, item) => {
           const currencyLabel = item.currencyCode;
+          const currencyCountry = item.currencyCountry;
           const amount = item.amount;
           const calcExchangeAmount = item.calcExchangeAmount;
 
           if (!acc[currencyLabel]) {
-            acc[currencyLabel] = { amount: 0, calcCurrencyAmount: 0 };
+            acc[currencyLabel] = {
+              amount: 0,
+              calcCurrencyAmount: 0,
+              currencyCountry: '',
+            };
           }
 
           acc[currencyLabel].amount += amount;
           acc[currencyLabel].calcCurrencyAmount += calcExchangeAmount;
+          acc[currencyLabel].currencyCountry = currencyCountry;
           return acc;
         },
-        {} as Record<string, { amount: number; calcCurrencyAmount: number }>,
+        {} as Record<
+          string,
+          {
+            amount: number;
+            calcCurrencyAmount: number;
+            currencyCountry: string;
+          }
+        >,
       );
 
       return Object.entries(reduceSpend).map(([currency, spend]) => ({
         currency,
+        currencyCountry: spend.currencyCountry,
         spend: roundDecimal(spend.amount),
         calcSpend: roundDecimal(spend.calcCurrencyAmount),
       }));
@@ -321,25 +352,38 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
     const reduceTotalSpend = expenses.reduce(
       (acc, day) => {
         day.expenseList.forEach((item) => {
-          const currencyLabel = item.currencyCode;
+          const currencyCode = item.currencyCode;
+          const currencyCountry = item.currencyCountry;
           const amount = item.amount;
           const calcAmount = item.calcExchangeAmount;
 
-          if (!acc[currencyLabel]) {
-            acc[currencyLabel] = { totalAmount: 0, totalCalcAmount: 0 };
+          if (!acc[currencyCode]) {
+            acc[currencyCode] = {
+              totalAmount: 0,
+              totalCalcAmount: 0,
+              currencyCountry: '',
+            };
           }
 
-          acc[currencyLabel].totalAmount += amount;
-          acc[currencyLabel].totalCalcAmount += calcAmount;
+          acc[currencyCode].totalAmount += amount;
+          acc[currencyCode].totalCalcAmount += calcAmount;
+          acc[currencyCode].currencyCountry = currencyCountry;
         });
-
         return acc;
       },
-      {} as Record<string, { totalAmount: number; totalCalcAmount: number }>,
+      {} as Record<
+        string,
+        {
+          totalAmount: number;
+          totalCalcAmount: number;
+          currencyCountry: string;
+        }
+      >,
     );
 
     return Object.entries(reduceTotalSpend).map(([currency, data]) => ({
       currency,
+      currencyCountry: data.currencyCountry,
       spend: roundDecimal(data.totalAmount),
       calcSpend: roundDecimal(data.totalCalcAmount),
     }));
@@ -428,20 +472,20 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
       day.expenseList.forEach((item) => {
         // 결제자 정보
         const payerInfo = {
-          label: item.payer.name,
-          value: item.payer.userId,
+          name: item.payer.name,
+          userId: item.payer.userId,
         };
 
         item.spender.forEach((spender) => {
           // 지출자 정보
           const spenderInfo = {
-            label: spender.name,
-            value: spender.member.userId,
+            name: spender.name,
+            userId: spender.member.userId,
           };
 
-          if (payerInfo.value !== spenderInfo.value) {
+          if (payerInfo.userId !== spenderInfo.userId) {
             // 결제자와 지출자가 다르면 키 생성
-            const key = `${spenderInfo.value}_${payerInfo.value}`;
+            const key = `${spenderInfo.userId}_${payerInfo.userId}`;
 
             settlementMap[key] =
               (settlementMap[key] || 0) + spender.calcExchangeAmount;
@@ -497,26 +541,32 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
         // 0원인 경우는 제외
         .filter((item) => item.amount > 0)
     );
-  }, []);
+  }, [expenses]);
 
   /** 내가 받을 금액 구하기 */
-  const getMyReceiveAmount = useCallback((id: string) => {
-    const myReceiveAmount = getFinalSettlement
-      .filter((settle) => settle.receiveId === id)
-      .reduce((acc, item) => acc + item.amount, 0);
+  const getMyReceiveAmount = useCallback(
+    (id: string) => {
+      const myReceiveAmount = getFinalSettlement
+        .filter((settle) => settle.receiveId === id)
+        .reduce((acc, item) => acc + item.amount, 0);
 
-    return roundDecimal(myReceiveAmount);
-  }, []);
+      return roundDecimal(myReceiveAmount);
+    },
+    [expenses],
+  );
 
   /** 내 순수 지출 구하기 */
-  const getMyNetExpense = useCallback((id: string) => {
-    const totalPayment = getTotalSpendAmountByMember(id);
-    const receiveAmount = getMyReceiveAmount(id);
+  const getMyNetExpense = useCallback(
+    (id: string) => {
+      const totalPayment = getTotalSpendAmountByMember(id);
+      const receiveAmount = getMyReceiveAmount(id);
 
-    const calcAmount = totalPayment - receiveAmount;
+      const calcAmount = totalPayment - receiveAmount;
 
-    return Math.max(0, roundDecimal(calcAmount));
-  }, []);
+      return Math.max(0, roundDecimal(calcAmount));
+    },
+    [expenses],
+  );
 
   return {
     getDailyAllSpend,
