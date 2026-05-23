@@ -10,7 +10,6 @@ import { EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Radio } from '@/shared/components/ui/Radio';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import { ILabelValue } from '@/shared/interfaces';
 import { IMemberList } from '@/shared/interfaces';

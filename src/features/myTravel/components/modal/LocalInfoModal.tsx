@@ -5,11 +5,9 @@
  * @description: LocalInfoModal 컴포넌트, 현지 정보 모달
  */
 
-import { cn } from '@/shared/lib/utils';
 import { useEffect, useState } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Chip } from '@/shared/components/ui/Chip';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { Button } from '@/shared/components/ui/Button';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/LocalCurrencyInfo';
