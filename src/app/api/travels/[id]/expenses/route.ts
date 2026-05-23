@@ -145,7 +145,7 @@ export async function POST(
         }),
       );
 
-      const newExpenseList = await tx.expenseList.create({
+      await tx.expenseList.create({
         data: {
           name,
           paymentType,
@@ -172,24 +172,58 @@ export async function POST(
         },
       });
 
-      const totalDailyAmount = await tx.expenseList.aggregate({
-        where: { travelExpenseId: travelExpense.id },
-        _sum: { calcExchangeAmount: true },
-      });
+      // const totalDailyAmount = await tx.expenseList.aggregate({
+      //   where: { travelExpenseId: travelExpense.id },
+      //   _sum: { calcExchangeAmount: true },
+      // });
 
-      await tx.travelExpense.update({
-        where: { id: travelExpense.id },
-        data: {
-          dailyExpense: totalDailyAmount._sum.calcExchangeAmount || 0,
-        },
-      });
+      // await tx.travelExpense.update({
+      //   where: { id: travelExpense.id },
+      //   data: {
+      //     dailyExpense: totalDailyAmount._sum.calcExchangeAmount || 0,
+      //   },
+      // });
 
-      return newExpenseList;
+      // return newExpenseList;
     });
 
     return successResponse(result);
   } catch (error) {
     console.error('@@ 가계부 지출 등록 에러 >>', error);
+    return errorResponse();
+  }
+}
+
+/** 가계부 지출 삭제 */
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
+  const authValidate = await authGuard(request);
+  if (!authValidate.isValid) return authValidate.errorResponse;
+
+  const travelId = Number(params.id);
+  if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
+
+  try {
+    const body = (await request.json()) as { deleteIds: number[] };
+    const { deleteIds } = body;
+
+    if (!deleteIds.length) {
+      return errorResponse('삭제할 아이디가 없습니다.', 400);
+    }
+
+    await prisma.expenseList.deleteMany({
+      where: {
+        id: {
+          in: deleteIds,
+        },
+      },
+    });
+
+    return successResponse();
+  } catch (error) {
+    console.error('@@ 지출 삭제 에러 >>', error);
     return errorResponse();
   }
 }

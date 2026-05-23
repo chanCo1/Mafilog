@@ -40,18 +40,18 @@ class _ExpenseService {
   //   return response.data.data;
   // }
 
-  // /** 일정 삭제 */
-  // async deleteTravelSchedulePlace(travelId: string, deleteIds: number[]) {
-  //   const response = await axiosInstanceWithAuth.delete(
-  //     `${API_URL}/${travelId}/schedules`,
-  //     {
-  //       data: {
-  //         deleteIds,
-  //       },
-  //     },
-  //   );
-  //   return response.data.data;
-  // }
+  /** 가계부 지출 삭제 */
+  async deleteTravelExpense(travelId: string, deleteIds: number[]) {
+    const response = await axiosInstanceWithAuth.delete(
+      `${API_URL}/${travelId}/expenses`,
+      {
+        data: {
+          deleteIds,
+        },
+      },
+    );
+    return response.data.data;
+  }
 
   // /** 일정 선택 이동 */
   // async updateBulkTravelScheduleDate(

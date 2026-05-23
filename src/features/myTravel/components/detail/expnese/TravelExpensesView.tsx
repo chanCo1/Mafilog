@@ -19,13 +19,13 @@ import Dropdown from '@/shared/components/ui/Dropdown';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.constant';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
-import { toast } from 'sonner';
 import { convertComma } from '@/shared/lib/utils';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 import { getTravelDayList } from '@/shared/lib/utils';
 import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import { useDeleteExpense } from '@/features/myTravel/hooks/rquery/expense/useDeleteExpense';
 
 function TravelExpensesView() {
   /** 지출일 선택 */
@@ -41,6 +41,8 @@ function TravelExpensesView() {
   const { getAllTotalSpend, getAllTotalSpendByCurrency } = useCalcExpense(
     expenseList ?? [],
   );
+  const { mutateAsync: deleteExpense, isPending: isDeletePending } =
+    useDeleteExpense(travelId);
 
   const selectedExpenses = useSelectExpenses((state) => state.selectedExpenses);
   const { clearSelectedExpenses } = useSelectExpenses();
@@ -57,27 +59,26 @@ function TravelExpensesView() {
     }
   };
 
+  /** 선택 삭제 */
+  const handleDeleteExpense = () => {
+    const deleteIds = selectedExpenses.map((expense) => expense.id);
+
+    openDialog({
+      message: `${deleteIds.length}개 지출을 삭제할까요?`,
+      type: 'confirm',
+      okLabel: '삭제',
+      onOk: async () => {
+        await deleteExpense({ travelId, deleteIds });
+        clearSelectedExpenses();
+      },
+    });
+  };
+
   /** 선택 이동 */
   const handelMoveSelectedExpense = (day: ILabelValue) => {
     const getExpenseId = selectedExpenses.map((expense) => expense.id);
     // setMoveSelectedExpense({ day: day.value as number, id: getExpenseId });
     clearSelectedExpenses();
-  };
-
-  /** 선택 삭제 */
-  const handleDeleteSelectedExpense = () => {
-    const getExpenseId = selectedExpenses.map((expense) => expense.id);
-
-    openDialog({
-      message: '선택된 지출을 삭제할까요?',
-      type: 'confirm',
-      okLabel: '삭제',
-      onOk: () => {
-        // setDeleteSelectedExpense({ id: getExpenseId });
-        toast.success(`지출을 삭제했어요`);
-        clearSelectedExpenses();
-      },
-    });
   };
 
   return (
@@ -93,7 +94,12 @@ function TravelExpensesView() {
                 <>
                   <Dropdown
                     trigger={
-                      <Button variant="gray" size="sm">
+                      <Button
+                        variant="gray"
+                        size="sm"
+                        disabled={!selectedExpenses.length}
+                        isLoading={false}
+                      >
                         선택 날짜 이동
                       </Button>
                     }
@@ -114,14 +120,17 @@ function TravelExpensesView() {
                   <Button
                     variant="redOutline"
                     size="sm"
-                    onClick={() => handleDeleteSelectedExpense()}
+                    disabled={!selectedExpenses.length || isDeletePending}
+                    isLoading={isDeletePending}
+                    onClick={handleDeleteExpense}
                   >
                     선택 삭제
                   </Button>
                 </>
               ) : (
                 <Button
-                  className="from-secondary to-primary w-35 bg-linear-to-r"
+                  // className="from-secondary to-primary w-35 bg-linear-to-r"
+                  className="w-35 bg-secondary"
                   variant="secondary"
                   size="sm"
                   onClick={() => setIsOpenAddExpneseModal(true)}

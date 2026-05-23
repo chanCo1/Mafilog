@@ -13,10 +13,11 @@ import { IExpenseList } from '@/features/myTravel/interfaces/expense.interface';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 import { EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
-import { toast } from 'sonner';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useDeleteExpense } from '@/features/myTravel/hooks/rquery/expense/useDeleteExpense';
 
 interface ITravelExpensesTimeline {
   expense?: IExpenseList;
@@ -29,6 +30,10 @@ export default function TravelExpensesTimeline({
 }: ITravelExpensesTimeline) {
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
   const { countryData } = useCountriesDataStore();
+
+  const travelId = useGetTravelId();
+  const { mutateAsync: deleteExpense, isPending: isDeletePending } =
+    useDeleteExpense(travelId);
 
   const { selectedExpenses, toggleSelect } = useSelectExpenses();
   const { openDialog } = useDialogStore();
@@ -48,12 +53,8 @@ export default function TravelExpensesTimeline({
       message: '지출을 삭제할까요?',
       type: 'confirm',
       okLabel: '삭제',
-      onOk: () => {
-        // setDeleteExpenseList({
-        //   day: expense.day as number,
-        //   id: expense?.id as string,
-        // });
-        toast.success(`지출을 삭제했어요`);
+      onOk: async () => {
+        await deleteExpense({ travelId, deleteIds: [expense.id] });
       },
     });
   };
@@ -107,7 +108,9 @@ export default function TravelExpensesTimeline({
             <div className="flex flex-col">
               <div className="flex items-baseline gap-1">
                 <div className="flex items-center gap-1">
-                  <span className="font-bold">{countryData[expense.currencyCountry].flagEmoji}</span>
+                  <span className="font-bold">
+                    {countryData[expense.currencyCountry].flagEmoji}
+                  </span>
                 </div>
                 <div className="">
                   <span className="text-sm font-bold">

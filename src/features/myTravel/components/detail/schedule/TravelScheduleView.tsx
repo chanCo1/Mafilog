@@ -152,7 +152,8 @@ function TravelScheduleView() {
                     메모 추가
                   </Button>
                   <Button
-                    className="w-35 bg-linear-to-r from-secondary to-primary"
+                    // className="w-35 bg-linear-to-r from-secondary to-primary"
+                    className="w-35 bg-secondary"
                     variant="secondary"
                     size="sm"
                     onClick={() => setIsOpenAddPlaceModal(true)}
