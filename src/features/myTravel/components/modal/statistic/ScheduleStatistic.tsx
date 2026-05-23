@@ -5,12 +5,14 @@
  * @description: 통계 > 일정별 컴포넌트
  */
 
-import { useState, useMemo } from 'react';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
+import { useMemo } from 'react';
 import { convertComma, getPercent } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 import BarChart from '@/shared/components/chart/BarChart';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 
 interface IScheduleStatistic {
   isShowMySpend: boolean;
@@ -19,15 +21,16 @@ interface IScheduleStatistic {
 export default function ScheduleStatistic({
   isShowMySpend,
 }: IScheduleStatistic) {
-  const expenses = useTravelExpenseStore((state) => state.expenses);
+  const travelId = useGetTravelId();
+  const { data: expenseList } = useGetTravelExpenses(travelId);
   const {
-    getAllTotalSpend,
     getAllTotalMySpend,
-    getDailyAllSpend,
+    getAllTotalSpend,
     getDailyMySpend,
-    getDailyAllSpendByCurrency,
+    getDailyAllSpend,
     getDailyMySpendByCurrency,
-  } = useTravelExpenseStore();
+    getDailyAllSpendByCurrency,
+  } = useCalcExpense(expenseList ?? []);
 
   const totalSpend = isShowMySpend ? getAllTotalMySpend : getAllTotalSpend;
   const dailySpend = isShowMySpend ? getDailyMySpend : getDailyAllSpend;
@@ -41,7 +44,7 @@ export default function ScheduleStatistic({
 
     const dailyExpense: Record<number, number> = {};
 
-    expenses.forEach((expense) => {
+    expenseList?.forEach((expense) => {
       labels.push(expense.day === 0 ? '여행전' : `${expense.day}일차`);
       data.push(dailySpend(expense.day));
 
@@ -58,19 +61,19 @@ export default function ScheduleStatistic({
       data,
       mostDay,
     };
-  }, [dailySpend, expenses]);
+  }, [dailySpend, expenseList]);
 
   return (
     <div className="flex flex-col gap-3">
       <div>
-        {totalSpend() ? (
+        {totalSpend ? (
           <BarChart
             labels={getBarChartData.labels}
             data={getBarChartData.data}
           />
         ) : null}
         <div className="flex items-baseline justify-center">
-          {totalSpend() ? (
+          {totalSpend ? (
             <>
               <span className="font-bold">
                 {getBarChartData.mostDay === '0'
@@ -86,7 +89,7 @@ export default function ScheduleStatistic({
           )}
         </div>
       </div>
-      {expenses.map((expense, index) => (
+      {expenseList?.map((expense, index) => (
         <Card key={`${expense.day}-${index}`}>
           <div className="flex items-start justify-between">
             <div className="flex items-baseline gap-1">
@@ -96,7 +99,7 @@ export default function ScheduleStatistic({
               <span className="text-text-secondary">
                 {getPercent({
                   numer: dailySpend(expense.day),
-                  deno: totalSpend(),
+                  deno: totalSpend,
                 })}
                 %
               </span>

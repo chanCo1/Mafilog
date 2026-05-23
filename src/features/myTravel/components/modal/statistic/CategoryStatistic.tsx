@@ -6,7 +6,6 @@
  */
 
 import { useMemo } from 'react';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { convertComma, getPercent, convertCategory } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
@@ -14,6 +13,9 @@ import { EXPENSE_CATEGORY_LIST } from '@/features/myTravel/constants/expense.con
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import DoughnutChart from '@/shared/components/chart/DoughnutChart';
 import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 
 interface ICategoryStatistic {
   isShowMySpend: boolean;
@@ -22,15 +24,16 @@ interface ICategoryStatistic {
 export default function CategoryStatistic({
   isShowMySpend,
 }: ICategoryStatistic) {
-  const expenses = useTravelExpenseStore((state) => state.expenses);
+  const travelId = useGetTravelId();
+  const { data: expenseList } = useGetTravelExpenses(travelId);
   const {
-    getAllTotalSpend,
     getAllTotalMySpend,
+    getAllTotalSpend,
     getCategorySpend,
     getCategorySpendByCurrency,
     getCategoryMySpend,
     getCategoryMySpendByCurrency,
-  } = useTravelExpenseStore();
+  } = useCalcExpense(expenseList ?? []);
 
   const totalSpend = isShowMySpend ? getAllTotalMySpend : getAllTotalSpend;
   const categorySpend = isShowMySpend ? getCategoryMySpend : getCategorySpend;
@@ -50,7 +53,7 @@ export default function CategoryStatistic({
       data.push(
         getPercent({
           numer: categorySpend(list.value),
-          deno: totalSpend(),
+          deno: totalSpend,
         }),
       );
 
@@ -89,12 +92,12 @@ export default function CategoryStatistic({
       mostCategory,
       backgroundColor,
     };
-  }, [expenses, categorySpend]);
+  }, [expenseList, categorySpend]);
 
   return (
     <div className="flex flex-col gap-3">
       <div>
-        {totalSpend() ? (
+        {totalSpend ? (
           <DoughnutChart
             backgroundColor={getChartData.backgroundColor}
             data={getChartData.data}
@@ -102,7 +105,7 @@ export default function CategoryStatistic({
           />
         ) : null}
         <div className="flex items-baseline justify-center">
-          {totalSpend() ? (
+          {totalSpend ? (
             <>
               <span className="font-bold">
                 {convertCategory(
@@ -127,7 +130,7 @@ export default function CategoryStatistic({
               <span className="text-text-secondary">
                 {getPercent({
                   numer: categorySpend(list.value),
-                  deno: totalSpend(),
+                  deno: totalSpend,
                 })}
                 %
               </span>
