@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
+import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 
 interface ITravelExpensesTimeline {
   expense?: IExpenseList;
@@ -28,6 +29,7 @@ export default function TravelExpensesTimeline({
   selectMode,
 }: ITravelExpensesTimeline) {
   const [isOpenDatilModal, setIsOpenDatilModal] = useState(false);
+  const { countryData } = useCountriesDataStore();
 
   const { selectedExpenses, toggleSelect } = useSelectExpenses();
   const setDeleteExpenseList = useTravelExpenseStore(
@@ -108,12 +110,21 @@ export default function TravelExpensesTimeline({
           >
             <div className="flex flex-col">
               <div className="flex items-baseline gap-1">
-                <span className="font-bold">
-                  {expense.currencyCode}
-                </span>
-                <span className="text-state-error text-lg font-bold">
-                  {convertComma(expense.amount ?? 0)}
-                </span>
+                <div className="flex items-center gap-1">
+                  <span className="font-bold">{countryData[expense.currencyCountry].flagEmoji}</span>
+                </div>
+                <div className="">
+                  <span className="text-sm font-bold">
+                    {
+                      countryData[expense.currencyCountry].currency[
+                        expense.currencyCode
+                      ].symbol
+                    }
+                  </span>
+                  <span className="text-state-error text-lg font-bold">
+                    {convertComma(expense.amount ?? 0)}
+                  </span>
+                </div>
                 {expense.currencyCode !== 'KRW' && (
                   <span className="text-text-secondary text-sm font-bold">
                     ({convertComma(expense.calcExchangeAmount ?? 0)}원)

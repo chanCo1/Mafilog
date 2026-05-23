@@ -112,6 +112,7 @@ export default function ScheduleStatistic({
                 <CurrencySpend
                   key={`${currency.currency}-${index}`}
                   currency={currency.currency}
+                  currencyCountry={currency.currencyCountry}
                   spend={currency.spend}
                   calcExchangeRate={currency.calcSpend}
                 />

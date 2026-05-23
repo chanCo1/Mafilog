@@ -12,6 +12,7 @@ import CurrencySpend from '@/features/myTravel/components/detail/expnese/Currenc
 import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
+import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 
 const ALL_DAY = 'all'; // 모든날
 
@@ -32,6 +33,8 @@ export default function TravelExpensesSpendCard({
     getAllTotalSpend,
     getAllTotalMySpend,
   } = useCalcExpense(expenseList ?? []);
+
+  const { countryData } = useCountriesDataStore();
 
   /** 일정별 지출 */
   const dailySpend =
@@ -101,7 +104,9 @@ export default function TravelExpensesSpendCard({
           )} */}
         </div>
         <div className="flex items-baseline justify-between font-bold">
-          <span className="max-mobile:text-sm">KRW</span>
+          <span className="font-bold">
+            {countryData['KR'].currency['KRW'].symbol}
+          </span>
           <span className="text-state-error max-mobile:text-lg text-xl">
             {convertComma(isMySpend ? mySpend : dailySpend)}원
           </span>

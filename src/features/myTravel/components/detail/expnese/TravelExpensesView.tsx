@@ -121,7 +121,7 @@ function TravelExpensesView() {
                 </>
               ) : (
                 <Button
-                  className="w-35 bg-linear-to-r from-secondary to-primary"
+                  className="from-secondary to-primary w-35 bg-linear-to-r"
                   variant="secondary"
                   size="sm"
                   onClick={() => setIsOpenAddExpneseModal(true)}
@@ -183,11 +183,12 @@ function TravelExpensesView() {
                   <span>{convertComma(getAllTotalSpend)}원</span>
                 </div>
               </div>
-              <div className='flex flex-col gap-1'>
+              <div className="flex flex-col gap-1">
                 {getAllTotalSpendByCurrency.map((currency, index) => (
                   <CurrencySpend
                     key={`${currency.currency}-${index}`}
                     currency={currency.currency}
+                    currencyCountry={currency.currencyCountry}
                     spend={currency.spend}
                     calcExchangeRate={currency.calcSpend}
                   />

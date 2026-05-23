@@ -30,6 +30,7 @@ export interface IExpenseList {
   calcFormula: string;
   calcExchangeAmount: number;
   currencyCode: string;
+  currencyCountry: string;
   exchangeRateAmount: number;
   payerId: string;
   payer: IPayer;
