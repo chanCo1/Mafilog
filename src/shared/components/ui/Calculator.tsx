@@ -67,15 +67,17 @@ export default function Calculator({
 
     const filteredCountries = Object.values(countryData).filter(
       (country) =>
-        travelCountryCodes.includes(country.code) && country.code !== 'US',
+        travelCountryCodes.includes(country.code) &&
+        country.code !== 'US' &&
+        country.code !== 'KR',
     );
 
     /** 미국 데이터, 달러는 항상 포함 */
+    const krData = countryData['KR'];
     const usaData = countryData['US'];
 
-    const mergeCountries = usaData
-      ? [...filteredCountries, usaData]
-      : filteredCountries;
+    const defaultCountries = [krData, usaData].filter(Boolean);
+    const mergeCountries = [...filteredCountries, ...defaultCountries];
 
     // 셀렉트 옵션
     return mergeCountries.map((country) => ({
@@ -193,13 +195,20 @@ export default function Calculator({
         </div>
         <div className="flex items-center justify-between">
           {currencyList && (
-            <div className="max-w-20">
+            <div className="max-w-30">
               <Selectbox
                 className="font-bold"
                 variant="none"
                 options={currencyList}
                 value={selectedCurrency}
                 onChange={(e) => setSelectedCurrency(e)}
+                prefix={
+                  <>
+                    {selectedCurrency && (
+                      <div>{countryData[selectedCurrency.value].flagEmoji}</div>
+                    )}
+                  </>
+                }
               />
             </div>
           )}
