@@ -3,6 +3,7 @@ import {
   EXPENSES_CATEGORY_TYPE,
   EXPENSES_PAYMENT_TYPE,
 } from '@/shared/types/expenseEnum';
+import { IMemberList } from '@/shared/interfaces';
 
 /** 가계부 리스트 조회 */
 export interface IExpenseResponse {
@@ -57,6 +58,7 @@ export interface ISpender {
   currencyCountry: string;
   createdAt: string;
   expenseListId: number;
+  member: IMemberList;
 }
 
 export interface IExpenseRequest {

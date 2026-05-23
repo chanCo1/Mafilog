@@ -2,7 +2,7 @@
  * @file: TravelExpensesTimeline.tsx
  * @author: chad
  * @since: 2026.04.29 ~
- * @description: TravelExpensesTimeline 컴포넌트, 가계부 지출 리스트 카드
+ * @description: 가계부 지출 리스트 카드
  */
 
 import { MouseEvent, useMemo, useState } from 'react';

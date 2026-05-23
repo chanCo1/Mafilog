@@ -2,7 +2,7 @@
  * @file: TravelExpensesSpendCard.tsx
  * @author: chad
  * @since: 2026.04.29 ~
- * @description: TravelExpensesSpendCard 컴포넌트, 지출 내역 노출 카드
+ * @description: 지출 내역 노출 카드
  */
 
 import { Card } from '@/shared/components/ui/Card';
@@ -10,6 +10,9 @@ import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useMemo } from 'react';
 import { convertComma } from '@/shared/lib/utils';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 
 const ALL_DAY = 'all'; // 모든날
 
@@ -25,13 +28,17 @@ export default function TravelExpensesSpendCard({
   const {
     getDailyAllSpend,
     getAllTotalSpend,
-    getDailyMySpend,
+    // getDailyMySpend,
     getAllTotalMySpend,
     // getAllTotalSpendByCurrency,
     // getDailyAllSpendByCurrency,
     // getAllTotalMySpendByCurrency,
     // getDailyMySpendByCurrency,
   } = useTravelExpenseStore();
+
+  const travelId = useGetTravelId();
+  const { data: expenses } = useGetTravelExpenses(travelId);
+  const { getDailyMySpend } = useCalcExpense(expenses ?? []);
 
   /** 일정별 지출 */
   const dailySpend =

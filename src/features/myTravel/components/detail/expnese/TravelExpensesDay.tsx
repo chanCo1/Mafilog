@@ -60,7 +60,7 @@ export default function TravelExpensesDay({
         <div className="flex items-end gap-1">
           <span className="text-sm">지출</span>
           <span className="font-bold">
-            {convertComma(dailyAllAmount)}원
+            {convertComma(expense.dailyExpense)}원
           </span>
         </div>
       </div>

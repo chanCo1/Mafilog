@@ -73,6 +73,7 @@ export default function CreateNewTravelModal({
 
   const router = useRouter();
 
+  /** 멤버 초기값 대입 */
   useEffect(() => {
     if (userInfo?.user?.id && userInfo?.user?.name) {
       setTravelMember([{ id: userInfo.user.id, name: userInfo.user.name }]);
