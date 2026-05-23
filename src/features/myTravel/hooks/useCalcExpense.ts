@@ -49,12 +49,12 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
 
       if (!targetDay) return 0;
 
-      // const dailySpend = targetDay.expenseList.reduce(
-      //   (sum, item) => sum + item.calcExchangeAmount,
-      //   0,
-      // );
+      const dailySpend = targetDay.expenseList.reduce(
+        (sum, item) => sum + item.calcExchangeAmount,
+        0,
+      );
 
-      return Math.max(0, roundDecimal(targetDay.dailyExpense));
+      return Math.max(0, roundDecimal(dailySpend));
     },
     [expenses],
   );

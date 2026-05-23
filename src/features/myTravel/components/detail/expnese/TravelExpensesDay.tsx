@@ -11,9 +11,12 @@ import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import { ILabelValue } from '@/shared/interfaces';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
 import { IExpenseResponse } from '@/features/myTravel/interfaces/expense.interface';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 
 interface ITravelExpensesDay {
-  expense: IExpenseResponse
+  expense: IExpenseResponse;
   selectMode: boolean;
 }
 
@@ -21,6 +24,10 @@ export default function TravelExpensesDay({
   expense,
   selectMode,
 }: ITravelExpensesDay) {
+  const travelId = useGetTravelId();
+  const { data: expenseList } = useGetTravelExpenses(travelId);
+  const { getDailyAllSpend } = useCalcExpense(expenseList ?? []);
+
   const { selectedExpenses, toggleDayAll } = useSelectExpenses();
 
   // 현재 일차의 list 아이템들이 모두 selectedSchedules에 포함되어 있는지 확인
@@ -46,14 +53,15 @@ export default function TravelExpensesDay({
           </span>
           {expense.date ? (
             <span className="text-text-secondary">
-              {convertFormattedDate(expense.date, 'MM월 dd일')} {getDay(expense.date)}
+              {convertFormattedDate(expense.date, 'MM월 dd일')}{' '}
+              {getDay(expense.date)}
             </span>
           ) : null}
         </div>
         <div className="flex items-end gap-1">
           <span className="text-sm">지출</span>
           <span className="font-bold">
-            {convertComma(expense.dailyExpense)}원
+            {convertComma(getDailyAllSpend(expense.day))}원
           </span>
         </div>
       </div>
