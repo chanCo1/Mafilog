@@ -41,7 +41,7 @@ export default function SelectSpenderType({
 
     return travelInfo?.member.map((member) => ({
       label: member.name,
-      value: member.id,
+      value: member.userId,
     }));
   }, [travelInfo]);
 
@@ -55,12 +55,15 @@ export default function SelectSpenderType({
     if (!_member) return;
 
     setSelectedSepnder((prev) => {
-      const isExist = prev?.some((item) => item.value === _member.id);
+      const isExist = prev.some((item) => item.value === _member.userId);
 
       if (isExist) {
-        return prev?.filter((item) => item.value !== _member.id);
+        return prev?.filter((item) => item.value !== _member.userId);
       } else {
-        return [...prev, { label: _member.name, value: _member.id }];
+        return [
+          ...prev,
+          { label: _member.name, value: _member.userId as string },
+        ];
       }
     });
   };
@@ -100,7 +103,7 @@ export default function SelectSpenderType({
                 <span className="font-bold">{_member.name}</span>
                 <div className="flex items-center gap-5">
                   <Radio
-                    id={{ label: _member.name, value: _member.id }}
+                    id={{ label: _member.name, value: _member.userId }}
                     isUserIcon
                     value={selectedPayer as ILabelValue}
                     onChange={(value) => setSelectPayer(value)}
@@ -109,7 +112,7 @@ export default function SelectSpenderType({
                     isUserIcon
                     value={Boolean(
                       selectedSepnder?.find(
-                        (sepnder) => sepnder.value === _member.id,
+                        (sepnder) => sepnder.value === _member.userId,
                       ),
                     )}
                     onChange={() => handleSelectSpender(_member)}

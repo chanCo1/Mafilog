@@ -302,12 +302,12 @@ export default function AddExpenseModal({
     if (type === EXPENSES_SPENDER_TYPE.SELF) {
       setSelectPayer({
         label: travelInfo.member[0].name,
-        value: travelInfo.member[0].id,
+        value: travelInfo.member[0].userId,
       });
       setSelectedSepnder([
         {
           label: travelInfo.member[0].name,
-          value: travelInfo.member[0].id,
+          value: travelInfo.member[0].userId,
         },
       ]);
     } else if (type === EXPENSES_SPENDER_TYPE.SPLIT) {
@@ -316,7 +316,7 @@ export default function AddExpenseModal({
       setSelectedSepnder([
         {
           label: travelInfo.member[0].name,
-          value: travelInfo.member[0].id,
+          value: travelInfo.member[0].userId,
         },
       ]);
     }
