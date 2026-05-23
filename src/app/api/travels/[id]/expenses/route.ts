@@ -126,6 +126,7 @@ export async function POST(
           spender: {
             create: spenders.map((spender) => ({
               amount: spender.amount,
+              name: spender.name,
               calcExchangeAmount: spender.calcExchangeAmount,
               category,
               currencyCode,

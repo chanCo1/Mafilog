@@ -37,16 +37,26 @@ export interface IExpenseList {
 }
 
 export interface IPayer {
-  id: number;
+  id: string;
+  createdAt: string;
+  expenseId: null;
+  expenseSpenderId: null;
+  name: string;
+  travelId: number;
+  userId: string;
 }
 
 export interface ISpender {
   id: number;
+  memberId: string;
   amount: number;
+  name: string;
   calcExchangeAmount: number;
-  category: EXPENSES_CATEGORY_TYPE
+  category: EXPENSES_CATEGORY_TYPE;
   currencyCode: string;
   currencyCountry: string;
+  createdAt: string;
+  expenseListId: number;
 }
 
 export interface IExpenseRequest {
@@ -69,6 +79,7 @@ export interface IExpenseRequest {
 
 interface ISpenderRequest {
   memberId: string;
+  name: string;
   amount: number;
   calcExchangeAmount: number;
   currencyCode: string;

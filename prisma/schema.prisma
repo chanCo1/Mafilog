@@ -333,17 +333,18 @@ model ExpenseList {
   currencyCountry    String
   // 적용 환율
   exchangeRateAmount Float
-  // 결제자 id
-  payerId            String
-  payer              TravelMember     @relation("payer", fields: [payerId], references: [id], onDelete: Cascade)
   spender            ExpenseSpender[]
   // 생성일
   createdAt          DateTime         @default(now())
   // 수정 시간
   updatedAt          DateTime         @updatedAt
+  // 결제자 id
+  payerId            String
+  // 결제자 연결
+  payer              TravelMember     @relation("payer", fields: [payerId], references: [id], onDelete: Cascade)
   // fk
   travelExpenseId    Int?
-  // 지출 일정 정보
+  // 지출 연결
   travelExpense      TravelExpense?   @relation(fields: [travelExpenseId], references: [id], onDelete: Cascade)
 }
 
@@ -355,6 +356,8 @@ model ExpenseSpender {
   id                 Int          @id @default(autoincrement())
   // 지출 금액
   amount             Float
+  // 멤버 이름
+  name               String
   // 지출 원화 금액
   calcExchangeAmount Float
   // 지출 카테고리

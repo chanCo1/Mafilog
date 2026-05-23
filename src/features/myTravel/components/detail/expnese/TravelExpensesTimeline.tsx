@@ -77,11 +77,11 @@ export default function TravelExpensesTimeline({
 
     switch (type) {
       case EXPENSES_SPENDER_TYPE.SELF:
-        return spender[0]?.label || '';
+        return spender[0]?.name || '';
       case EXPENSES_SPENDER_TYPE.SPLIT:
         return '1/N';
       case EXPENSES_SPENDER_TYPE.ASSIGN:
-        return spender.map((_spender) => _spender.label).join(', ');
+        return spender.map((_spender) => _spender.name).join(', ');
       default:
         return '';
     }
@@ -124,7 +124,7 @@ export default function TravelExpensesTimeline({
               <div className="text-text-secondary text-sm">
                 <span className="font-bold">결제: </span>
                 <span>
-                  {expense.payer.label} ·{' '}
+                  {expense.payer.name} ·{' '}
                   {convertPaymentType(expense.paymentType)}
                 </span>
                 {getSpender && (

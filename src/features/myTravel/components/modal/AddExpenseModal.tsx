@@ -104,7 +104,8 @@ export default function AddExpenseModal({
     });
   }, [expenseList]);
 
-  const { mutateAsync: createExpense } = useCreateTravelExpense(travelId);
+  const { mutateAsync: createExpense, isPending: isCreatePending } =
+    useCreateTravelExpense(travelId);
 
   // const { setAddExpenseList, setUpdateExpense, setDeleteExpenseList } =
   //   useTravelExpenseStore();
@@ -119,6 +120,7 @@ export default function AddExpenseModal({
     /** 지출자 각자에게 지출 금액, 원화 금액,  */
     const withAmountSpender = selectedSepnder.map((spender) => ({
       ...spender,
+      name: spender.label,
       memberId: spender.value as string,
       amount: roundDecimal(expenseAmount / selectedSepnder.length),
       calcExchangeAmount: roundDecimal(
@@ -342,7 +344,11 @@ export default function AddExpenseModal({
             <Button variant="gray" onClick={onClickCloseBtn}>
               취소
             </Button>
-            <Button disabled={isDisabled} onClick={handleExpense}>
+            <Button
+              disabled={isDisabled || isCreatePending}
+              isLoading={isCreatePending}
+              onClick={handleExpense}
+            >
               {isModify ? '수정' : '지출 추가'}
             </Button>
           </div>

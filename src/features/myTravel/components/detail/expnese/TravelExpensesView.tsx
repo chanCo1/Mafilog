@@ -16,8 +16,6 @@ import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModa
 import { TRAVEL_EXPENSES_BEFORE_LIST } from '@/features/myTravel/constants/expense.constant';
 import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import Dropdown from '@/shared/components/ui/Dropdown';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.constant';
