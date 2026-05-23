@@ -5,9 +5,12 @@
  * @description: 여행 일정 선택 이동
  */
 
-import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import { authGuard } from '@/shared/backend/lib/authGuard';
+import {
+  successResponse,
+  errorResponse,
+} from '@/shared/backend/utils/apiResponse';
 
 export async function PATCH(
   request: Request,
@@ -19,13 +22,7 @@ export async function PATCH(
   }
 
   const travelId = Number(params.id);
-
-  if (!travelId) {
-    return NextResponse.json(
-      { message: '잘 못 된 접근입니다.' },
-      { status: 403 },
-    );
-  }
+  if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
 
   try {
     const body = (await request.json()) as {
@@ -33,24 +30,14 @@ export async function PATCH(
       targetDay: number;
     };
     const { moveIds, targetDay } = body;
-
-    if (!moveIds?.length || !targetDay) {
-      return NextResponse.json(
-        { message: '필수 데이터가 누락되었습니다.' },
-        { status: 400 },
-      );
-    }
+    if (!moveIds?.length || !targetDay)
+      return errorResponse('필수 데이터가 누락되었습니다.', 400);
 
     const targetSchedule = await prisma.travelSchedule.findFirst({
       where: { travelId, day: targetDay },
     });
-
-    if (!targetSchedule) {
-      return NextResponse.json(
-        { message: '이동하려는 일정을 찾을 수 없습니다.' },
-        { status: 404 },
-      );
-    }
+    if (!targetSchedule)
+      return errorResponse('이동하려는 일정을 찾을 수 없습니다.', 404);
 
     const lastItem = await prisma.scheduleList.findFirst({
       where: { scheduleId: targetSchedule.id },
@@ -58,14 +45,10 @@ export async function PATCH(
       select: { order: true },
     });
 
-    if (!targetSchedule) {
-      return NextResponse.json(
-        { message: '이동하려는 일정의 순서를 찾을 수 없습니다.' },
-        { status: 404 },
-      );
-    }
+    if (!lastItem)
+      return errorResponse('이동하려는 일정의 순서를 찾을 수 없습니다.', 404);
 
-    const startOrder = (lastItem?.order ?? -1);
+    const startOrder = lastItem?.order ?? -1;
 
     await prisma.$transaction(async (tx) => {
       // TODO: 이동 전, 후로 order 재정렬 할건지 고민..
@@ -139,15 +122,9 @@ export async function PATCH(
       );
     });
 
-
-    return NextResponse.json(
-      {
-        message: `이동이 완료되었습니다.`,
-      },
-      { status: 200 },
-    );
+    return successResponse();
   } catch (error) {
     console.error('@@ 다중 일정 이동 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }

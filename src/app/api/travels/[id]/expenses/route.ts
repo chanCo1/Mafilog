@@ -95,7 +95,7 @@ export async function POST(
 
     if (!spenders.length) return errorResponse('지출자가 없습니다.', 400);
 
-    const result = await prisma.$transaction(async (tx) => {
+    const createExpense = await prisma.$transaction(async (tx) => {
       let travelExpense = await tx.travelExpense.findFirst({
         where: { travelId, day },
       });
@@ -110,6 +110,14 @@ export async function POST(
           },
         });
       }
+
+      const lastExpense = await tx.expenseList.findFirst({
+        where: { travelExpenseId: travelExpense.id },
+        orderBy: { order: 'desc' },
+        select: { order: true },
+      });
+
+      const lastOrder = lastExpense?.order ?? -1;
 
       const payerMember = await tx.travelMember.findFirst({
         where: {
@@ -152,6 +160,7 @@ export async function POST(
           spenderType,
           category,
           day,
+          order: lastOrder + 1,
           time: time || null,
           memo: memo || null,
           amount,
@@ -187,7 +196,7 @@ export async function POST(
       // return newExpenseList;
     });
 
-    return successResponse(result);
+    return successResponse(createExpense);
   } catch (error) {
     console.error('@@ 가계부 지출 등록 에러 >>', error);
     return errorResponse();
