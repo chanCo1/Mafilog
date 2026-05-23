@@ -29,7 +29,16 @@ export async function GET(
       where: { travelId },
       orderBy: { day: 'asc' },
       include: {
-        expenseList: { include: { spender: true, payer: true } },
+        expenseList: {
+          include: {
+            spender: {
+              include: {
+                member: true,
+              },
+            },
+            payer: true,
+          },
+        },
       },
     });
 
@@ -84,11 +93,7 @@ export async function POST(
       return errorResponse('필수 데이터가 없습니다.', 400);
     }
 
-    if (!spenders.length)
-      return errorResponse(
-        '지출자가 없습니다.',
-        400,
-      );
+    if (!spenders.length) return errorResponse('지출자가 없습니다.', 400);
 
     const result = await prisma.$transaction(async (tx) => {
       let travelExpense = await tx.travelExpense.findFirst({
@@ -106,6 +111,40 @@ export async function POST(
         });
       }
 
+      const payerMember = await tx.travelMember.findFirst({
+        where: {
+          travelId: travelId,
+          userId: payerId,
+        },
+      });
+
+      if (!payerMember) {
+        return errorResponse(
+          '결제자를 여행 멤버 중에서 찾을 수 없습니다.',
+          400,
+        );
+      }
+
+      const mappedSpenders = await Promise.all(
+        spenders.map(async (spender) => {
+          const targetMember = await tx.travelMember.findFirst({
+            where: { travelId, userId: spender.memberId },
+          });
+
+          if (!targetMember) throw new Error('지출자를 찾을 수 없습니다.');
+
+          return {
+            amount: spender.amount,
+            name: spender.name,
+            calcExchangeAmount: spender.calcExchangeAmount,
+            category,
+            currencyCode,
+            currencyCountry,
+            memberId: targetMember.id,
+          };
+        }),
+      );
+
       const newExpenseList = await tx.expenseList.create({
         data: {
           name,
@@ -122,17 +161,9 @@ export async function POST(
           currencyCountry,
           exchangeRateAmount,
           travelExpenseId: travelExpense.id,
-          payerId: payerId,
+          payerId: payerMember.id,
           spender: {
-            create: spenders.map((spender) => ({
-              amount: spender.amount,
-              name: spender.name,
-              calcExchangeAmount: spender.calcExchangeAmount,
-              category,
-              currencyCode,
-              currencyCountry,
-              memberId: spender.memberId,
-            })),
+            create: mappedSpenders,
           },
         },
         include: {

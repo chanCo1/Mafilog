@@ -138,11 +138,11 @@ model TravelCity {
  */
 model TravelMember {
   // pk
-  id               String           @id @default(cuid())
+  id               Int           @id @default(autoincrement())
   // 멤버 이름
   name             String
-  // fk
-  userId           String?
+  // 프론트에서 입력한 유저 아이디
+  userId           String
   // fk
   travelId         Int
   // 여행 정보
@@ -339,7 +339,7 @@ model ExpenseList {
   // 수정 시간
   updatedAt          DateTime         @updatedAt
   // 결제자 id
-  payerId            String
+  payerId            Int
   // 결제자 연결
   payer              TravelMember     @relation("payer", fields: [payerId], references: [id], onDelete: Cascade)
   // fk
@@ -369,7 +369,7 @@ model ExpenseSpender {
   // 생성일
   createdAt          DateTime     @default(now())
   // 맴버 연동
-  memberId           String
+  memberId           Int
   member             TravelMember @relation("spender", fields: [memberId], references: [id], onDelete: Cascade)
   // 지출 내역 연동
   expenseListId      Int

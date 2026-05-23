@@ -196,12 +196,11 @@ export async function PATCH(
       if (member.length) {
         await Promise.all(
           member.map((member: IMemberList) => {
-            const isMe = member.id === currentUserId;
             return tx.travelMember.create({
               data: {
                 name: member.name,
                 travelId,
-                userId: isMe ? currentUserId : null,
+                userId: member.id,
               },
             });
           }),

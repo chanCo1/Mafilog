@@ -104,13 +104,11 @@ export async function POST(request: Request) {
       if (member && member.length > 0) {
         await Promise.all(
           member.map((member: IMemberList) => {
-            const isMe = member.id === currentUserId;
-
             return tx.travelMember.create({
               data: {
                 name: member.name,
                 travelId: newTravel.id,
-                userId: isMe ? currentUserId : null,
+                userId: member.id,
               },
             });
           }),

@@ -141,7 +141,6 @@ export default function AddExpenseModal({
       memo: inputMemo,
       amount: expenseAmount,
       calcFormula: calcFormula,
-      payer: selectedPayer,
       calcExchangeAmount: calcExchangeAmount,
       currencyCode: currencyCode.label,
       currencyCountry: currencyCode.value as string,
@@ -205,12 +204,12 @@ export default function AddExpenseModal({
       setSelectedDay(travelDayList?.[0]);
       setSelectPayer({
         label: travelInfo.member[0].name,
-        value: travelInfo.member[0].id,
+        value: travelInfo.member[0].userId,
       });
       setSelectedSepnder([
         {
           label: travelInfo.member[0].name,
-          value: travelInfo.member[0].id,
+          value: travelInfo.member[0].userId,
         },
       ]);
     }
@@ -289,7 +288,7 @@ export default function AddExpenseModal({
 
     return travelInfo?.member.map((member) => ({
       label: member.name,
-      value: member.id,
+      value: member.userId,
     }));
   }, [travelInfo]);
 
