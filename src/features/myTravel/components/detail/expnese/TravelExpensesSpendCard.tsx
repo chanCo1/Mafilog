@@ -6,7 +6,6 @@
  */
 
 import { Card } from '@/shared/components/ui/Card';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useMemo } from 'react';
 import { convertComma } from '@/shared/lib/utils';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
@@ -25,31 +24,25 @@ export default function TravelExpensesSpendCard({
   selectedDay,
   isMySpend,
 }: ITravelExpensesSpendCard) {
+  const travelId = useGetTravelId();
+  const { data: expenseList } = useGetTravelExpenses(travelId);
   const {
     getDailyAllSpend,
+    getDailyMySpend,
     getAllTotalSpend,
-    // getDailyMySpend,
     getAllTotalMySpend,
-    // getAllTotalSpendByCurrency,
-    // getDailyAllSpendByCurrency,
-    // getAllTotalMySpendByCurrency,
-    // getDailyMySpendByCurrency,
-  } = useTravelExpenseStore();
-
-  const travelId = useGetTravelId();
-  const { data: expenses } = useGetTravelExpenses(travelId);
-  const { getDailyMySpend } = useCalcExpense(expenses ?? []);
+  } = useCalcExpense(expenseList ?? []);
 
   /** 일정별 지출 */
   const dailySpend =
     selectedDay === ALL_DAY
-      ? getAllTotalSpend()
+      ? getAllTotalSpend
       : getDailyAllSpend(selectedDay as number);
 
   /** 일정별 내 지출 */
   const mySpend =
     selectedDay === ALL_DAY
-      ? getAllTotalMySpend()
+      ? getAllTotalMySpend
       : getDailyMySpend(selectedDay as number);
 
   // /** 모든날 통화별 지출 */

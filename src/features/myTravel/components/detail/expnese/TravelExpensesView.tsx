@@ -14,7 +14,6 @@ import { Card } from '@/shared/components/ui/Card';
 import TravelExpensesSpendCard from '@/features/myTravel/components/detail/expnese/TravelExpensesSpendCard';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 import { TRAVEL_EXPENSES_BEFORE_LIST } from '@/features/myTravel/constants/expense.constant';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import Dropdown from '@/shared/components/ui/Dropdown';
 import { ILabelValue } from '@/shared/interfaces';
@@ -26,13 +25,9 @@ import CurrencySpend from '@/features/myTravel/components/detail/expnese/Currenc
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 import { getTravelDayList } from '@/shared/lib/utils';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
 
-interface ITravelExpensesView {
-  from: Date;
-  to: Date;
-}
-
-function TravelExpensesView({ from, to }: ITravelExpensesView) {
+function TravelExpensesView() {
   /** 지출일 선택 */
   const [selectedDay, setSelectedDay] = useState<string | number>(
     TRAVEL_EXPENSES_BEFORE_LIST[0].value,
@@ -43,12 +38,10 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
 
   const travelId = useGetTravelId();
   const { data: expenseList } = useGetTravelExpenses(travelId);
-  const {
-    setDeleteSelectedExpense,
-    setMoveSelectedExpense,
-    getAllTotalSpend,
-    getAllTotalSpendByCurrency,
-  } = useTravelExpenseStore();
+  const { getAllTotalSpend, getAllTotalSpendByCurrency } = useCalcExpense(
+    expenseList ?? [],
+  );
+
   const selectedExpenses = useSelectExpenses((state) => state.selectedExpenses);
   const { clearSelectedExpenses } = useSelectExpenses();
 
@@ -67,7 +60,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
   /** 선택 이동 */
   const handelMoveSelectedExpense = (day: ILabelValue) => {
     const getExpenseId = selectedExpenses.map((expense) => expense.id);
-    setMoveSelectedExpense({ day: day.value as number, id: getExpenseId });
+    // setMoveSelectedExpense({ day: day.value as number, id: getExpenseId });
     clearSelectedExpenses();
   };
 
@@ -80,7 +73,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
       type: 'confirm',
       okLabel: '삭제',
       onOk: () => {
-        setDeleteSelectedExpense({ id: getExpenseId });
+        // setDeleteSelectedExpense({ id: getExpenseId });
         toast.success(`지출을 삭제했어요`);
         clearSelectedExpenses();
       },
@@ -128,8 +121,7 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
                 </>
               ) : (
                 <Button
-                  className="w-35"
-                  // className="w-35 bg-linear-to-r from-secondary to-primary"
+                  className="w-35 bg-linear-to-r from-secondary to-primary"
                   variant="secondary"
                   size="sm"
                   onClick={() => setIsOpenAddExpneseModal(true)}
@@ -185,20 +177,22 @@ function TravelExpensesView({ from, to }: ITravelExpensesView) {
               <TravelExpensesSpendCard selectedDay={selectedDay} isMySpend />
             </div>
             <Card className="">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between pb-1">
                 <p className="text-lg font-bold">여행 총 지출</p>
                 <div className="text-state-error text-h3 max-mobile:text-xxl flex justify-end font-bold">
-                  <span>{convertComma(getAllTotalSpend())}원</span>
+                  <span>{convertComma(getAllTotalSpend)}원</span>
                 </div>
               </div>
-              {getAllTotalSpendByCurrency().map((currency, index) => (
-                <CurrencySpend
-                  key={`${currency.currency}-${index}`}
-                  currency={currency.currency}
-                  spend={currency.spend}
-                  calcExchangeRate={currency.calcSpend}
-                />
-              ))}
+              <div className='flex flex-col gap-1'>
+                {getAllTotalSpendByCurrency.map((currency, index) => (
+                  <CurrencySpend
+                    key={`${currency.currency}-${index}`}
+                    currency={currency.currency}
+                    spend={currency.spend}
+                    calcExchangeRate={currency.calcSpend}
+                  />
+                ))}
+              </div>
             </Card>
           </div>
         }
