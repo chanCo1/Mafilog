@@ -54,7 +54,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const serverMessage = error.response?.data?.message;
           console.log(`${serverMessage || '인증 실패'}`);
 
-          return null;
+          throw new Error(serverMessage);
         }
       },
     }),

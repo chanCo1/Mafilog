@@ -5,15 +5,14 @@
  * @description: 추억 정보 컴포넌트
  */
 
-import { useState, Dispatch, SetStateAction } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { Dispatch, SetStateAction } from 'react';
 import FileUpload from '@/shared/components/ui/FileUpload';
 import { Input } from '@/shared/components/ui/Input';
 import { Textarea } from '@/shared/components/ui/Textarea';
 
 interface IFillMemoryStep3 {
-  selectedImage: File[];
-  setSelectedImage: Dispatch<SetStateAction<File[]>>;
+  selectedImage: (File | string)[];
+  setSelectedImage: Dispatch<SetStateAction<(File | string)[]>>;
   memoryTitle: string;
   setMemoryTitle: Dispatch<SetStateAction<string>>;
   memoryMemo: string;
