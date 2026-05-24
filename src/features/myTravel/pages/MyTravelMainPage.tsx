@@ -31,10 +31,10 @@ export default function MyTravelMainPage() {
         <div
           className={cn(
             'flex flex-col items-center gap-1',
-            !travelList?.upcoming.length && 'pt-20',
+            !travelList && 'pt-20',
           )}
         >
-          {travelList?.upcoming?.length ? (
+          {travelList ? (
             <div>
               벌써{' '}
               <span className="text-primary font-bold">
