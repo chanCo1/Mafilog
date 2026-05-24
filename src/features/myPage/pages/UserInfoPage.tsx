@@ -17,19 +17,29 @@ import {
   TPasswordSchema,
 } from '@/features/myPage/schema/profile.schema';
 import { useForm } from 'react-hook-form';
+import { useSession } from 'next-auth/react';
+import FileUpload from '@/shared/components/ui/FileUpload';
+import { useEffect, useState } from 'react';
+import { useUpdateProfile } from '@/features/myPage/hooks/rquery/useUpdateProfile';
 
 export default function UserInfoPage() {
+  const { data: sessionData } = useSession();
+  const userInfo = sessionData?.user;
+
   const {
     register: profileRegister,
     handleSubmit: profileHandleSubmit,
     formState: { errors: profileErrors },
+    watch,
   } = useForm<TProfileSchema>({
     resolver: zodResolver(profileSchema),
     mode: 'onChange',
     defaultValues: {
-      name: '',
+      name: userInfo?.name ?? '',
     },
   });
+
+  const watchName = watch('name');
 
   const {
     register: passwordRegister,
@@ -45,9 +55,20 @@ export default function UserInfoPage() {
     },
   });
 
+  const [selectedImage, setSelectedImage] = useState<(File | string)[]>([]);
+
+  const { mutateAsync: updateProfile, isPending: isUpdatePending } = useUpdateProfile();
+
   /** 프로필 변경 */
-  const onProfileSubmit = (value: TProfileSchema) => {
-    console.log(value);
+  const onProfileSubmit = async (value: TProfileSchema) => {
+    const formData = new FormData();
+
+    formData.append('name', value.name);
+    selectedImage.forEach((file) => {
+      formData.append('imageUrl', file);
+    });
+
+    await updateProfile(formData);
   };
 
   /** 비밀번호 변경 */
@@ -55,19 +76,24 @@ export default function UserInfoPage() {
     console.log(value);
   };
 
+  useEffect(() => {
+    if (userInfo?.profileImageUrl) {
+      setSelectedImage([userInfo.profileImageUrl]);
+    }
+  }, [userInfo?.profileImageUrl]);
+
   return (
-    <div className="flex flex-col gap-5 pt-4">
+    <div className="max-mobile:w-full flex w-2/5 flex-col gap-5 pt-4">
       <div className="flex flex-col gap-1">
         <h3 className="text-lg font-bold">프로필 변경</h3>
         <span>프로필</span>
-        <div className="flex gap-3">
-          <div className="relative">
-            <div className="h-40 w-40 rounded-full bg-amber-100" />
-            <div className="absolute right-0 bottom-0">
-              <Button variant="gray" size="xs">
-                변경
-              </Button>
-            </div>
+        <div className="flex flex-col gap-3">
+          <div className="max-w-100">
+            <FileUpload
+              className="h-50 w-50 rounded-full"
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
+            />
           </div>
           <form onSubmit={profileHandleSubmit(onProfileSubmit)}>
             <div className="flex flex-col gap-2">
@@ -78,15 +104,16 @@ export default function UserInfoPage() {
                 errorMsg={profileErrors.name?.message}
                 {...profileRegister('name')}
               />
-              <Button type="submit" size="sm">
-                프로필 변경
-              </Button>
+              <Input label="이메일" value={userInfo?.email ?? ''} disabled />
+              <div className="flex justify-end">
+                <Button type="submit" size="sm" disabled={!watchName || isUpdatePending} isLoading={isUpdatePending}>
+                  프로필 변경
+                </Button>
+              </div>
             </div>
           </form>
         </div>
       </div>
-
-      <Input label="이메일" value={'test@test.com'} disabled />
 
       <div className="flex flex-col gap-1">
         <h3 className="text-lg font-bold">비밀번호 변경</h3>

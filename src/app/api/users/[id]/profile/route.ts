@@ -29,7 +29,7 @@ export async function PATCH(request: Request) {
     const uploadedUrls = await uploadCloudinary({ files });
     const imageUrl = uploadedUrls.length ? uploadedUrls[0] : null;
 
-    await prisma.user.update({
+    const updatedUser = await prisma.user.update({
       where: { id: currentUserId },
       data: {
         name,
@@ -37,7 +37,7 @@ export async function PATCH(request: Request) {
       },
     });
 
-    return successResponse();
+    return successResponse(updatedUser);
   } catch (error) {
     console.log('@@ 프로필 수정 에러', error);
     return errorResponse();

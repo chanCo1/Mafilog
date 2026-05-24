@@ -15,7 +15,6 @@ import { useRouter } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
-
 interface IUserInfoModal {
   isOpen: boolean;
   handleClose: () => void;
@@ -24,15 +23,7 @@ interface IUserInfoModal {
 export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
   const router = useRouter();
   const { data: userData } = useSession();
-
-  const user = userData?.user as
-    | {
-        name?: string | null;
-        email?: string | null;
-        image?: string | null;
-        hexCode?: string | null;
-      }
-    | undefined;
+  const userInfo = userData?.user;
 
   /** 페이지 이동 핸들링 */
   const handelLinkPage = (path: string) => {
@@ -65,23 +56,24 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
       <div className="flex h-full flex-col gap-5">
         <div className="flex gap-1">
           <div className="h-24 w-24">
-            {user?.image ? (
+            {userInfo?.profileImageUrl ? (
               <Image
-                src={user?.image}
+                src={userInfo.profileImageUrl}
                 alt="프로필 이미지"
-                fill
-                className="rounded-full object-cover"
+                width={96}
+                height={96}
+                className="rounded-full object-cover h-24 w-24"
               />
             ) : (
               <div
                 className={cn('h-full w-full rounded-full')}
-                style={{ backgroundColor: `#${user?.hexCode}` }}
+                style={{ backgroundColor: `#${userInfo?.hexCode}` }}
               />
             )}
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-bold">{user?.name}</span>
-            <span className="text-text-secondary">{user?.email}</span>
+            <span className="text-lg font-bold">{userInfo?.name}</span>
+            <span className="text-text-secondary">{userInfo?.email}</span>
           </div>
         </div>
 
