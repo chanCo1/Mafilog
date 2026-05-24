@@ -265,7 +265,9 @@ export async function PATCH(
       // 새로운 기간에 포함되지 않은 일정 삭제
       if (schedulesToDelete.length > 0) {
         await tx.travelSchedule.deleteMany({
-          where: { id: { in: schedulesToDelete.map((schedule) => schedule.id) } },
+          where: {
+            id: { in: schedulesToDelete.map((schedule) => schedule.id) },
+          },
         });
       }
 
@@ -315,6 +317,29 @@ export async function PATCH(
     return successResponse();
   } catch (error) {
     console.error('@@ 여행 수정 에러 >>', error);
+    return errorResponse();
+  }
+}
+
+/** 여행 삭제 */
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } },
+) {
+  const authValidate = await authGuard(request);
+  if (!authValidate.isValid) return authValidate.errorResponse;
+
+  const travelId = Number(params.id);
+  if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
+
+  try {
+    await prisma.travel.delete({
+      where: { id: travelId },
+    });
+
+    return successResponse();
+  } catch (error) {
+    console.error('@@ 여행 삭제 에러 >>', error);
     return errorResponse();
   }
 }
