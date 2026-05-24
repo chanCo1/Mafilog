@@ -182,7 +182,7 @@ export async function PATCH(
       where: { id: scheduleListId },
       data: {
         day,
-        order: originSchedule.day === day ? originSchedule.day : lastOrder + 1,
+        order: originSchedule.day === day ? originSchedule.order : lastOrder + 1,
         time: time || '',
         memo: memo || '',
         schedule: {
