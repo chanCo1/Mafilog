@@ -31,6 +31,7 @@ import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { truncateText } from '@/shared/lib/utils';
 import { useUpdateMyTravel } from '@/features/myTravel/hooks/rquery/myTravel/useUpdateMyTravel';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { useDeleteMyTravel } from '@/features/myTravel/hooks/rquery/myTravel/useDeleteMyTravel';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -70,6 +71,7 @@ export default function CreateNewTravelModal({
   const { data: travelDetail } = useGetMyTravelDetail(travelId);
   const { mutateAsync: updateTravelDetail, isPending: isUpdatePending } =
     useUpdateMyTravel(travelId);
+  const { mutateAsync: deleteMyTravel } = useDeleteMyTravel();
 
   const router = useRouter();
 
@@ -205,6 +207,19 @@ export default function CreateNewTravelModal({
     setTravelStyles([]);
   };
 
+  /** 여행 삭제 */
+  const handelDeleteTravel = () => {
+    openDialog({
+      type: 'confirm',
+      message: '여행을 삭제할까요?',
+      okLabel: '삭제',
+      onOk: async () => {
+        await deleteMyTravel(travelId);
+        router.push('/my-travel');
+      },
+    });
+  };
+
   useEffect(() => {
     /** 여행지 선택 완료 후 다 지웠을 경우 */
     if (stepData[0].isComplete && !selectedCities.length) {
@@ -262,52 +277,57 @@ export default function CreateNewTravelModal({
       }
       handleClose={onClickCloseBtn}
       footer={
-        <div className="flex gap-1">
-          {currentStep === 1 && (
-            <>
-              <Button variant="gray" onClick={onClickCloseBtn}>
-                취소
-              </Button>
-              <Button
-                disabled={!selectedCities.length || !travelType}
-                onClick={handelNextStep}
-              >
-                {selectedCities.length}개 도시/다음
-              </Button>
-            </>
-          )}
-          {currentStep === 2 && (
-            <>
-              <Button
-                variant="gray"
-                onClick={handlePrevStep}
-                prefix={<ChevronLeft className="h-4 w-4" />}
-              >
-                이전
-              </Button>
-              <Button disabled={!selectedDate} onClick={handelNextStep}>
-                다음
-              </Button>
-            </>
-          )}
-          {currentStep === 3 && (
-            <>
-              <Button
-                variant="gray"
-                onClick={handlePrevStep}
-                prefix={<ChevronLeft className="h-4 w-4" />}
-              >
-                이전
-              </Button>
-              <Button
-                onClick={createNewTravel}
-                disabled={isDisabled || isPending || isUpdatePending}
-                isLoading={isPending || isUpdatePending}
-              >
-                {isModify ? '여행 수정' : '여행 만들기'}
-              </Button>
-            </>
-          )}
+        <div className="flex w-full justify-between gap-1">
+          <Button variant="redOutline" onClick={handelDeleteTravel}>
+            삭제
+          </Button>
+          <div className="flex gap-1">
+            {currentStep === 1 && (
+              <>
+                <Button variant="gray" onClick={onClickCloseBtn}>
+                  취소
+                </Button>
+                <Button
+                  disabled={!selectedCities.length || !travelType}
+                  onClick={handelNextStep}
+                >
+                  {selectedCities.length}개 도시/다음
+                </Button>
+              </>
+            )}
+            {currentStep === 2 && (
+              <>
+                <Button
+                  variant="gray"
+                  onClick={handlePrevStep}
+                  prefix={<ChevronLeft className="h-4 w-4" />}
+                >
+                  이전
+                </Button>
+                <Button disabled={!selectedDate} onClick={handelNextStep}>
+                  다음
+                </Button>
+              </>
+            )}
+            {currentStep === 3 && (
+              <>
+                <Button
+                  variant="gray"
+                  onClick={handlePrevStep}
+                  prefix={<ChevronLeft className="h-4 w-4" />}
+                >
+                  이전
+                </Button>
+                <Button
+                  onClick={createNewTravel}
+                  disabled={isDisabled || isPending || isUpdatePending}
+                  isLoading={isPending || isUpdatePending}
+                >
+                  {isModify ? '여행 수정' : '여행 만들기'}
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       }
     >
