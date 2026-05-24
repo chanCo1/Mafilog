@@ -28,17 +28,17 @@ class _ExpenseService {
     return response.data.data;
   }
 
-  // /** 일정 수정 */
-  // async updateTravelSchedulePlace(
-  //   travelId: string,
-  //   data: IUpdateSchedulePlaceRequest,
-  // ) {
-  //   const response = await axiosInstanceWithAuth.patch(
-  //     `${API_URL}/${travelId}/schedules`,
-  //     data,
-  //   );
-  //   return response.data.data;
-  // }
+  // /** 가계부 지출 수정 */
+  async updateTravelExpense(
+    travelId: string,
+    data: IExpenseRequest,
+  ) {
+    const response = await axiosInstanceWithAuth.patch(
+      `${API_URL}/${travelId}/expenses`,
+      data,
+    );
+    return response.data.data;
+  }
 
   /** 가계부 지출 삭제 */
   async deleteTravelExpense(travelId: string, deleteIds: number[]) {
