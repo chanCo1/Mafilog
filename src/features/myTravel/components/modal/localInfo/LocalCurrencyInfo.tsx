@@ -5,8 +5,6 @@
  * @description: LocalCurrencyInfo 컴포넌트, 환율 정보
  */
 
-import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { useFetchCurrency } from '@/shared/hooks/rquery/useFetchCurrency';
 import { useGetCurrencyByCountry } from '@/shared/hooks/useGetCurrencyByCountry';
 import { CURRENCY_STANDARD_AMOUNT } from '@/features/myTravel/constants';
@@ -41,10 +39,10 @@ export default function LocalCurrencyInfo({
           <br /> {`${convertComma(CURRENCY_STANDARD_AMOUNT)}원`}에&nbsp;
           <span className="text-primary font-bold">
             {getCurrency.currencyCode} {getCurrency.symbol}
-            {getCurrency.convertedStandard}
+            {convertComma(getCurrency.convertedStandard)}
           </span>
           &nbsp;
-          <span className="text-text-secondary text-sm">
+          <span className="text-text-secondary text-sm font-bold">
             ({getCurrency.symbol}1 = {getCurrency.convertedWon}원)
           </span>
           &nbsp;이에요
