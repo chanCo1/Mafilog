@@ -60,6 +60,7 @@ export async function POST(request: Request) {
       { status: 200 },
     );
   } catch (error) {
+    console.log('@@ 회원가입 에러', error);
     return NextResponse.json({ message: 'server error' }, { status: 500 });
   }
 }

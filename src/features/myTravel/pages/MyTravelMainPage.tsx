@@ -21,6 +21,13 @@ export default function MyTravelMainPage() {
   const { data: travelList } = useGetMyTravelList(userInfo?.user?.id);
   const [isOpenModal, setIsOpenModal] = useState(false);
 
+  const progressTravel = travelList?.progress;
+  const upcomingTravel = travelList?.upcoming;
+  const lastTravel = travelList?.last;
+
+  const isTravelList =
+    progressTravel?.length || upcomingTravel?.length || lastTravel?.length;
+
   return (
     <>
       <div className="flex flex-col gap-5">
@@ -31,10 +38,10 @@ export default function MyTravelMainPage() {
         <div
           className={cn(
             'flex flex-col items-center gap-1',
-            !travelList && 'pt-20',
+            !isTravelList && 'pt-20',
           )}
         >
-          {travelList ? (
+          {isTravelList ? (
             <div>
               벌써{' '}
               <span className="text-primary font-bold">
@@ -55,14 +62,14 @@ export default function MyTravelMainPage() {
             새 여행 만들기
           </Button>
         </div>
-        {travelList?.progress.length ? (
-          <TravelListTemplate title="진행중인" list={travelList?.progress} />
+        {progressTravel?.length ? (
+          <TravelListTemplate title="진행중인" list={progressTravel} />
         ) : null}
-        {travelList?.upcoming.length ? (
-          <TravelListTemplate title="다가오는" list={travelList?.upcoming} />
+        {upcomingTravel?.length ? (
+          <TravelListTemplate title="다가오는" list={upcomingTravel} />
         ) : null}
-        {travelList?.last.length ? (
-          <TravelListTemplate title="지난" list={travelList?.last} />
+        {lastTravel?.length ? (
+          <TravelListTemplate title="지난" list={lastTravel} />
         ) : null}
       </div>
       <CreateNewTravelModal

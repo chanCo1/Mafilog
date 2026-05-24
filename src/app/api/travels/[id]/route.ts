@@ -191,13 +191,21 @@ export async function PATCH(
         );
       }
 
-      // 멤버 저장
+      /** 멤버 수정 */
       if (member.length) {
-        const existingMembers = await tx.travelMember.findMany({
+        // 기존 멤버 목록 가져오기
+        const originMembers = await tx.travelMember.findMany({
           where: { travelId },
         });
-        // 현재 있는 멤버 정보
-        const existingUserIds = existingMembers.map((member) => member.userId);
+
+        // 프론트에서 받은 멤버 정보
+        const newMemberIds = member.map((member: IMemberList) =>
+          String(member.userId),
+        );
+        // 기존 멤버
+        const existingUserIds = originMembers.map((member) =>
+          String(member.userId),
+        );
 
         // 새로운 멤버 찾기
         const newMembers = member.filter(
@@ -205,7 +213,6 @@ export async function PATCH(
             !existingUserIds.includes(String(member.userId)),
         );
 
-        // 새로운 멤버 있으면 저장
         if (newMembers.length > 0) {
           await Promise.all(
             newMembers.map((member: IMemberList) => {
@@ -213,11 +220,47 @@ export async function PATCH(
                 data: {
                   name: member.name,
                   travelId,
-                  userId: member.id,
+                  userId: String(member.userId),
                 },
               });
             }),
           );
+        }
+
+        const updatedMembers = member.filter((member: IMemberList) =>
+          existingUserIds.includes(String(member.userId)),
+        );
+
+        // 기존 멤버 이름 수정
+        if (updatedMembers.length > 0) {
+          await Promise.all(
+            updatedMembers.map(async (member: IMemberList) => {
+              // 기존 멤버 찾기
+              const target = originMembers.find(
+                (origin) => String(origin.userId) === String(member.userId),
+              );
+              // 이름이 다를 때만 업데이트 실행
+              if (target && target.name !== member.name) {
+                return tx.travelMember.update({
+                  where: { id: target.id },
+                  data: { name: member.name },
+                });
+              }
+            }),
+          );
+        }
+
+        const deleteMember = originMembers.filter(
+          (member) => !newMemberIds.includes(String(member.userId)),
+        );
+
+        // 멤버 삭제
+        if (deleteMember.length > 0) {
+          await tx.travelMember.deleteMany({
+            where: {
+              id: { in: deleteMember.map((member) => member.id) },
+            },
+          });
         }
       }
 
