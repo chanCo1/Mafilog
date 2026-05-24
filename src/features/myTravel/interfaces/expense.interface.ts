@@ -63,6 +63,7 @@ export interface ISpender {
 }
 
 export interface IExpenseRequest {
+  id?: number;
   name: string;
   paymentType: string;
   spenderType: string;
