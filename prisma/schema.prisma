@@ -36,7 +36,7 @@ model User {
   // 생성 시간
   createdAt       DateTime @default(now())
   // 수정 시간
-  updatedAt       DateTime @updatedAt
+  updatedAt       DateTime @default(now())
 }
 
 /**
@@ -98,7 +98,7 @@ model Travel {
   // 생성일
   createdAt     DateTime            @default(now())
   // 수정 시간
-  updatedAt     DateTime            @default(now()) @updatedAt
+  updatedAt     DateTime            @default(now())
 }
 
 /**
@@ -149,6 +149,8 @@ model TravelMember {
   travel           Travel           @relation(fields: [travelId], references: [id], onDelete: Cascade)
   // 생성일
   createdAt        DateTime         @default(now())
+  // 수정 시간
+  updatedAt        DateTime         @default(now())
   expenseId        Int?
   expenseList      ExpenseList[]    @relation("payer")
   expenseSpenderId Int?
@@ -168,7 +170,7 @@ model ChecklistCategory {
   // 생성일
   createdAt DateTime        @default(now())
   // 수정 시간
-  updatedAt DateTime        @default(now()) @updatedAt
+  updatedAt DateTime        @default(now())
   // fk
   travelId  Int
   // 여행 정보
@@ -188,7 +190,7 @@ model ChecklistItem {
   // 생성일
   createdAt  DateTime          @default(now())
   // 수정 시간
-  updatedAt  DateTime          @default(now()) @updatedAt
+  updatedAt  DateTime          @default(now())
   // fk
   categoryId Int
   // 카테고리 정보
@@ -214,7 +216,7 @@ model TravelSchedule {
   // 여행 정보
   travel       Travel         @relation(fields: [travelId], references: [id], onDelete: Cascade)
   // 수정 시간
-  updatedAt    DateTime       @default(now()) @updatedAt
+  updatedAt    DateTime       @default(now())
 }
 
 /**
@@ -238,7 +240,7 @@ model ScheduleList {
   // 생성일
   createdAt  DateTime       @default(now())
   // 수정 시간
-  updatedAt  DateTime       @updatedAt
+  updatedAt  DateTime       @default(now())
   // fk
   scheduleId Int
   // 일정 정보
@@ -298,7 +300,7 @@ model TravelExpense {
   // 여행 정보
   travel       Travel        @relation(fields: [travelId], references: [id], onDelete: Cascade)
   // 수정 시간
-  updatedAt    DateTime      @default(now()) @updatedAt
+  updatedAt    DateTime      @default(now())
 }
 
 /**
@@ -339,7 +341,7 @@ model ExpenseList {
   // 생성일
   createdAt          DateTime         @default(now())
   // 수정 시간
-  updatedAt          DateTime         @updatedAt
+  updatedAt          DateTime         @default(now())
   // 결제자 id
   payerId            Int
   // 결제자 연결
