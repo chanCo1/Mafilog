@@ -5,10 +5,13 @@
  * @description: 소셜 로그인 api
  */
 
-import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import jwt from 'jsonwebtoken';
 import { getHexCode } from '@/shared/lib/utils';
+import {
+  successResponse,
+  errorResponse,
+} from '@/shared/backend/utils/apiResponse';
 
 export async function POST(request: Request) {
   const { provider, providerAccountId, email, name, profileImageUrl } =
@@ -16,10 +19,7 @@ export async function POST(request: Request) {
 
   try {
     if (!provider || !providerAccountId || !email) {
-      return NextResponse.json(
-        { message: '필수 소셜 정보가 누락되었습니다.' },
-        { status: 400 },
-      );
+      return errorResponse('입력되지 않은 항목이 있습니다.', 400);
     }
 
     let targetUser = null;
@@ -90,22 +90,18 @@ export async function POST(request: Request) {
       { expiresIn: '30d' },
     );
 
-    return NextResponse.json(
-      {
-        message: '소셜 로그인에 성공했습니다.',
-        user: {
-          id: targetUser.id,
-          email: targetUser.email,
-          name: targetUser.name,
-          profileImageUrl: targetUser.profileImageUrl,
-          accessToken,
-          hexCode: targetUser.hexCode,
-        },
+    return successResponse({
+      user: {
+        id: targetUser.id,
+        email: targetUser.email,
+        name: targetUser.name,
+        profileImageUrl: targetUser.profileImageUrl,
+        accessToken,
+        hexCode: targetUser.hexCode,
       },
-      { status: 200 },
-    );
+    });
   } catch (error) {
-    console.log('실패 원인 >', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    console.log('@@ 소셜로그인 실패 >>', error);
+    return errorResponse();
   }
 }
