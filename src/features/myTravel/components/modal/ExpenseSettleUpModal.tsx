@@ -39,7 +39,9 @@ export default function ExpenseSettleUpModal({
   } = useCalcExpense(expenseList ?? []);
 
   const getMemberName = (id: string) => {
-    const findedName = travelInfo?.member.find((memeber) => memeber.userId === id);
+    const findedName = travelInfo?.member.find(
+      (memeber) => memeber.userId === id,
+    );
 
     return findedName?.name || '';
   };
@@ -108,23 +110,23 @@ export default function ExpenseSettleUpModal({
                 {getFinalSettlement.map((settlement) => (
                   <div
                     key={`${settlement.sendId}-${settlement.receiveId}`}
-                    className="text-text-secondary flex flex-wrap items-center"
+                    className="flex flex-wrap items-center justify-between"
                   >
-                    <div className="mr-1 text-lg">💸</div>
-                    <span className="text-text-primary font-bold">
-                      {getMemberName(settlement.sendId)}
-                    </span>
-                    &nbsp;
-                    <MoveRight size={20} />
-                    &nbsp;
-                    <span className="text-text-primary font-bold">
-                      {getMemberName(settlement.receiveId)}
-                    </span>
-                    &nbsp;
+                    <div className='flex flex-wrap items-center'>
+                      <div className="mr-1 text-lg">💸</div>
+                      <span className="text-text-primary font-bold">
+                        {getMemberName(settlement.sendId)}
+                      </span>
+                      &nbsp;
+                      <MoveRight size={20} className='text-text-secondary' />
+                      &nbsp;
+                      <span className="text-text-primary font-bold">
+                        {getMemberName(settlement.receiveId)}
+                      </span>
+                    </div>
                     <span className="text-state-error font-bold">
                       {convertComma(settlement.amount)}원
                     </span>
-                    을 보내야해요
                   </div>
                 ))}
               </>

@@ -27,25 +27,37 @@ export default function LocalCurrencyInfo({
   return (
     <>
       {getCurrency ? (
-        <div className="break-keep">
-          <span className="text-primary text-lg font-bold">
-            {selectedCity?.countryName}
-          </span>
-          ({selectedCity?.name})의 환율은<br />
-          <span className="text-text-secondary">
-            {convertFormattedDate(lastUpdate)}
-          </span>
-          &nbsp;기준,
-          <br /> {`${convertComma(CURRENCY_STANDARD_AMOUNT)}원`}에&nbsp;
-          <span className="text-primary font-bold">
-            {getCurrency.currencyCode} {getCurrency.symbol}
-            {convertComma(getCurrency.convertedStandard)}
-          </span>
-          &nbsp;
-          <span className="text-text-secondary text-sm font-bold">
-            ({getCurrency.symbol}1 = {getCurrency.convertedWon}원)
-          </span>
-          &nbsp;이에요
+        <div className="flex flex-col gap-1">
+          <div className='flex gap-1 items-center'>
+            <span>{getCurrency.countryEmoji}</span>
+            <span className="text-primary text-lg font-bold">
+              {selectedCity?.countryName}
+            </span>
+            ({selectedCity?.name})의 환율은
+          </div>
+          <div>
+            <span className="text-text-secondary font-bold">
+              {convertFormattedDate(lastUpdate)}
+            </span>{' '}
+            기준,
+          </div>
+          <div className="flex">
+            {`${convertComma(CURRENCY_STANDARD_AMOUNT)}원`}에&nbsp;
+            <div className="text-primary flex gap-1 font-bold">
+              <div className='flex gap-1'>
+                {/* <span className="text-sm">{getCurrency.symbol}</span> */}
+                <span>{convertComma(getCurrency.convertedStandard)}</span>
+                <span className="text-text-primary">
+                  {getCurrency.currencyName}
+                </span>
+              </div>
+            </div>
+            &nbsp;
+            <span className="text-text-secondary text-sm font-bold">
+              ({getCurrency.symbol}1 = {getCurrency.convertedWon}원)
+            </span>
+            &nbsp;이에요
+          </div>
         </div>
       ) : (
         <span className="text-state-error">환율 정보를 가져오지 못했어요</span>
