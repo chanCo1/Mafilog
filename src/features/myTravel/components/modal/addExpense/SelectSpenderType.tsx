@@ -13,7 +13,6 @@ import { Checkbox } from '@/shared/components/ui/Checkbox';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import { ILabelValue } from '@/shared/interfaces';
 import { IMemberList } from '@/shared/interfaces';
-import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
 
 interface ISelectSpenderType {
@@ -22,6 +21,7 @@ interface ISelectSpenderType {
   setSelectedSepnder: Dispatch<SetStateAction<ILabelValue[]>>;
   selectedPayer: ILabelValue;
   setSelectPayer: Dispatch<SetStateAction<ILabelValue>>;
+  travelId: string;
 }
 
 /** 지출 방식 (1/N, 지정)에 따른 결제 멤버 선택 컴포넌트 */
@@ -31,8 +31,8 @@ export default function SelectSpenderType({
   setSelectedSepnder,
   selectedPayer,
   setSelectPayer,
+  travelId,
 }: ISelectSpenderType) {
-  const travelId = useGetTravelId();
   const { data: travelInfo } = useGetMyTravelDetail(travelId);
 
   const getMembersOption = useMemo(() => {

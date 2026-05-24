@@ -30,13 +30,17 @@ import ExpenseSettleUpModal from '@/features/myTravel/components/modal/ExpenseSe
 import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { ReturnButton } from '@/shared/components/ui/ReturnButton';
+import { useSearchParams } from 'next/navigation';
 
 export default function MyTravelDetailPage() {
   const travelId = useGetTravelId();
   const { data: myTravelDatail } = useGetMyTravelDetail(travelId);
 
+  const searchParams = useSearchParams();
+  const tabValue = searchParams.get('tab');
+
   const [selectedTab, setSelectedTab] = useState<TRAVEL_TAB>(
-    TRAVEL_TAB.SCHEDULE,
+    tabValue ? (tabValue as TRAVEL_TAB) : TRAVEL_TAB.SCHEDULE,
   );
 
   /** 모달 컨트롤 */
@@ -56,7 +60,7 @@ export default function MyTravelDetailPage() {
           className="text-text-secondary"
           path="/my-travel"
           label="뒤로가기"
-          size='sm'
+          size="sm"
         />
         <PageHeader
           title={myTravelDatail.title}
@@ -146,10 +150,7 @@ export default function MyTravelDetailPage() {
           <TravelScheduleView />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.EXPENSES}>
-          <TravelExpensesView
-            from={myTravelDatail.from}
-            to={myTravelDatail.to}
-          />
+          <TravelExpensesView />
         </FadeInOutStyled>
       </div>
 

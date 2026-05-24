@@ -5,7 +5,7 @@ import { TRAVEL_STYLE, TRAVEL_TYPE, TRAVEL_PARTNER } from '@/shared/types/Enum';
 export interface ITravelBase {
   createdAt: string;
   from: Date;
-  id: string;
+  id: number;
   imageUrl: string | null;
   title: string;
   to: Date;

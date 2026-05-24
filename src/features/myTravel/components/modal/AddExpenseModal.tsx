@@ -37,12 +37,15 @@ import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useCreateTravelExpense } from '@/features/myTravel/hooks/rquery/expense/useCreateTravelExpense';
 import { useDeleteExpense } from '@/features/myTravel/hooks/rquery/expense/useDeleteExpense';
 import { useUpdateExpense } from '@/features/myTravel/hooks/rquery/expense/useUpdateExpense';
+import { useRouter } from 'next/navigation';
+import { TRAVEL_TAB } from '@/shared/types/Enum';
 
 interface IAddExpenseModal {
   isModify?: boolean;
   isOpen: boolean;
   expense?: IExpenseList;
   handleClose: () => void;
+  travelId?: string;
 }
 
 export default function AddExpenseModal({
@@ -50,6 +53,7 @@ export default function AddExpenseModal({
   isOpen,
   handleClose,
   expense,
+  travelId,
 }: IAddExpenseModal) {
   /** 지출 명 */
   const [expenseName, setExpenseName] = useState('');
@@ -92,11 +96,11 @@ export default function AddExpenseModal({
   /** 계산 수식 */
   const [calcFormula, setCalcFormula] = useState('');
 
-  const travelId = useGetTravelId();
-  const { data: travelInfo } = useGetMyTravelDetail(travelId);
-  const { data: expenseList } = useGetTravelExpenses(travelId);
+  const currentTravelId = useGetTravelId() || travelId as string;
+  const { data: travelInfo } = useGetMyTravelDetail(currentTravelId);
+  const { data: expenseList } = useGetTravelExpenses(currentTravelId);
   const { mutateAsync: deleteExpense, isPending: isDeletePending } =
-    useDeleteExpense(travelId);
+    useDeleteExpense(currentTravelId);
 
   const { countryData } = useCountriesDataStore();
 
@@ -107,11 +111,12 @@ export default function AddExpenseModal({
   }, [expenseList]);
 
   const { mutateAsync: createExpense, isPending: isCreatePending } =
-    useCreateTravelExpense(travelId);
+    useCreateTravelExpense(currentTravelId);
   const { mutateAsync: updateExpense, isPending: isUpdatePending } =
-    useUpdateExpense(travelId);
+    useUpdateExpense(currentTravelId);
 
   const { openDialog } = useDialogStore();
+  const router = useRouter();
 
   /** 지출 추가 핸들링 */
   const handleExpense = async () => {
@@ -151,12 +156,15 @@ export default function AddExpenseModal({
     };
 
     if (isModify) {
-      await updateExpense({ travelId, data: saveData });
+      await updateExpense({ travelId: currentTravelId, data: saveData });
     } else {
-      await createExpense({ travelId, data: saveData });
+      await createExpense({ travelId: currentTravelId, data: saveData });
     }
 
     onClickCloseBtn();
+    if (travelId) {
+      router.push(`/my-travel/${travelId}?tab=${TRAVEL_TAB.EXPENSES}`)
+    }
   };
 
   /** 지출 삭제 핸들러 */
@@ -170,7 +178,10 @@ export default function AddExpenseModal({
       type: 'confirm',
       okLabel: '삭제',
       onOk: async () => {
-        await deleteExpense({ travelId, deleteIds: [expense.id] });
+        await deleteExpense({
+          travelId: currentTravelId,
+          deleteIds: [expense.id],
+        });
       },
     });
   };
@@ -250,7 +261,7 @@ export default function AddExpenseModal({
 
   /** 초기값 대입 */
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) return;``
 
     if (isModify && expense) {
       setExpenseName(expense.name);
@@ -414,6 +425,7 @@ export default function AddExpenseModal({
             selectedSpenderType={selectedSpenderType}
             setSelectPayer={setSelectPayer}
             setSelectedSepnder={setSelectedSepnder}
+            travelId={currentTravelId}
           />
 
           <div className="flex items-center gap-2">
@@ -441,6 +453,7 @@ export default function AddExpenseModal({
           />
         </div>
         <Calculator
+          travelId={currentTravelId}
           onChangeValue={handleCalcChange}
           defaultValue={calculatorDefaultValue}
           isModify={isModify}

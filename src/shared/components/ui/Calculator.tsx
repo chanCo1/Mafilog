@@ -18,7 +18,6 @@ import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useGetCurrencyByCountry } from '@/shared/hooks/useGetCurrencyByCountry';
 import { CURRENCY_STANDARD_AMOUNT } from '@/features/myTravel/constants';
 import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
-import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface ICalculator {
   onChangeValue?: (data: {
@@ -36,6 +35,7 @@ interface ICalculator {
     | undefined;
   isModify?: boolean;
   isOpen?: boolean;
+  travelId: string;
 }
 
 export default function Calculator({
@@ -43,8 +43,8 @@ export default function Calculator({
   defaultValue,
   isModify = false,
   isOpen,
+  travelId,
 }: ICalculator) {
-  const travelId = useGetTravelId();
   const { data: travelInfo } = useGetMyTravelDetail(travelId);
 
   const [inpuNumber, setInputNumber] = useState('');
