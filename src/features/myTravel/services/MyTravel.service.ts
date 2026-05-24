@@ -15,7 +15,7 @@ const API_URL = '/travels';
 
 class _MyTravelService {
   /** 새 여행 생성 요청 */
-  async createCreateTravel(data: FormData) {
+  async createTravel(data: FormData) {
     const response = await axiosInstanceWithAuth.post(`${API_URL}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -46,6 +46,14 @@ class _MyTravelService {
           'Content-Type': 'multipart/form-data',
         },
       },
+    );
+    return response.data.data;
+  }
+
+  /** 여행 삭제 */
+  async deleteMyTravel(travelId: string) {
+    const response = await axiosInstanceWithAuth.delete(
+      `${API_URL}/${travelId}`,
     );
     return response.data.data;
   }
