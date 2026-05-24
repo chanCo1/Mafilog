@@ -66,7 +66,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     error: '/login',
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
+      if (trigger === 'update' && session) {
+        if (session.name) token.name = session.name;
+        if (session.profileImageUrl !== undefined) {
+          token.profileImageUrl = session.profileImageUrl;
+        }
+      }
+
       if (user) {
         token.id = user.id;
         token.profileImageUrl = (user as any).profileImageUrl;
