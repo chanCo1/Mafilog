@@ -28,7 +28,6 @@ import { ILabelValue } from '@/shared/interfaces';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Calculator from '@/shared/components/ui/Calculator';
 import { IExpenseList } from '@/features/myTravel/interfaces/expense.interface';
-import { toast } from 'sonner';
 import SelectSpenderType from '@/features/myTravel/components/modal/addExpense/SelectSpenderType';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
@@ -37,6 +36,7 @@ import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/u
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useCreateTravelExpense } from '@/features/myTravel/hooks/rquery/expense/useCreateTravelExpense';
 import { useDeleteExpense } from '@/features/myTravel/hooks/rquery/expense/useDeleteExpense';
+import { useUpdateExpense } from '@/features/myTravel/hooks/rquery/expense/useUpdateExpense';
 
 interface IAddExpenseModal {
   isModify?: boolean;
@@ -108,6 +108,8 @@ export default function AddExpenseModal({
 
   const { mutateAsync: createExpense, isPending: isCreatePending } =
     useCreateTravelExpense(travelId);
+  const { mutateAsync: updateExpense, isPending: isUpdatePending } =
+    useUpdateExpense(travelId);
 
   const { openDialog } = useDialogStore();
 
@@ -130,7 +132,7 @@ export default function AddExpenseModal({
     }));
 
     const saveData = {
-      // id: isModify ? expense!.id : '',
+      id: isModify && expense ? expense.id : undefined,
       name: expenseName,
       paymentType: selectedPaymentType,
       spenderType: selectedSpenderType,
@@ -148,13 +150,11 @@ export default function AddExpenseModal({
       payerId: selectedPayer.value as string,
     };
 
-    // if (isModify) {
-    //   setUpdateExpense(saveData);
-    // } else {
-    //   setAddExpenseList(saveData);
-    // }
-
-    await createExpense({ travelId, data: saveData });
+    if (isModify) {
+      await updateExpense({ travelId, data: saveData });
+    } else {
+      await createExpense({ travelId, data: saveData });
+    }
 
     onClickCloseBtn();
   };
@@ -350,8 +350,8 @@ export default function AddExpenseModal({
               취소
             </Button>
             <Button
-              disabled={isDisabled || isCreatePending}
-              isLoading={isCreatePending}
+              disabled={isDisabled || isCreatePending || isUpdatePending}
+              isLoading={isCreatePending || isUpdatePending}
               onClick={handleExpense}
             >
               {isModify ? '수정' : '지출 추가'}
