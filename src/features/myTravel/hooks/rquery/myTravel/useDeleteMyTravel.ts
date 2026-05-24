@@ -8,9 +8,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 import { toast } from 'sonner';
+import { myTravelListKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 export const useDeleteMyTravel = () => {
   const queryClient = useQueryClient();
+  const queryKey = myTravelListKeys.all;
 
   return useMutation({
     mutationFn: async (travelId: string) => {
@@ -19,7 +21,7 @@ export const useDeleteMyTravel = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['myTravelList'],
+        queryKey,
       });
 
       toast.success('여행을 삭제했어요');

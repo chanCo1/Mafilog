@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { IExpenseRequest } from '@/features/myTravel/interfaces/expense.interface';
 import ExpenseService from '@/features/myTravel/services/Expense.service';
+import { travelExpensesKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 interface IUseUpdateExpense {
   travelId: string;
@@ -19,6 +20,7 @@ export const useUpdateExpense = (
   travelId: string,
 ) => {
   const queryClient = useQueryClient();
+  const queryKey = travelExpensesKeys.detail(travelId);
 
   return useMutation({
     mutationFn: async ({ travelId, data }: IUseUpdateExpense) => {
@@ -27,7 +29,7 @@ export const useUpdateExpense = (
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['travelExpenses', travelId],
+        queryKey,
       });
 
       toast.success('지출을 수정했어요');

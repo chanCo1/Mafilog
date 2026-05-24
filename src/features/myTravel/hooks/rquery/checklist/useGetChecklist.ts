@@ -7,13 +7,16 @@
 
 import { useQuery } from '@tanstack/react-query';
 import ChecklistService from '@/features/myTravel/services/Checklist.service';
+import { travelChecklistKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 export const useGetChecklist = (travelId: string, isFetch: boolean) => {
+  const queryKey = travelChecklistKeys.detail(travelId);
+
   const query = useQuery({
-    queryKey: ['travelChecklist', travelId],
+    queryKey,
     queryFn: async () => await ChecklistService.getTravelChecklist(travelId),
     enabled: !!travelId && isFetch,
-    staleTime: 1000 * 60 * 1, 
+    staleTime: 1000 * 60 * 1,
     gcTime: 1000 * 60 * 10,
   });
 

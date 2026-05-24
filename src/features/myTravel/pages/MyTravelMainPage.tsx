@@ -43,7 +43,7 @@ export default function MyTravelMainPage() {
         >
           {isTravelList ? (
             <div>
-              벌써{' '}
+              지금까지{' '}
               <span className="text-primary font-bold">
                 {travelList?.last.length}번
               </span>{' '}

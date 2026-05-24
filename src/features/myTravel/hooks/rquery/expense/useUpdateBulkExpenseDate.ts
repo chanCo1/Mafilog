@@ -8,6 +8,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import ExpenseService from '@/features/myTravel/services/Expense.service';
+import { travelExpensesKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 interface IUseUpdateBulkExpenseDate {
   travelId: string;
@@ -16,6 +17,7 @@ interface IUseUpdateBulkExpenseDate {
 
 export const useUpdateBulkExpenseDate = (travelId: string) => {
   const queryClient = useQueryClient();
+  const queryKey = travelExpensesKeys.detail(travelId);
 
   return useMutation({
     mutationFn: async ({ travelId, data }: IUseUpdateBulkExpenseDate) => {
@@ -24,7 +26,7 @@ export const useUpdateBulkExpenseDate = (travelId: string) => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['travelExpenses', travelId],
+        queryKey,
       });
 
       toast.success('지출을 이동했어요');

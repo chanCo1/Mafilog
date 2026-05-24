@@ -8,6 +8,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import ScheduleService from '@/features/myTravel/services/Schedule.service';
+import { travelScheduleKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 interface IUseUpdateBulkScheduleDate {
   travelId: string;
@@ -19,15 +20,12 @@ export const useUpdateBulkScheduleDate = (travelId: string) => {
 
   return useMutation({
     mutationFn: async ({ travelId, data }: IUseUpdateBulkScheduleDate) => {
-      return await ScheduleService.updateBulkTravelScheduleDate(
-        travelId,
-        data,
-      );
+      return await ScheduleService.updateBulkTravelScheduleDate(travelId, data);
     },
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['travelSchedules', travelId],
+        queryKey: travelScheduleKeys.detail(travelId),
       });
 
       toast.success('일정을 이동했어요');

@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { IUpdateSchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.interface';
 import ScheduleService from '@/features/myTravel/services/Schedule.service';
+import { travelScheduleKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 interface IUseUpdateSchedulePlace {
   travelId: string;
@@ -27,7 +28,7 @@ export const useUpdateSchedulePlace = (
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['travelSchedules', travelId],
+        queryKey: travelScheduleKeys.detail(travelId),
       });
 
       toast.success('수정되었어요');

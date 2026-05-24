@@ -7,10 +7,13 @@
 
 import { useQuery } from '@tanstack/react-query';
 import ExpenseService from '@/features/myTravel/services/Expense.service';
+import { travelExpensesKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 export const useGetTravelExpenses = (travelId: string) => {
+  const queryKey = travelExpensesKeys.detail(travelId);
+
   const query = useQuery({
-    queryKey: ['travelExpenses', travelId],
+    queryKey,
     queryFn: async () => await ExpenseService.getTravelExpenses(travelId),
     enabled: !!travelId,
     staleTime: 1000 * 60 * 5,

@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import ScheduleService from '@/features/myTravel/services/Schedule.service';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { travelScheduleKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 interface IUseDeleteSchedulePlace {
   travelId: string;
@@ -31,7 +32,7 @@ export const useDeleteSchedulePlace = (
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['travelSchedules', travelId],
+        queryKey: travelScheduleKeys.detail(travelId),
       });
 
       if (type) {

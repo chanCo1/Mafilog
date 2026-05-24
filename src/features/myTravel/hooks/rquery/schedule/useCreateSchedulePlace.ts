@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { ISchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.interface';
 import ScheduleService from '@/features/myTravel/services/Schedule.service';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { travelScheduleKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 interface IUseCreateSchedulePlace {
   travelId: string;
@@ -29,7 +30,7 @@ export const useCreateSchedulePlace = (
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['travelSchedules', travelId],
+        queryKey: travelScheduleKeys.detail(travelId),
       });
 
       toast.success(

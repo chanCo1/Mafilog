@@ -8,9 +8,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 import { toast } from 'sonner';
+import { myTravelListKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 export const useCreateMyTravelList = () => {
   const queryClient = useQueryClient();
+  const queryKey = myTravelListKeys.all;
 
   return useMutation({
     mutationFn: async (formData: FormData) => {
@@ -19,7 +21,7 @@ export const useCreateMyTravelList = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['myTravelList'],
+        queryKey,
       });
 
       toast.success('새 여행을 만들었어요');

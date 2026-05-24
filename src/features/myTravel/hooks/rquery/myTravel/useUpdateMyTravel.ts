@@ -8,6 +8,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
+import {
+  myTravelListKeys,
+  myTravelDetailKeys,
+  travelExpensesKeys,
+  travelScheduleKeys,
+} from '@/features/myTravel/hooks/rquery/queryKeys';
 
 export const useUpdateMyTravel = (travelId: string) => {
   const queryClient = useQueryClient();
@@ -18,10 +24,16 @@ export const useUpdateMyTravel = (travelId: string) => {
     },
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myTravelList'] });
-      queryClient.invalidateQueries({ queryKey: ['myTravelDetail', travelId] });
-      queryClient.invalidateQueries({ queryKey: ['travelSchedules', travelId] });
-      queryClient.invalidateQueries({ queryKey: ['travelExpenses', travelId] });
+      queryClient.invalidateQueries({ queryKey: myTravelListKeys.all });
+      queryClient.invalidateQueries({
+        queryKey: myTravelDetailKeys.detail(travelId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: travelScheduleKeys.detail(travelId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: travelExpensesKeys.detail(travelId),
+      });
 
       toast.success('여행 정보가 수정되었어요');
     },

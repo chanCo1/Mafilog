@@ -12,7 +12,7 @@ import {
   IChecklistResponse,
 } from '@/features/myTravel/interfaces/checklist.interface';
 import ChecklistService from '@/features/myTravel/services/Checklist.service';
-import { nanoid } from 'nanoid';
+import { travelChecklistKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 interface IUseDeleteChecklist {
   travelId: string;
@@ -21,7 +21,7 @@ interface IUseDeleteChecklist {
 
 export const useDeleteChecklist = (travelId: string) => {
   const queryClient = useQueryClient();
-  const queryKey = ['travelChecklist', travelId];
+  const queryKey = travelChecklistKeys.detail(travelId);
 
   return useMutation({
     mutationFn: async ({ travelId, requestData }: IUseDeleteChecklist) => {
