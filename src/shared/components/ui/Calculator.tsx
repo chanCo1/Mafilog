@@ -72,7 +72,7 @@ export default function Calculator({
         country.code !== 'KR',
     );
 
-    /** 미국 데이터, 달러는 항상 포함 */
+    /** 미국 데이터(달러) 와 한국은 항상 포함 */
     const krData = countryData['KR'];
     const usaData = countryData['US'];
 
@@ -81,15 +81,22 @@ export default function Calculator({
 
     // 셀렉트 옵션
     return mergeCountries.map((country) => ({
-      label: Object.keys(country.currency)[0],
+      label: `${countryData[country.code].flagEmoji} ${Object.keys(country.currency)[0]}`,
       value: country.code,
     }));
   }, [countryData, travelInfo?.cities]);
 
   useEffect(() => {
-    if (isModify) {
-      setInputNumber(defaultValue?.inputNumber || '');
-      setSelectedCurrency(defaultValue?.selectedCurrency);
+    if (isModify && defaultValue) {
+      const _defaultValue = defaultValue.selectedCurrency;
+
+      const _selectedCurrency = {
+        label: `${countryData[_defaultValue.value].flagEmoji} ${_defaultValue.label}`,
+        value: _defaultValue.value,
+      };
+
+      setInputNumber(defaultValue.inputNumber || '');
+      setSelectedCurrency(_selectedCurrency);
       return;
     }
 
@@ -170,10 +177,15 @@ export default function Calculator({
   }, [result, getCurrency]);
 
   useEffect(() => {
+    if (!selectedCurrency) return;
+
     onChangeValue?.({
       amount: result,
       calcAmount: calcResultCurrency,
-      currencyCode: selectedCurrency!,
+      currencyCode: {
+        label: selectedCurrency.label.split(' ')[1],
+        value: selectedCurrency.value,
+      },
       exchangeRate: Number(getCurrency?.convertedWon || 0),
       formula: inpuNumber,
     });
@@ -202,13 +214,6 @@ export default function Calculator({
                 options={currencyList}
                 value={selectedCurrency}
                 onChange={(e) => setSelectedCurrency(e)}
-                prefix={
-                  <>
-                    {selectedCurrency && (
-                      <div>{countryData[selectedCurrency.value].flagEmoji}</div>
-                    )}
-                  </>
-                }
               />
             </div>
           )}
