@@ -28,6 +28,6 @@ export interface IMemberList {
   expenseId?: number | null;
   expenseSpenderId?: number | null;
   travelId?: number;
-  userId: string;
+  userId?: string;
   createdAt?: string;
 }

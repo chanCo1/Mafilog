@@ -278,7 +278,7 @@ export default function AddExpenseModal({
 
       const spenderMember = expense.spender.map((spender) => ({
         label: spender.member.name,
-        value: spender.member.userId,
+        value: spender.member.userId as string,
       }));
 
       setSelectedSepnder(spenderMember);

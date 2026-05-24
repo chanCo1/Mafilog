@@ -16,7 +16,7 @@ import {
 } from '@/features/myTravel/constants';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
-import { User, CircleX } from 'lucide-react';
+import { CircleX } from 'lucide-react';
 import { IMemberList } from '@/shared/interfaces';
 import { nanoid } from 'nanoid';
 import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
@@ -168,7 +168,7 @@ export default function CreateNewTravelStep3({
             )}
           </div>
           <span className="text-text-secondary text-sm">
-            최대 15명까지 등록할 수 있어요.
+            최대 15명까지 등록할 수 있어요
           </span>
         </div>
 
@@ -191,7 +191,7 @@ export default function CreateNewTravelStep3({
             ))}
           </div>
           <span className="text-text-secondary text-sm">
-            1개만 선택 가능해요.
+            1개만 선택 가능해요
           </span>
         </div>
 
@@ -213,7 +213,7 @@ export default function CreateNewTravelStep3({
             ))}
           </div>
           <span className="text-text-secondary text-sm">
-            여러개 선택 가능해요.
+            여러개 선택 가능해요
           </span>
         </div>
       </div>
