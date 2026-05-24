@@ -12,32 +12,32 @@ import { Input } from '@/shared/components/ui/Input';
 import { Loading } from '@/shared/components/ui/Loading';
 import { Search } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
-import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
-import { getPlaceCategory } from '@/shared/lib/utils';
+import {
+  IPlaceList,
+  IScheduleResponse,
+} from '@/features/myTravel/interfaces/schedule.interface';
+import { getPlaceCategory, getTravelDayList } from '@/shared/lib/utils';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { ILabelValue } from '@/shared/interfaces';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import SelectedChips from '@/features/myTravel/components/modal/SelectedChips';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
-import { toast } from 'sonner';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
-import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { useFetchGooglePlaces } from '@/shared/hooks/rquery/useFetchGooglePlaces';
+import { useCreateSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useCreateSchedulePlace';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface IAddPlaceModal {
   isOpen: boolean;
   handleClose: () => void;
+  scheduleList: IScheduleResponse[];
 }
 
-export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const setAddScheduleList = useTravelScheduleStore(
-    (state) => state.setAddScheduleList,
-  );
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
+export default function AddPlaceModal({
+  isOpen,
+  handleClose,
+  scheduleList,
+}: IAddPlaceModal) {
+  const travelId = useGetTravelId();
 
   /** 장소 검색 */
   const [searchPlace, setSearchPlace] = useState<string>('');
@@ -59,18 +59,17 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
     search: submitSearch,
   });
 
-  /** 일정 선택 초기값 */
-  // useEffect(() => {
-  //   if (travelInfo.from && travelInfo.to) {
-  //     setSelectedDay(
-  //       travelDaysList[getTravelCurrentDay(travelInfo.from, travelInfo.to) - 1],
-  //     );
-  //   }
-  // }, [travelInfo.from, travelInfo.to, travelDaysList]);
+  const travelDayList = getTravelDayList(scheduleList);
 
+  const { mutateAsync: createSechdulePlace, isPending } =
+    useCreateSchedulePlace(travelId, SCHEDULE_TYPE.MEMO);
+
+  /** 일정 선택 초기값 */
   useEffect(() => {
-    setSelectedDay(travelDaysList[0]);
-  }, [travelDaysList]);
+    if (isOpen) {
+      setSelectedDay(travelDayList[0]);
+    }
+  }, [isOpen]);
 
   const handleSearch = async () => {
     try {
@@ -141,21 +140,25 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
   }, [clickPlaceData]);
 
   /** 장소 추가 핸들링 */
-  const handleAddPlace = () => {
+  const handleAddPlace = async () => {
     if (!selectedDay) return;
 
-    try {
-      setAddScheduleList({
-        type: 'place',
-        day: selectedDay,
-        places: selectedPlaces,
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    const getScheduleId = scheduleList.find(
+      (list) => list.day === selectedDay.value,
+    )?.id;
 
-    onClickCloseBtn();
-    toast.success('장소를 추가했어요');
+    if (getScheduleId) {
+      await createSechdulePlace({
+        travelId,
+        data: {
+          type: SCHEDULE_TYPE.PLACE,
+          day: selectedDay.value as number,
+          place: selectedPlaces,
+          scheduleId: getScheduleId,
+        },
+      });
+      onClickCloseBtn();
+    }
   };
 
   return (
@@ -168,7 +171,11 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={!selectedPlaces.length} onClick={handleAddPlace}>
+          <Button
+            disabled={!selectedPlaces.length || isPending}
+            isLoading={isPending}
+            onClick={handleAddPlace}
+          >
             장소 추가
           </Button>
         </>
@@ -177,7 +184,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
       <div className="flex h-full flex-col gap-2">
         <Selectbox
           label="여행 일정 선택"
-          options={travelDaysList}
+          options={travelDayList}
           value={selectedDay}
           onChange={(value) => setSelectedDay(value)}
           placeholder="여행 일정을 선택해주세요"
@@ -210,7 +217,7 @@ export default function AddPlaceModal({ isOpen, handleClose }: IAddPlaceModal) {
         <div className="max-mobile:h-40 h-60 overflow-hidden rounded-lg">
           {/* <GoogleMap
             places={clickedPlace}
-            id={process.env.GOOGLE_MAP_ID2 as string}
+            id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID2 as string}
             isSingle
           /> */}
         </div>

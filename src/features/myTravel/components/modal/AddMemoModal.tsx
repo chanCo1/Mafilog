@@ -11,34 +11,39 @@ import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Button } from '@/shared/components/ui/Button';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
-import { toast } from 'sonner';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
-import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
+import { IScheduleResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { getTravelDayList } from '@/shared/lib/utils';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { useCreateSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useCreateSchedulePlace';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface IAddMemoModal {
   isOpen: boolean;
   handleClose: () => void;
+  scheduleList: IScheduleResponse[];
 }
 
-export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const setAddScheduleList = useTravelScheduleStore(
-    (state) => state.setAddScheduleList,
-  );
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
-
+export default function AddMemoModal({
+  isOpen,
+  handleClose,
+  scheduleList,
+}: IAddMemoModal) {
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>();
   /** 메모 입력 */
   const [inputMemo, setInputMemo] = useState('');
 
+  const travelDayList = getTravelDayList(scheduleList);
+  const travelId = useGetTravelId();
+  const { mutateAsync: createSechdulePlace, isPending } =
+    useCreateSchedulePlace(travelId, SCHEDULE_TYPE.PLACE);
+
+  /** 일정 선택 초기값 */
   useEffect(() => {
-    setSelectedDay(travelDaysList[0]);
-  }, [travelDaysList]);
+    if (isOpen) {
+      setSelectedDay(travelDayList[0]);
+    }
+  }, [isOpen]);
 
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
@@ -52,21 +57,26 @@ export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
   };
 
   /** 메모 추가 핸들링 */
-  const handelAddMemo = () => {
+  const handelAddMemo = async () => {
     if (!selectedDay) return;
 
-    try {
-      setAddScheduleList({
-        type: 'memo',
-        day: selectedDay,
-        memo: inputMemo,
+    const getScheduleId = scheduleList.find(
+      (list) => list.day === selectedDay.value,
+    )?.id;
+
+    if (getScheduleId) {
+      await createSechdulePlace({
+        travelId,
+        data: {
+          type: SCHEDULE_TYPE.MEMO,
+          memo: inputMemo,
+          day: selectedDay.value as number,
+          scheduleId: getScheduleId,
+        },
       });
-    } catch (error) {
-      console.log(error);
     }
 
     onClickCloseBtn();
-    toast.success('메모를 추가했어요');
   };
 
   return (
@@ -79,7 +89,11 @@ export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
           <Button variant="gray" onClick={onClickCloseBtn}>
             취소
           </Button>
-          <Button disabled={!inputMemo} onClick={handelAddMemo}>
+          <Button
+            disabled={isPending}
+            isLoading={isPending}
+            onClick={handelAddMemo}
+          >
             메모 추가
           </Button>
         </>
@@ -88,7 +102,7 @@ export default function AddMemoModal({ isOpen, handleClose }: IAddMemoModal) {
       <div className="flex h-full flex-col gap-2">
         <Selectbox
           label="여행 일정 선택"
-          options={travelDaysList}
+          options={travelDayList}
           value={selectedDay}
           onChange={(value) => setSelectedDay(value)}
           placeholder="여행 일정을 선택해주세요"

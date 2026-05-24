@@ -13,8 +13,12 @@ import {
   TRAVEL_PARTNER_LIST,
   TRAVEL_STYLE_LIST,
 } from '@/features/myTravel/constants';
-import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
+import {
+  IPlaceList,
+  IScheduleResponse,
+} from '@/features/myTravel/interfaces/schedule.interface';
 import { EXPENSES_PAYMENT_TYPE } from '@/shared/types/expenseEnum';
+import { IExpenseResponse } from '@/features/myTravel/interfaces/expense.interface';
 
 /** 조건부로 클래스 사용(clsx) + props로 받은 스타일이 기본 스타일을 덮어쓰기(twMerge) */
 export function cn(...inputs: ClassValue[]) {
@@ -29,9 +33,15 @@ export const truncateText = (text: string, maxLength: number = 18): string => {
 };
 
 /** 날짜 포멧 변경 */
-export const convertFormattedDate = (date: Date, format = 'yyyy-MM-dd') => {
+export const convertFormattedDate = (
+  date: Date | string | undefined,
+  format = 'yyyy-MM-dd',
+) => {
   if (!date) return '';
-  return formatDate(date, format, { locale: ko });
+
+  const dateValue = typeof date === 'string' ? new Date(date) : date;
+
+  return formatDate(dateValue, format, { locale: ko });
 };
 
 /** 여행 기간 포멧 노출 (YYYY.MM.DD ~ YYYY.MM.DD) */
@@ -46,12 +56,14 @@ export const convertTravelDateRange = (from: Date, to: Date) => {
 };
 
 /** 무슨 요일인지 구하기 */
-export const getDay = (date: Date) => {
-  return formatDate(date, 'E', { locale: ko });
+export const getDay = (date: Date | string) => {
+  const dateValue = typeof date === 'string' ? new Date(date) : date;
+
+  return formatDate(dateValue, 'E', { locale: ko });
 };
 
 /** 시간을 0시 0분 0초로 초기화 */
-const setResetHour = (date: Date): Date => {
+export const setResetHour = (date: Date): Date => {
   const _date = new Date(date);
   _date.setHours(0, 0, 0, 0);
 
@@ -103,6 +115,8 @@ export const getTravelCurrentDay = (from: Date, to: Date) => {
 
 /** 여행 기간에 따른 일차 & 날짜 구하기 */
 export const getTravelDayOfWeek = (from: Date, to: Date) => {
+  if (!from || !to) return [];
+
   const travelDays = Array.from({ length: getTravelDay(from, to) }).map(
     (_, index) => {
       const _day = index + 1;
@@ -133,8 +147,23 @@ export const getTravelStatus = (from: Date, to: Date) => {
   }
 };
 
+/** 여행 기간에 따른 날짜 리스트 */
+export const getTravelDayList = (
+  scheduleList: IExpenseResponse[] | IScheduleResponse[] | undefined,
+) => {
+  if (!scheduleList?.length) return [];
+
+  return scheduleList.map((_day) => {
+    return {
+      label: `${_day.day}일차 ${convertFormattedDate(_day.date, 'MM월 dd일')} (${getDay(_day.date)})`,
+      value: _day.day,
+    };
+  });
+};
+
 /** 여행 동반자 변환 */
-export const convertTravelPartner = (partner: TRAVEL_PARTNER) => {
+export const convertTravelPartner = (partner: TRAVEL_PARTNER | undefined) => {
+  if (!partner) return '';
   return TRAVEL_PARTNER_LIST.find((list) => list.value === partner)?.label;
 };
 

@@ -68,8 +68,8 @@ export default function HomePage() {
         </div>
       </div>
       <div className="max-mobile:pt-65 max-mobile:gap-10 flex flex-col gap-15 pt-72">
-        <MapContainer />
         <UpcomingContainer />
+        <MapContainer />
       </div>
       <ProgressTravelCard />
     </>

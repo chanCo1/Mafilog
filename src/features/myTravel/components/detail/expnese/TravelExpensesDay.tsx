@@ -5,43 +5,40 @@
  * @description: TravelExpensesDay 컴포넌트, 가계부 일차별 지출
  */
 
-import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { convertFormattedDate, getDay, convertComma } from '@/shared/lib/utils';
 import TravelExpensesTimeline from '@/features/myTravel/components/detail/expnese/TravelExpensesTimeline';
-import { IExpense } from '@/shared/interfaces/travelExpenseStore.interface';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import { ILabelValue } from '@/shared/interfaces';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
+import { IExpenseResponse } from '@/features/myTravel/interfaces/expense.interface';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 
 interface ITravelExpensesDay {
-  day?: number;
-  date?: Date;
+  expense: IExpenseResponse;
   selectMode: boolean;
-  list: IExpense['list'];
 }
 
 export default function TravelExpensesDay({
-  day,
-  date,
-  list,
+  expense,
   selectMode,
 }: ITravelExpensesDay) {
-  const { selectedExpenses, toggleDayAll } = useSelectExpenses();
-  const { getDailyAllSpend } = useTravelExpenseStore();
+  const travelId = useGetTravelId();
+  const { data: expenseList } = useGetTravelExpenses(travelId);
+  const { getDailyAllSpend } = useCalcExpense(expenseList ?? []);
 
-  const dailyAllAmount = getDailyAllSpend(day!);
+  const { selectedExpenses, toggleDayAll } = useSelectExpenses();
 
   // 현재 일차의 list 아이템들이 모두 selectedSchedules에 포함되어 있는지 확인
   const isAllSelected =
-    list.length > 0 &&
-    list.every((item) =>
+    expense.expenseList.length > 0 &&
+    expense.expenseList.every((item) =>
       selectedExpenses.some((selected) => selected.id === item.id),
     );
 
   const handleAllCheck = (checked: boolean | ILabelValue[]) => {
-    toggleDayAll(list, !checked as boolean);
+    toggleDayAll(expense.expenseList, !checked as boolean);
   };
 
   return (
@@ -52,28 +49,29 @@ export default function TravelExpensesDay({
             <Checkbox value={isAllSelected} onChange={handleAllCheck} />
           )}
           <span className="text-lg font-bold">
-            {day === 0 ? '여행전' : `${day}일차`}
+            {expense.day === 0 ? '여행전' : `${expense.day}일차`}
           </span>
-          {date ? (
+          {expense.date ? (
             <span className="text-text-secondary">
-              {convertFormattedDate(date, 'MM월 dd일')} {getDay(date)}
+              {convertFormattedDate(expense.date, 'MM월 dd일')}{' '}
+              {getDay(expense.date)}
             </span>
           ) : null}
         </div>
         <div className="flex items-end gap-1">
           <span className="text-sm">지출</span>
           <span className="font-bold">
-            {convertComma(dailyAllAmount)}원
+            {convertComma(getDailyAllSpend(expense.day))}원
           </span>
         </div>
       </div>
       <div className="flex flex-col">
-        {list.length ? (
+        {expense.expenseList.length ? (
           <>
-            {list.map((_data, index) => (
+            {expense.expenseList.map((_data, index) => (
               <TravelExpensesTimeline
                 key={`${_data?.id}-${index}`}
-                timeLineData={_data}
+                expense={_data}
                 selectMode={selectMode}
               />
             ))}

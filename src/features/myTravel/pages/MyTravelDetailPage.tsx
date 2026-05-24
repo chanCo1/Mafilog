@@ -2,24 +2,18 @@
  * @file: MyTravelDetailPage.tsx
  * @author: chad
  * @since: 2026.04.27 ~
- * @description: MyTravelDetailPage 컴포넌트, 내 여행 상세 페이지
+ * @description: 내 여행 상세 페이지
  */
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { cn, convertTravelStyle } from '@/shared/lib/utils';
+import { useState } from 'react';
+import { convertTravelStyle } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
-import {
-  TRAVEL_DETAIL_MOCK_DATA,
-  CHECKLIST_MOCK_DATA,
-} from '@/features/myTravel/data';
 import TravelStatus from '@/features/myTravel/components/detail/TravelStatus';
 import {
-  convertFormattedDate,
-  getDay,
-  getTravelDay,
   convertTravelPartner,
+  convertTravelDateRange,
 } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import { TRAVEL_TAB_LIST } from '@/features/myTravel/constants';
@@ -29,70 +23,24 @@ import TravelScheduleView from '@/features/myTravel/components/detail/schedule/T
 import TravelExpensesView from '@/features/myTravel/components/detail/expnese/TravelExpensesView';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import LocalInfoModal from '@/features/myTravel/components/modal/LocalInfoModal';
 import CheckListModal from '@/features/myTravel/components/modal/CheckListModal';
-import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
-import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import ExpenseStatisticModal from '@/features/myTravel/components/modal/ExpenseStatisticModal';
 import ExpenseSettleUpModal from '@/features/myTravel/components/modal/ExpenseSettleUpModal';
-
-// interface IMyTravelDetailPage {}
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { ReturnButton } from '@/shared/components/ui/ReturnButton';
+import { useSearchParams } from 'next/navigation';
 
 export default function MyTravelDetailPage() {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const setInitTravelInfo = useTravelInfoStore(
-    (state) => state.setInitTravelInfo,
-  );
+  const travelId = useGetTravelId();
+  const { data: myTravelDatail } = useGetMyTravelDetail(travelId);
 
-  const setInitSchedules = useTravelScheduleStore(
-    (state) => state.setInitSchedules,
-  );
-  const setInitExpense = useTravelExpenseStore((state) => state.setInitExpense);
-  const setInitCheckList = useTravelCheckListStore(
-    (state) => state.setInitCheckList,
-  );
-
-  useEffect(() => {
-    /** TODO: 임시 데이터 */
-    const {
-      id,
-      title,
-      from,
-      to,
-      status,
-      travelPartner,
-      travelStyles,
-      image,
-      // schedule,
-      cities,
-      member,
-    } = TRAVEL_DETAIL_MOCK_DATA;
-
-    setInitTravelInfo({
-      id,
-      cities,
-      from,
-      status,
-      title,
-      to,
-      travelPartner,
-      travelPeriod: getTravelDay(from, to),
-      travelStyles,
-      member,
-    });
-    setInitSchedules({ from, to });
-    setInitExpense({ from, to });
-    setInitCheckList(CHECKLIST_MOCK_DATA);
-
-    return () => {
-      useTravelInfoStore.getState().reset();
-    };
-  }, []);
+  const searchParams = useSearchParams();
+  const tabValue = searchParams.get('tab');
 
   const [selectedTab, setSelectedTab] = useState<TRAVEL_TAB>(
-    TRAVEL_TAB.SCHEDULE,
+    tabValue ? (tabValue as TRAVEL_TAB) : TRAVEL_TAB.SCHEDULE,
   );
 
   /** 모달 컨트롤 */
@@ -102,51 +50,52 @@ export default function MyTravelDetailPage() {
   const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
   const [isOpenSettelUpModal, setIsOpenSettelUpModal] = useState(false);
 
-  /** 여행 기간 날짜 포멧 */
-  const formattedValue = useMemo(() => {
-    if (!travelInfo.from || !travelInfo.to) return '';
-
-    if (travelInfo.from === travelInfo.to) {
-      return `${convertFormattedDate(travelInfo.from)}(${getDay(travelInfo.from)}) (${getTravelDay(travelInfo.from, travelInfo.to)}일)`;
-    }
-
-    return `${convertFormattedDate(travelInfo.from)}(${getDay(travelInfo.from)}) ~ ${convertFormattedDate(travelInfo.to)}(${getDay(travelInfo.to)}) (${getTravelDay(travelInfo.from, travelInfo.to)}일)`;
-  }, [travelInfo.from, travelInfo.to]);
+  if (!myTravelDatail) return;
 
   return (
     <div className="flex flex-col gap-5">
-      <PageHeader
-        title={travelInfo.title}
-        ruby={
-          <TravelStatus
-            status={travelInfo.status}
-            from={travelInfo.from}
-            to={travelInfo.to}
-          />
-        }
-        titleBtn={
-          <div
-            className="text-text-secondary shrink-0 cursor-pointer font-bold"
-            onClick={() => setIsOpenTravelModify(true)}
-          >
-            수정
-          </div>
-        }
-        description={
-          <div className="max-mobile:flex-col mobile:gap-1 max-mobile:items-start flex items-center">
-            <span>{formattedValue}</span>
-            <span className="max-mobile:hidden">|</span>
-            <div className="text-md max-mobile:text-sm flex gap-1">
-              <div>{convertTravelPartner(travelInfo.travelPartner)}</div>
-              {travelInfo.travelStyles.length &&
-                travelInfo.travelStyles.map((style) => (
-                  <div key={style}>#{convertTravelStyle(style)}</div>
-                ))}
-              여행
+      <div className="flex flex-col gap-1">
+        <ReturnButton
+          position="left"
+          className="text-text-secondary"
+          path="/my-travel"
+          label="뒤로가기"
+          size="sm"
+        />
+        <PageHeader
+          title={myTravelDatail.title}
+          ruby={
+            <TravelStatus from={myTravelDatail.from} to={myTravelDatail.to} />
+          }
+          titleBtn={
+            <div
+              className="text-text-secondary shrink-0 cursor-pointer font-bold"
+              onClick={() => setIsOpenTravelModify(true)}
+            >
+              수정
             </div>
-          </div>
-        }
-      />
+          }
+          description={
+            <div className="max-mobile:flex-col mobile:gap-1 max-mobile:items-start flex items-center">
+              <span className="max-mobile:text-md">
+                {convertTravelDateRange(myTravelDatail.from, myTravelDatail.to)}
+              </span>
+              <span className="max-mobile:hidden">|</span>
+              <div className="text-md max-mobile:text-sm flex gap-1">
+                <div>{convertTravelPartner(myTravelDatail.travelPartner)}</div>
+                {myTravelDatail.travelStyles.length ? (
+                  <>
+                    {myTravelDatail.travelStyles.map((style) => (
+                      <div key={style}>#{convertTravelStyle(style)}</div>
+                    ))}
+                  </>
+                ) : null}
+                여행
+              </div>
+            </div>
+          }
+        />
+      </div>
       <div className="flex items-end justify-between">
         <div className="flex items-center gap-1">
           {TRAVEL_TAB_LIST.map((list, index) => (

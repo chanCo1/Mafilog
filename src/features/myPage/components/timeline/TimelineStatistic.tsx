@@ -7,8 +7,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { useMemo } from 'react';
 import { EXPENSE_CATEGORY_LIST } from '@/features/myTravel/constants/expense.constant';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import DoughnutChart from '@/shared/components/chart/DoughnutChart';

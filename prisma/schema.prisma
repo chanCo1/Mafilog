@@ -36,7 +36,7 @@ model User {
   // 생성 시간
   createdAt       DateTime @default(now())
   // 수정 시간
-  updatedAt       DateTime @updatedAt
+  updatedAt       DateTime @default(now())
 }
 
 /**
@@ -64,7 +64,7 @@ model Social {
  */
 model Travel {
   // pk
-  id            Int              @id @default(autoincrement())
+  id            Int                 @id @default(autoincrement())
   // 여행 이름
   title         String
   // 여행 타입 (해외, 국내)
@@ -97,6 +97,8 @@ model Travel {
   user          User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   // 생성일
   createdAt     DateTime            @default(now())
+  // 수정 시간
+  updatedAt     DateTime            @default(now())
 }
 
 /**
@@ -136,17 +138,19 @@ model TravelCity {
  */
 model TravelMember {
   // pk
-  id               String           @id @default(cuid())
+  id               Int              @id @default(autoincrement())
   // 멤버 이름
   name             String
-  // fk
-  userId           String?
+  // 프론트에서 입력한 유저 아이디
+  userId           String
   // fk
   travelId         Int
   // 여행 정보
   travel           Travel           @relation(fields: [travelId], references: [id], onDelete: Cascade)
   // 생성일
   createdAt        DateTime         @default(now())
+  // 수정 시간
+  updatedAt        DateTime         @default(now())
   expenseId        Int?
   expenseList      ExpenseList[]    @relation("payer")
   expenseSpenderId Int?
@@ -158,15 +162,19 @@ model TravelMember {
  */
 model ChecklistCategory {
   // pk
-  id       Int             @id @default(autoincrement())
+  id        Int             @id @default(autoincrement())
   // 체크리스트 라벨
-  label    String
+  label     String
   // 체크리스트 아이템
-  items    ChecklistItem[]
+  items     ChecklistItem[]
+  // 생성일
+  createdAt DateTime        @default(now())
+  // 수정 시간
+  updatedAt DateTime        @default(now())
   // fk
-  travelId Int
+  travelId  Int
   // 여행 정보
-  travel   Travel          @relation(fields: [travelId], references: [id], onDelete: Cascade)
+  travel    Travel          @relation(fields: [travelId], references: [id], onDelete: Cascade)
 }
 
 /**
@@ -179,6 +187,10 @@ model ChecklistItem {
   label      String
   // 체크 여부
   isChecked  Boolean           @default(false)
+  // 생성일
+  createdAt  DateTime          @default(now())
+  // 수정 시간
+  updatedAt  DateTime          @default(now())
   // fk
   categoryId Int
   // 카테고리 정보
@@ -197,10 +209,14 @@ model TravelSchedule {
   date         DateTime
   // 리스트
   scheduleList ScheduleList[]
+  // 생성일
+  createdAt    DateTime       @default(now())
   // fk
   travelId     Int
   // 여행 정보
   travel       Travel         @relation(fields: [travelId], references: [id], onDelete: Cascade)
+  // 수정 시간
+  updatedAt    DateTime       @default(now())
 }
 
 /**
@@ -208,23 +224,27 @@ model TravelSchedule {
  */
 model ScheduleList {
   // pk
-  id              Int            @id @default(autoincrement())
+  id         Int            @id @default(autoincrement())
   // 입력 타입 place or memo
-  type            String
+  type       String
   // 몇일차인지
-  day             Int
-  // // fk
-  schedulePlaceId String         @unique
+  day        Int
+  // 순서
+  order      Int            @default(0)
   // 장소
-  place           SchedulePlace? @relation(fields: [schedulePlaceId], references: [id])
+  place      SchedulePlace?
   // 방문 시간
-  time            String
+  time       String?
   // 메모
-  memo            String
+  memo       String?
+  // 생성일
+  createdAt  DateTime       @default(now())
+  // 수정 시간
+  updatedAt  DateTime       @default(now())
   // fk
-  scheduleId      Int
+  scheduleId Int
   // 일정 정보
-  schedule        TravelSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  schedule   TravelSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
 }
 
 /**
@@ -232,27 +252,31 @@ model ScheduleList {
  */
 model SchedulePlace {
   // pk
-  id            String        @id
+  id             Int          @id @default(autoincrement())
+  // 구글 id
+  placeId        String
   // 장소 이름
-  name          String
+  name           String
   // 장소 주소
-  address       String
+  address        String
   // 국가 표준 시간대
-  timezone      String?
+  timezone       String?
   // google places에서 정의하는 장소 타입
-  types         String[]
+  types          String[]
   // 위도
-  lat           Float
+  lat            Float
   // 경도
-  lng           Float
+  lng            Float
   // 국가 이름
-  countryName   String
+  countryName    String
   // 국가 코드
-  countryCode   String
+  countryCode    String
   // 생성일
-  createdAt     DateTime      @default(now())
+  createdAt      DateTime     @default(now())
+  // fk
+  scheduleListId Int          @unique
   // 일정 리스트 정보
-  scheduleLists ScheduleList?
+  scheduleList   ScheduleList @relation(fields: [scheduleListId], references: [id], onDelete: Cascade)
 }
 
 /**
@@ -264,15 +288,19 @@ model TravelExpense {
   // 일정
   day          Int
   // 날짜
-  date         DateTime
+  date         DateTime?
   // 리스트
   expenseList  ExpenseList[]
   // 해당 일정에 대한 지출
   dailyExpense Float?
+  // 생성일
+  createdAt    DateTime      @default(now())
   // fk
   travelId     Int
   // 여행 정보
   travel       Travel        @relation(fields: [travelId], references: [id], onDelete: Cascade)
+  // 수정 시간
+  updatedAt    DateTime      @default(now())
 }
 
 /**
@@ -280,7 +308,7 @@ model TravelExpense {
  */
 model ExpenseList {
   // pk
-  id                 Int     @id @default(autoincrement())
+  id                 Int              @id @default(autoincrement())
   // 지출명
   name               String
   // 결제 방식
@@ -291,6 +319,8 @@ model ExpenseList {
   category           String
   // 몇일차인지
   day                Int
+  // 순서
+  order              Int              @default(0)
   // 지출 시간
   time               String?
   // 메모
@@ -298,7 +328,7 @@ model ExpenseList {
   // 지출 금액 (입력 금액)
   amount             Float
   // 입력된 계산식
-  clacFormula        String
+  calcFormula        String
   // 계산된 값 (원화)
   calcExchangeAmount Float
   // 통화 코드
@@ -307,17 +337,19 @@ model ExpenseList {
   currencyCountry    String
   // 적용 환율
   exchangeRateAmount Float
-
+  spender            ExpenseSpender[]
+  // 생성일
+  createdAt          DateTime         @default(now())
+  // 수정 시간
+  updatedAt          DateTime         @default(now())
   // 결제자 id
-  payerId String
-  payer   TravelMember @relation("payer", fields: [payerId], references: [id], onDelete: Cascade)
-
-  spender ExpenseSpender[]
-
+  payerId            Int
+  // 결제자 연결
+  payer              TravelMember     @relation("payer", fields: [payerId], references: [id], onDelete: Cascade)
   // fk
-  travelExpenseId Int?
-  // 지출 일정 정보
-  travelExpense   TravelExpense? @relation(fields: [travelExpenseId], references: [id], onDelete: Cascade)
+  travelExpenseId    Int?
+  // 지출 연결
+  travelExpense      TravelExpense?   @relation(fields: [travelExpenseId], references: [id], onDelete: Cascade)
 }
 
 /**
@@ -325,9 +357,11 @@ model ExpenseList {
  */
 model ExpenseSpender {
   // pk
-  id                 Int    @id @default(autoincrement())
+  id                 Int          @id @default(autoincrement())
   // 지출 금액
   amount             Float
+  // 멤버 이름
+  name               String
   // 지출 원화 금액
   calcExchangeAmount Float
   // 지출 카테고리
@@ -336,12 +370,12 @@ model ExpenseSpender {
   currencyCode       String
   // 통화 국가 코드
   currencyCountry    String
-
+  // 생성일
+  createdAt          DateTime     @default(now())
   // 맴버 연동
-  memberId String
-  member   TravelMember @relation("spender", fields: [memberId], references: [id], onDelete: Cascade)
-
+  memberId           Int
+  member             TravelMember @relation("spender", fields: [memberId], references: [id], onDelete: Cascade)
   // 지출 내역 연동
-  expenseListId Int
-  expenseList   ExpenseList @relation(fields: [expenseListId], references: [id], onDelete: Cascade)
+  expenseListId      Int
+  expenseList        ExpenseList  @relation(fields: [expenseListId], references: [id], onDelete: Cascade)
 }

@@ -1,5 +1,5 @@
 /**
- * @file: useFetchMyTravelList.ts
+ * @file: useGetMyTravelList.ts
  * @author: chad
  * @since: 2026.05.04 ~
  * @description: 내 여행 리스트 조회
@@ -11,6 +11,7 @@ import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 import { getTravelStatus } from '@/shared/lib/utils';
 import { TRAVEL_STATUS } from '@/shared/types/Enum';
 import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
+import { myTravelListKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
 
 interface ITravelSections {
   progress: IMyTravelListResponse[];
@@ -26,12 +27,15 @@ const getDiffMidnight = (): number => {
   return midnight.diff(now);
 };
 
-export const useFetchMyTravelList = () => {
+export const useGetMyTravelList = (userId: string | undefined) => {
+  const queryKey = myTravelListKeys.all;
+
   const query = useQuery({
-    queryKey: ['myTravelList'],
+    queryKey,
     queryFn: async () => await MyTravelService.getMyTravelList(),
     staleTime: getDiffMidnight(),
     gcTime: 1000 * 60 * 60 * 36,
+    enabled: !!userId,
 
     select: (list): ITravelSections => {
       if (!list) return { progress: [], upcoming: [], last: [] };

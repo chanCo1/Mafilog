@@ -7,7 +7,13 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import {
+  forwardRef,
+  useState,
+  ReactNode,
+  InputHTMLAttributes,
+  ForwardedRef,
+} from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import RequireDot from '@/shared/components/ui/RequireDot';
@@ -35,12 +41,12 @@ const inputVariants = cva(
 
 interface IInput
   extends
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'size'>,
+    Omit<InputHTMLAttributes<HTMLInputElement>, 'prefix' | 'size'>,
     VariantProps<typeof inputVariants> {
   className?: string;
   inputClassName?: string;
-  prefix?: React.ReactNode;
-  suffix?: React.ReactNode;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
   label?: string;
   labelPosition?: 'left' | 'top';
   isRequired?: boolean;
@@ -66,7 +72,7 @@ function InputEntity(
     isPassword,
     ...props
   }: IInput,
-  ref: React.ForwardedRef<HTMLInputElement>,
+  ref: ForwardedRef<HTMLInputElement>,
 ) {
   const [isFocused, setIsFocused] = useState(false);
   const [passwordType, setPassowrdType] = useState('password');
@@ -92,7 +98,7 @@ function InputEntity(
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       <div
         className={cn('flex gap-1', labelPosition === 'top' ? 'flex-col' : '')}
       >
@@ -109,10 +115,10 @@ function InputEntity(
             isFocused && 'border-border-active border',
             className,
           )}
-          ref={ref}
         >
           {prefix && <span className="mr-1 shrink-0">{prefix}</span>}
           <input
+            ref={ref}
             type={isPassword ? passwordType : type}
             className={cn('w-full outline-none focus:ring-0', inputClassName)}
             {...props}
@@ -121,7 +127,7 @@ function InputEntity(
           />
           {/* 패스워드 사용시 아이콘 노출 */}
           {isPassword && (
-            <div className='cursor-pointer'>
+            <div className="cursor-pointer">
               {passwordType === 'password' ? (
                 <Eye
                   className="text-gray-7 h-4 w-4"
@@ -135,7 +141,7 @@ function InputEntity(
               )}
             </div>
           )}
-          {suffix && <span className="shrink-0 ml-1">{suffix}</span>}
+          {suffix && <span className="ml-1 shrink-0">{suffix}</span>}
         </div>
       </div>
       {description && (
@@ -148,4 +154,4 @@ function InputEntity(
   );
 }
 
-export const Input = React.forwardRef(InputEntity);
+export const Input = forwardRef(InputEntity);

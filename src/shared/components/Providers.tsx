@@ -14,11 +14,21 @@ import { queryClient } from '@/shared/lib/queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Dialog } from '@/shared/components/ui/Dialog';
 import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+interface IProviders {
+  children: React.ReactNode;
+  session: Session | null;
+}
+
+export default function Providers({ children, session }: IProviders) {
   return (
     <QueryClientProvider client={queryClient}>
-      <SessionProvider refetchInterval={0}>
+      <SessionProvider
+        session={session}
+        refetchInterval={0}
+        refetchOnWindowFocus={false}
+      >
         <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY || ''}>
           <Toast />
           <Dialog />

@@ -1,52 +1,54 @@
 /**
- * @file: PlaceDeatilModal.tsx
+ * @file: PlaceDetailModal.tsx
  * @author: chad
  * @since: 2026.05.02 ~
- * @description: PlaceDeatilModal 컴포넌트, 일정 상세 모달
+ * @description: 일정 상세 모달 (장소, 메모 상세 및 수정)
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Textarea } from '@/shared/components/ui/Textarea';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Button } from '@/shared/components/ui/Button';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
-import { toast } from 'sonner';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import { ILabelValue } from '@/shared/interfaces';
-import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
-import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TimePicker from '@/shared/components/ui/TimePicker';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
+import { getTravelDayList } from '@/shared/lib/utils';
+import { useUpdateSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useUpdateSchedulePlace';
+import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useDeleteSchedulePlace';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
-interface IPlaceDeatilModal {
+interface IPlaceDetailModal {
   isOpen: boolean;
   handleClose: () => void;
-  timeLineData: IScheduleList | undefined;
+  timeLineData: ISecheduleListResponse | undefined;
 }
 
-export default function PlaceDeatilModal({
+export default function PlaceDetailModal({
   isOpen,
   handleClose,
   timeLineData,
-}: IPlaceDeatilModal) {
+}: IPlaceDetailModal) {
   const isPlace = timeLineData?.type === SCHEDULE_TYPE.PLACE;
 
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const setDeleteScheduleList = useTravelScheduleStore(
-    (state) => state.setDeleteScheduleList,
-  );
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
+  const travelId = useGetTravelId();
+  const { data: scheduleList } = useGetTravelSchedules(travelId);
+  const { mutateAsync: updateSchedule, isPending } =
+    useUpdateSchedulePlace(travelId);
+  const { mutateAsync: deleteSchedule, isPending: deletePending } =
+    useDeleteSchedulePlace(travelId, timeLineData?.type);
+
+  const travelDayList = getTravelDayList(scheduleList);
+
   const { openDialog } = useDialogStore();
 
   /** 일정 */
   const [selectedDay, setSelectedDay] = useState<ILabelValue>(
-    travelDaysList?.[0],
+    travelDayList?.[0],
   );
   /** 시간 */
   const [selectedTime, setSelectedTime] = useState('');
@@ -55,7 +57,20 @@ export default function PlaceDeatilModal({
 
   const onClickCloseBtn = () => {
     handleClose();
-    resetData();
+  };
+
+  /** 일정 수정 */
+  const handleUpdateSchedule = async () => {
+    await updateSchedule({
+      travelId,
+      data: {
+        day: selectedDay.value as number,
+        memo: inputMemo,
+        time: selectedTime,
+        scheduleListId: timeLineData?.id as number,
+      },
+    });
+    onClickCloseBtn();
   };
 
   /** 일정 삭제 핸들러 */
@@ -66,29 +81,27 @@ export default function PlaceDeatilModal({
       message: `${isPlace ? '장소' : '메모'}를 삭제할까요?`,
       type: 'confirm',
       okLabel: '삭제',
-      onOk: () => {
-        setDeleteScheduleList({
-          day: timeLineData.day.value as number,
-          id: timeLineData?.id as string,
-        });
-        toast.success(`${isPlace ? '장소' : '메모'}를 삭제했어요`);
+      onOk: async () => {
+        await deleteSchedule({ travelId, deleteIds: [timeLineData.id] });
       },
     });
   };
 
-  const resetData = useCallback(() => {
-    if (timeLineData?.day.value) {
-      setSelectedDay(travelDaysList[(timeLineData.day.value as number) - 1]);
+  const resetData = () => {
+    if (timeLineData?.day) {
+      setSelectedDay(travelDayList[(timeLineData.day as number) - 1]);
     }
 
-    setSelectedTime(timeLineData?.time ?? '');
-    setInputMemo(timeLineData?.memo ?? '');
-  }, []);
+    setSelectedTime(timeLineData?.time || '');
+    setInputMemo(timeLineData?.memo || '');
+  };
 
   /** 초기값 대입 */
   useEffect(() => {
-    resetData();
-  }, [timeLineData?.day.value, travelDaysList, resetData]);
+    if (isOpen) {
+      resetData();
+    }
+  }, [isOpen]);
 
   return (
     <SideModal
@@ -97,12 +110,25 @@ export default function PlaceDeatilModal({
       handleClose={onClickCloseBtn}
       footer={
         <div className="flex w-full justify-between">
-          <Button variant="redOutline" onClick={handleDeleteSchedule}>삭제</Button>
+          <Button
+            variant="redOutline"
+            disabled={deletePending}
+            isLoading={deletePending}
+            onClick={handleDeleteSchedule}
+          >
+            삭제
+          </Button>
           <div className="flex gap-1">
             <Button variant="gray" onClick={onClickCloseBtn}>
               취소
             </Button>
-            <Button disabled={!inputMemo}>수정</Button>
+            <Button
+              disabled={isPending}
+              isLoading={isPending}
+              onClick={handleUpdateSchedule}
+            >
+              수정
+            </Button>
           </div>
         </div>
       }
@@ -112,7 +138,7 @@ export default function PlaceDeatilModal({
           <div className="mb-4 flex flex-col gap-1">
             <p>{timeLineData.place.address}</p>
             <div className="text-text-secondary flex gap-1">
-              <span>{timeLineData.place.country.name}</span>
+              <span>{timeLineData.place.countryName}</span>
               <span className="text-gray-2"> | </span>
               <span>{getPlaceCategory(timeLineData.place.types)}</span>
             </div>
@@ -121,7 +147,7 @@ export default function PlaceDeatilModal({
         <div className="flex gap-1">
           <Selectbox
             label="여행 일정"
-            options={travelDaysList}
+            options={travelDayList}
             value={selectedDay}
             onChange={(value) => setSelectedDay(value)}
             placeholder="여행 일정을 선택해주세요"

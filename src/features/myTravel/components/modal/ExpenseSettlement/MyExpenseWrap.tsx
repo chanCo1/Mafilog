@@ -22,7 +22,7 @@ export default function MyExpenseWrap({
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center">
-        <Dot />
+        <Dot className="text-primary" />
         <span>{name}</span>
       </div>
       <span className={cn('text-state-error text-lg font-bold', className)}>{amount}원</span>

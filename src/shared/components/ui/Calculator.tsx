@@ -17,7 +17,7 @@ import { ILabelValue } from '@/shared/interfaces';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useGetCurrencyByCountry } from '@/shared/hooks/useGetCurrencyByCountry';
 import { CURRENCY_STANDARD_AMOUNT } from '@/features/myTravel/constants';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
 
 interface ICalculator {
   onChangeValue?: (data: {
@@ -35,6 +35,7 @@ interface ICalculator {
     | undefined;
   isModify?: boolean;
   isOpen?: boolean;
+  travelId: string;
 }
 
 export default function Calculator({
@@ -42,8 +43,9 @@ export default function Calculator({
   defaultValue,
   isModify = false,
   isOpen,
+  travelId,
 }: ICalculator) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const { data: travelInfo } = useGetMyTravelDetail(travelId);
 
   const [inpuNumber, setInputNumber] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState<ILabelValue>();
@@ -56,36 +58,45 @@ export default function Calculator({
   );
 
   const currencyList = useMemo(() => {
-    if (!countryData || !travelInfo.cities.length) return [];
+    if (!countryData || !travelInfo?.cities.length) return [];
 
     /** 여행중인 나라만 추출 */
     const travelCountryCodes = Array.from(
-      new Set(travelInfo.cities.map((city) => city.country.code)),
+      new Set(travelInfo.cities.map((city) => city.countryCode)),
     );
 
     const filteredCountries = Object.values(countryData).filter(
       (country) =>
-        travelCountryCodes.includes(country.code) && country.code !== 'US',
+        travelCountryCodes.includes(country.code) &&
+        country.code !== 'US' &&
+        country.code !== 'KR',
     );
 
-    /** 미국 데이터, 달러는 항상 포함 */
+    /** 미국 데이터(달러) 와 한국은 항상 포함 */
+    const krData = countryData['KR'];
     const usaData = countryData['US'];
 
-    const mergeCountries = usaData
-      ? [...filteredCountries, usaData]
-      : filteredCountries;
+    const defaultCountries = [krData, usaData].filter(Boolean);
+    const mergeCountries = [...filteredCountries, ...defaultCountries];
 
     // 셀렉트 옵션
     return mergeCountries.map((country) => ({
-      label: Object.keys(country.currency)[0],
+      label: `${countryData[country.code].flagEmoji} ${Object.keys(country.currency)[0]}`,
       value: country.code,
     }));
-  }, [countryData, travelInfo.cities]);
+  }, [countryData, travelInfo?.cities]);
 
   useEffect(() => {
-    if (isModify) {
-      setInputNumber(defaultValue?.inputNumber || '');
-      setSelectedCurrency(defaultValue?.selectedCurrency);
+    if (isModify && defaultValue) {
+      const _defaultValue = defaultValue.selectedCurrency;
+
+      const _selectedCurrency = {
+        label: `${countryData[_defaultValue.value].flagEmoji} ${_defaultValue.label}`,
+        value: _defaultValue.value,
+      };
+
+      setInputNumber(defaultValue.inputNumber || '');
+      setSelectedCurrency(_selectedCurrency);
       return;
     }
 
@@ -93,7 +104,14 @@ export default function Calculator({
       setSelectedCurrency(currencyList[0]);
       setInputNumber('');
     }
-  }, [currencyList, isModify, isOpen]);
+  }, [
+    currencyList,
+    isModify,
+    isOpen,
+    setInputNumber,
+    defaultValue?.inputNumber,
+    defaultValue?.selectedCurrency,
+  ]);
 
   /** 숫자 클릭 */
   const handleClickNumber = (num: string) => {
@@ -145,7 +163,7 @@ export default function Calculator({
         lastValidResult.current = calculated;
         return roundDecimal(calculated);
       }
-    } catch (e) {
+    } catch (error: any) {
       return lastValidResult.current;
     }
 
@@ -159,10 +177,15 @@ export default function Calculator({
   }, [result, getCurrency]);
 
   useEffect(() => {
+    if (!selectedCurrency) return;
+
     onChangeValue?.({
       amount: result,
       calcAmount: calcResultCurrency,
-      currencyCode: selectedCurrency!,
+      currencyCode: {
+        label: selectedCurrency.label.split(' ')[1],
+        value: selectedCurrency.value,
+      },
       exchangeRate: Number(getCurrency?.convertedWon || 0),
       formula: inpuNumber,
     });
@@ -184,7 +207,7 @@ export default function Calculator({
         </div>
         <div className="flex items-center justify-between">
           {currencyList && (
-            <div className="max-w-20">
+            <div className="max-w-30">
               <Selectbox
                 className="font-bold"
                 variant="none"

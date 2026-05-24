@@ -21,7 +21,7 @@ import RequireDot from '@/shared/components/ui/RequireDot';
 
 interface ICreateNewTravelStep1 {
   travelType: string;
-  setTravelType: Dispatch<SetStateAction<string>>;
+  setTravelType: Dispatch<SetStateAction<TRAVEL_TYPE | ''>>;
   selectedCities: IPlaceList[];
   setSelectedCities: Dispatch<SetStateAction<IPlaceList[]>>;
 }

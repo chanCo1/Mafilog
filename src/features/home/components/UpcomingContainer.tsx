@@ -13,13 +13,13 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
-import { useFetchMyTravelList } from '@/features/myTravel/hooks/rquery/useFetchMyTravelList';
+import { useGetMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelList';
 
 export default function UpcomingContainer() {
   const [isOpenCreateNewModal, setIsOpenCretateNewModal] = useState(false);
 
   const { data: userInfo } = useSession();
-  const { data: travelList } = useFetchMyTravelList();
+  const { data: travelList } = useGetMyTravelList(userInfo?.user?.id);
 
   const router = useRouter();
 

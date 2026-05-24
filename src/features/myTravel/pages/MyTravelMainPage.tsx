@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * @file: MainPage.tsx
+ * @file: MyTravelMainPage.tsx
  * @author: chad
  * @since: 2026.04.23 ~
- * @description: MainPage 컴포넌트
+ * @description: 내 여행 메인 페이지 컴포넌트
  */
 
 import { useState } from 'react';
@@ -13,11 +13,20 @@ import PageHeader from '@/shared/components/ui/PageHeader';
 import { Button } from '@/shared/components/ui/Button';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import TravelListTemplate from '@/features/myTravel/components/main/TravelListTemplate';
-import { useFetchMyTravelList } from '@/features/myTravel/hooks/rquery/useFetchMyTravelList';
+import { useGetMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelList';
+import { useSession } from 'next-auth/react';
 
 export default function MyTravelMainPage() {
-  const { data: travelList } = useFetchMyTravelList();
+  const { data: userInfo } = useSession();
+  const { data: travelList } = useGetMyTravelList(userInfo?.user?.id);
   const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const progressTravel = travelList?.progress;
+  const upcomingTravel = travelList?.upcoming;
+  const lastTravel = travelList?.last;
+
+  const isTravelList =
+    progressTravel?.length || upcomingTravel?.length || lastTravel?.length;
 
   return (
     <>
@@ -29,12 +38,12 @@ export default function MyTravelMainPage() {
         <div
           className={cn(
             'flex flex-col items-center gap-1',
-            !travelList?.upcoming.length && 'pt-20',
+            !isTravelList && 'pt-20',
           )}
         >
-          {travelList?.upcoming?.length ? (
+          {isTravelList ? (
             <div>
-              벌써{' '}
+              지금까지{' '}
               <span className="text-primary font-bold">
                 {travelList?.last.length}번
               </span>{' '}
@@ -53,14 +62,14 @@ export default function MyTravelMainPage() {
             새 여행 만들기
           </Button>
         </div>
-        {travelList?.progress.length ? (
-          <TravelListTemplate title="진행중인" list={travelList?.progress} />
+        {progressTravel?.length ? (
+          <TravelListTemplate title="진행중인" list={progressTravel} />
         ) : null}
-        {travelList?.upcoming.length ? (
-          <TravelListTemplate title="다가오는" list={travelList?.upcoming} />
+        {upcomingTravel?.length ? (
+          <TravelListTemplate title="다가오는" list={upcomingTravel} />
         ) : null}
-        {travelList?.last.length ? (
-          <TravelListTemplate title="지난" list={travelList?.last} />
+        {lastTravel?.length ? (
+          <TravelListTemplate title="지난" list={lastTravel} />
         ) : null}
       </div>
       <CreateNewTravelModal

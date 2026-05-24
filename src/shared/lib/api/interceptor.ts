@@ -6,6 +6,8 @@ import {
 } from 'axios';
 import { getSession, signOut } from 'next-auth/react';
 
+let cachedAccessToken: string | null = null;
+
 /** 요청 인터셉터 */
 const requestInterceptor = async (
   config: InternalAxiosRequestConfig,
@@ -13,11 +15,13 @@ const requestInterceptor = async (
   // NextAuth 세션에서 토큰 가져오기
   if (typeof window !== 'undefined') {
     try {
-      const session = await getSession();
-      const token = (session as any)?.accessToken;
+      if (!cachedAccessToken) {
+        const session = await getSession();
+        cachedAccessToken = (session as any)?.accessToken || null;
+      }
 
-      if (token && config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+      if (cachedAccessToken && config.headers) {
+        config.headers.Authorization = `Bearer ${cachedAccessToken}`;
       }
     } catch (error) {
       console.error('세션 실패:', error);
@@ -40,10 +44,13 @@ const responseInterceptor = (response: AxiosResponse) => {
 const responseErrorInterceptor = async (error: AxiosError) => {
   // 전역 에러 처리
   if (error.response?.status === 401) {
+    cachedAccessToken = null;
+
     await signOut({
       redirect: true,
       callbackUrl: '/login',
     });
+
     return Promise.reject(error);
   }
   return Promise.reject(error);

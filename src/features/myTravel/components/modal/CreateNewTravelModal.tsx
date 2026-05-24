@@ -21,11 +21,17 @@ import { DateRange } from 'react-day-picker';
 import { toast } from 'sonner';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { IMemberList } from '@/shared/interfaces';
-import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
+import { TRAVEL_PARTNER, TRAVEL_STYLE, TRAVEL_TYPE } from '@/shared/types/Enum';
 import { useSession } from 'next-auth/react';
-import { getTravelDay } from '@/shared/lib/utils';
-import { useMutateMyTravelList } from '@/features/myTravel/hooks/rquery/useMutateMyTravelList';
+import { getTravelDay, setResetHour } from '@/shared/lib/utils';
+import { useCreateMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useCreateMyTravelList';
 import { useRouter } from 'next/navigation';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { truncateText } from '@/shared/lib/utils';
+import { useUpdateMyTravel } from '@/features/myTravel/hooks/rquery/myTravel/useUpdateMyTravel';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { useDeleteMyTravel } from '@/features/myTravel/hooks/rquery/myTravel/useDeleteMyTravel';
 
 interface ICreateNewTravelModal {
   isOpen: boolean;
@@ -41,17 +47,18 @@ export default function CreateNewTravelModal({
   isNotTravelPage,
 }: ICreateNewTravelModal) {
   const { data: userInfo } = useSession();
+  const { openDialog } = useDialogStore();
 
   const [stepData, setStepData] = useState(CREATE_TRAVEL_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const [travelType, setTravelType] = useState<string>('');
+  const [travelType, setTravelType] = useState<TRAVEL_TYPE | ''>('');
   const [selectedCities, setSelectedCities] = useState<IPlaceList[]>([]);
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
   );
   const [travelTitle, setTravelTitle] = useState('');
-  const [selectedImage, setSelectedImage] = useState<File[]>([]);
+  const [selectedImage, setSelectedImage] = useState<(File | string)[]>([]);
   const [travelPartner, setTravelPartner] = useState<TRAVEL_PARTNER>(
     TRAVEL_PARTNER.ALONE,
   );
@@ -59,10 +66,16 @@ export default function CreateNewTravelModal({
   const [travelMember, setTravelMember] = useState<IMemberList[]>([]);
 
   const { mutateAsync: createTravelMutate, isPending } =
-    useMutateMyTravelList();
+    useCreateMyTravelList();
+  const travelId = useGetTravelId();
+  const { data: travelDetail } = useGetMyTravelDetail(travelId);
+  const { mutateAsync: updateTravelDetail, isPending: isUpdatePending } =
+    useUpdateMyTravel(travelId);
+  const { mutateAsync: deleteMyTravel } = useDeleteMyTravel();
 
   const router = useRouter();
 
+  /** 멤버 초기값 대입 */
   useEffect(() => {
     if (userInfo?.user?.id && userInfo?.user?.name) {
       setTravelMember([{ id: userInfo.user.id, name: userInfo.user.name }]);
@@ -91,10 +104,6 @@ export default function CreateNewTravelModal({
   const onClickCloseBtn = () => {
     handleClose();
     dataReset();
-
-    if (isNotTravelPage) {
-      router.push('/my-travel');
-    }
   };
 
   /** 새 여행 만들기 */
@@ -143,7 +152,41 @@ export default function CreateNewTravelModal({
       formData.append('imageUrl', file);
     });
 
-    await createTravelMutate(formData);
+    if (isModify) {
+      if (!travelDetail || !selectedDate?.from || !selectedDate?.to) return;
+
+      if (
+        setResetHour(travelDetail?.from).getTime() !==
+          setResetHour(selectedDate.from).getTime() ||
+        setResetHour(travelDetail?.to).getTime() !==
+          setResetHour(selectedDate.to).getTime()
+      ) {
+        openDialog({
+          type: 'confirm',
+          message: (
+            <div className="flex flex-col gap-1">
+              <span className="">날짜 변경시 해당 날짜에 포함되지 않은</span>
+              <span className="">기존 일정과 지출은 삭제돼요. 수정할까요?</span>
+            </div>
+          ),
+          okLabel: '수정',
+          onOk: async () => {
+            await updateTravelDetail(formData);
+            onClickCloseBtn();
+          },
+        });
+
+        return;
+      }
+      await updateTravelDetail(formData);
+    } else {
+      await createTravelMutate(formData);
+
+      if (isNotTravelPage) {
+        router.push('/my-travel');
+      }
+    }
+
     onClickCloseBtn();
   };
 
@@ -162,6 +205,19 @@ export default function CreateNewTravelModal({
     setSelectedImage([]);
     setTravelPartner('alone');
     setTravelStyles([]);
+  };
+
+  /** 여행 삭제 */
+  const handelDeleteTravel = () => {
+    openDialog({
+      type: 'confirm',
+      message: '여행을 삭제할까요?',
+      okLabel: '삭제',
+      onOk: async () => {
+        await deleteMyTravel(travelId);
+        router.push('/my-travel');
+      },
+    });
   };
 
   useEffect(() => {
@@ -186,54 +242,92 @@ export default function CreateNewTravelModal({
     }
   }, [selectedDate]);
 
+  /** 수정 시 상세 값 바인딩 */
+  useEffect(() => {
+    if (isOpen && isModify && travelDetail) {
+      setStepData(stepData.map((step) => ({ ...step, isComplete: true })));
+
+      setTravelType(travelDetail.travelType);
+      setSelectedCities(travelDetail.cities);
+      setSeletedDate({
+        from: new Date(travelDetail.from),
+        to: new Date(travelDetail.to),
+      });
+      setTravelTitle(travelDetail.title);
+
+      setTravelPartner(travelDetail.travelPartner);
+      setTravelStyles(travelDetail.travelStyles);
+      setTravelMember(travelDetail.member);
+
+      if (travelDetail.imageUrl) {
+        setSelectedImage([travelDetail.imageUrl]);
+      }
+    }
+  }, [travelId, isModify, isOpen, travelDetail]);
+
+  const isDisabled = !travelType || !selectedCities || !selectedDate;
+
   return (
     <SideModal
       isOpen={isOpen}
-      title="새 여행 만들기"
+      title={
+        isModify && travelDetail
+          ? `${truncateText(travelDetail.title, 20)}`
+          : '새 여행 만들기'
+      }
       handleClose={onClickCloseBtn}
       footer={
-        <div className="flex gap-1">
-          {currentStep === 1 && (
-            <>
-              <Button variant="gray" onClick={onClickCloseBtn}>
-                취소
-              </Button>
-              <Button
-                disabled={!selectedCities.length || !travelType}
-                onClick={handelNextStep}
-              >
-                {selectedCities.length}개 도시/다음
-              </Button>
-            </>
-          )}
-          {currentStep === 2 && (
-            <>
-              <Button
-                variant="gray"
-                onClick={handlePrevStep}
-                prefix={<ChevronLeft className="h-4 w-4" />}
-              >
-                이전
-              </Button>
-              <Button disabled={!selectedDate} onClick={handelNextStep}>
-                다음
-              </Button>
-            </>
-          )}
-          {currentStep === 3 && (
-            <>
-              <Button
-                variant="gray"
-                onClick={handlePrevStep}
-                prefix={<ChevronLeft className="h-4 w-4" />}
-              >
-                이전
-              </Button>
-              <Button onClick={createNewTravel} isLoading={isPending}>
-                여행 만들기
-              </Button>
-            </>
-          )}
+        <div className="flex w-full justify-between gap-1">
+          <Button variant="redOutline" onClick={handelDeleteTravel}>
+            삭제
+          </Button>
+          <div className="flex gap-1">
+            {currentStep === 1 && (
+              <>
+                <Button variant="gray" onClick={onClickCloseBtn}>
+                  취소
+                </Button>
+                <Button
+                  disabled={!selectedCities.length || !travelType}
+                  onClick={handelNextStep}
+                >
+                  {selectedCities.length}개 도시/다음
+                </Button>
+              </>
+            )}
+            {currentStep === 2 && (
+              <>
+                <Button
+                  variant="gray"
+                  onClick={handlePrevStep}
+                  prefix={<ChevronLeft className="h-4 w-4" />}
+                >
+                  이전
+                </Button>
+                <Button disabled={!selectedDate} onClick={handelNextStep}>
+                  다음
+                </Button>
+              </>
+            )}
+            {currentStep === 3 && (
+              <>
+                <Button
+                  variant="gray"
+                  onClick={handlePrevStep}
+                  prefix={<ChevronLeft className="h-4 w-4" />}
+                >
+                  이전
+                </Button>
+                <Button
+                  onClick={createNewTravel}
+                  disabled={isDisabled || isPending || isUpdatePending}
+                  isLoading={isPending || isUpdatePending}
+                >
+                  {isModify ? '여행 수정' : '여행 만들기'}
+                </Button>
+              </>
+            )}
+          </div>
         </div>
       }
     >

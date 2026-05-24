@@ -5,16 +5,10 @@
  * @description: Loading 컴포넌트
  */
 
-import { forwardRef, LegacyRef, RefAttributes } from 'react';
+import { LegacyRef } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
-import {
-  Pentagon,
-  GamepadDirectional,
-  Disc3,
-  CircleStar,
-  Plane,
-} from 'lucide-react';
+import { Plane } from 'lucide-react';
 
 const loadingVariants = cva('animate-spin', {
   variants: {
@@ -33,13 +27,8 @@ interface ILoading extends VariantProps<typeof loadingVariants> {
   className?: string;
 }
 
-function LoadingEntity(
-  { className, size }: ILoading,
-  ref: LegacyRef<SVGSVGElement>,
-) {
-  return (
-    <Plane className={cn(loadingVariants({ size }), className)} ref={ref} />
-  );
+function LoadingEntity({ className, size }: ILoading) {
+  return <Plane className={cn(loadingVariants({ size }), className)} />;
 }
 
-export const Loading = forwardRef(LoadingEntity);
+export const Loading = LoadingEntity;

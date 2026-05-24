@@ -34,8 +34,8 @@ interface IFileUpload {
   disabled?: boolean;
   maxSize?: number;
   accept?: string;
-  selectedImage: File[];
-  setSelectedImage: Dispatch<SetStateAction<File[]>>;
+  selectedImage: (File | string)[];
+  setSelectedImage: Dispatch<SetStateAction<(File | string)[]>>;
 }
 
 export default function FileUpload({
@@ -85,7 +85,9 @@ export default function FileUpload({
 
     // 기존 파일들의 고유 키 생성
     const existingKeys = new Set(
-      selectedImage.map((f) => `${f.name}-${f.size}-${f.lastModified}`),
+      selectedImage
+        .filter((file): file is File => file instanceof File)
+        .map((_file) => `${_file.name}-${_file.size}-${_file.lastModified}`),
     );
 
     // 기존과 중복되는지 필터링
@@ -111,12 +113,22 @@ export default function FileUpload({
 
   /** 이미지 선택에 따라 미리보기 이미지 생성/제거 */
   useEffect(() => {
-    const _previews = selectedImage.map((file) => URL.createObjectURL(file));
+    const objectUrlsToRevoke: string[] = [];
+
+    const _previews = selectedImage.map((item) => {
+      if (typeof item === 'string') {
+        return item;
+      }
+
+      const url = URL.createObjectURL(item);
+      objectUrlsToRevoke.push(url);
+      return url;
+    });
+
     setPreviewImage(_previews);
 
-    // 이전 URL들을 메모리에서 해제
     return () => {
-      _previews.forEach((url) => URL.revokeObjectURL(url));
+      objectUrlsToRevoke.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [selectedImage]);
 

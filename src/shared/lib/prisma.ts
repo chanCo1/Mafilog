@@ -2,15 +2,16 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+const globalForPrisma = global as unknown as {
+  prisma: ReturnType<typeof createPrismaClient> | undefined;
+};
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
-const basePrisma = new PrismaClient({ adapter });
+const createPrismaClient = () => {
+  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const adapter = new PrismaPg(pool);
+  const basePrisma = new PrismaClient({ adapter });
 
-export const prisma =
-  globalForPrisma.prisma ||
-  basePrisma.$extends({
+  return basePrisma.$extends({
     query: {
       $allModels: {
         async create({ args, query }) {
@@ -39,5 +40,8 @@ export const prisma =
       },
     },
   });
+};
+
+export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;

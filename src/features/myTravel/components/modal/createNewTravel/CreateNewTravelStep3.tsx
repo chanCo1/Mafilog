@@ -2,11 +2,10 @@
  * @file: CreateNewTravelStep3.tsx
  * @author: chad
  * @since: 2026.04.26 ~
- * @description: CreateNewTravelStep3 컴포넌트, 여행 정보 입력
+ * @description: 여행 생성 스텝 3 > 여행 정보 입력 컴포넌트
  */
 
 import { Dispatch, SetStateAction, useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/Input';
 import FileUpload from '@/shared/components/ui/FileUpload';
 import { Chip } from '@/shared/components/ui/Chip';
@@ -16,17 +15,20 @@ import {
 } from '@/features/myTravel/constants';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
-import { User, CircleX } from 'lucide-react';
+import { CircleX, Pencil } from 'lucide-react';
 import { IMemberList } from '@/shared/interfaces';
 import { nanoid } from 'nanoid';
 import { TRAVEL_PARTNER, TRAVEL_STYLE } from '@/shared/types/Enum';
 import { useSession } from 'next-auth/react';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { ANIMAL_EMOJI } from '@/shared/constants';
+import InlineInput from '@/features/myTravel/components/modal/InlineIntput';
 
 interface ICreateNewTravelStep3 {
   title: string;
   setTravelTitle: Dispatch<SetStateAction<string>>;
-  selectedImage: File[];
-  setSelectedImage: Dispatch<SetStateAction<File[]>>;
+  selectedImage: (File | string)[];
+  setSelectedImage: Dispatch<SetStateAction<(File | string)[]>>;
   travelPartner: TRAVEL_PARTNER;
   setTravelPartner: Dispatch<SetStateAction<TRAVEL_PARTNER>>;
   travelStyles: TRAVEL_STYLE[];
@@ -48,8 +50,9 @@ export default function CreateNewTravelStep3({
   setTravelMember,
 }: ICreateNewTravelStep3) {
   const [isAciveAddTravelMember, setIsActiveAddTravelMember] = useState(false);
-  const [addMemberName, setAddMemberName] = useState('');
+  const [editMemberId, setEditMembeId] = useState('');
 
+  const travelId = useGetTravelId();
   const { data: userInfo } = useSession();
 
   /** 여행 스타일 핸들링 */
@@ -64,10 +67,20 @@ export default function CreateNewTravelStep3({
   };
 
   /** 여행 멤버 추가 */
-  const handleAddMember = () => {
-    setTravelMember([...travelMember, { id: nanoid(), name: addMemberName }]);
-    setAddMemberName('');
+  const handleAddMember = (name: string) => {
+    setTravelMember([...travelMember, { id: nanoid(), name }]);
     setIsActiveAddTravelMember(false);
+  };
+
+  /** 여행 멤버 수정 */
+  const handleUpdateMember = (userId: string, name: string) => {
+    setTravelMember((prevMember) => {
+      return prevMember.map((member) =>
+        member.userId === userId ? { ...member, name } : member,
+      );
+    });
+
+    setEditMembeId('');
   };
 
   /** 여행 멤버 삭제 */
@@ -82,7 +95,7 @@ export default function CreateNewTravelStep3({
         <Input
           label="제목 입력"
           placeholder="여행 제목을 입력해주세요"
-          description="필수는 아니에요. 최대 20자까지 입력가능해요."
+          description="필수는 아니에요, 최대 20자까지 입력가능해요"
           maxLength={20}
           value={title}
           onChange={(e) => setTravelTitle(e.target.value)}
@@ -90,82 +103,82 @@ export default function CreateNewTravelStep3({
 
         <FileUpload
           label="대표 이미지"
-          description="필수는 아니에요."
+          description="필수는 아니에요"
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
         />
 
-        <div className="flex flex-col gap-1 p-1">
+        <div className="flex flex-col gap-2">
           <span>여행 멤버</span>
           {travelMember.map((member, index) => {
-            const isMe = member.id === userInfo?.user?.id;
+            const isMe =
+              (travelId ? member.userId : member.id) === userInfo?.user?.id;
 
             return (
-              <div
-                key={`${member}-${index}`}
-                className="flex items-center gap-1"
-              >
-                <div className="flex items-center gap-1">
-                  {isMe ? (
-                    <div
-                      className={cn('h-6 w-6 rounded-full')}
-                      style={{ backgroundColor: `#${userInfo?.user?.hexCode}` }}
+              <div key={`${member}-${index}`}>
+                {member.userId === editMemberId ? (
+                  <>
+                    <InlineInput
+                      onSubmit={(name) =>
+                        handleUpdateMember(member.userId!, name)
+                      }
+                      submitText="수정"
+                      defaultValue={member.name}
+                      onCancel={() => setEditMembeId('')}
                     />
-                  ) : (
-                    <User size="22" className="text-primary fill-current" />
-                  )}
-                  <span className="">
-                    {member.name}&nbsp;
-                    {isMe ? '(나)' : ''}
-                  </span>
-                </div>
-                {!isMe && (
-                  <CircleX
-                    className="text-text-secondary cursor-pointer"
-                    size={20}
-                    onClick={() => handelDeleteMember(member.id)}
-                  />
+                  </>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-1">
+                      <span className="text-xl leading-1">
+                        {ANIMAL_EMOJI[index]}
+                      </span>
+                      <span className="">
+                        {member.name}&nbsp;
+                        {isMe ? '(나)' : ''}
+                      </span>
+                    </div>
+                    {!isMe && member && (
+                      <div className="text-text-secondary flex items-center gap-2">
+                        <Pencil
+                          className="cursor-pointer"
+                          size={22}
+                          onClick={() => setEditMembeId(member.userId!)}
+                        />
+                        <CircleX
+                          className="cursor-pointer"
+                          size={22}
+                          onClick={() => handelDeleteMember(member.id)}
+                        />
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             );
           })}
           <div className="flex items-center gap-1">
-            <CategoryIcon
-              variant="plus"
-              size="sm"
-              circled={isAciveAddTravelMember ? 'none' : 'outline'}
-              className={isAciveAddTravelMember ? 'none' : 'cursor-pointer'}
-              onClick={() => setIsActiveAddTravelMember(true)}
-            />
-            {isAciveAddTravelMember && (
-              <div className="flex items-center justify-between gap-2">
-                <Input
+            {ANIMAL_EMOJI.length === travelMember.length ? null : (
+              <>
+                <CategoryIcon
+                  variant="plus"
                   size="sm"
-                  value={addMemberName}
-                  onChange={(e) => setAddMemberName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.nativeEvent.isComposing) return;
-                    if (e.key === 'Enter') handleAddMember();
-                  }}
-                  maxLength={10}
+                  circled={isAciveAddTravelMember ? 'none' : 'outline'}
+                  className={isAciveAddTravelMember ? 'none' : 'cursor-pointer'}
+                  onClick={() => setIsActiveAddTravelMember(true)}
                 />
-                <div className="flex shrink-0 gap-3">
-                  <div
-                    className="text-primary cursor-pointer text-sm font-bold"
-                    onClick={handleAddMember}
-                  >
-                    추가
-                  </div>
-                  <div
-                    className="text-text-secondary cursor-pointer text-sm font-bold"
-                    onClick={() => setIsActiveAddTravelMember(false)}
-                  >
-                    취소
-                  </div>
-                </div>
-              </div>
+                {isAciveAddTravelMember && (
+                  <InlineInput
+                    onSubmit={(name) => handleAddMember(name)}
+                    onCancel={() => setIsActiveAddTravelMember(false)}
+                  />
+                )}
+              </>
             )}
           </div>
+          <span className="text-text-secondary text-sm">
+            최대 15명까지 등록할 수 있어요
+          </span>
         </div>
 
         <div className="flex flex-col gap-1">
@@ -173,7 +186,7 @@ export default function CreateNewTravelStep3({
             <span>누구와 여행인가요?</span>
             <RequireDot />
           </div>
-          <div className="flex flex-wrap gap-1 p-1">
+          <div className="flex flex-wrap gap-1">
             {TRAVEL_PARTNER_LIST.map((list) => (
               <Chip
                 key={list.value}
@@ -187,11 +200,11 @@ export default function CreateNewTravelStep3({
             ))}
           </div>
           <span className="text-text-secondary text-sm">
-            1개만 선택 가능해요.
+            1개만 선택 가능해요
           </span>
         </div>
 
-        <div className="flex flex-col gap-1 p-1">
+        <div className="flex flex-col gap-1">
           <span>어떤 여행인가요?</span>
           <div className="flex flex-wrap gap-1">
             {TRAVEL_STYLE_LIST.map((list) => (
@@ -209,7 +222,7 @@ export default function CreateNewTravelStep3({
             ))}
           </div>
           <span className="text-text-secondary text-sm">
-            여러개 선택 가능해요.
+            여러개 선택 가능해요
           </span>
         </div>
       </div>

@@ -14,19 +14,19 @@ import { Card } from '@/shared/components/ui/Card';
 import TravelExpensesSpendCard from '@/features/myTravel/components/detail/expnese/TravelExpensesSpendCard';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
 import { TRAVEL_EXPENSES_BEFORE_LIST } from '@/features/myTravel/constants/expense.constant';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
 import Dropdown from '@/shared/components/ui/Dropdown';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_EXPENSE_BEFORE } from '@/features/myTravel/constants/expense.constant';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
-import { toast } from 'sonner';
 import { convertComma } from '@/shared/lib/utils';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
-
-// interface ITravelExpensesView {}
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
+import { getTravelDayList } from '@/shared/lib/utils';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import { useDeleteExpense } from '@/features/myTravel/hooks/rquery/expense/useDeleteExpense';
+import { useUpdateBulkExpenseDate } from '@/features/myTravel/hooks/rquery/expense/useUpdateBulkExpenseDate';
 
 function TravelExpensesView() {
   /** 지출일 선택 */
@@ -37,21 +37,18 @@ function TravelExpensesView() {
   const [selectModifyMode, setSelectModifyMode] = useState(false);
   const [isOpenAddExpenseModal, setIsOpenAddExpneseModal] = useState(false);
 
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const expenses = useTravelExpenseStore((state) => state.expenses);
-  const {
-    setDeleteSelectedExpense,
-    setMoveSelectedExpense,
-    getAllTotalSpend,
-    getAllTotalSpendByCurrency,
-  } = useTravelExpenseStore();
+  const travelId = useGetTravelId();
+  const { data: expenseList } = useGetTravelExpenses(travelId);
+  const { getAllTotalSpend, getAllTotalSpendByCurrency } = useCalcExpense(
+    expenseList ?? [],
+  );
+  const { mutateAsync: deleteExpense, isPending: isDeletePending } =
+    useDeleteExpense(travelId);
+  const { mutateAsync: moveExpense, isPending: isMovePending } =
+    useUpdateBulkExpenseDate(travelId);
+
   const selectedExpenses = useSelectExpenses((state) => state.selectedExpenses);
   const { clearSelectedExpenses } = useSelectExpenses();
-
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
 
   const { openDialog } = useDialogStore();
 
@@ -65,24 +62,31 @@ function TravelExpensesView() {
     }
   };
 
-  /** 선택 이동 */
-  const handelMoveSelectedExpense = (day: ILabelValue) => {
-    const getExpenseId = selectedExpenses.map((expense) => expense.id);
-    setMoveSelectedExpense({ day: day.value as number, id: getExpenseId });
-    clearSelectedExpenses();
-  };
-
   /** 선택 삭제 */
-  const handleDeleteSelectedExpense = () => {
-    const getExpenseId = selectedExpenses.map((expense) => expense.id);
+  const handleDeleteExpense = () => {
+    const deleteIds = selectedExpenses.map((expense) => expense.id);
 
     openDialog({
-      message: '선택된 지출을 삭제할까요?',
+      message: `${deleteIds.length}개 지출을 삭제할까요?`,
       type: 'confirm',
       okLabel: '삭제',
-      onOk: () => {
-        setDeleteSelectedExpense({ id: getExpenseId });
-        toast.success(`지출을 삭제했어요`);
+      onOk: async () => {
+        await deleteExpense({ travelId, deleteIds });
+        clearSelectedExpenses();
+      },
+    });
+  };
+
+  /** 선택 이동 */
+  const handelMoveExpense = (targetDay: number) => {
+    const moveIds = selectedExpenses.map((expense) => expense.id);
+
+    openDialog({
+      message: `${moveIds.length}개 지출을 이동할까요?`,
+      type: 'confirm',
+      okLabel: '이동',
+      onOk: async () => {
+        await moveExpense({ travelId, data: { moveIds, targetDay } });
         clearSelectedExpenses();
       },
     });
@@ -101,33 +105,40 @@ function TravelExpensesView() {
                 <>
                   <Dropdown
                     trigger={
-                      <Button variant="gray" size="sm">
+                      <Button
+                        variant="gray"
+                        size="sm"
+                        disabled={!selectedExpenses.length || isMovePending}
+                        isLoading={isMovePending}
+                      >
                         선택 날짜 이동
                       </Button>
                     }
                   >
-                    {[TRAVEL_EXPENSE_BEFORE, ...travelDaysList].map((list) => (
+                    {getTravelDayList(expenseList).map((list, index) => (
                       <span
                         key={list.value}
                         className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
-                        onClick={() => handelMoveSelectedExpense(list)}
+                        onClick={() => handelMoveExpense(list.value)}
                       >
-                        {list.label}
+                        {index === 0 ? '여행전' :list.label}
                       </span>
                     ))}
                   </Dropdown>
                   <Button
                     variant="redOutline"
                     size="sm"
-                    onClick={() => handleDeleteSelectedExpense()}
+                    disabled={!selectedExpenses.length || isDeletePending}
+                    isLoading={isDeletePending}
+                    onClick={handleDeleteExpense}
                   >
                     선택 삭제
                   </Button>
                 </>
               ) : (
                 <Button
-                  className="w-35"
-                  // className="w-35 bg-linear-to-r from-secondary to-primary"
+                  // className="from-secondary to-primary w-35 bg-linear-to-r"
+                  className="bg-secondary w-35"
                   variant="secondary"
                   size="sm"
                   onClick={() => setIsOpenAddExpneseModal(true)}
@@ -140,12 +151,10 @@ function TravelExpensesView() {
         }
         dayTimelines={
           <>
-            {expenses.map((_day, index) => (
+            {expenseList?.map((expense, index) => (
               <TravelExpensesDay
-                key={`${_day.day}-${index}`}
-                day={_day.day}
-                date={_day.date}
-                list={_day.list}
+                key={`${expense.day}-${index}`}
+                expense={expense}
                 selectMode={selectModifyMode}
               />
             ))}
@@ -165,7 +174,7 @@ function TravelExpensesView() {
                 {list.label}
               </Chip>
             ))}
-            {expenses.map((_day, index) => {
+            {expenseList?.map((_day, index) => {
               if (_day.day === 0) return;
               return (
                 <Chip
@@ -185,20 +194,23 @@ function TravelExpensesView() {
               <TravelExpensesSpendCard selectedDay={selectedDay} isMySpend />
             </div>
             <Card className="">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between pb-1">
                 <p className="text-lg font-bold">여행 총 지출</p>
                 <div className="text-state-error text-h3 max-mobile:text-xxl flex justify-end font-bold">
-                  <span>{convertComma(getAllTotalSpend())}원</span>
+                  <span>{convertComma(getAllTotalSpend)}원</span>
                 </div>
               </div>
-              {getAllTotalSpendByCurrency().map((currency, index) => (
-                <CurrencySpend
-                  key={`${currency.currency}-${index}`}
-                  currency={currency.currency}
-                  spend={currency.spend}
-                  calcExchangeRate={currency.calcSpend}
-                />
-              ))}
+              <div className="flex flex-col gap-1">
+                {getAllTotalSpendByCurrency.map((currency, index) => (
+                  <CurrencySpend
+                    key={`${currency.currency}-${index}`}
+                    currency={currency.currency}
+                    currencyCountry={currency.currencyCountry}
+                    spend={currency.spend}
+                    calcExchangeRate={currency.calcSpend}
+                  />
+                ))}
+              </div>
             </Card>
           </div>
         }
