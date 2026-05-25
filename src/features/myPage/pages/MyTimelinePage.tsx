@@ -7,13 +7,26 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TravelAccDataCard from '@/features/myPage/components/timeline/TravelAccDataCard';
 import TravelTimelineWrap from '@/features/myPage/components/timeline/TravelTimelineWrap';
 import TimelineStatistic from '@/features/myPage/components/timeline/TimelineStatistic';
+import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
+import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/timeline/useGetMyTimelineList';
 
 export default function MyTimelinePage() {
-  const [selectedTimeline, setSelectedTimeline] = useState(0);
+  const [selectedTimeline, setSelectedTimeline] =
+    useState<IMyTravelListResponse | null>(null);
+
+  const { data: myTimelineList } = useGetMyTimelineList();
+
+  useEffect(() => {
+    if (window.innerWidth >= 639) {
+      if (myTimelineList) {
+        setSelectedTimeline(myTimelineList[0]);
+      }
+    }
+  }, [myTimelineList]);
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -41,13 +54,15 @@ export default function MyTimelinePage() {
       </div>
 
       <div className="max-desktop:grid-cols-1 grid grid-cols-2 gap-2">
-        <div className="">
-          <TravelTimelineWrap
-            selectedTimeline={selectedTimeline}
-            setSelectedTimeline={setSelectedTimeline}
-          />
-        </div>
-        <div className="max-desktop:hidden">{/* <TimelineStatistic /> */}</div>
+        <TravelTimelineWrap
+          selectedTimeline={selectedTimeline}
+          setSelectedTimeline={setSelectedTimeline}
+        />
+        {selectedTimeline && (
+          <div className="max-desktop:hidden">
+            <TimelineStatistic selectedTimeline={selectedTimeline} />
+          </div>
+        )}
       </div>
     </div>
   );

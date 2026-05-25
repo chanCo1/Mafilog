@@ -9,11 +9,12 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import TimelineCard from '@/features/myPage/components/timeline/TimelineCard';
 import TimelineStatisticModal from '@/features/myPage/components/timeline/modal/TimelineStatisticModal';
-import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/useGetMyTimelineList';
+import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/timeline/useGetMyTimelineList';
+import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
 
 interface ITravelTimelineWrap {
-  selectedTimeline: number;
-  setSelectedTimeline: Dispatch<SetStateAction<number>>;
+  selectedTimeline: IMyTravelListResponse | null;
+  setSelectedTimeline: Dispatch<SetStateAction<IMyTravelListResponse | null>>;
 }
 
 export default function TravelTimelineWrap({
@@ -24,8 +25,8 @@ export default function TravelTimelineWrap({
 
   const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
 
-  const handleTimeline = (id: number) => {
-    setSelectedTimeline(id);
+  const handleTimeline = (travel: IMyTravelListResponse) => {
+    setSelectedTimeline(travel);
 
     if (window.innerWidth >= 1023) return;
     setIsOpenStatisticModal(true);
@@ -43,9 +44,9 @@ export default function TravelTimelineWrap({
             </div>
             <div className="border-border-primary w-px flex-1 border" />
           </div>
-          <div className="w-full pb-3" onClick={() => handleTimeline(_list.id)}>
+          <div className="w-full pb-3" onClick={() => handleTimeline(_list)}>
             <TimelineCard
-              isSelected={_list.id === selectedTimeline}
+              isSelected={_list.id === selectedTimeline?.id}
               index={myTimelineList.length - index}
               list={_list}
             />
@@ -55,6 +56,7 @@ export default function TravelTimelineWrap({
       <TimelineStatisticModal
         isOpen={isOpenStatisticModal}
         handleClose={() => setIsOpenStatisticModal(false)}
+        selectedTimeline={selectedTimeline!}
       />
     </div>
   );
