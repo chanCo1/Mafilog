@@ -22,6 +22,7 @@ import FileUpload from '@/shared/components/ui/FileUpload';
 import { useEffect, useState } from 'react';
 import { useUpdateProfile } from '@/features/myPage/hooks/rquery/useUpdateProfile';
 import { useUpdatePassword } from '@/features/myPage/hooks/rquery/useUpdatePassword';
+import { toast } from 'sonner';
 
 export default function UserInfoPage() {
   const { data: sessionData } = useSession();
@@ -83,6 +84,11 @@ export default function UserInfoPage() {
 
   /** 비밀번호 변경 */
   const onPasswordSubmit = async (value: TPasswordSchema) => {
+    if (value.originPassword === value.changePassword) {
+      toast.error('변경된 비밀번호가 없습니다.');
+      return;
+    }
+
     await updatePassword(value, {
       onSuccess: () => {
         passwordReset();

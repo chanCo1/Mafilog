@@ -6,18 +6,14 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import UserService from '@/features/myPage/services/User.service';
 import { toast } from 'sonner';
 import { TPasswordSchema } from '@/features/myPage/schema/profile.schema';
 
 export const useUpdatePassword = () => {
-  const { data: userInfo } = useSession();
-
   return useMutation({
     mutationFn: async (data: TPasswordSchema) => {
       const res = await UserService.updatePassword(
-        userInfo?.user?.id as string,
         data,
       );
       return res.data;

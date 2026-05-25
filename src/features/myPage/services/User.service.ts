@@ -12,9 +12,9 @@ const API_URL = '/users';
 
 class _UserService {
   /** 프로필 변경 */
-  async updateProfile(userId: string, data: FormData) {
+  async updateProfile(data: FormData) {
     const response = await axiosInstanceWithAuth.patch(
-      `${API_URL}/${userId}/profile`,
+      `${API_URL}/profile`,
       data,
       {
         headers: {
@@ -26,9 +26,9 @@ class _UserService {
   }
 
   /** 비밀번호 변경 */
-  async updatePassword(userId: string, data: TPasswordSchema) {
+  async updatePassword(data: TPasswordSchema) {
     const response = await axiosInstanceWithAuth.patch(
-      `${API_URL}/${userId}/password`,
+      `${API_URL}/password`,
       data,
     );
     return response.data;

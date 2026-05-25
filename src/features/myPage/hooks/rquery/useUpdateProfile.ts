@@ -11,12 +11,11 @@ import UserService from '@/features/myPage/services/User.service';
 import { toast } from 'sonner';
 
 export const useUpdateProfile = () => {
-  const { data: userInfo, update } = useSession();
+  const { update } = useSession();
 
   return useMutation({
     mutationFn: async (formData: FormData) => {
       const res = await UserService.updateProfile(
-        userInfo?.user?.id as string,
         formData,
       );
       return res.data;
