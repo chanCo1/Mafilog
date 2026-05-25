@@ -48,7 +48,7 @@ export default function TimelineCard({
               #{convertTravelPartner(list.travelPartner)}
             </Chip>
             {list.travelStyles.map((style) => (
-              <Chip size="sm" variant="gray">
+              <Chip key={style} size="sm" variant="gray">
                 #{convertTravelStyle(style)}
               </Chip>
             ))}

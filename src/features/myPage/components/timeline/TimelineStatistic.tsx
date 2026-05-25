@@ -15,7 +15,7 @@ import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 import { convertComma, getPercent, convertCategory } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
-import { useGetTimelineExpenses } from '@/features/myPage/hooks/rquery/timeline/useGetTimelineExpneses';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 
@@ -26,7 +26,9 @@ interface ITimelineStatistic {
 export default function TimelineStatistic({
   selectedTimeline,
 }: ITimelineStatistic) {
-  const { data: expenseList } = useGetTimelineExpenses(selectedTimeline?.id);
+  const { data: expenseList } = useGetTravelExpenses(
+    selectedTimeline?.id.toString(),
+  );
   const {
     getAllTotalMySpend,
     getCategoryMySpend,
