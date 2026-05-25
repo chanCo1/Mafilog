@@ -7,6 +7,7 @@
 
 import { axiosInstanceWithAuth } from '@/shared/lib/api';
 import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
+import { IExpenseResponse } from '@/features/myTravel/interfaces/expense.interface';
 
 const API_URL = '/timelines';
 
@@ -14,6 +15,14 @@ class _MyTimelineService {
   /** 내 타임라인 리스트 조회 */
   async getMyTimelineList(): Promise<IMyTravelListResponse[]> {
     const response = await axiosInstanceWithAuth.get(`${API_URL}`);
+    return response.data.data;
+  }
+
+  /** 내 타임라인 가계부 지출 조회 */
+  async getMyTimelineExpenses(travelId: string): Promise<IExpenseResponse[]> {
+    const response = await axiosInstanceWithAuth.get(
+      `${API_URL}/${travelId}/expenses`,
+    );
     return response.data.data;
   }
 }
