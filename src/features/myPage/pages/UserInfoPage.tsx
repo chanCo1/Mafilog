@@ -88,9 +88,9 @@ export default function UserInfoPage() {
         <h3 className="text-lg font-bold">프로필 변경</h3>
         <span>프로필</span>
         <div className="flex flex-col gap-3">
-          <div className="max-w-100">
+          <div className="max-w-100 flex justify-center">
             <FileUpload
-              className="h-50 w-50 rounded-full"
+              className="w-50 rounded-full"
               selectedImage={selectedImage}
               setSelectedImage={setSelectedImage}
             />
@@ -102,6 +102,7 @@ export default function UserInfoPage() {
                 isRequired
                 description="최대 10글자 입력 가능해요"
                 errorMsg={profileErrors.name?.message}
+                maxLength={10}
                 {...profileRegister('name')}
               />
               <Input label="이메일" value={userInfo?.email ?? ''} disabled />

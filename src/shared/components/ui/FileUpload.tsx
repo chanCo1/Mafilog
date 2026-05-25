@@ -150,7 +150,7 @@ export default function FileUpload({
           disabled={disabled}
           className="hidden"
         />
-        <div className={cn('relative h-60 w-full', className)}>
+        <div className={cn('relative h-50 w-full', className)}>
           {previewImage.length ? (
             <div className={cn('relative h-full')}>
               {/* 0번 인덱스를 대표 이미지로 지정 */}
