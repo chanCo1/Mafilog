@@ -74,7 +74,7 @@ export async function GET(request: Request) {
 
     const responseData = {
       worldCountryCount: worldCountries.size,
-      worldCityCount: worldCountries.size,
+      worldCityCount: worldCities.size,
       domesticCityCount: domesticCities.size,
       totalTravelDays,
       totalMyExpense: myTotalExpense._sum.calcExchangeAmount || 0,

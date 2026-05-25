@@ -92,58 +92,69 @@ export default function TimelineStatistic({
     <div className="desktop:sticky desktop:top-13 flex flex-col gap-3">
       <div className="flex flex-col gap-1">
         <p className="text-lg font-bold">{selectedTimeline?.title}</p>
-        <span className="text-state-error text-xxl font-bold">
-          {convertComma(getAllTotalMySpend)}원
-        </span>
-      </div>
-      <div>
-        <DoughnutChart
-          backgroundColor={getChartData.backgroundColor}
-          data={getChartData.data}
-          labels={getChartData.labels}
-        />
-        <div className="flex items-baseline justify-center">
-          <span className="font-bold">
-            {convertCategory(
-              getChartData.mostCategory as EXPENSES_CATEGORY_TYPE,
-            )}
+        {getAllTotalMySpend ? (
+          <span className="text-state-error text-xxl font-bold">
+            {convertComma(getAllTotalMySpend)}원
           </span>
-          <span className="text-sm">에 가장 많이 지출했어요</span>
-        </div>
+        ) : null}
       </div>
-      {EXPENSE_CATEGORY_LIST.map((list, index) => (
-        <Card key={`${list.value}-${index}`}>
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-1">
-              <CategoryIcon variant={list.value} circled="none" size="sm" />
-              <p className="font-bold">{list.label}</p>
-              <span className="text-text-secondary">
-                {getPercent({
-                  numer: getCategoryMySpend(list.value),
-                  deno: getAllTotalMySpend,
-                })}
-                %
+
+      {getAllTotalMySpend ? (
+        <>
+          <div>
+            <DoughnutChart
+              backgroundColor={getChartData.backgroundColor}
+              data={getChartData.data}
+              labels={getChartData.labels}
+            />
+            <div className="flex items-baseline justify-center">
+              <span className="font-bold">
+                {convertCategory(
+                  getChartData.mostCategory as EXPENSES_CATEGORY_TYPE,
+                )}
               </span>
-            </div>
-            <div className="flex flex-col items-end">
-              <p className="text-state-error text-lg font-bold">
-                {convertComma(getCategoryMySpend(list.value))}원
-              </p>
-              {getCategoryMySpendByCurrency(list.value).map(
-                (currency, index) => (
-                  <CurrencySpend
-                    key={`${currency.currency}-${index}`}
-                    currency={currency.currency}
-                    currencyCountry={currency.currencyCountry}
-                    spend={currency.spend}
-                    calcExchangeRate={currency.calcSpend}
-                  />
-                ),
-              )}
+              <span className="text-sm">에 가장 많이 지출했어요</span>
             </div>
           </div>
-        </Card>
-      ))}
+          {EXPENSE_CATEGORY_LIST.map((list, index) => (
+            <Card key={`${list.value}-${index}`}>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-1">
+                  <CategoryIcon variant={list.value} circled="none" size="sm" />
+                  <p className="font-bold">{list.label}</p>
+                  <span className="text-text-secondary">
+                    {getPercent({
+                      numer: getCategoryMySpend(list.value),
+                      deno: getAllTotalMySpend,
+                    })}
+                    %
+                  </span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <p className="text-state-error text-lg font-bold">
+                    {convertComma(getCategoryMySpend(list.value))}원
+                  </p>
+                  {getCategoryMySpendByCurrency(list.value).map(
+                    (currency, index) => (
+                      <CurrencySpend
+                        key={`${currency.currency}-${index}`}
+                        currency={currency.currency}
+                        currencyCountry={currency.currencyCountry}
+                        spend={currency.spend}
+                        calcExchangeRate={currency.calcSpend}
+                      />
+                    ),
+                  )}
+                </div>
+              </div>
+            </Card>
+          ))}
+        </>
+      ) : (
+        <div className="text-text-secondary pt-6 text-center">
+          <span>아직 지출 내역이 없어요</span>
+        </div>
+      )}
     </div>
   );
 }
