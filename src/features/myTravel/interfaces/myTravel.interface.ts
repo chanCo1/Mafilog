@@ -4,6 +4,7 @@ import { TRAVEL_STYLE, TRAVEL_TYPE, TRAVEL_PARTNER } from '@/shared/types/Enum';
 /** 내 여행 기본 조회 */
 export interface ITravelBase {
   createdAt: string;
+  updatedAt: string;
   from: Date;
   id: number;
   imageUrl: string | null;
