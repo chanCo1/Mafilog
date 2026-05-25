@@ -21,22 +21,40 @@ export async function PATCH(request: Request) {
   if (!currentUserId) return errorResponse('잘 못 된 접근입니다.', 403);
 
   try {
-    // 파일이 없으므로 JSON으로 받습니다.
     const body = await request.json();
-    const { password, passwordConfirm } = body;
+    const { originPassword, changePassword, changePasswordConfirm } = body;
 
-    if (!password || !passwordConfirm) {
+    if (!originPassword || !changePassword || !changePasswordConfirm) {
       return errorResponse('비밀번호를 입력해 주세요.', 400);
     }
 
-    if (password !== passwordConfirm) {
+    if (changePassword !== changePasswordConfirm) {
       return errorResponse('비밀번호가 일치하지 않습니다.', 400);
     }
 
-    // 비밀번호 암호화
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // 유저 정보 추출
+    const extractUser = await prisma.user.findUnique({
+      where: { id: currentUserId },
+    });
 
-    // DB 업데이트
+    if (!extractUser || !extractUser.password) {
+      return errorResponse('유저 정보를 찾을 수 없거나 소셜 로그인 유저입니다.', 404);
+    }
+
+    const isPasswordMatch = await bcrypt.compare(originPassword, extractUser.password);
+
+    if (!isPasswordMatch) {
+      return errorResponse('현재 비밀번호가 올바르지 않습니다.', 401);
+    }
+
+    if (originPassword === changePassword) {
+      return errorResponse('변경사항이 없습니다.', 400);
+    }
+
+    // 비밀번호 암호화
+    const hashedPassword = await bcrypt.hash(changePassword, 10);
+
+    // 유저 업데이트
     await prisma.user.update({
       where: { id: currentUserId },
       data: { password: hashedPassword },
