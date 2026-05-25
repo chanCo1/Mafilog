@@ -29,7 +29,7 @@ function TavelAccContent({
   unit,
   className,
 }: {
-  count: number;
+  count: string | number;
   unit: string;
   className?: string;
 }) {
