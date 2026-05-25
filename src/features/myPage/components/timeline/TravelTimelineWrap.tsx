@@ -5,21 +5,27 @@
  * @description: 타임라인 리스트 컴포넌트
  */
 
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import TimelineCard from '@/features/myPage/components/timeline/TimelineCard';
 import TimelineStatisticModal from '@/features/myPage/components/timeline/modal/TimelineStatisticModal';
 import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/useGetMyTimelineList';
 
-interface ITravelTimelineWrap {}
+interface ITravelTimelineWrap {
+  selectedTimeline: number;
+  setSelectedTimeline: Dispatch<SetStateAction<number>>;
+}
 
-export default function TravelTimelineWrap() {
+export default function TravelTimelineWrap({
+  selectedTimeline,
+  setSelectedTimeline,
+}: ITravelTimelineWrap) {
   const { data: myTimelineList } = useGetMyTimelineList();
 
   const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
 
-  const handleTimeline = () => {
-    // setSelectedTimeline(1);
+  const handleTimeline = (id: number) => {
+    setSelectedTimeline(id);
 
     if (window.innerWidth >= 1023) return;
     setIsOpenStatisticModal(true);
@@ -37,8 +43,12 @@ export default function TravelTimelineWrap() {
             </div>
             <div className="border-border-primary w-px flex-1 border" />
           </div>
-          <div className="w-full pb-3" onClick={() => handleTimeline()}>
-            <TimelineCard isSelected={true} index={myTimelineList.length - index} list={_list} />
+          <div className="w-full pb-3" onClick={() => handleTimeline(_list.id)}>
+            <TimelineCard
+              isSelected={_list.id === selectedTimeline}
+              index={myTimelineList.length - index}
+              list={_list}
+            />
           </div>
         </div>
       ))}

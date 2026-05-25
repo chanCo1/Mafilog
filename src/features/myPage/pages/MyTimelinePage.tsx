@@ -8,15 +8,13 @@
 'use client';
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
-import { Card } from '@/shared/components/ui/Card';
 import TravelAccDataCard from '@/features/myPage/components/timeline/TravelAccDataCard';
 import TravelTimelineWrap from '@/features/myPage/components/timeline/TravelTimelineWrap';
 import TimelineStatistic from '@/features/myPage/components/timeline/TimelineStatistic';
 
-interface IMyTimelinePage {}
-
 export default function MyTimelinePage() {
+  const [selectedTimeline, setSelectedTimeline] = useState(0);
+
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="max-desktop:grid-cols-2 grid grid-cols-4 gap-2 bg-white pt-4 pb-3">
@@ -44,11 +42,12 @@ export default function MyTimelinePage() {
 
       <div className="max-desktop:grid-cols-1 grid grid-cols-2 gap-2">
         <div className="">
-          <TravelTimelineWrap />
+          <TravelTimelineWrap
+            selectedTimeline={selectedTimeline}
+            setSelectedTimeline={setSelectedTimeline}
+          />
         </div>
-        <div className="max-desktop:hidden">
-          <TimelineStatistic />
-        </div>
+        <div className="max-desktop:hidden">{/* <TimelineStatistic /> */}</div>
       </div>
     </div>
   );
