@@ -33,7 +33,7 @@ export default function UserInfoModal({ isOpen, handleClose }: IUserInfoModal) {
 
   /** 로그아웃 */
   const handleLogout = async () => {
-    await signOut({ redirect: false });
+    await signOut({ callbackUrl: '/login' });
     handleClose();
     router.push('/login');
   };
