@@ -18,6 +18,7 @@ interface IUploadCloudinary {
   folderName?: string;
 }
 
+/** cloudinary 파일 업로드 */
 export async function uploadCloudinary({
   files,
   folderName = 'mafilog-app',
@@ -46,3 +47,18 @@ export async function uploadCloudinary({
 
   return Promise.all(uploadPromises);
 }
+
+/** cloudinary 파일 삭제 */
+export const deleteCloudinary = async (imageUrl: string) => {
+  try {     
+    const urlParts = imageUrl.split('/');
+    const filenameWithExtension = urlParts[urlParts.length - 1];
+    const publicId = filenameWithExtension.split('.')[0];
+
+    await cloudinary.uploader.destroy(`mafilog-app/${publicId}`);
+    
+    console.log(`Cloudinary 이미지 삭제 완료: ${publicId}`);
+  } catch (error) {
+    console.error('Cloudinary 이미지 삭제 실패:', error);
+  }
+};

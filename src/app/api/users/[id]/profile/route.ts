@@ -7,7 +7,10 @@
 
 import { prisma } from '@/shared/lib/prisma';
 import { authGuard } from '@/shared/backend/lib/authGuard';
-import { uploadCloudinary } from '@/shared/backend/lib/cloudinary';
+import {
+  uploadCloudinary,
+  deleteCloudinary,
+} from '@/shared/backend/lib/cloudinary';
 import {
   successResponse,
   errorResponse,
@@ -24,10 +27,50 @@ export async function PATCH(request: Request) {
     const formData = await request.formData();
 
     const name = formData.get('name') as string;
-    const files = formData.getAll('imageUrl') as File[];
+    const files = formData.getAll('imageUrl');
 
-    const uploadedUrls = await uploadCloudinary({ files });
-    const imageUrl = uploadedUrls.length ? uploadedUrls[0] : null;
+    const extractUser = await prisma.user.findUnique({
+      where: { id: currentUserId },
+      select: { name: true, profileImageUrl: true }
+    });
+
+    if (!extractUser) {
+      return errorResponse('유저 정보를 찾을 수 없습니다.', 404);
+    }
+
+    const originName = extractUser.name;
+    const originImageUrl = extractUser.profileImageUrl;
+
+    // 파일 분기처리
+    const imageFiles = files.filter(
+      (file) => typeof file !== 'string',
+    ) as File[];
+    const imageUrls = files.filter(
+      (file) => typeof file === 'string',
+    ) as string[];
+
+    let imageUrl: string | null = null;
+
+    if (imageFiles.length) {
+      const uploadedUrls = await uploadCloudinary({ files: imageFiles });
+      imageUrl = uploadedUrls.length ? uploadedUrls[0] : null;
+    } else if (imageUrls.length) {
+      imageUrl = imageUrls[0];
+    } else {
+      imageUrl = null;
+    }
+
+    if (name === originName && imageUrl === originImageUrl) {
+      console.log('변경 사항이 없습니다.');
+      return successResponse(extractUser);
+    }
+
+    // 기존 이미지 삭제
+    if (originImageUrl && originImageUrl !== imageUrl) {
+      if (originImageUrl.includes('cloudinary.com')) {
+        deleteCloudinary(originImageUrl); 
+      }
+    }
 
     const updatedUser = await prisma.user.update({
       where: { id: currentUserId },
