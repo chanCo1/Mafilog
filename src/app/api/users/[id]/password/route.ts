@@ -44,7 +44,7 @@ export async function PATCH(request: Request) {
     const isPasswordMatch = await bcrypt.compare(originPassword, extractUser.password);
 
     if (!isPasswordMatch) {
-      return errorResponse('현재 비밀번호가 올바르지 않습니다.', 401);
+      return errorResponse('현재 비밀번호가 일치하지 않습니다.', 400);
     }
 
     if (originPassword === changePassword) {

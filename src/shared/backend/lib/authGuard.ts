@@ -26,7 +26,7 @@ export async function authGuard(request: Request) {
   const session = await auth();
 
   /** 토큰의 만료 여부 */
-  if (!session || !session.user || (session as any).accessToken !== token) {
+  if (!session || !session.user || session.accessToken !== token) {
     return {
       isValid: false,
       errorResponse: NextResponse.json(
@@ -36,7 +36,7 @@ export async function authGuard(request: Request) {
     };
   }
 
-  // 3. 검증 성공 시 세션 정보 반환
+  // 검증 성공 시 세션 정보 반환
   return {
     isValid: true,
     session,

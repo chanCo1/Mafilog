@@ -6,6 +6,7 @@
  */
 
 import { axiosInstanceWithAuth } from '@/shared/lib/api';
+import { TPasswordSchema } from '@/features/myPage/schema/profile.schema';
 
 const API_URL = '/users';
 
@@ -25,9 +26,9 @@ class _UserService {
   }
 
   /** 비밀번호 변경 */
-  async updatePassword(userId: string, data: any) {
+  async updatePassword(userId: string, data: TPasswordSchema) {
     const response = await axiosInstanceWithAuth.patch(
-      `${API_URL}${userId}/password`,
+      `${API_URL}/${userId}/password`,
       data,
     );
     return response.data;
