@@ -21,6 +21,7 @@ import { useSession } from 'next-auth/react';
 import FileUpload from '@/shared/components/ui/FileUpload';
 import { useEffect, useState } from 'react';
 import { useUpdateProfile } from '@/features/myPage/hooks/rquery/useUpdateProfile';
+import { useUpdatePassword } from '@/features/myPage/hooks/rquery/useUpdatePassword';
 
 export default function UserInfoPage() {
   const { data: sessionData } = useSession();
@@ -30,7 +31,7 @@ export default function UserInfoPage() {
     register: profileRegister,
     handleSubmit: profileHandleSubmit,
     formState: { errors: profileErrors },
-    watch,
+    watch: profileWatch,
   } = useForm<TProfileSchema>({
     resolver: zodResolver(profileSchema),
     mode: 'onChange',
@@ -39,25 +40,34 @@ export default function UserInfoPage() {
     },
   });
 
-  const watchName = watch('name');
+  const watchName = profileWatch('name');
 
   const {
     register: passwordRegister,
     handleSubmit: passwordHandleSubmit,
     formState: { errors: passwordErrors },
+    watch: passwordWatch,
+    reset: passwordReset,
   } = useForm<TPasswordSchema>({
     resolver: zodResolver(passwordSchema),
     mode: 'onChange',
     defaultValues: {
-      currentPassword: '',
+      originPassword: '',
       changePassword: '',
       changePasswordConfirm: '',
     },
   });
 
+  const watchOriginPassword = passwordWatch('originPassword');
+  const watchChangePassword = passwordWatch('changePassword');
+  const watchChangePasswordConfirm = passwordWatch('changePasswordConfirm');
+
   const [selectedImage, setSelectedImage] = useState<(File | string)[]>([]);
 
-  const { mutateAsync: updateProfile, isPending: isUpdatePending } = useUpdateProfile();
+  const { mutateAsync: updateProfile, isPending: isUpdatePending } =
+    useUpdateProfile();
+  const { mutateAsync: updatePassword, isPending: isPasswordPending } =
+    useUpdatePassword();
 
   /** 프로필 변경 */
   const onProfileSubmit = async (value: TProfileSchema) => {
@@ -72,10 +82,15 @@ export default function UserInfoPage() {
   };
 
   /** 비밀번호 변경 */
-  const onPasswordSubmit = (value: TPasswordSchema) => {
-    console.log(value);
+  const onPasswordSubmit = async (value: TPasswordSchema) => {
+    await updatePassword(value, {
+      onSuccess: () => {
+        passwordReset();
+      },
+    });
   };
 
+  /** 이미지 데이터 바인딩 */
   useEffect(() => {
     if (userInfo?.profileImageUrl) {
       setSelectedImage([userInfo.profileImageUrl]);
@@ -88,7 +103,7 @@ export default function UserInfoPage() {
         <h3 className="text-lg font-bold">프로필 변경</h3>
         <span>프로필</span>
         <div className="flex flex-col gap-3">
-          <div className="max-w-100 flex justify-center">
+          <div className="flex max-w-100 justify-center">
             <FileUpload
               className="w-50 rounded-full"
               selectedImage={selectedImage}
@@ -107,7 +122,12 @@ export default function UserInfoPage() {
               />
               <Input label="이메일" value={userInfo?.email ?? ''} disabled />
               <div className="flex justify-end">
-                <Button type="submit" size="sm" disabled={!watchName || isUpdatePending} isLoading={isUpdatePending}>
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={!watchName || isUpdatePending}
+                  isLoading={isUpdatePending}
+                >
                   프로필 변경
                 </Button>
               </div>
@@ -127,8 +147,8 @@ export default function UserInfoPage() {
             label="현재 비밀번호"
             isPassword
             isRequired
-            errorMsg={passwordErrors.currentPassword?.message}
-            {...passwordRegister('currentPassword')}
+            errorMsg={passwordErrors.originPassword?.message}
+            {...passwordRegister('originPassword')}
           />
           <Input
             type="password"
@@ -148,7 +168,17 @@ export default function UserInfoPage() {
             {...passwordRegister('changePasswordConfirm')}
           />
           <div className="flex justify-end pt-1">
-            <Button type="submit" size="sm">
+            <Button
+              type="submit"
+              size="sm"
+              disabled={
+                !watchOriginPassword ||
+                !watchChangePassword ||
+                !watchChangePasswordConfirm ||
+                isPasswordPending
+              }
+              isLoading={isPasswordPending}
+            >
               비밀번호 변경
             </Button>
           </div>
