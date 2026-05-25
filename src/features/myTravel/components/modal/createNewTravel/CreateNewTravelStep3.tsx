@@ -76,7 +76,7 @@ export default function CreateNewTravelStep3({
   const handleUpdateMember = (userId: string, name: string) => {
     setTravelMember((prevMember) => {
       return prevMember.map((member) =>
-        member.userId === userId ? { ...member, name } : member,
+        member.id === userId ? { ...member, name } : member,
       );
     });
 
@@ -116,11 +116,11 @@ export default function CreateNewTravelStep3({
 
             return (
               <div key={`${member}-${index}`}>
-                {member.userId === editMemberId ? (
+                {member.id === editMemberId ? (
                   <>
                     <InlineInput
                       onSubmit={(name) =>
-                        handleUpdateMember(member.userId!, name)
+                        handleUpdateMember(member.id, name)
                       }
                       submitText="수정"
                       defaultValue={member.name}
@@ -143,7 +143,7 @@ export default function CreateNewTravelStep3({
                         <Pencil
                           className="cursor-pointer"
                           size={22}
-                          onClick={() => setEditMembeId(member.userId!)}
+                          onClick={() => setEditMembeId(member.id)}
                         />
                         <CircleX
                           className="cursor-pointer"

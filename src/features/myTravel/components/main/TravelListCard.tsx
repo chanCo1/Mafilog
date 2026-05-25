@@ -39,7 +39,7 @@ export default function TravelListCard({
           alt="배경 이미지"
           fill
           priority
-          className="z-0 rounded-lg object-fill"
+          className="z-0 rounded-lg object-cover"
         />
       )}
       {calcDDay(travel.from) > 0 ? (

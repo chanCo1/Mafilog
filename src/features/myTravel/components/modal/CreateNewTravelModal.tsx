@@ -8,6 +8,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { cn } from '@/shared/lib/utils';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
 import Step from '@/shared/components/ui/Step';
@@ -277,10 +278,17 @@ export default function CreateNewTravelModal({
       }
       handleClose={onClickCloseBtn}
       footer={
-        <div className="flex w-full justify-between gap-1">
-          <Button variant="redOutline" onClick={handelDeleteTravel}>
-            삭제
-          </Button>
+        <div
+          className={cn(
+            'flex w-full gap-1',
+            isModify ? 'justify-between' : 'justify-end',
+          )}
+        >
+          {isModify && (
+            <Button variant="redOutline" onClick={handelDeleteTravel}>
+              삭제
+            </Button>
+          )}
           <div className="flex gap-1">
             {currentStep === 1 && (
               <>
