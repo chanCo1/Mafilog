@@ -17,14 +17,6 @@ class _MyTimelineService {
     const response = await axiosInstanceWithAuth.get(`${API_URL}`);
     return response.data.data;
   }
-
-  /** 내 타임라인 가계부 지출 조회 */
-  async getMyTimelineExpenses(travelId: string): Promise<IExpenseResponse[]> {
-    const response = await axiosInstanceWithAuth.get(
-      `${API_URL}/${travelId}/expenses`,
-    );
-    return response.data.data;
-  }
 }
 
 const MyTimelineService = new _MyTimelineService();
