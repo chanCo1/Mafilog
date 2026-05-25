@@ -1,19 +1,20 @@
 /**
- * @file: useGetMyTimelineList.ts
+ * @file: useGetTimelineExpenses.ts
  * @author: chad
  * @since: 2026.05.25 ~
  * @description: 내 여행 타임라인 지출 조회
  */
 
 import { useQuery } from '@tanstack/react-query';
-import MyTimelineService from '@/features/myPage/services/MyTimeline.service';
+import ExpenseService from '@/features/myTravel/services/Expense.service';
 import { myTimelineKeys } from '@/features/myPage/hooks/rquery/queryKeys';
 
-export const useGetMyTimelineList = (travelId: string) => {
+export const useGetTimelineExpenses = (travelId: number) => {
   const query = useQuery({
-    queryKey: myTimelineKeys.detail(travelId),
+    queryKey: myTimelineKeys.detail(String(travelId)),
     queryFn: async () =>
-      await MyTimelineService.getMyTimelineExpenses(travelId),
+      await ExpenseService.getTravelExpenses(String(travelId)),
+    enabled: !!travelId,
     staleTime: 1000 * 60 * 5,
   });
 
