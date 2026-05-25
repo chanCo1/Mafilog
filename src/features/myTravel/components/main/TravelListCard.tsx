@@ -48,7 +48,7 @@ export default function TravelListCard({
         </div>
       ) : null}
       <p className="text-outline-white z-1 text-center text-lg font-bold">
-        {truncateText(travel.title)}
+        {truncateText(travel.title, 20)}
       </p>
       <p className="text-outline-white z-1">
         {convertTravelDateRange(travel.from, travel.to)}
