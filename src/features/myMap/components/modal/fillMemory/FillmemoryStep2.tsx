@@ -10,41 +10,36 @@ import { Input } from '@/shared/components/ui/Input';
 import { Calendar } from 'lucide-react';
 import DatePicker from '@/shared/components/ui/DatePicker';
 import { DateRange } from 'react-day-picker';
-import { convertFormattedDate, getDay, getTravelDay } from '@/shared/lib/utils';
+import { convertTravelDateRange } from '@/shared/lib/utils';
 
 interface IFillMemoryStep2 {
   selectedDate: DateRange | undefined;
   setSeletedDate: Dispatch<SetStateAction<DateRange | undefined>>;
+  disabled: boolean;
 }
 
 export default function FillMemoryStep2({
   selectedDate,
   setSeletedDate,
+  disabled,
 }: IFillMemoryStep2) {
-  /** 여행 기간 날짜 포멧 */
-  const formattedValue = useMemo(() => {
-    if (!selectedDate?.from || !selectedDate?.to) return '';
-
-    if (selectedDate.from === selectedDate.to) {
-      return `${convertFormattedDate(selectedDate.from)}(${getDay(selectedDate.from)}) (${getTravelDay(selectedDate.from, selectedDate.to)}일)`;
-    }
-
-    return `${convertFormattedDate(selectedDate.from)}(${getDay(selectedDate.from)}) ~ ${convertFormattedDate(selectedDate.to)}(${getDay(selectedDate.to)}) (${getTravelDay(selectedDate.from, selectedDate.to)}일)`;
-  }, [selectedDate]);
-
   return (
     <div className="flex h-full flex-col gap-2">
       <Input
         label="여행기간"
         placeholder="ex) 2026-01-01 ~ 2026-01-02"
-        description="아래 달력에서 여행기간을 선택해주세요."
+        description={disabled ? '여행 일정 기간이 자동으로 선택되었어요' : "아래 달력에서 여행기간을 선택해주세요"}
         isRequired
         readOnly
-        value={formattedValue}
+        value={convertTravelDateRange(selectedDate?.from, selectedDate?.to)}
         prefix={<Calendar className="h-4 w-4" />}
       />
       <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
-        <DatePicker selected={selectedDate} onSelected={setSeletedDate} />
+        <DatePicker
+          selected={selectedDate}
+          onSelected={setSeletedDate}
+          disabled={disabled}
+        />
       </div>
     </div>
   );
