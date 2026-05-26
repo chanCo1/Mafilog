@@ -1,4 +1,5 @@
 export const memoryKeys = {
   all: ['memory'] as const,
-  // detail: (?: string) => [...memoryKeys.all, ?] as const,
+  list: (mapType: string) => [...memoryKeys.all, mapType] as const,
+  detail: (mapId: number) => [...memoryKeys.all, mapId] as const,
 };
