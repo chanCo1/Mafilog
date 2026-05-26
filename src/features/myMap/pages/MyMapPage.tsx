@@ -58,7 +58,7 @@ export default function MyMapPage() {
             </span>
             <AmchartMap
               isOpenFillModal={isOpenFillModal}
-              setSelectedMap={setSelectedMapType}
+              setSelectedMapType={setSelectedMapType}
               setSelectedMapId={setSelectedMapId}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
             />

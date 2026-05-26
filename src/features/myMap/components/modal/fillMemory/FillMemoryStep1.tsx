@@ -57,7 +57,10 @@ export default function FillMemoryStep1({
 
     setSelectedTravel(selected);
     if (finedTimeline) {
-      setSeletedDate({ from: finedTimeline.from, to: finedTimeline.to });
+      setSeletedDate({
+        from: new Date(finedTimeline.from),
+        to: new Date(finedTimeline.to),
+      });
     } else {
       setSeletedDate(undefined);
     }

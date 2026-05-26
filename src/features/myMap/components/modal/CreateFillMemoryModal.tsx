@@ -37,7 +37,7 @@ export default function CreateFillMemoryModal({
   handleClose,
   isModify = false,
   selectedMapId,
-  selectedMapType
+  selectedMapType,
 }: ICreateFillMemoryModal) {
   const [stepData, setStepData] = useState(CREATE_MEMORY_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
@@ -62,7 +62,8 @@ export default function CreateFillMemoryModal({
   const { data: travelSchedule } = useGetTravelSchedules(
     selectedTravel.value ? selectedTravel.value.toString() : '',
   );
-  const { mutateAsync: createMemory } = useCreateMemory();
+  const { mutateAsync: createMemory, isPending: isCreatePending } =
+    useCreateMemory();
 
   useEffect(() => {
     if (travelSchedule?.length) {
@@ -111,7 +112,7 @@ export default function CreateFillMemoryModal({
         </div>
       ),
       okLabel: '닫기',
-      onOk: async () => {
+      onOk: () => {
         handleClose();
         dataReset();
       },
@@ -146,8 +147,11 @@ export default function CreateFillMemoryModal({
     formData.append('to', selectedDate?.to?.toISOString() || '');
     formData.append('memo', memoryMemo);
 
-    formData.append('scheduleId', selectedTravel.value.toString());
-    formData.append('scheduleTitle', selectedTravel.label);
+    if (selectedTravel.value !== 0) {
+      formData.append('scheduleId', selectedTravel.value.toString());
+      formData.append('scheduleTitle', selectedTravel.label);
+    }
+
     formData.append('schedules', JSON.stringify(loadSchedules));
 
     selectedImage.forEach((file) => {
@@ -157,10 +161,11 @@ export default function CreateFillMemoryModal({
     if (isModify) {
       console.log('수정');
     } else {
-      createMemory(formData);
+      await createMemory(formData);
     }
 
-    onClickCloseBtn();
+    handleClose();
+    dataReset();
   };
 
   /** 여행 삭제 */
@@ -258,8 +263,12 @@ export default function CreateFillMemoryModal({
                 >
                   이전
                 </Button>
-                <Button disabled={isDisabled} onClick={handelCreateNewMemory}>
-                  여행 만들기
+                <Button
+                  disabled={isDisabled || isCreatePending}
+                  isLoading={isCreatePending}
+                  onClick={handelCreateNewMemory}
+                >
+                  추억 만들기
                 </Button>
               </>
             )}
