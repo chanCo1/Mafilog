@@ -45,7 +45,10 @@ export const convertFormattedDate = (
 };
 
 /** 여행 기간 포멧 노출 (YYYY.MM.DD ~ YYYY.MM.DD) */
-export const convertTravelDateRange = (from: Date, to: Date) => {
+export const convertTravelDateRange = (
+  from: Date | undefined,
+  to: Date | undefined,
+) => {
   if (!from || !to) return '';
 
   if (from === to) {
