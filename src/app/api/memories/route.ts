@@ -14,6 +14,7 @@ import {
 import { uploadCloudinary } from '@/shared/backend/lib/cloudinary';
 import { getHexCode } from '@/shared/lib/utils';
 
+/** 추억 생성 */
 export async function POST(request: Request) {
   const authValidate = await authGuard(request);
   if (!authValidate.isValid) return authValidate.errorResponse;
@@ -69,7 +70,8 @@ export async function POST(request: Request) {
             time: list.time || null,
             memo: list.memo || null,
             rating: list.rating || 0,
-            placeData: list.place ? list.place : null,
+            order: list.order,
+            place: list.place ? list.place : null,
           });
         }
       }
@@ -86,6 +88,41 @@ export async function POST(request: Request) {
     return successResponse(newMemory);
   } catch (error) {
     console.error('@@ 추억 생성 에러 >>', error);
+    return errorResponse();
+  }
+}
+
+/** 추억 조회 */
+export async function GET(request: Request) {
+  const authValidate = await authGuard(request);
+  if (!authValidate.isValid) return authValidate.errorResponse;
+
+  const currentUserId = authValidate.session?.user?.id;
+  if (!currentUserId) return errorResponse('잘 못 된 접근입니다.', 403);
+
+  try {
+    // URL에서 쿼리 파라미터 추출
+    const { searchParams } = new URL(request.url);
+    const mapType = searchParams.get('mapType');
+    const mapId = searchParams.get('mapId');
+
+    const memories = await prisma.memory.findMany({
+      where: {
+        userId: currentUserId,
+        // mapType이나 mapId가 있으면 필터 조회, 없으면 전체 조회
+        ...(mapType && { mapType }),
+        ...(mapId && { mapId }),
+      },
+      include: {
+        schedules: {
+          orderBy: { id: 'asc' },
+        },
+      },
+    });
+
+    return successResponse(memories);
+  } catch (error) {
+    console.error('@@ 추억 리스트 조회 에러 >>', error);
     return errorResponse();
   }
 }

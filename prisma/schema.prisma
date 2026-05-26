@@ -419,18 +419,20 @@ model Memory {
  * 추억 일정
  */
 model MemorySchedule {
-  id        Int     @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   // 일차
-  day       Int
+  day      Int
   // 스케줄 타입 ('place' | 'memo')
-  type      String
+  type     String
   // 방문 시간
-  time      String?
+  time     String?
   // 메모
-  memo      String?
+  memo     String?
+  // 순서
+  order    Int
   // 별점
-  rating    Int     @default(0)
-  placeData Json?
-  memoryId  Int
-  memory    Memory  @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+  rating   Int     @default(0)
+  place    Json?
+  memoryId Int
+  memory   Memory  @relation(fields: [memoryId], references: [id], onDelete: Cascade)
 }
