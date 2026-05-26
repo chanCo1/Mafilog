@@ -20,15 +20,15 @@ import CreateFillMemoryModal from '@/features/myMap/components/modal/CreateFillM
 interface IMyMapPage {}
 
 export default function MyMapPage() {
-  const [selectedMap, setSelectedMap] = useState<ILabelValue>(
+  const [selectedMapType, setSelectedMapType] = useState<ILabelValue>(
     MAP_TRAVEL_TYPE_LIST[0],
   );
   // 선택한 지도 아이디
   const [selectedMapId, setSelectedMapId] = useState<string | undefined>(undefined);
   const [isOpenFillModal, setIsOpenFillModal] = useState(false);
 
-  const isWorld = selectedMap.value === TRAVEL_TYPE.WORLD;
-  const isDomestic = selectedMap.value === TRAVEL_TYPE.DOMESTIC;
+  const isWorld = selectedMapType.value === TRAVEL_TYPE.WORLD;
+  const isDomestic = selectedMapType.value === TRAVEL_TYPE.DOMESTIC;
 
   return (
     <div className="flex h-full flex-col gap-5">
@@ -42,8 +42,8 @@ export default function MyMapPage() {
           <Chip
             key={list.value}
             size="lg"
-            variant={selectedMap.value === list.value ? 'primary' : 'gray'}
-            onClick={() => setSelectedMap(list)}
+            variant={selectedMapType.value === list.value ? 'primary' : 'gray'}
+            onClick={() => setSelectedMapType(list)}
           >
             {list.label}
           </Chip>
@@ -58,7 +58,7 @@ export default function MyMapPage() {
             </span>
             <AmchartMap
               isOpenFillModal={isOpenFillModal}
-              setSelectedMap={setSelectedMap}
+              setSelectedMap={setSelectedMapType}
               setSelectedMapId={setSelectedMapId}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
             />
@@ -82,6 +82,7 @@ export default function MyMapPage() {
       <CreateFillMemoryModal
         isOpen={isOpenFillModal}
         handleClose={() => setIsOpenFillModal(false)}
+        selectedMapType={selectedMapType.value as string}
         selectedMapId={selectedMapId}
       />
     </div>

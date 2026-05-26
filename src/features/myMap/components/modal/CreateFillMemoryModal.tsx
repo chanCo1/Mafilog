@@ -29,6 +29,7 @@ interface ICreateFillMemoryModal {
   handleClose: () => void;
   isModify?: boolean;
   selectedMapId: string | undefined;
+  selectedMapType: string;
 }
 
 export default function CreateFillMemoryModal({
@@ -36,6 +37,7 @@ export default function CreateFillMemoryModal({
   handleClose,
   isModify = false,
   selectedMapId,
+  selectedMapType
 }: ICreateFillMemoryModal) {
   const [stepData, setStepData] = useState(CREATE_MEMORY_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
@@ -138,11 +140,14 @@ export default function CreateFillMemoryModal({
     const formData = new FormData();
 
     formData.append('mapId', selectedMapId);
+    formData.append('mapType', selectedMapType);
     formData.append('title', memoryTitle);
     formData.append('from', selectedDate?.from?.toISOString() || '');
     formData.append('to', selectedDate?.to?.toISOString() || '');
     formData.append('memo', memoryMemo);
 
+    formData.append('scheduleId', selectedTravel.value.toString());
+    formData.append('scheduleTitle', selectedTravel.label);
     formData.append('schedules', JSON.stringify(loadSchedules));
 
     selectedImage.forEach((file) => {

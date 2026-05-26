@@ -22,7 +22,7 @@ interface IAmchartMap {
   isWheel?: boolean;
   isDomestic?: boolean;
   readonly?: boolean;
-  setSelectedMap?: Dispatch<SetStateAction<ILabelValue>>;
+  setSelectedMapType?: Dispatch<SetStateAction<ILabelValue>>;
   setSelectedMapId: Dispatch<SetStateAction<string | undefined>>
   isOpenFillModal?: boolean;
   setIsOpenFillModal?: () => void;
@@ -32,7 +32,7 @@ export default function AmchartMap({
   isWheel = true,
   isDomestic = false,
   readonly = false,
-  setSelectedMap,
+  setSelectedMapType,
   setSelectedMapId,
   isOpenFillModal,
   setIsOpenFillModal,
@@ -158,7 +158,7 @@ export default function AmchartMap({
         };
 
         if (dataContext?.id === 'KR') {
-          setSelectedMap?.(MAP_TRAVEL_TYPE_LIST[1]);
+          setSelectedMapType?.(MAP_TRAVEL_TYPE_LIST[1]);
           return;
         }
 
