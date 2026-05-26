@@ -16,6 +16,7 @@ import { ILabelValue } from '@/shared/interfaces';
 import AmchartMap from '@/shared/components/map/AmchartMap';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
 import CreateFillMemoryModal from '@/features/myMap/components/modal/CreateFillMemoryModal';
+import { useGetMemoryList } from '@/features/myMap/hooks/rquery/useGetMemoryList';
 
 interface IMyMapPage {}
 
@@ -24,11 +25,18 @@ export default function MyMapPage() {
     MAP_TRAVEL_TYPE_LIST[0],
   );
   // 선택한 지도 아이디
-  const [selectedMapId, setSelectedMapId] = useState<string | undefined>(undefined);
+  const [selectedMapId, setSelectedMapId] = useState<string | undefined>(
+    undefined,
+  );
   const [isOpenFillModal, setIsOpenFillModal] = useState(false);
 
   const isWorld = selectedMapType.value === TRAVEL_TYPE.WORLD;
   const isDomestic = selectedMapType.value === TRAVEL_TYPE.DOMESTIC;
+
+  const { data: memoryList } = useGetMemoryList(
+    selectedMapType.value as string,
+  );
+  console.log(memoryList);
 
   return (
     <div className="flex h-full flex-col gap-5">

@@ -11,6 +11,7 @@ export interface IPlaceList {
   lng: number;
   types: string[];
   timezone?: string;
+  placeId?: string;
 }
 
 /** 일정 리스트 조회 */
