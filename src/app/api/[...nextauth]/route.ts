@@ -51,10 +51,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             rememberMe,
           };
         } catch (error: any) {
-          const serverMessage = error.response?.data?.message;
+        const serverMessage = error.response?.data?.message;
           console.log(`${serverMessage || '인증 실패'}`);
 
-          return null;
+          throw new Error(serverMessage);
         }
       },
     }),
@@ -66,12 +66,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     error: '/login',
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
+      if (trigger === 'update' && session) {
+        if (session.name) token.name = session.name;
+        if (session.profileImageUrl !== undefined) {
+          token.profileImageUrl = session.profileImageUrl;
+        }
+      }
+
       if (user) {
         token.id = user.id;
-        token.profileImageUrl = (user as any).profileImageUrl;
+        token.profileImageUrl = user.profileImageUrl;
         token.email = user.email;
-        token.hexCode = (user as any).hexCode;
+        token.hexCode = user.hexCode;
 
         if (account?.provider === 'kakao') {
           try {
@@ -97,8 +104,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             throw new Error('SocialLoginError');
           }
         } else {
-          token.accessToken = (user as any).accessToken;
-          const isRememberMe = (user as any).rememberMe;
+          token.accessToken = user.accessToken;
+          const isRememberMe = user.rememberMe;
 
           if (isRememberMe) {
             token.exp = getTokenExpire(30);
@@ -112,9 +119,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        (session as any).accessToken = token.accessToken;
-        session.user.image = token.profileImageUrl as string;
-        (session.user as any).hexCode = token.hexCode as string;
+        session.accessToken = token.accessToken as string;
+        session.user.profileImageUrl = token.profileImageUrl as string;
+        session.user.hexCode = token.hexCode as string;
       }
       return session;
     },

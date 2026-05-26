@@ -8,6 +8,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { cn } from '@/shared/lib/utils';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
 import Step from '@/shared/components/ui/Step';
@@ -74,13 +75,6 @@ export default function CreateNewTravelModal({
   const { mutateAsync: deleteMyTravel } = useDeleteMyTravel();
 
   const router = useRouter();
-
-  /** 멤버 초기값 대입 */
-  useEffect(() => {
-    if (userInfo?.user?.id && userInfo?.user?.name) {
-      setTravelMember([{ id: userInfo.user.id, name: userInfo.user.name }]);
-    }
-  }, [userInfo]);
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -244,23 +238,30 @@ export default function CreateNewTravelModal({
 
   /** 수정 시 상세 값 바인딩 */
   useEffect(() => {
-    if (isOpen && isModify && travelDetail) {
-      setStepData(stepData.map((step) => ({ ...step, isComplete: true })));
+    if (isOpen) {
+      if (isModify && travelDetail) {
+        setStepData(stepData.map((step) => ({ ...step, isComplete: true })));
 
-      setTravelType(travelDetail.travelType);
-      setSelectedCities(travelDetail.cities);
-      setSeletedDate({
-        from: new Date(travelDetail.from),
-        to: new Date(travelDetail.to),
-      });
-      setTravelTitle(travelDetail.title);
+        setTravelType(travelDetail.travelType);
+        setSelectedCities(travelDetail.cities);
+        setSeletedDate({
+          from: new Date(travelDetail.from),
+          to: new Date(travelDetail.to),
+        });
+        setTravelTitle(travelDetail.title);
 
-      setTravelPartner(travelDetail.travelPartner);
-      setTravelStyles(travelDetail.travelStyles);
-      setTravelMember(travelDetail.member);
+        setTravelPartner(travelDetail.travelPartner);
+        setTravelStyles(travelDetail.travelStyles);
+        setTravelMember(travelDetail.member);
 
-      if (travelDetail.imageUrl) {
-        setSelectedImage([travelDetail.imageUrl]);
+        if (travelDetail.imageUrl) {
+          setSelectedImage([travelDetail.imageUrl]);
+        }
+      } else if (!isModify) {
+        if (userInfo?.user?.id && userInfo?.user?.name) {
+          // 멤버 초기값 대입
+          setTravelMember([{ id: userInfo.user.id, name: userInfo.user.name }]);
+        }
       }
     }
   }, [travelId, isModify, isOpen, travelDetail]);
@@ -277,10 +278,17 @@ export default function CreateNewTravelModal({
       }
       handleClose={onClickCloseBtn}
       footer={
-        <div className="flex w-full justify-between gap-1">
-          <Button variant="redOutline" onClick={handelDeleteTravel}>
-            삭제
-          </Button>
+        <div
+          className={cn(
+            'flex w-full gap-1',
+            isModify ? 'justify-between' : 'justify-end',
+          )}
+        >
+          {isModify && (
+            <Button variant="redOutline" onClick={handelDeleteTravel}>
+              삭제
+            </Button>
+          )}
           <div className="flex gap-1">
             {currentStep === 1 && (
               <>

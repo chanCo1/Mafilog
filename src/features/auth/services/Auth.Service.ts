@@ -24,13 +24,14 @@ class _AuthService {
   /** 로그인 요청 */
   async postLogin(data: ILoginRequest) {
     const response = await axiosInstance.post(`${API_URL}/login`, data);
-    return response.data;
+    return response.data.data;
   }
 
   /** 소셜 로그인 요청 */
   async postSocialLogin(data: ISocialLoginRequest) {
     const response = await axiosInstance.post(`${API_URL}/socialLogin`, data);
-    return response.data;
+    // TODO: 로그인 에러가 난다면 여길 확인해볼것
+    return response.data.data;
   }
 }
 

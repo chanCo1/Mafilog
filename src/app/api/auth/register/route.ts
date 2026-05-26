@@ -5,10 +5,13 @@
  * @description: 회원가입 api
  */
 
-import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import bcrypt from 'bcrypt';
 import { getHexCode } from '@/shared/lib/utils';
+import {
+  successResponse,
+  errorResponse,
+} from '@/shared/backend/utils/apiResponse';
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -17,18 +20,12 @@ export async function POST(request: Request) {
   try {
     // 입력 유효성 검사
     if (!email || !name || !password || !passwordConfirm) {
-      return NextResponse.json(
-        { message: '입력되지 않은 항목이 있습니다.' },
-        { status: 400 },
-      );
+      return errorResponse('입력되지 않은 항목이 있습니다.', 400);
     }
 
     // 비밀번호 확인 유효성 검사
     if (password !== passwordConfirm) {
-      return NextResponse.json(
-        { message: '비밀번호가 일치하지 않습니다.' },
-        { status: 400 },
-      );
+      return errorResponse('비밀번호가 일치하지 않습니다.', 400);
     }
 
     const findUser = await prisma.user.findUnique({
@@ -37,10 +34,7 @@ export async function POST(request: Request) {
 
     // 이미 가입되어 있는지 유효성 검사
     if (findUser) {
-      return NextResponse.json(
-        { message: '이미 가입되어 있는 이메일입니다.' },
-        { status: 400 },
-      );
+      return errorResponse('이미 가입되어 있는 이메일입니다.', 400);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -55,12 +49,9 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json(
-      { message: '회원가입을 완료했어요' },
-      { status: 200 },
-    );
+    return successResponse();
   } catch (error) {
     console.log('@@ 회원가입 에러', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }

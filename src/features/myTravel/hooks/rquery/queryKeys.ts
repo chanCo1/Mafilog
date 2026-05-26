@@ -19,7 +19,7 @@ export const travelChecklistKeys = {
 /** 스케줄 */
 export const travelScheduleKeys = {
   all: ['travelSchedules'] as const,
-  detail: (travelId: string) => [...travelExpensesKeys.all, travelId] as const,
+  detail: (travelId: string) => [...travelScheduleKeys.all, travelId] as const,
 };
 
 /** 가계부 */

@@ -129,12 +129,12 @@ function InputEntity(
           {isPassword && (
             <div className="cursor-pointer">
               {passwordType === 'password' ? (
-                <Eye
+                <EyeClosed
                   className="text-gray-7 h-4 w-4"
                   onClick={() => setPassowrdType('text')}
                 />
               ) : (
-                <EyeClosed
+                <Eye
                   className="text-gray-7 h-4 w-4"
                   onClick={() => setPassowrdType('password')}
                 />

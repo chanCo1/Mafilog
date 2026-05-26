@@ -9,6 +9,10 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/shared/lib/prisma';
 import { authGuard } from '@/shared/backend/lib/authGuard';
 import { IChecklistRequest } from '@/features/myTravel/interfaces/checklist.interface';
+import {
+  successResponse,
+  errorResponse,
+} from '@/shared/backend/utils/apiResponse';
 
 /** 내 여행 상세 조회 */
 export async function GET(
@@ -16,19 +20,10 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   const authValidate = await authGuard(request);
-
-  if (!authValidate.isValid) {
-    return authValidate.errorResponse;
-  }
+  if (!authValidate.isValid) return authValidate.errorResponse;
 
   const travelId = Number(params.id);
-
-  if (!travelId) {
-    return NextResponse.json(
-      { message: '잘 못 된 접근입니다.' },
-      { status: 403 },
-    );
-  }
+  if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
 
   try {
     const checklist = await prisma.checklistCategory.findMany({
@@ -39,10 +34,10 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({ data: checklist }, { status: 200 });
+    return successResponse(checklist);
   } catch (error) {
     console.error('@@ 내 여행 상세 체크리스트 조회 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }
 
@@ -55,13 +50,7 @@ export async function POST(
   if (!authValidate.isValid) return authValidate.errorResponse;
 
   const travelId = Number(params.id);
-
-  if (!travelId) {
-    return NextResponse.json(
-      { message: '잘 못 된 접근입니다.' },
-      { status: 403 },
-    );
-  }
+  if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
 
   const body = (await request.json()) as IChecklistRequest;
   const { type, categoryId, label } = body;
@@ -75,7 +64,7 @@ export async function POST(
         },
         include: { items: true },
       });
-      return NextResponse.json({ data: newCategory }, { status: 200 });
+      return successResponse(newCategory);
     }
 
     if (type === 'ITEM') {
@@ -91,11 +80,11 @@ export async function POST(
           label,
         },
       });
-      return NextResponse.json({ data: newItem }, { status: 200 });
+      return successResponse(newItem);
     }
   } catch (error) {
     console.error('@@ 체크리스트 생성 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }
 
@@ -110,10 +99,7 @@ export async function PATCH(
   const travelId = Number(params.id);
 
   if (!travelId) {
-    return NextResponse.json(
-      { message: '잘 못 된 접근입니다.' },
-      { status: 403 },
-    );
+    return errorResponse('잘 못 된 접근입니다.', 403);
   }
 
   const body = (await request.json()) as IChecklistRequest;
@@ -122,34 +108,29 @@ export async function PATCH(
   try {
     if (type === 'CATEGORY') {
       if (!categoryId || !label) {
-        return NextResponse.json(
-          { message: '카테고리 id 또는 카테고리명이 없습니다.' },
-          { status: 400 },
-        );
+        return errorResponse('카테고리 id 또는 카테고리명이 없습니다.', 400);
       }
       const updatedCategory = await prisma.checklistCategory.update({
         where: { id: Number(categoryId) },
         data: { label },
       });
-      return NextResponse.json({ data: updatedCategory }, { status: 200 });
+      return successResponse(updatedCategory);
     }
 
     if (type === 'ITEM') {
       if (!itemId || isChecked === undefined) {
-        return NextResponse.json(
-          { message: '아이템 id 또는 체크 상태가 없습니다.' },
-          { status: 400 },
-        );
+        return errorResponse('아이템 id 또는 체크 상태가 없습니다.', 400);
       }
+
       const updatedItem = await prisma.checklistItem.update({
         where: { id: Number(itemId) },
         data: { isChecked },
       });
-      return NextResponse.json({ data: updatedItem }, { status: 200 });
+      return successResponse(updatedItem);
     }
   } catch (error) {
     console.error('@@ 체크리스트 수정 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }
 
@@ -164,10 +145,7 @@ export async function DELETE(
   const travelId = Number(params.id);
 
   if (!travelId) {
-    return NextResponse.json(
-      { message: '잘 못 된 접근입니다.' },
-      { status: 403 },
-    );
+    return errorResponse('잘 못 된 접근입니다.', 403);
   }
 
   const body = (await request.json()) as IChecklistRequest;
@@ -176,41 +154,29 @@ export async function DELETE(
   try {
     if (type === 'CATEGORY') {
       if (!type || !categoryId) {
-        return NextResponse.json(
-          { message: '필수 항목이 없습니다' },
-          { status: 400 },
-        );
+        return errorResponse('필수 항목이 없습니다.', 400);
       }
 
       await prisma.checklistCategory.delete({
         where: { id: Number(categoryId) },
       });
 
-      return NextResponse.json(
-        { message: '카테고리가 삭제되었습니다.' },
-        { status: 200 },
-      );
+      return successResponse();
     }
 
     if (type === 'ITEM') {
       if (!type || !itemId) {
-        return NextResponse.json(
-          { message: '필수 항목이 없습니다' },
-          { status: 400 },
-        );
+        return errorResponse('필수 항목이 없습니다.', 400);
       }
 
       await prisma.checklistItem.delete({
         where: { id: Number(itemId) },
       });
 
-      return NextResponse.json(
-        { message: '항목이 삭제되었습니다.' },
-        { status: 200 },
-      );
+      return successResponse();
     }
   } catch (error) {
     console.error('@@ 체크리스트 삭제 에러 >>', error);
-    return NextResponse.json({ message: 'server error' }, { status: 500 });
+    return errorResponse();
   }
 }

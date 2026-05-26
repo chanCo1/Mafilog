@@ -14,7 +14,7 @@ export type TProfileSchema = z.infer<typeof profileSchema>;
 /** 비밀번호 변경 스키마 */
 export const passwordSchema = z
   .object({
-    currentPassword: z.string().min(1, '현재 비밀번호를 입력해주세요'),
+    originPassword: z.string().min(1, '현재 비밀번호를 입력해주세요'),
     changePassword: z
       .string()
       .min(8, '8자 이상 비밀번호를 입력해주세요')
@@ -27,6 +27,6 @@ export const passwordSchema = z
   })
   .refine((value) => value.changePassword === value.changePasswordConfirm, {
     message: '비밀번호가 일치하지 않아요',
-    path: ['passwordConfirm'],
+    path: ['changePasswordConfirm'],
   });
 export type TPasswordSchema = z.infer<typeof passwordSchema>;

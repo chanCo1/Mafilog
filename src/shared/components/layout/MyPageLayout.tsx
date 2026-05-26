@@ -14,6 +14,7 @@ import { Card } from '@/shared/components/ui/Card';
 import { useRouter, usePathname } from 'next/navigation';
 import { cn } from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
+import { useSession } from 'next-auth/react';
 
 interface IMyPageLayout {
   children: ReactNode;
@@ -22,6 +23,8 @@ interface IMyPageLayout {
 export default function MyPageLayout({ children }: IMyPageLayout) {
   const router = useRouter();
   const path = usePathname();
+
+  const { data: userInfo } = useSession();
 
   /** 페이지 이동 핸들링 */
   const handelLinkPage = (path: string) => {
@@ -32,10 +35,10 @@ export default function MyPageLayout({ children }: IMyPageLayout) {
     <div className="flex flex-col gap-2">
       <PageHeader
         title="마이페이지"
-        description={`안녕하세요. ${'여행최고'}님!`}
+        description={`안녕하세요. ${userInfo?.user?.name}님!`}
       />
-      <div className="max-mobile:flex-col flex gap-5 max-mobile:gap-1">
-        <Card className="text-text-secondary max-mobile:hidden flex w-50 flex-col gap-1 shrink-0 sticky top-13 h-50 mt-4">
+      <div className="max-mobile:flex-col max-mobile:gap-1 flex gap-5">
+        <Card className="text-text-secondary max-mobile:hidden sticky top-13 mt-4 flex h-50 w-50 shrink-0 flex-col gap-1">
           {MYPAGE_LIST.map((list) => (
             <p
               key={list.path}

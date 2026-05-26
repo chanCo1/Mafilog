@@ -17,57 +17,104 @@ import {
   TPasswordSchema,
 } from '@/features/myPage/schema/profile.schema';
 import { useForm } from 'react-hook-form';
+import { useSession } from 'next-auth/react';
+import FileUpload from '@/shared/components/ui/FileUpload';
+import { useEffect, useState } from 'react';
+import { useUpdateProfile } from '@/features/myPage/hooks/rquery/useUpdateProfile';
+import { useUpdatePassword } from '@/features/myPage/hooks/rquery/useUpdatePassword';
+import { toast } from 'sonner';
 
 export default function UserInfoPage() {
+  const { data: sessionData } = useSession();
+  const userInfo = sessionData?.user;
+
   const {
     register: profileRegister,
     handleSubmit: profileHandleSubmit,
     formState: { errors: profileErrors },
+    watch: profileWatch,
   } = useForm<TProfileSchema>({
     resolver: zodResolver(profileSchema),
     mode: 'onChange',
     defaultValues: {
-      name: '',
+      name: userInfo?.name ?? '',
     },
   });
+
+  const watchName = profileWatch('name');
 
   const {
     register: passwordRegister,
     handleSubmit: passwordHandleSubmit,
     formState: { errors: passwordErrors },
+    watch: passwordWatch,
+    reset: passwordReset,
   } = useForm<TPasswordSchema>({
     resolver: zodResolver(passwordSchema),
     mode: 'onChange',
     defaultValues: {
-      currentPassword: '',
+      originPassword: '',
       changePassword: '',
       changePasswordConfirm: '',
     },
   });
 
+  const watchOriginPassword = passwordWatch('originPassword');
+  const watchChangePassword = passwordWatch('changePassword');
+  const watchChangePasswordConfirm = passwordWatch('changePasswordConfirm');
+
+  const [selectedImage, setSelectedImage] = useState<(File | string)[]>([]);
+
+  const { mutateAsync: updateProfile, isPending: isUpdatePending } =
+    useUpdateProfile();
+  const { mutateAsync: updatePassword, isPending: isPasswordPending } =
+    useUpdatePassword();
+
   /** 프로필 변경 */
-  const onProfileSubmit = (value: TProfileSchema) => {
-    console.log(value);
+  const onProfileSubmit = async (value: TProfileSchema) => {
+    const formData = new FormData();
+
+    formData.append('name', value.name);
+    selectedImage.forEach((file) => {
+      formData.append('imageUrl', file);
+    });
+
+    await updateProfile(formData);
   };
 
   /** 비밀번호 변경 */
-  const onPasswordSubmit = (value: TPasswordSchema) => {
-    console.log(value);
+  const onPasswordSubmit = async (value: TPasswordSchema) => {
+    if (value.originPassword === value.changePassword) {
+      toast.error('변경된 비밀번호가 없습니다.');
+      return;
+    }
+
+    await updatePassword(value, {
+      onSuccess: () => {
+        passwordReset();
+      },
+    });
   };
 
+  /** 이미지 데이터 바인딩 */
+  useEffect(() => {
+    if (userInfo?.profileImageUrl) {
+      setSelectedImage([userInfo.profileImageUrl]);
+    }
+  }, [userInfo?.profileImageUrl]);
+
   return (
-    <div className="flex flex-col gap-5 pt-4">
+    <div className="max-mobile:w-full flex w-2/5 flex-col gap-5 pt-4">
       <div className="flex flex-col gap-1">
         <h3 className="text-lg font-bold">프로필 변경</h3>
         <span>프로필</span>
-        <div className="flex gap-3">
-          <div className="relative">
-            <div className="h-40 w-40 rounded-full bg-amber-100" />
-            <div className="absolute right-0 bottom-0">
-              <Button variant="gray" size="xs">
-                변경
-              </Button>
-            </div>
+        <div className="flex flex-col gap-3">
+          <div className="flex max-w-100 justify-center">
+            <FileUpload
+              className="w-50 rounded-full"
+              selectedImage={selectedImage}
+              setSelectedImage={setSelectedImage}
+            />
           </div>
           <form onSubmit={profileHandleSubmit(onProfileSubmit)}>
             <div className="flex flex-col gap-2">
@@ -76,17 +123,24 @@ export default function UserInfoPage() {
                 isRequired
                 description="최대 10글자 입력 가능해요"
                 errorMsg={profileErrors.name?.message}
+                maxLength={10}
                 {...profileRegister('name')}
               />
-              <Button type="submit" size="sm">
-                프로필 변경
-              </Button>
+              <Input label="이메일" value={userInfo?.email ?? ''} disabled />
+              <div className="flex justify-end">
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={!watchName || isUpdatePending}
+                  isLoading={isUpdatePending}
+                >
+                  프로필 변경
+                </Button>
+              </div>
             </div>
           </form>
         </div>
       </div>
-
-      <Input label="이메일" value={'test@test.com'} disabled />
 
       <div className="flex flex-col gap-1">
         <h3 className="text-lg font-bold">비밀번호 변경</h3>
@@ -99,8 +153,8 @@ export default function UserInfoPage() {
             label="현재 비밀번호"
             isPassword
             isRequired
-            errorMsg={passwordErrors.currentPassword?.message}
-            {...passwordRegister('currentPassword')}
+            errorMsg={passwordErrors.originPassword?.message}
+            {...passwordRegister('originPassword')}
           />
           <Input
             type="password"
@@ -120,7 +174,17 @@ export default function UserInfoPage() {
             {...passwordRegister('changePasswordConfirm')}
           />
           <div className="flex justify-end pt-1">
-            <Button type="submit" size="sm">
+            <Button
+              type="submit"
+              size="sm"
+              disabled={
+                !watchOriginPassword ||
+                !watchChangePassword ||
+                !watchChangePasswordConfirm ||
+                isPasswordPending
+              }
+              isLoading={isPasswordPending}
+            >
               비밀번호 변경
             </Button>
           </div>
