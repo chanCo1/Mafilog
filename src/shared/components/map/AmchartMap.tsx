@@ -23,6 +23,7 @@ interface IAmchartMap {
   isDomestic?: boolean;
   readonly?: boolean;
   setSelectedMap?: Dispatch<SetStateAction<ILabelValue>>;
+  setSelectedMapId: Dispatch<SetStateAction<string | undefined>>
   isOpenFillModal?: boolean;
   setIsOpenFillModal?: () => void;
 }
@@ -32,6 +33,7 @@ export default function AmchartMap({
   isDomestic = false,
   readonly = false,
   setSelectedMap,
+  setSelectedMapId,
   isOpenFillModal,
   setIsOpenFillModal,
 }: IAmchartMap) {
@@ -192,6 +194,7 @@ export default function AmchartMap({
           },
           onOk: () => {
             setIsOpenFillModal?.();
+            setSelectedMapId(dataContext?.id);
           },
         });
       }

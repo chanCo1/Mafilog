@@ -23,6 +23,8 @@ export default function MyMapPage() {
   const [selectedMap, setSelectedMap] = useState<ILabelValue>(
     MAP_TRAVEL_TYPE_LIST[0],
   );
+  // 선택한 지도 아이디
+  const [selectedMapId, setSelectedMapId] = useState<string | undefined>(undefined);
   const [isOpenFillModal, setIsOpenFillModal] = useState(false);
 
   const isWorld = selectedMap.value === TRAVEL_TYPE.WORLD;
@@ -57,6 +59,7 @@ export default function MyMapPage() {
             <AmchartMap
               isOpenFillModal={isOpenFillModal}
               setSelectedMap={setSelectedMap}
+              setSelectedMapId={setSelectedMapId}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
             />
           </div>
@@ -69,6 +72,7 @@ export default function MyMapPage() {
             <AmchartMap
               isOpenFillModal={isOpenFillModal}
               isDomestic
+              setSelectedMapId={setSelectedMapId}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
             />
           </div>
@@ -78,6 +82,7 @@ export default function MyMapPage() {
       <CreateFillMemoryModal
         isOpen={isOpenFillModal}
         handleClose={() => setIsOpenFillModal(false)}
+        selectedMapId={selectedMapId}
       />
     </div>
   );
