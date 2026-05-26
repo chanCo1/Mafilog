@@ -32,13 +32,14 @@ export default function FillMemoryStep3({
       <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
         <FileUpload
           label="대표 이미지"
-          description="필수는 아니에요."
+          description="필수는 아니에요"
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
           isMultiple
         />
         <Input
           label="제목"
+          isRequired
           placeholder="추억 제목을 입력해주세요"
           description="최대 20자까지 입력가능해요"
           maxLength={20}

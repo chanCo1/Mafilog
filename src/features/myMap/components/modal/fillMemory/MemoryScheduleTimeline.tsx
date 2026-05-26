@@ -15,11 +15,11 @@ import { Textarea } from '@/shared/components/ui/Textarea';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import RatingStar from '@/shared/components/ui/RatingStar';
-import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface IMemoryScheduleTimeline {
-  timeLineData: ISecheduleListResponse;
-  dailyAllSchedule: ISecheduleListResponse[];
+  timeLineData: IScheduleListResponse;
+  dailyAllSchedule: IScheduleListResponse[];
   currentIndex: number;
 }
 
@@ -68,7 +68,7 @@ export default function MemoryScheduleTimeline({
                 )}
               </div>
               <RatingStar value={rating} onChange={setRating} />
-              <Textarea />
+              <Textarea defaultValue={timeLineData.memo} />
             </div>
           ) : (
             <span className="text-text-secondary">{timeLineData.memo}</span>

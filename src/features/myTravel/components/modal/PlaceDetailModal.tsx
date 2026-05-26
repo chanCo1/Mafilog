@@ -15,7 +15,7 @@ import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import TimePicker from '@/shared/components/ui/TimePicker';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
-import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
 import { getTravelDayList } from '@/shared/lib/utils';
 import { useUpdateSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useUpdateSchedulePlace';
@@ -25,7 +25,7 @@ import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 interface IPlaceDetailModal {
   isOpen: boolean;
   handleClose: () => void;
-  timeLineData: ISecheduleListResponse | undefined;
+  timeLineData: IScheduleListResponse | undefined;
 }
 
 export default function PlaceDetailModal({

@@ -20,10 +20,10 @@ export interface IScheduleResponse {
   date: string;
   travelId: number;
   createAt: string;
-  scheduleList: ISecheduleListResponse[];
+  scheduleList: IScheduleListResponse[];
 }
 
-export interface ISecheduleListResponse {
+export interface IScheduleListResponse {
   id: number;
   type: SCHEDULE_TYPE;
   day: number;
@@ -50,4 +50,16 @@ export interface IUpdateSchedulePlaceRequest extends Pick<
   'memo' | 'day' | 'time'
 > {
   scheduleListId: number;
+}
+
+export interface IScheduleListWithRating extends IScheduleListResponse {
+  rating: number;
+}
+
+/** 추억채우기 스케줄 */
+export interface IMemorySchedules extends Omit<
+  IScheduleResponse,
+  'scheduleList'
+> {
+  scheduleList: IScheduleListWithRating[];
 }
