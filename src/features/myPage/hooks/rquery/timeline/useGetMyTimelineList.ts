@@ -5,12 +5,12 @@
  * @description: 내 여행 타임라인 리스트 조회
  */
 
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import MyTimelineService from '@/features/myPage/services/MyTimeline.service';
 import { myTimelineKeys } from '@/features/myPage/hooks/rquery/queryKeys';
 
 export const useGetMyTimelineList = () => {
-  const query = useQuery({
+  const query = useSuspenseQuery({
     queryKey: myTimelineKeys.all,
     queryFn: async () => await MyTimelineService.getMyTimelineList(),
     staleTime: 1000 * 60 * 5,

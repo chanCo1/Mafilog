@@ -12,14 +12,14 @@ import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { Card } from '@/shared/components/ui/Card';
 import { Textarea } from '@/shared/components/ui/Textarea';
-import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import RatingStar from '@/shared/components/ui/RatingStar';
+import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface IMemoryScheduleTimeline {
-  timeLineData: IScheduleList;
-  dailyAllSchedule: IScheduleList[];
+  timeLineData: ISecheduleListResponse;
+  dailyAllSchedule: ISecheduleListResponse[];
   currentIndex: number;
 }
 
@@ -61,8 +61,8 @@ export default function MemoryScheduleTimeline({
                 {_place && (
                   <span className="text-text-secondary text-sm">
                     {<>{getPlaceCategory(_place.types)}</>}
-                    {_place.country.name && (
-                      <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
+                    {_place.countryName && (
+                      <>&nbsp;&#8226;&nbsp;{_place.countryName}</>
                     )}
                   </span>
                 )}

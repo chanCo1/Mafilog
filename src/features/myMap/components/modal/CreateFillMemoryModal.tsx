@@ -6,6 +6,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { cn } from '@/shared/lib/utils';
 import { CREATE_MEMORY_STEP_LIST } from '@/features/myMap/constants/myMap.constant';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { Button } from '@/shared/components/ui/Button';
@@ -16,6 +17,8 @@ import { DateRange } from 'react-day-picker';
 import FillMemoryStep1 from '@/features/myMap/components/modal/fillMemory/FillMemoryStep1';
 import FillMemoryStep2 from '@/features/myMap/components/modal/fillMemory/FillmemoryStep2';
 import FillMemoryStep3 from '@/features/myMap/components/modal/fillMemory/FillMemoryStep3';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { ILabelValue } from '@/shared/interfaces';
 
 interface ICreateFillMemoryModal {
   isOpen: boolean;
@@ -31,15 +34,20 @@ export default function CreateFillMemoryModal({
   const [stepData, setStepData] = useState(CREATE_MEMORY_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
 
-  const [selectedTravel, setSelectedTravel] = useState(true);
+  const [selectedTravel, setSelectedTravel] = useState<ILabelValue>({
+    label: '선택 안함',
+    value: 0,
+  });
 
   const [selectedDate, setSeletedDate] = useState<DateRange | undefined>(
     undefined,
   );
 
   const [memoryTitle, setMemoryTitle] = useState('');
-  const [selectedImage, setSelectedImage] = useState<File[]>([]);
+  const [selectedImage, setSelectedImage] = useState<(File | string)[]>([]);
   const [memoryMemo, setMemoryMemo] = useState('');
+
+  const { openDialog } = useDialogStore();
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -61,11 +69,46 @@ export default function CreateFillMemoryModal({
 
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
-    handleClose();
-    // dataReset();
+    openDialog({
+      type: 'confirm',
+      message: '작성중인 내용이 있습니다. 닫을까요?',
+      okLabel: '닫기',
+      onOk: async () => {
+        handleClose();
+        dataReset();
+      },
+    });
   };
 
   const handelCreateNewMemory = () => {};
+
+  /** 여행 삭제 */
+  const handelDeleteTravel = () => {
+    openDialog({
+      type: 'confirm',
+      message: '추억을 삭제할까요?',
+      okLabel: '삭제',
+      // onOk: async () => {
+      //   await deleteMyTravel(travelId);
+      //   router.push('/my-travel');
+      // },
+    });
+  };
+
+  /** 데이터 초기화 */
+  const dataReset = () => {
+    if (isModify) return;
+
+    stepData.forEach((data) => {
+      data.isComplete = false;
+    });
+    setCurrentStep(1);
+    setSelectedTravel({ label: '선택 안함', value: 0 });
+    setSeletedDate(undefined);
+    setMemoryTitle('');
+    setSelectedImage([]);
+    setMemoryMemo('');
+  };
 
   useEffect(() => {
     /** 날짜 선택 완료 후 지웠을 경우 */
@@ -84,46 +127,58 @@ export default function CreateFillMemoryModal({
       title="추억 채우기"
       handleClose={onClickCloseBtn}
       footer={
-        <div className="flex gap-1">
-          {currentStep === 1 && (
-            <>
-              <Button variant="gray" onClick={onClickCloseBtn}>
-                취소
-              </Button>
-              <Button
-                // disabled={!selectedCities.length}
-                onClick={handelNextStep}
-              >
-                다음
-              </Button>
-            </>
+        <div
+          className={cn(
+            'flex w-full gap-1',
+            isModify ? 'justify-between' : 'justify-end',
           )}
-          {currentStep === 2 && (
-            <>
-              <Button
-                variant="gray"
-                onClick={handlePrevStep}
-                prefix={<ChevronLeft className="h-4 w-4" />}
-              >
-                이전
-              </Button>
-              <Button disabled={!selectedDate} onClick={handelNextStep}>
-                다음
-              </Button>
-            </>
+        >
+          {isModify && (
+            <Button variant="redOutline" onClick={handelDeleteTravel}>
+              삭제
+            </Button>
           )}
-          {currentStep === 3 && (
-            <>
-              <Button
-                variant="gray"
-                onClick={handlePrevStep}
-                prefix={<ChevronLeft className="h-4 w-4" />}
-              >
-                이전
-              </Button>
-              <Button onClick={handelCreateNewMemory}>여행 만들기</Button>
-            </>
-          )}
+          <div className="flex gap-1">
+            {currentStep === 1 && (
+              <>
+                <Button variant="gray" onClick={onClickCloseBtn}>
+                  취소
+                </Button>
+                <Button
+                  // disabled={!selectedCities.length}
+                  onClick={handelNextStep}
+                >
+                  다음
+                </Button>
+              </>
+            )}
+            {currentStep === 2 && (
+              <>
+                <Button
+                  variant="gray"
+                  onClick={handlePrevStep}
+                  prefix={<ChevronLeft className="h-4 w-4" />}
+                >
+                  이전
+                </Button>
+                <Button disabled={!selectedDate} onClick={handelNextStep}>
+                  다음
+                </Button>
+              </>
+            )}
+            {currentStep === 3 && (
+              <>
+                <Button
+                  variant="gray"
+                  onClick={handlePrevStep}
+                  prefix={<ChevronLeft className="h-4 w-4" />}
+                >
+                  이전
+                </Button>
+                <Button onClick={handelCreateNewMemory}>여행 만들기</Button>
+              </>
+            )}
+          </div>
         </div>
       }
     >
