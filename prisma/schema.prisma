@@ -37,6 +37,7 @@ model User {
   createdAt       DateTime @default(now())
   // 수정 시간
   updatedAt       DateTime @default(now())
+  memories        Memory[]
 }
 
 /**
@@ -378,4 +379,58 @@ model ExpenseSpender {
   // 지출 내역 연동
   expenseListId      Int
   expenseList        ExpenseList  @relation(fields: [expenseListId], references: [id], onDelete: Cascade)
+}
+
+/**
+ * 추억
+ */
+model Memory {
+  id            Int              @id @default(autoincrement())
+  // 추억 제목
+  title         String
+  // 시작일
+  from          DateTime
+  // 종료일
+  to            DateTime
+  // 이미지 주소
+  imageUrl      String[]
+  // 색상
+  hexCode       String
+  // 지도 타입 "WORLD" | "DOMESTIC"
+  mapType       String
+  // 지도 id (해당 지도의 국가/도시 코드)
+  mapId         String
+  // 메모
+  memo          String?
+  scheduleId    String?
+  scheduleTitle String?
+  // 유저 아이디
+  userId        String
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // 해당 지도의 스케줄
+  schedules     MemorySchedule[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @default(now())
+
+  @@index([mapType, mapId])
+}
+
+/**
+ * 추억 일정
+ */
+model MemorySchedule {
+  id        Int     @id @default(autoincrement())
+  // 일차
+  day       Int
+  // 스케줄 타입 ('place' | 'memo')
+  type      String
+  // 방문 시간
+  time      String?
+  // 메모
+  memo      String?
+  // 별점
+  rating    Int     @default(0)
+  placeData Json?
+  memoryId  Int
+  memory    Memory  @relation(fields: [memoryId], references: [id], onDelete: Cascade)
 }
