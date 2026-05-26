@@ -22,17 +22,20 @@ import { ILabelValue } from '@/shared/interfaces';
 import { toast } from 'sonner';
 import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interface';
 import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
+import { useCreateMemory } from '@/features/myMap/hooks/rquery/useCreateMemory';
 
 interface ICreateFillMemoryModal {
   isOpen: boolean;
   handleClose: () => void;
   isModify?: boolean;
+  selectedMapId: string | undefined;
 }
 
 export default function CreateFillMemoryModal({
   isOpen,
   handleClose,
   isModify = false,
+  selectedMapId,
 }: ICreateFillMemoryModal) {
   const [stepData, setStepData] = useState(CREATE_MEMORY_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
@@ -57,6 +60,7 @@ export default function CreateFillMemoryModal({
   const { data: travelSchedule } = useGetTravelSchedules(
     selectedTravel.value ? selectedTravel.value.toString() : '',
   );
+  const { mutateAsync: createMemory } = useCreateMemory();
 
   useEffect(() => {
     if (travelSchedule?.length) {
@@ -98,7 +102,12 @@ export default function CreateFillMemoryModal({
   const onClickCloseBtn = () => {
     openDialog({
       type: 'confirm',
-      message: '작성중인 내용이 있습니다. 닫을까요?',
+      message: (
+        <div className="flex flex-col gap-1">
+          <span>작성중인 내용이 있습니다.</span>
+          <span>닫을까요?</span>
+        </div>
+      ),
       okLabel: '닫기',
       onOk: async () => {
         handleClose();
@@ -107,7 +116,13 @@ export default function CreateFillMemoryModal({
     });
   };
 
+  /** 추억 저장 */
   const handelCreateNewMemory = async () => {
+    if (!selectedMapId) {
+      toast.error('지도가 선택되지 않았습니다');
+      return;
+    }
+
     const notCompletedStep = stepData.filter((step, index) => {
       // 완료되지 않은 스텝이 있을 경우
       if (stepData.length - 1 > index + 1) {
@@ -122,6 +137,7 @@ export default function CreateFillMemoryModal({
 
     const formData = new FormData();
 
+    formData.append('mapId', selectedMapId);
     formData.append('title', memoryTitle);
     formData.append('from', selectedDate?.from?.toISOString() || '');
     formData.append('to', selectedDate?.to?.toISOString() || '');
@@ -132,6 +148,14 @@ export default function CreateFillMemoryModal({
     selectedImage.forEach((file) => {
       formData.append('imageUrl', file);
     });
+
+    if (isModify) {
+      console.log('수정');
+    } else {
+      createMemory(formData);
+    }
+
+    onClickCloseBtn();
   };
 
   /** 여행 삭제 */
