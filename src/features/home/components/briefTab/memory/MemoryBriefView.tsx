@@ -40,6 +40,7 @@ function MemoryBrief() {
           src="/world_map.png"
           alt="세계 지도 이미지"
           fill
+          sizes='100%'
           className="object-contain opacity-20"
         />
         <Image
