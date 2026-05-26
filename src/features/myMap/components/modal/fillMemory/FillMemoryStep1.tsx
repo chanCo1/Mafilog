@@ -5,31 +5,35 @@
  * @description: FillMemoryStep1 컴포넌트
  */
 
-import { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Chip } from '@/shared/components/ui/Chip';
-import { MAP_MOCK_DATA } from '@/features/myMap/data/mockData';
 import MemoryScheduleDay from '@/features/myMap/components/modal/fillMemory/MemoryScheduleDay';
 import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/timeline/useGetMyTimelineList';
 import { ILabelValue } from '@/shared/interfaces';
-import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
+import { DateRange } from 'react-day-picker';
+import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interface';
+import { IHandleUpdateSchedule } from '@/features/myMap/interfaces/memory.interface';
 
 interface IFillMemoryStep1 {
   selectedTravel: ILabelValue;
   setSelectedTravel: Dispatch<SetStateAction<ILabelValue>>;
+  setSeletedDate: Dispatch<SetStateAction<DateRange | undefined>>;
+  loadSchedules: IMemorySchedules[];
+  setLoadSchedules: Dispatch<SetStateAction<IMemorySchedules[]>>;
 }
 
 export default function FillMemoryStep1({
   selectedTravel,
   setSelectedTravel,
+  setSeletedDate,
+  loadSchedules,
+  setLoadSchedules,
 }: IFillMemoryStep1) {
   const [selectedDay, setSelectedDay] = useState(1);
 
   const { data: timelineList } = useGetMyTimelineList();
-  const { data: travelSchedule } = useGetTravelSchedules(
-    selectedTravel.value ? selectedTravel.value.toString() : '',
-  );
 
   /** 여행 불러오기 옵션 */
   const loadTravelOptions = useMemo(() => {
@@ -41,9 +45,45 @@ export default function FillMemoryStep1({
     return [{ label: '선택 안함', value: 0 }, ..._timelineList];
   }, [timelineList]);
 
-  const filteredSchedule = travelSchedule?.filter(
+  const filteredSchedule = loadSchedules?.filter(
     (schedule) => schedule.day === selectedDay,
   );
+
+  /** 여행 선택 핸들링 */
+  const handleSelectedTravel = (selected: ILabelValue) => {
+    const finedTimeline = timelineList.find(
+      (list) => list.id === selected.value,
+    );
+
+    setSelectedTravel(selected);
+    if (finedTimeline) {
+      setSeletedDate({ from: finedTimeline.from, to: finedTimeline.to });
+    } else {
+      setSeletedDate(undefined);
+    }
+  };
+
+  /** 일정 수정(별점, 메모) */
+  const handleUpdateSchedule = ({
+    day,
+    key,
+    listId,
+    value,
+  }: IHandleUpdateSchedule) => {
+    setLoadSchedules((prev) =>
+      prev.map((schedule) => {
+        if (schedule.day !== day) return schedule;
+
+        return {
+          ...schedule,
+          scheduleList: schedule.scheduleList.map((list) => {
+            if (list.id !== listId) return list;
+            return { ...list, [key]: value };
+          }),
+        };
+      }),
+    );
+  };
 
   return (
     <div className="flex h-full flex-col gap-3">
@@ -53,18 +93,17 @@ export default function FillMemoryStep1({
         isRequired
         value={selectedTravel}
         description="여행 일정을 선택해주세요"
-        onChange={(value) => setSelectedTravel(value)}
+        onChange={(value) => handleSelectedTravel(value)}
       />
 
-      {travelSchedule?.length ? (
+      {loadSchedules?.length ? (
         <div className="flex h-full flex-col gap-3">
-          <h3 className="text-lg font-bold">{MAP_MOCK_DATA.title}</h3>
+          <h3 className="text-lg font-bold">{selectedTravel.label}</h3>
           <div className="scrollbar-hide flex shrink-0 gap-1 overflow-x-auto">
-            {travelSchedule.map((_day, index) => (
+            {loadSchedules.map((_day, index) => (
               <Chip
                 key={`${_day.day}-${index}`}
                 size="md"
-                className="shrink-0"
                 variant={
                   selectedDay === _day.day ? 'primary' : 'primaryOutline'
                 }
@@ -77,12 +116,13 @@ export default function FillMemoryStep1({
               <MemoryScheduleDay
                 key={`${schedule.day}-${index}`}
                 schedule={schedule}
+                onUpdateSchedule={handleUpdateSchedule}
               />
             ))}
           </div>
         </div>
       ) : (
-        <p className="text-text-secondary">일정 선택 없이 추억을 채울게요</p>
+        <p className="text-text-secondary">일정 선택 없이 추억이 채워져요</p>
       )}
     </div>
   );

@@ -15,18 +15,26 @@ import { Textarea } from '@/shared/components/ui/Textarea';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import RatingStar from '@/shared/components/ui/RatingStar';
-import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { IScheduleListWithRating } from '@/features/myTravel/interfaces/schedule.interface';
+import { IHandleUpdateSchedule } from '@/features/myMap/interfaces/memory.interface';
 
 interface IMemoryScheduleTimeline {
-  timeLineData: IScheduleListResponse;
-  dailyAllSchedule: IScheduleListResponse[];
+  timeLineData: IScheduleListWithRating;
+  dailyAllSchedule: IScheduleListWithRating[];
   currentIndex: number;
+  onUpdateSchedule: ({
+    day,
+    key,
+    listId,
+    value,
+  }: IHandleUpdateSchedule) => void;
 }
 
 export default function MemoryScheduleTimeline({
   timeLineData,
   currentIndex,
   dailyAllSchedule,
+  onUpdateSchedule,
 }: IMemoryScheduleTimeline) {
   const displayCount = useTimelineDiscplayCount({
     currentIndex,
@@ -35,8 +43,6 @@ export default function MemoryScheduleTimeline({
   });
 
   const _place = timeLineData?.place;
-
-  const [rating, setRating] = useState(0);
 
   return (
     <div className="flex w-full gap-3">
@@ -54,7 +60,7 @@ export default function MemoryScheduleTimeline({
         <Card>
           {timeLineData.type === SCHEDULE_TYPE.PLACE ? (
             <div className="flex flex-col gap-1">
-              <div className='flex flex-col'>
+              <div className="flex flex-col">
                 <span className="text-lg font-bold">
                   {timeLineData.place?.name}
                 </span>
@@ -67,8 +73,28 @@ export default function MemoryScheduleTimeline({
                   </span>
                 )}
               </div>
-              <RatingStar value={rating} onChange={setRating} />
-              <Textarea defaultValue={timeLineData.memo} />
+              <RatingStar
+                value={timeLineData.rating}
+                onChange={(newRating) =>
+                  onUpdateSchedule({
+                    day: timeLineData.day,
+                    key: 'rating',
+                    value: newRating,
+                    listId: timeLineData.id,
+                  })
+                }
+              />
+              <Textarea
+                value={timeLineData.memo || ''}
+                onChange={(e) =>
+                  onUpdateSchedule({
+                    day: timeLineData.day,
+                    key: 'memo',
+                    value: e.target.value,
+                    listId: timeLineData.id,
+                  })
+                }
+              />
             </div>
           ) : (
             <span className="text-text-secondary">{timeLineData.memo}</span>

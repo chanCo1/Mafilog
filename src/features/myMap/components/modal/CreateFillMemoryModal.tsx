@@ -19,6 +19,9 @@ import FillMemoryStep2 from '@/features/myMap/components/modal/fillMemory/Fillme
 import FillMemoryStep3 from '@/features/myMap/components/modal/fillMemory/FillMemoryStep3';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { ILabelValue } from '@/shared/interfaces';
+import { toast } from 'sonner';
+import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interface';
+import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
 
 interface ICreateFillMemoryModal {
   isOpen: boolean;
@@ -47,7 +50,31 @@ export default function CreateFillMemoryModal({
   const [selectedImage, setSelectedImage] = useState<(File | string)[]>([]);
   const [memoryMemo, setMemoryMemo] = useState('');
 
+  const [loadSchedules, setLoadSchedules] = useState<IMemorySchedules[]>([]);
+
   const { openDialog } = useDialogStore();
+
+  const { data: travelSchedule } = useGetTravelSchedules(
+    selectedTravel.value ? selectedTravel.value.toString() : '',
+  );
+
+  useEffect(() => {
+    if (travelSchedule?.length) {
+      const scheduleWithRating: IMemorySchedules[] = travelSchedule.map(
+        (schedule) => ({
+          ...schedule,
+          scheduleList: schedule.scheduleList.map((list) => ({
+            ...list,
+            rating: 0,
+          })),
+        }),
+      );
+
+      setLoadSchedules(scheduleWithRating);
+    } else {
+      setLoadSchedules([]);
+    }
+  }, [travelSchedule]);
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -80,7 +107,32 @@ export default function CreateFillMemoryModal({
     });
   };
 
-  const handelCreateNewMemory = () => {};
+  const handelCreateNewMemory = async () => {
+    const notCompletedStep = stepData.filter((step, index) => {
+      // 완료되지 않은 스텝이 있을 경우
+      if (stepData.length - 1 > index + 1) {
+        return !step.isComplete;
+      }
+    });
+
+    if (notCompletedStep.length) {
+      toast.error('입력되지 않은 항목이 있습니다');
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append('title', memoryTitle);
+    formData.append('from', selectedDate?.from?.toISOString() || '');
+    formData.append('to', selectedDate?.to?.toISOString() || '');
+    formData.append('memo', memoryMemo);
+
+    formData.append('schedules', JSON.stringify(loadSchedules));
+
+    selectedImage.forEach((file) => {
+      formData.append('imageUrl', file);
+    });
+  };
 
   /** 여행 삭제 */
   const handelDeleteTravel = () => {
@@ -120,6 +172,8 @@ export default function CreateFillMemoryModal({
       );
     }
   }, [selectedDate]);
+
+  const isDisabled = !selectedDate || !memoryTitle;
 
   return (
     <SideModal
@@ -175,7 +229,9 @@ export default function CreateFillMemoryModal({
                 >
                   이전
                 </Button>
-                <Button onClick={handelCreateNewMemory}>여행 만들기</Button>
+                <Button disabled={isDisabled} onClick={handelCreateNewMemory}>
+                  여행 만들기
+                </Button>
               </>
             )}
           </div>
@@ -193,12 +249,16 @@ export default function CreateFillMemoryModal({
           <FillMemoryStep1
             selectedTravel={selectedTravel}
             setSelectedTravel={setSelectedTravel}
+            setSeletedDate={setSeletedDate}
+            loadSchedules={loadSchedules}
+            setLoadSchedules={setLoadSchedules}
           />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={currentStep === 2}>
           <FillMemoryStep2
             selectedDate={selectedDate}
             setSeletedDate={setSeletedDate}
+            disabled={!!selectedTravel.value}
           />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={currentStep === 3}>

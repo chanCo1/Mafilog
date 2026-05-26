@@ -8,13 +8,23 @@
 import { cn } from '@/shared/lib/utils';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
 import MemoryScheduleTimeline from '@/features/myMap/components/modal/fillMemory/MemoryScheduleTimeline';
-import { IScheduleResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interface';
+import { IHandleUpdateSchedule } from '@/features/myMap/interfaces/memory.interface';
 
 interface IMemoryScheduleDay {
-  schedule: IScheduleResponse;
+  schedule: IMemorySchedules;
+  onUpdateSchedule: ({
+    day,
+    key,
+    listId,
+    value,
+  }: IHandleUpdateSchedule) => void;
 }
 
-export default function MemoryScheduleDay({ schedule }: IMemoryScheduleDay) {
+export default function MemoryScheduleDay({
+  schedule,
+  onUpdateSchedule,
+}: IMemoryScheduleDay) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-1">
@@ -33,6 +43,7 @@ export default function MemoryScheduleDay({ schedule }: IMemoryScheduleDay) {
                 timeLineData={_data}
                 dailyAllSchedule={schedule.scheduleList}
                 currentIndex={index}
+                onUpdateSchedule={onUpdateSchedule}
               />
             ))}
           </>
