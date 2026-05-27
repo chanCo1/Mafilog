@@ -18,8 +18,6 @@ import { TRAVEL_TYPE } from '@/shared/types/Enum';
 import CreateFillMemoryModal from '@/features/myMap/components/modal/CreateFillMemoryModal';
 import { useGetMemoryList } from '@/features/myMap/hooks/rquery/useGetMemoryList';
 
-interface IMyMapPage {}
-
 export default function MyMapPage() {
   const [selectedMapType, setSelectedMapType] = useState<ILabelValue>(
     MAP_TRAVEL_TYPE_LIST[0],
@@ -59,10 +57,22 @@ export default function MyMapPage() {
 
       <div className="h-full">
         {isWorld && (
-          <div className="flex h-full flex-col">
-            <span className="text-text-secondary text-center break-keep">
-              지도가 비어있어요. 나만의 세계 여행 지도를 채워보세요.
-            </span>
+          <div className="flex h-full flex-col gap-2">
+            <div className="flex justify-center break-keep">
+              {memoryList?.length ? (
+                <div>
+                  벌써{' '}
+                  <span className="text-primary font-bold">
+                    {memoryList?.length}개국
+                  </span>
+                  에 소중한 추억이 채워졌네요!
+                </div>
+              ) : (
+                <span className="text-text-secondary">
+                  지도가 비어있어요. 나만의 세계 여행 지도를 채워보세요
+                </span>
+              )}
+            </div>
             <AmchartMap
               isOpenFillModal={isOpenFillModal}
               setSelectedMapType={setSelectedMapType}
@@ -73,10 +83,22 @@ export default function MyMapPage() {
           </div>
         )}
         {isDomestic && (
-          <div className="flex h-full flex-col">
-            <span className="text-text-secondary text-center break-keep">
-              아직 채워진 도시가 없어요. 소중한 첫 번째 추억을 남겨보세요.
-            </span>
+          <div className="flex h-full flex-col gap-2">
+            <div className="flex justify-center break-keep">
+              {memoryList?.length ? (
+                <div>
+                  벌써{' '}
+                  <span className="text-primary font-bold">
+                    {memoryList?.length}개 도시
+                  </span>
+                  에 추억이 채워졌네요! 소중한 추억을 더 남겨보세요
+                </div>
+              ) : (
+                <span className="text-text-secondary">
+                  아직 채워진 도시가 없어요. 소중한 첫 번째 추억을 남겨보세요.
+                </span>
+              )}
+            </div>
             <AmchartMap
               isOpenFillModal={isOpenFillModal}
               isDomestic

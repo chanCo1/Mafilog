@@ -107,11 +107,11 @@ export default function CreateFillMemoryModal({
       type: 'confirm',
       message: (
         <div className="flex flex-col gap-1">
-          <span>작성중인 내용이 있습니다.</span>
-          <span>닫을까요?</span>
+          <span>작성중인 내용이 있어요</span>
+          <span>작성을 그만할까요?</span>
         </div>
       ),
-      okLabel: '닫기',
+      okLabel: '그만',
       onOk: () => {
         handleClose();
         dataReset();
