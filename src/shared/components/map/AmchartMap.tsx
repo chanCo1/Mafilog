@@ -23,10 +23,12 @@ interface IAmchartMap {
   isDomestic?: boolean;
   readonly?: boolean;
   setSelectedMapType?: Dispatch<SetStateAction<ILabelValue>>;
-  setSelectedMapId: Dispatch<SetStateAction<string | undefined>>;
+  setSelectedMapId?: Dispatch<SetStateAction<string | undefined>>;
   isOpenFillModal?: boolean;
   setIsOpenFillModal?: () => void;
-  memoryList: IMemoryListResponse[] | undefined;
+  isOpenDetailModal?: boolean;
+  setIsOpenDetailModal?: () => void;
+  memoryList?: IMemoryListResponse[] | undefined;
 }
 
 export default function AmchartMap({
@@ -37,6 +39,8 @@ export default function AmchartMap({
   setSelectedMapId,
   isOpenFillModal,
   setIsOpenFillModal,
+  isOpenDetailModal,
+  setIsOpenDetailModal,
   memoryList,
 }: IAmchartMap) {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -161,14 +165,14 @@ export default function AmchartMap({
           activePolygonRef.current = target;
         }
 
-        if (readonly) return;
+        if (readonly || !memoryListRef.current) return;
 
         const memory = memoryListRef.current?.find(
           (_memory) => _memory.mapId === dataContext?.id,
         );
-
         if (memory) {
-          setSelectedMapId(dataContext?.id);
+          setIsOpenDetailModal?.();
+          setSelectedMapId?.(dataContext?.id);
         } else {
           openDialog({
             type: 'confirm',
@@ -186,7 +190,7 @@ export default function AmchartMap({
             },
             onOk: () => {
               setIsOpenFillModal?.();
-              setSelectedMapId(dataContext?.id);
+              setSelectedMapId?.(dataContext?.id);
             },
           });
         }
@@ -277,12 +281,12 @@ export default function AmchartMap({
 
           polygon.setAll({
             fill: fillColor,
-            fillOpacity: 0.7,
+            fillOpacity: 1,
           });
 
           polygon.states.create('default', {
             fill: fillColor,
-            fillOpacity: 0.7,
+            fillOpacity: 1,
           });
 
           polygon.states.create('hover', {
@@ -338,6 +342,16 @@ export default function AmchartMap({
       }
     }
   }, [isOpenFillModal]);
+
+  useEffect(() => {
+    if (!isOpenDetailModal) {
+      console.log(isOpenDetailModal)
+      if (activePolygonRef.current) {
+        activePolygonRef.current.set('active', false);
+        activePolygonRef.current = null;
+      }
+    }
+  }, [isOpenDetailModal]);
 
   return <div ref={mapRef} className="h-full w-full rounded-lg!" />;
 }

@@ -17,6 +17,7 @@ import AmchartMap from '@/shared/components/map/AmchartMap';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
 import CreateFillMemoryModal from '@/features/myMap/components/modal/CreateFillMemoryModal';
 import { useGetMemoryList } from '@/features/myMap/hooks/rquery/useGetMemoryList';
+import FillMemoryDetailModal from '@/features/myMap/components/modal/FillMemoryDetailModal';
 
 export default function MyMapPage() {
   const [selectedMapType, setSelectedMapType] = useState<ILabelValue>(
@@ -27,6 +28,7 @@ export default function MyMapPage() {
     undefined,
   );
   const [isOpenFillModal, setIsOpenFillModal] = useState(false);
+  const [isOpenDetailModal, setIsOpenDetailModal] = useState(false);
 
   const isWorld = selectedMapType.value === TRAVEL_TYPE.WORLD;
   const isDomestic = selectedMapType.value === TRAVEL_TYPE.DOMESTIC;
@@ -55,10 +57,10 @@ export default function MyMapPage() {
         ))}
       </div>
 
-      <div className="h-full">
+      <div className={cn('h-full')}>
         {isWorld && (
           <div className="flex h-full flex-col gap-2">
-            <div className="flex justify-center break-keep">
+            <div className="flex break-keep justify-center text-center">
               {memoryList?.length ? (
                 <div>
                   벌써{' '}
@@ -75,18 +77,20 @@ export default function MyMapPage() {
             </div>
             <AmchartMap
               isOpenFillModal={isOpenFillModal}
+              setIsOpenFillModal={() => setIsOpenFillModal(true)}
+              isOpenDetailModal={isOpenDetailModal}
+              setIsOpenDetailModal={() => setIsOpenDetailModal(true)}
               setSelectedMapType={setSelectedMapType}
               setSelectedMapId={setSelectedMapId}
-              setIsOpenFillModal={() => setIsOpenFillModal(true)}
               memoryList={memoryList}
             />
           </div>
         )}
         {isDomestic && (
           <div className="flex h-full flex-col gap-2">
-            <div className="flex justify-center break-keep">
+            <div className="flex text-center justify-center break-keep">
               {memoryList?.length ? (
-                <div>
+                <div className=''>
                   벌써{' '}
                   <span className="text-primary font-bold">
                     {memoryList?.length}개 도시
@@ -100,10 +104,12 @@ export default function MyMapPage() {
               )}
             </div>
             <AmchartMap
-              isOpenFillModal={isOpenFillModal}
               isDomestic
-              setSelectedMapId={setSelectedMapId}
+              isOpenFillModal={isOpenFillModal}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
+              isOpenDetailModal={isOpenDetailModal}
+              setIsOpenDetailModal={() => setIsOpenDetailModal(true)}
+              setSelectedMapId={setSelectedMapId}
               memoryList={memoryList}
             />
           </div>
@@ -115,6 +121,11 @@ export default function MyMapPage() {
         handleClose={() => setIsOpenFillModal(false)}
         selectedMapType={selectedMapType.value as string}
         selectedMapId={selectedMapId}
+      />
+
+      <FillMemoryDetailModal
+        isOpen={isOpenDetailModal}
+        handleClose={() => setIsOpenDetailModal(false)}
       />
     </div>
   );

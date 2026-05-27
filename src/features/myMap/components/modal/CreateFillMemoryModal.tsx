@@ -173,7 +173,7 @@ export default function CreateFillMemoryModal({
   };
 
   /** 여행 삭제 */
-  const handelDeleteTravel = () => {
+  const handelDeleteMemory = () => {
     openDialog({
       type: 'confirm',
       message: '추억을 삭제할까요?',
@@ -226,7 +226,7 @@ export default function CreateFillMemoryModal({
           )}
         >
           {isModify && (
-            <Button variant="redOutline" onClick={handelDeleteTravel}>
+            <Button variant="redOutline" onClick={handelDeleteMemory}>
               삭제
             </Button>
           )}
