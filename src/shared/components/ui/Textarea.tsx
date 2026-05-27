@@ -80,8 +80,8 @@ function TextareaEntity({
         >
           <textarea
             className={cn(
-              'w-full resize-none outline-none focus:ring-0',
-              readonly ? 'h-auto' : 'h-20',
+              'w-full resize-none outline-none focus:ring-0 scrollbar-hide',
+              readonly ? 'h-10' : 'h-20',
             )}
             {...props}
             onFocus={handleFocus}

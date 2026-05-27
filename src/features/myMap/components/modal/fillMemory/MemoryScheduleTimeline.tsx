@@ -17,17 +17,19 @@ import { getPlaceCategory } from '@/shared/lib/utils';
 import RatingStar from '@/shared/components/ui/RatingStar';
 import { IScheduleListWithRating } from '@/features/myTravel/interfaces/schedule.interface';
 import { IHandleUpdateSchedule } from '@/features/myMap/interfaces/memory.interface';
+import { IMemoryScheduleList } from '@/features/myMap/interfaces/memory.interface';
 
 interface IMemoryScheduleTimeline {
-  timeLineData: IScheduleListWithRating;
-  dailyAllSchedule: IScheduleListWithRating[];
+  timeLineData: IScheduleListWithRating | IMemoryScheduleList;
+  dailyAllSchedule: IScheduleListWithRating[] | IMemoryScheduleList[];
   currentIndex: number;
-  onUpdateSchedule: ({
+  onUpdateSchedule?: ({
     day,
     key,
     listId,
     value,
   }: IHandleUpdateSchedule) => void;
+  readonly?: boolean;
 }
 
 export default function MemoryScheduleTimeline({
@@ -35,10 +37,11 @@ export default function MemoryScheduleTimeline({
   currentIndex,
   dailyAllSchedule,
   onUpdateSchedule,
+  readonly,
 }: IMemoryScheduleTimeline) {
   const displayCount = useTimelineDiscplayCount({
     currentIndex,
-    dailyAllSchedule,
+    dailyAllSchedule: dailyAllSchedule as IScheduleListWithRating[],
     type: timeLineData?.type,
   });
 
@@ -76,25 +79,30 @@ export default function MemoryScheduleTimeline({
               <RatingStar
                 value={timeLineData.rating}
                 onChange={(newRating) =>
-                  onUpdateSchedule({
+                  onUpdateSchedule?.({
                     day: timeLineData.day,
                     key: 'rating',
                     value: newRating,
                     listId: timeLineData.id,
                   })
                 }
+                readonly={readonly}
               />
-              <Textarea
-                value={timeLineData.memo || ''}
-                onChange={(e) =>
-                  onUpdateSchedule({
-                    day: timeLineData.day,
-                    key: 'memo',
-                    value: e.target.value,
-                    listId: timeLineData.id,
-                  })
-                }
-              />
+              {(!readonly || timeLineData.memo) && (
+                <Textarea
+                  value={timeLineData.memo || ''}
+                  onChange={(e) =>
+                    onUpdateSchedule?.({
+                      day: timeLineData.day,
+                      key: 'memo',
+                      value: e.target.value,
+                      listId: timeLineData.id,
+                    })
+                  }
+                  variant={readonly ? 'none' : 'default'}
+                  readonly={readonly}
+                />
+              )}
             </div>
           ) : (
             <span className="text-text-secondary">{timeLineData.memo}</span>

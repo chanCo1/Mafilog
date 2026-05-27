@@ -9,21 +9,24 @@ import { cn } from '@/shared/lib/utils';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
 import MemoryScheduleTimeline from '@/features/myMap/components/modal/fillMemory/MemoryScheduleTimeline';
 import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interface';
+import { IMemoryScheduleResponse } from '@/features/myMap/interfaces/memory.interface';
 import { IHandleUpdateSchedule } from '@/features/myMap/interfaces/memory.interface';
 
 interface IMemoryScheduleDay {
-  schedule: IMemorySchedules;
-  onUpdateSchedule: ({
+  schedule: IMemorySchedules | IMemoryScheduleResponse;
+  onUpdateSchedule?: ({
     day,
     key,
     listId,
     value,
   }: IHandleUpdateSchedule) => void;
+  readonly?: boolean; 
 }
 
 export default function MemoryScheduleDay({
   schedule,
   onUpdateSchedule,
+  readonly,
 }: IMemoryScheduleDay) {
   return (
     <div className="flex flex-col gap-2">
@@ -44,11 +47,12 @@ export default function MemoryScheduleDay({
                 dailyAllSchedule={schedule.scheduleList}
                 currentIndex={index}
                 onUpdateSchedule={onUpdateSchedule}
+                readonly={readonly}
               />
             ))}
           </>
         ) : (
-          <p className="text-text-secondary">등록된 일정이 없습니다</p>
+          <p className="text-text-secondary">등록된 일정이 없어요</p>
         )}
       </div>
     </div>
