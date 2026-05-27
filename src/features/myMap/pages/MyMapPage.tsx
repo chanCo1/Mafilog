@@ -36,7 +36,6 @@ export default function MyMapPage() {
   const { data: memoryList } = useGetMemoryList(
     selectedMapType.value as string,
   );
-  console.log(memoryList);
 
   return (
     <div className="flex h-full flex-col gap-5">
@@ -69,6 +68,7 @@ export default function MyMapPage() {
               setSelectedMapType={setSelectedMapType}
               setSelectedMapId={setSelectedMapId}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
+              memoryList={memoryList}
             />
           </div>
         )}
@@ -82,6 +82,7 @@ export default function MyMapPage() {
               isDomestic
               setSelectedMapId={setSelectedMapId}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
+              memoryList={memoryList}
             />
           </div>
         )}

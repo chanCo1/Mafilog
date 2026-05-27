@@ -28,7 +28,7 @@ class _MemoryService {
   }: {
     mapType?: string;
     mapId?: string;
-  }): Promise<IMemoryListResponse> {
+  }): Promise<IMemoryListResponse[]> {
     const params = { mapType, mapId };
     const response = await axiosInstanceWithAuth.get(`${API_URL}`, { params });
 
