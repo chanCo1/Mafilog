@@ -11,11 +11,12 @@ import MemoryService from '@/features/myMap/services/Memory.service';
 
 export const useGetMemoryDetail = (mapId: string) => {
   const queryKey = memoryKeys.detail(mapId);
+  const isMapId = Boolean(Number(mapId));
 
   const query = useQuery({
     queryKey,
     queryFn: async () => await MemoryService.getMemoryDetail(mapId),
-    enabled: !!mapId,
+    enabled: isMapId,
     staleTime: 1000 * 60 * 5,
   });
 
