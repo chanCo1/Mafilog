@@ -354,7 +354,7 @@ export default function AmchartMap({
     }
   }, [isOpenDetailModal]);
 
-  return <div ref={mapRef} className="h-full w-full rounded-lg!" />;
+  return <div ref={mapRef} className="h-full w-full rounded-lg! overflow-hidden" />;
 }
 
 export const tooltipBox = (regionName: string, imageUrl?: string) => {
