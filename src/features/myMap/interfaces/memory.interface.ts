@@ -1,5 +1,5 @@
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
-import { TRAVEL_TYPE } from '@/shared/types/Enum';
+import { TRAVEL_TYPE, SCHEDULE_TYPE } from '@/shared/types/Enum';
 
 export interface IHandleUpdateSchedule {
   day: number;
@@ -28,7 +28,16 @@ export interface IMemoryListResponse {
 
 /** 추억 상세 조회 */
 export interface IMemoryDetailResponse extends IMemoryListResponse {
-  schedules: IMemoryScheduleList[];
+  schedules: IMemoryScheduleResponse[];
+}
+
+export interface IMemoryScheduleResponse {
+  id: number;
+  day: number;
+  date: string;
+  scheduleList: IMemoryScheduleList[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IMemoryScheduleList {
@@ -39,6 +48,6 @@ export interface IMemoryScheduleList {
   order: number;
   rating: number;
   time: string;
-  type: string;
-  place: IPlaceList[];
+  type: SCHEDULE_TYPE;
+  place: IPlaceList;
 }
