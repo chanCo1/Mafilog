@@ -46,16 +46,19 @@ export const convertFormattedDate = (
 
 /** 여행 기간 포멧 노출 (YYYY.MM.DD ~ YYYY.MM.DD) */
 export const convertTravelDateRange = (
-  from: Date | undefined,
-  to: Date | undefined,
+  from: Date | undefined | string,
+  to: Date | undefined | string,
 ) => {
   if (!from || !to) return '';
 
-  if (from === to) {
-    return `${convertFormattedDate(from)}(${getDay(from)}) (${getTravelDay(from, to)}일)`;
+  const fromDate = typeof from === 'string' ? new Date(from) : from;
+  const toDate = typeof to === 'string' ? new Date(to) : to;
+
+  if (fromDate === toDate) {
+    return `${convertFormattedDate(fromDate)}(${getDay(fromDate)}) (${getTravelDay(fromDate, toDate)}일)`;
   }
 
-  return `${convertFormattedDate(from)}(${getDay(from)}) ~ ${convertFormattedDate(to)}(${getDay(to)}) (${getTravelDay(from, to)}일)`;
+  return `${convertFormattedDate(fromDate)}(${getDay(fromDate)}) ~ ${convertFormattedDate(toDate)}(${getDay(toDate)}) (${getTravelDay(fromDate, toDate)}일)`;
 };
 
 /** 무슨 요일인지 구하기 */
