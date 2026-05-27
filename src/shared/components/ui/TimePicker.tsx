@@ -148,7 +148,7 @@ export default function TimePicker({
       {isOpen && (
         <div
           className={cn(
-            'scrollbar-hide absolute z-50 flex max-h-50 w-full gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
+            'scrollbar-hide absolute z-50 flex max-h-45 w-full gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
             direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
           )}
         >

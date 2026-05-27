@@ -57,7 +57,7 @@ export default function Dropdown({
       {isOpen && (
         <div
           className={cn(
-            'scrollbar-hide absolute z-50 flex max-h-50 w-max min-w-30 flex-col gap-1 overflow-auto rounded-lg bg-white p-2 whitespace-nowrap shadow-lg',
+            'scrollbar-hide absolute z-50 flex max-h-45 w-max min-w-30 flex-col gap-1 overflow-auto rounded-lg bg-white p-2 whitespace-nowrap shadow-lg',
             direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
           )}
           onClick={() => setIsOpen(false)}
