@@ -282,8 +282,11 @@ export default function CreateFillMemoryModal({
         onClickStep={setCurrentStep}
         className="pb-4"
       />
-      <div className="relative h-[calc(100%-170px)]">
-        <FadeInOutStyled isShow={currentStep === 1}>
+      <div className="relative h-full">
+        <FadeInOutStyled
+          isShow={currentStep === 1}
+          clasName="h-[calc(100%-170px)]"
+        >
           <FillMemoryStep1
             selectedTravel={selectedTravel}
             setSelectedTravel={setSelectedTravel}
@@ -292,14 +295,20 @@ export default function CreateFillMemoryModal({
             setLoadSchedules={setLoadSchedules}
           />
         </FadeInOutStyled>
-        <FadeInOutStyled isShow={currentStep === 2}>
+        <FadeInOutStyled
+          isShow={currentStep === 2}
+          clasName="h-[calc(100%-80px)]"
+        >
           <FillMemoryStep2
             selectedDate={selectedDate}
             setSeletedDate={setSeletedDate}
             disabled={!!selectedTravel.value}
           />
         </FadeInOutStyled>
-        <FadeInOutStyled isShow={currentStep === 3}>
+        <FadeInOutStyled
+          isShow={currentStep === 3}
+          clasName="h-[calc(100%-80px)]"
+        >
           <FillMemoryStep3
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}
