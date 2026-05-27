@@ -5,7 +5,7 @@
  * @description: 추억 상세 모달
  */
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/Button';
 import { SideModal } from '@/shared/components/ui/SideModal';
@@ -17,6 +17,8 @@ import { convertTravelDateRange } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { Chip } from '@/shared/components/ui/Chip';
 import MemoryScheduleDay from '@/features/myMap/components/modal/fillMemory/MemoryScheduleDay';
+import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 
 interface IFillMemoryDetailModal {
   isOpen: boolean;
@@ -33,7 +35,6 @@ export default function FillMemoryDetailModal({
 
   const { openDialog } = useDialogStore();
   const { data: memoryDetail } = useGetMemoryDetail(selectedMapId ?? '');
-  console.log('memoryDetail >> ', memoryDetail);
 
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
@@ -56,6 +57,20 @@ export default function FillMemoryDetailModal({
   const filteredSchedule = memoryDetail?.schedules?.filter(
     (schedule) => schedule.day === selectedDay,
   );
+
+  const getPlace = useMemo(() => {
+    const targetDay = memoryDetail?.schedules?.find(
+      (s) => s.day === selectedDay,
+    );
+
+    if (!targetDay) return [];
+
+    const places = targetDay.scheduleList
+      .filter((item) => item.type === SCHEDULE_TYPE.PLACE && !!item.place)
+      .map((item) => item.place as IPlaceList);
+
+    return places.length > 0 ? places : [];
+  }, [memoryDetail?.schedules, selectedDay]);
 
   return (
     <SideModal
@@ -81,7 +96,7 @@ export default function FillMemoryDetailModal({
         </div>
       }
     >
-      <div className="flex h-full overflow-auto scrollbar-hide flex-col gap-5">
+      <div className="scrollbar-hide flex h-full flex-col gap-5 overflow-auto">
         {memoryDetail?.imageUrl.length ? (
           <EmblaCarousel imageUrls={memoryDetail.imageUrl} />
         ) : null}
@@ -96,9 +111,9 @@ export default function FillMemoryDetailModal({
           {memoryDetail?.memo && <Card>{memoryDetail.memo}</Card>}
         </div>
 
-        <div className="flex flex-col gap-2 h-full">
+        <div className="flex flex-col gap-2">
           {memoryDetail && (
-            <div className="scrollbar-hide flex gap-1 overflow-x-auto shrink-0">
+            <div className="scrollbar-hide flex shrink-0 gap-1 overflow-x-auto">
               {memoryDetail?.schedules.map((_day, index) => (
                 <Chip
                   key={`${_day.day}-${index}`}
@@ -111,6 +126,12 @@ export default function FillMemoryDetailModal({
               ))}
             </div>
           )}
+          <div className="h-50 overflow-hidden rounded-lg">
+            <GoogleMap
+              places={getPlace}
+              id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
+            />
+          </div>
           <div className="flex flex-col gap-3">
             {filteredSchedule?.map((schedule, index) => (
               <MemoryScheduleDay
