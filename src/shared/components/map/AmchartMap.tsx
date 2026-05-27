@@ -43,8 +43,13 @@ export default function AmchartMap({
   const mapInstanceRef = useRef<am5map.MapChart | null>(null);
   const activePolygonRef = useRef<am5map.MapPolygon | null>(null);
   const polygonSeriesRef = useRef<am5map.MapPolygonSeries | null>(null);
+  const memoryListRef = useRef<IMemoryListResponse[] | undefined>(memoryList);
 
   const { openDialog } = useDialogStore();
+
+  useEffect(() => {
+    memoryListRef.current = memoryList;
+  }, [memoryList]);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -158,15 +163,11 @@ export default function AmchartMap({
 
         if (readonly) return;
 
-        const memory = memoryList?.find(
+        const memory = memoryListRef.current?.find(
           (_memory) => _memory.mapId === dataContext?.id,
         );
 
-        console.log(dataContext?.id)
-        console.log(memory)
-
         if (memory) {
-          console.log(memory)
           setSelectedMapId(dataContext?.id);
         } else {
           openDialog({
