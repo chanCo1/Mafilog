@@ -23,6 +23,7 @@ import { toast } from 'sonner';
 import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interface';
 import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
 import { useCreateMemory } from '@/features/myMap/hooks/rquery/useCreateMemory';
+import { getHexCode } from '@/shared/lib/utils';
 
 interface ICreateFillMemoryModal {
   isOpen: boolean;
@@ -56,6 +57,8 @@ export default function CreateFillMemoryModal({
   const [memoryMemo, setMemoryMemo] = useState('');
 
   const [loadSchedules, setLoadSchedules] = useState<IMemorySchedules[]>([]);
+
+  const [mapColor, setMapColor] = useState(getHexCode());
 
   const { openDialog } = useDialogStore();
 
@@ -111,7 +114,7 @@ export default function CreateFillMemoryModal({
           <span>작성을 그만할까요?</span>
         </div>
       ),
-      okLabel: '그만',
+      okLabel: '나가기',
       onOk: () => {
         handleClose();
         dataReset();
@@ -146,6 +149,7 @@ export default function CreateFillMemoryModal({
     formData.append('from', selectedDate?.from?.toISOString() || '');
     formData.append('to', selectedDate?.to?.toISOString() || '');
     formData.append('memo', memoryMemo);
+    formData.append('mapColor', mapColor);
 
     if (selectedTravel.value !== 0) {
       formData.append('scheduleId', selectedTravel.value.toString());
@@ -314,6 +318,8 @@ export default function CreateFillMemoryModal({
             setMemoryTitle={setMemoryTitle}
             memoryMemo={memoryMemo}
             setMemoryMemo={setMemoryMemo}
+            mapColor={mapColor}
+            setMapColor={setMapColor}
           />
         </FadeInOutStyled>
       </div>

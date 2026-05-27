@@ -34,12 +34,12 @@ export async function POST(request: Request) {
     const memo = formData.get('memo') as string;
     const scheduleId = formData.get('scheduleId') as string | null;
     const scheduleTitle = formData.get('scheduleTitle') as string | null;
+    const hexCode = formData.get('mapColor') as string;
 
     const rawSchedules = JSON.parse(formData.get('schedules') as string);
     const files = formData.getAll('imageUrl') as File[];
 
     const uploadedUrls = await uploadCloudinary({ files });
-    const hexCode = getHexCode();
 
     const newMemory = await prisma.$transaction(async (tx) => {
       // 추억 생성
@@ -113,11 +113,11 @@ export async function GET(request: Request) {
         ...(mapType && { mapType }),
         ...(mapId && { mapId }),
       },
-      include: {
-        schedules: {
-          orderBy: { id: 'asc' },
-        },
-      },
+      // include: {
+      //   schedules: {
+      //     orderBy: { id: 'asc' },
+      //   },
+      // },
     });
 
     return successResponse(memories);
