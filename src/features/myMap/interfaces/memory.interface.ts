@@ -20,11 +20,15 @@ export interface IMemoryListResponse {
   memo: string;
   scheduleId: string;
   scheduleTitle: string;
-  schedules: IMemoryScheduleList[];
   title: string;
   to: string;
   updatedAt: string;
   userId: string;
+}
+
+/** 추억 상세 조회 */
+export interface IMemoryDetailResponse extends IMemoryListResponse {
+  schedules: IMemoryScheduleList[];
 }
 
 export interface IMemoryScheduleList {
