@@ -6,7 +6,10 @@
  */
 
 import { axiosInstanceWithAuth } from '@/shared/lib/api';
-import { IMemoryListResponse } from '@/features/myMap/interfaces/memory.interface';
+import {
+  IMemoryListResponse,
+  IMemoryDetailResponse,
+} from '@/features/myMap/interfaces/memory.interface';
 
 const API_URL = '/memories';
 
@@ -35,11 +38,11 @@ class _MemoryService {
     return response.data.data;
   }
 
-  // /** 추억 상세 조회 */
-  // async getMyTravelDetail(travelId: string): Promise<IMyTravelDetailResponse> {
-  //   const response = await axiosInstanceWithAuth.get(`${API_URL}/${travelId}`);
-  //   return response.data.data;
-  // }
+  /** 추억 상세 조회 */
+  async getMemoryDetail(memoryId: string): Promise<IMemoryDetailResponse> {
+    const response = await axiosInstanceWithAuth.get(`${API_URL}/${memoryId}/detail`);
+    return response.data.data;
+  }
 
   // /** 추억 상세 수정 */
   // async updateMyTravelDetail(travelId: string, data: FormData) {
