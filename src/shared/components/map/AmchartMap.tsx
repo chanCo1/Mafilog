@@ -280,6 +280,11 @@ export default function AmchartMap({
             fillOpacity: 0.7,
           });
 
+          polygon.states.create('default', {
+            fill: fillColor,
+            fillOpacity: 0.7,
+          });
+
           polygon.states.create('hover', {
             fill: fillColor,
             fillOpacity: 1,
@@ -297,6 +302,11 @@ export default function AmchartMap({
           // 사진이 없는 경우
         } else {
           polygon.setAll({
+            fill: am5.color(0xd1d3dc),
+            fillOpacity: 1,
+          });
+
+          polygon.states.create('default', {
             fill: am5.color(0xd1d3dc),
             fillOpacity: 1,
           });

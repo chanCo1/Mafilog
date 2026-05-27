@@ -65,7 +65,7 @@ export default function MyMapPage() {
                   <span className="text-primary font-bold">
                     {memoryList?.length}개국
                   </span>
-                  에 소중한 추억이 채워졌네요!
+                  에 추억이 채워졌네요! 소중한 추억을 더 남겨보세요
                 </div>
               ) : (
                 <span className="text-text-secondary">
