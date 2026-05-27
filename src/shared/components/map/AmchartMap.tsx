@@ -272,7 +272,7 @@ export default function AmchartMap({
 
         if (memory) {
           const fillColor = memory.hexCode
-            ? am5.color(`#${memory.hexCode}`)
+            ? am5.color(memory.hexCode)
             : am5.color(0x6f9dd3);
 
           polygon.setAll({

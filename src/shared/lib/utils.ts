@@ -237,7 +237,7 @@ export const getTokenExpire = (day: number = 1) => {
 
 /** 헥스코드 구하기 */
 export const getHexCode = () => {
-  return `${Math.floor(Math.random() * 16777215)
+  return `#${Math.floor(Math.random() * 16777215)
     .toString(16)
     .padStart(6, '0')}`;
 };

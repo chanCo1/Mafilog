@@ -45,7 +45,7 @@ export async function POST(request: Request) {
         email,
         password: hashedPassword,
         name: name,
-        hexCode: hexCode || '6f9dd3',
+        hexCode: hexCode || '#6f9dd3',
       },
     });
 

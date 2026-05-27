@@ -12,7 +12,6 @@ import {
   errorResponse,
 } from '@/shared/backend/utils/apiResponse';
 import { uploadCloudinary } from '@/shared/backend/lib/cloudinary';
-import { getHexCode } from '@/shared/lib/utils';
 
 /** 추억 생성 */
 export async function POST(request: Request) {
