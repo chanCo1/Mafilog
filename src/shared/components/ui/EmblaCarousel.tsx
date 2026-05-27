@@ -35,12 +35,8 @@ export default function EmblaCarousel({
     if (emblaApi) emblaApi.scrollNext();
   }, [emblaApi]);
 
-  if (!imageUrls.length) {
-    return <div className='text-text-secondary text-center'>등록된 이미지가 없습니다.</div>;
-  }
-
   return (
-    <div className="relative w-full">
+    <div className={cn("relative w-full", className)}>
       <div className="overflow-hidden rounded-lg" ref={emblaRef}>
         <div className="flex">
           {imageUrls.map((url, index) => (

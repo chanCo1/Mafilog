@@ -19,7 +19,7 @@ const textareaVariants = cva(
         none: 'border-none',
       },
       size: {
-        md: 'px-2.5 py-2.5',
+        md: 'p-2.5',
       },
     },
     defaultVariants: {
@@ -39,21 +39,21 @@ interface ITextarea
   isRequired?: boolean;
   description?: string;
   errorMsg?: string;
+  readonly?: boolean;
 }
 
-function TextareaEntity(
-  {
-    className,
-    variant,
-    size,
-    label,
-    labelPosition = 'top',
-    isRequired = false,
-    description,
-    errorMsg,
-    ...props
-  }: ITextarea,
-) {
+function TextareaEntity({
+  className,
+  variant,
+  size,
+  label,
+  labelPosition = 'top',
+  isRequired = false,
+  description,
+  errorMsg,
+  readonly,
+  ...props
+}: ITextarea) {
   const [isFocused, setIsFocused] = React.useState(false);
 
   const handleFocus = () => setIsFocused(true);
@@ -74,20 +74,26 @@ function TextareaEntity(
           className={cn(
             props.disabled && 'bg-gray-1',
             textareaVariants({ variant, size }),
-            isFocused && 'border-border-active border',
+            !readonly && isFocused && 'border-border-active border',
             className,
           )}
         >
           <textarea
-            className="w-full outline-none focus:ring-0 h-20 resize-none"
+            className={cn(
+              'w-full resize-none outline-none focus:ring-0',
+              readonly ? 'h-auto' : 'h-20',
+            )}
             {...props}
             onFocus={handleFocus}
             onBlur={handleBlur}
+            readOnly={readonly}
           />
         </div>
       </div>
       {description && (
-        <span className="text-text-secondary text-sm font-bold">{description}</span>
+        <span className="text-text-secondary text-sm font-bold">
+          {description}
+        </span>
       )}
       {errorMsg && (
         <span className="text-state-error text-sm font-bold">{errorMsg}</span>
