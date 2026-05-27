@@ -55,31 +55,25 @@ export async function POST(request: Request) {
           scheduleId: scheduleId || null,
           scheduleTitle: scheduleTitle || null,
           user: { connect: { id: currentUserId } },
+
+          schedules: {
+            create: rawSchedules.map((dailyData: any) => ({
+              day: dailyData.day,
+              date: new Date(dailyData.date),
+              scheduleList: {
+                create: dailyData.scheduleList.map((list: any) => ({
+                  type: list.type,
+                  time: list.time || null,
+                  memo: list.memo || null,
+                  rating: list.rating || 0,
+                  order: list.order,
+                  place: list.place ? list.place : null,
+                })),
+              },
+            })),
+          },
         },
       });
-
-      // 추억 스케줄 생성
-      const scheduleRecords = [];
-      for (const dailyData of rawSchedules) {
-        for (const list of dailyData.scheduleList) {
-          scheduleRecords.push({
-            memoryId: createdMemory.id,
-            day: list.day,
-            type: list.type,
-            time: list.time || null,
-            memo: list.memo || null,
-            rating: list.rating || 0,
-            order: list.order,
-            place: list.place ? list.place : null,
-          });
-        }
-      }
-
-      if (scheduleRecords.length > 0) {
-        await tx.memorySchedule.createMany({
-          data: scheduleRecords,
-        });
-      }
 
       return createdMemory;
     });

@@ -34,7 +34,8 @@ export async function GET(
       },
       include: {
         schedules: {
-          orderBy: { order: 'asc' },
+          orderBy: { day: 'asc' },
+          include: { scheduleList: true },
         },
       },
     });

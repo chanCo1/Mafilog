@@ -419,20 +419,49 @@ model Memory {
  * 추억 일정
  */
 model MemorySchedule {
-  id       Int     @id @default(autoincrement())
+  // pk
+  id   Int      @id @default(autoincrement())
   // 일차
-  day      Int
-  // 스케줄 타입 ('place' | 'memo')
-  type     String
-  // 방문 시간
-  time     String?
-  // 메모
-  memo     String?
-  // 순서
-  order    Int
-  // 별점
-  rating   Int     @default(0)
-  place    Json?
+  day  Int
+  // 날짜
+  date DateTime
+
+  // fk
   memoryId Int
-  memory   Memory  @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+  // 추억 연동
+  memory   Memory @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  // 상세 리스트
+  scheduleList MemoryScheduleList[]
+
+  // 생성일/수정일
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+/**
+ * 추억 스케줄 상세 리스트
+ */
+model MemoryScheduleList {
+  // pk
+  id               Int            @id @default(autoincrement())
+  // 스케줄 타입 ('place' | 'memo')
+  type             String
+  // 방문 시간
+  time             String?
+  // 메모
+  memo             String?
+  // 순서
+  order            Int
+  // 별점
+  rating           Int            @default(0)
+  // 장소 정보
+  place            Json?
+  // fk
+  memoryScheduleId Int
+  // 부모(하루 단위) 일정 연동
+  memorySchedule   MemorySchedule @relation(fields: [memoryScheduleId], references: [id], onDelete: Cascade)
+  // 생성일/수정일
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now())
 }
