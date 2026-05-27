@@ -126,6 +126,7 @@ export default function MyMapPage() {
       <FillMemoryDetailModal
         isOpen={isOpenDetailModal}
         handleClose={() => setIsOpenDetailModal(false)}
+        selectedMapId={selectedMapId}
       />
     </div>
   );

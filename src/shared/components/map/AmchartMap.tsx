@@ -172,7 +172,8 @@ export default function AmchartMap({
         );
         if (memory) {
           setIsOpenDetailModal?.();
-          setSelectedMapId?.(dataContext?.id);
+          // 상세 조회를 위한 추억 id 전달
+          setSelectedMapId?.(memory?.id.toString());
         } else {
           openDialog({
             type: 'confirm',
@@ -190,6 +191,7 @@ export default function AmchartMap({
             },
             onOk: () => {
               setIsOpenFillModal?.();
+              // 지도 채우기 위해 지도 아이디 전달
               setSelectedMapId?.(dataContext?.id);
             },
           });
@@ -345,7 +347,6 @@ export default function AmchartMap({
 
   useEffect(() => {
     if (!isOpenDetailModal) {
-      console.log(isOpenDetailModal)
       if (activePolygonRef.current) {
         activePolygonRef.current.set('active', false);
         activePolygonRef.current = null;

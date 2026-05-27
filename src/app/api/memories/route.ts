@@ -91,7 +91,7 @@ export async function POST(request: Request) {
   }
 }
 
-/** 추억 조회 */
+/** 추억 리스트 조회 */
 export async function GET(request: Request) {
   const authValidate = await authGuard(request);
   if (!authValidate.isValid) return authValidate.errorResponse;
