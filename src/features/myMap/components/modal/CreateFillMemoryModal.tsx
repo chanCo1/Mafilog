@@ -24,6 +24,7 @@ import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interf
 import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
 import { useCreateMemory } from '@/features/myMap/hooks/rquery/useCreateMemory';
 import { getHexCode } from '@/shared/lib/utils';
+import { useGetMemoryDetail } from '@/features/myMap/hooks/rquery/useGetMemoryDetail';
 
 interface ICreateFillMemoryModal {
   isOpen: boolean;
@@ -31,6 +32,7 @@ interface ICreateFillMemoryModal {
   isModify?: boolean;
   selectedMapId: string | undefined;
   selectedMapType: string;
+  selectedMemoryId: number
 }
 
 export default function CreateFillMemoryModal({
@@ -39,6 +41,7 @@ export default function CreateFillMemoryModal({
   isModify = false,
   selectedMapId,
   selectedMapType,
+  selectedMemoryId,
 }: ICreateFillMemoryModal) {
   const [stepData, setStepData] = useState(CREATE_MEMORY_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
@@ -67,6 +70,10 @@ export default function CreateFillMemoryModal({
   );
   const { mutateAsync: createMemory, isPending: isCreatePending } =
     useCreateMemory(selectedMapType);
+
+  const { data: memoryDetail } = useGetMemoryDetail(
+    selectedMemoryId,
+  );
 
   useEffect(() => {
     if (travelSchedule?.length) {

@@ -29,6 +29,7 @@ interface IAmchartMap {
   isOpenDetailModal?: boolean;
   setIsOpenDetailModal?: () => void;
   memoryList?: IMemoryListResponse[] | undefined;
+  setSelectedMemoryId?: Dispatch<SetStateAction<number>>;
 }
 
 export default function AmchartMap({
@@ -41,6 +42,7 @@ export default function AmchartMap({
   setIsOpenFillModal,
   isOpenDetailModal,
   setIsOpenDetailModal,
+  setSelectedMemoryId,
   memoryList,
 }: IAmchartMap) {
   const mapRef = useRef<HTMLDivElement>(null);
@@ -173,7 +175,7 @@ export default function AmchartMap({
         if (memory) {
           setIsOpenDetailModal?.();
           // 상세 조회를 위한 추억 id 전달
-          setSelectedMapId?.(memory?.id.toString());
+          setSelectedMemoryId?.(memory?.id);
         } else {
           openDialog({
             type: 'confirm',
@@ -354,7 +356,9 @@ export default function AmchartMap({
     }
   }, [isOpenDetailModal]);
 
-  return <div ref={mapRef} className="h-full w-full rounded-lg! overflow-hidden" />;
+  return (
+    <div ref={mapRef} className="h-full w-full overflow-hidden rounded-lg!" />
+  );
 }
 
 export const tooltipBox = (regionName: string, imageUrl?: string) => {

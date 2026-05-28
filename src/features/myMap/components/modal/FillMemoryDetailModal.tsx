@@ -24,23 +24,22 @@ import { useDeleteMemory } from '@/features/myMap/hooks/rquery/useDeleteMemory';
 interface IFillMemoryDetailModal {
   isOpen: boolean;
   handleClose: () => void;
-  selectedMapId: string | undefined;
+  selectedMemoryId: number;
   selectedMapType: string | undefined;
+  handleUpdate: () => void;
 }
 
 export default function FillMemoryDetailModal({
   handleClose,
   isOpen,
-  selectedMapId,
+  selectedMemoryId,
   selectedMapType,
+  handleUpdate,
 }: IFillMemoryDetailModal) {
   const [selectedDay, setSelectedDay] = useState(1);
 
   const { openDialog } = useDialogStore();
-  const { data: memoryDetail } = useGetMemoryDetail(
-    selectedMapId ?? '',
-    isOpen,
-  );
+  const { data: memoryDetail } = useGetMemoryDetail(selectedMemoryId ?? '');
   const { mutateAsync: deleteMemory, isPending: isDeletePending } =
     useDeleteMemory(selectedMapType ?? '');
 
@@ -101,12 +100,7 @@ export default function FillMemoryDetailModal({
             <Button variant="gray" onClick={onClickCloseBtn}>
               닫기
             </Button>
-            <Button
-            // disabled={!selectedCities.length}
-            // onClick={handelNextStep}
-            >
-              수정
-            </Button>
+            <Button onClick={handleUpdate}>수정</Button>
           </div>
         </div>
       }
@@ -118,7 +112,7 @@ export default function FillMemoryDetailModal({
 
         <div className="flex flex-col gap-2">
           {memoryDetail?.scheduleTitle && (
-            <h5 className="text-lg font-bold">{memoryDetail?.scheduleTitle}</h5>
+            <h5 className="font-bold">{memoryDetail?.scheduleTitle}</h5>
           )}
           <span>
             {convertTravelDateRange(memoryDetail?.from, memoryDetail?.to)}

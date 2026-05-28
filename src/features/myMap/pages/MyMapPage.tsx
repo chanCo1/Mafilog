@@ -27,8 +27,11 @@ export default function MyMapPage() {
   const [selectedMapId, setSelectedMapId] = useState<string | undefined>(
     undefined,
   );
+  // 선택한 추억 id
+  const [selectedMemoryId, setSelectedMemoryId] = useState(0);
   const [isOpenFillModal, setIsOpenFillModal] = useState(false);
   const [isOpenDetailModal, setIsOpenDetailModal] = useState(false);
+  const [isFillMemoryModify, setIsFillMemoryModify] = useState(false);
 
   const isWorld = selectedMapType.value === TRAVEL_TYPE.WORLD;
   const isDomestic = selectedMapType.value === TRAVEL_TYPE.DOMESTIC;
@@ -36,6 +39,13 @@ export default function MyMapPage() {
   const { data: memoryList } = useGetMemoryList(
     selectedMapType.value as string,
   );
+
+  /** 추억 상세 모달에서 수정 클릭 시 */
+  const handleUpdateMemoryDetail = () => {
+    setIsOpenDetailModal(false);
+    setIsOpenFillModal(true);
+    setIsFillMemoryModify(true);
+  };
 
   return (
     <div className="flex h-full flex-col gap-5">
@@ -60,12 +70,12 @@ export default function MyMapPage() {
       <div className={cn('h-full')}>
         {isWorld && (
           <div className="flex h-full flex-col gap-2">
-            <div className="flex break-keep justify-center text-center">
+            <div className="flex justify-center text-center break-keep">
               {memoryList?.length ? (
                 <div>
                   벌써{' '}
                   <span className="text-primary font-bold">
-                    {memoryList?.length}개국
+                    {memoryList?.length}개의 나라
                   </span>
                   에 추억이 채워졌네요! 소중한 추억을 더 남겨보세요
                 </div>
@@ -82,15 +92,16 @@ export default function MyMapPage() {
               setIsOpenDetailModal={() => setIsOpenDetailModal(true)}
               setSelectedMapType={setSelectedMapType}
               setSelectedMapId={setSelectedMapId}
+              setSelectedMemoryId={setSelectedMemoryId}
               memoryList={memoryList}
             />
           </div>
         )}
         {isDomestic && (
           <div className="flex h-full flex-col gap-2">
-            <div className="flex text-center justify-center break-keep">
+            <div className="flex justify-center text-center break-keep">
               {memoryList?.length ? (
-                <div className=''>
+                <div className="">
                   벌써{' '}
                   <span className="text-primary font-bold">
                     {memoryList?.length}개 도시
@@ -110,6 +121,7 @@ export default function MyMapPage() {
               isOpenDetailModal={isOpenDetailModal}
               setIsOpenDetailModal={() => setIsOpenDetailModal(true)}
               setSelectedMapId={setSelectedMapId}
+              setSelectedMemoryId={setSelectedMemoryId}
               memoryList={memoryList}
             />
           </div>
@@ -121,13 +133,16 @@ export default function MyMapPage() {
         handleClose={() => setIsOpenFillModal(false)}
         selectedMapType={selectedMapType.value as string}
         selectedMapId={selectedMapId}
+        selectedMemoryId={selectedMemoryId}
+        isModify={isFillMemoryModify}
       />
 
       <FillMemoryDetailModal
         isOpen={isOpenDetailModal}
         handleClose={() => setIsOpenDetailModal(false)}
-        selectedMapId={selectedMapId}
+        selectedMemoryId={selectedMemoryId}
         selectedMapType={selectedMapType.value as string}
+        handleUpdate={handleUpdateMemoryDetail}
       />
     </div>
   );
