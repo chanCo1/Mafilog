@@ -46,19 +46,19 @@ class _MemoryService {
     return response.data.data;
   }
 
-  // /** 추억 상세 수정 */
-  // async updateMyTravelDetail(travelId: string, data: FormData) {
-  //   const response = await axiosInstanceWithAuth.patch(
-  //     `${API_URL}/${travelId}`,
-  //     data,
-  //     {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     },
-  //   );
-  //   return response.data.data;
-  // }
+  /** 추억 상세 수정 */
+  async updateMemory(memoryId: number, data: FormData) {
+    const response = await axiosInstanceWithAuth.patch(
+      `${API_URL}/${memoryId}/detail`,
+      data,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+    return response.data.data;
+  }
 
   /** 추억 삭제 */
   async deleteMemory(memoryId: number) {
