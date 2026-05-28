@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     const scheduleTitle = formData.get('scheduleTitle') as string | null;
     const hexCode = formData.get('mapColor') as string;
 
-    const rawSchedules = JSON.parse(formData.get('schedules') as string);
+    const schedules = JSON.parse(formData.get('schedules') as string);
     const files = formData.getAll('imageUrl') as File[];
 
     const uploadedUrls = await uploadCloudinary({ files });
@@ -57,12 +57,13 @@ export async function POST(request: Request) {
           user: { connect: { id: currentUserId } },
 
           schedules: {
-            create: rawSchedules.map((dailyData: any) => ({
+            create: schedules.map((dailyData: any) => ({
               day: dailyData.day,
               date: new Date(dailyData.date),
               scheduleList: {
                 create: dailyData.scheduleList.map((list: any) => ({
                   type: list.type,
+                  day: list.day,
                   time: list.time || null,
                   memo: list.memo || null,
                   rating: list.rating || 0,
