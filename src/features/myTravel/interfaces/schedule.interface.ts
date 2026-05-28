@@ -56,11 +56,3 @@ export interface IUpdateSchedulePlaceRequest extends Pick<
 export interface IScheduleListWithRating extends IScheduleListResponse {
   rating: number;
 }
-
-/** 추억채우기 스케줄 */
-export interface IMemorySchedules extends Omit<
-  IScheduleResponse,
-  'scheduleList'
-> {
-  scheduleList: IScheduleListWithRating[];
-}

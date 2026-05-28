@@ -26,9 +26,18 @@ export interface IMemoryListResponse {
   userId: string;
 }
 
-/** 추억 상세 조회 */
-export interface IMemoryDetailResponse extends IMemoryListResponse {
-  schedules: IMemoryScheduleResponse[];
+export interface IMemoryScheduleList {
+  id: number;
+  type: SCHEDULE_TYPE;
+  day: number;
+  time: string;
+  memo: string;
+  place: IPlaceList;
+  order?: number;
+  rating?: number;
+  memoryId?: number;
+  scheduleId?: number;
+  scheduleListId?: number;
 }
 
 export interface IMemoryScheduleResponse {
@@ -36,18 +45,26 @@ export interface IMemoryScheduleResponse {
   day: number;
   date: string;
   scheduleList: IMemoryScheduleList[];
-  createdAt: string;
-  updatedAt: string;
+  travelId?: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-export interface IMemoryScheduleList {
-  day: number;
+/** 추억 상세 조회 */
+export interface IMemoryDetailResponse {
   id: number;
+  userId: string;
+  title: string;
+  scheduleTitle: string;
   memo: string;
-  memoryId: number;
-  order: number;
-  rating: number;
-  time: string;
-  type: SCHEDULE_TYPE;
-  place: IPlaceList;
+  hexCode: string;
+  mapId: string;
+  mapType: TRAVEL_TYPE;
+  from: string;
+  to: string;
+  imageUrl: string[];
+  schedules: IMemoryScheduleResponse[];
+  scheduleId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
