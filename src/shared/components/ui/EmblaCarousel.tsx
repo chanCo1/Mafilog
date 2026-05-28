@@ -40,7 +40,7 @@ export default function EmblaCarousel({
       <div className="overflow-hidden rounded-lg" ref={emblaRef}>
         <div className="flex">
           {imageUrls.map((url, index) => (
-            <div key={index} className="relative h-55 w-full flex-none">
+            <div key={index} className="relative h-50 w-full flex-none">
               <Image
                 src={url}
                 alt={`추억 이미지 ${index + 1}`}

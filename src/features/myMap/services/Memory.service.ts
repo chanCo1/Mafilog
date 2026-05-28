@@ -40,7 +40,9 @@ class _MemoryService {
 
   /** 추억 상세 조회 */
   async getMemoryDetail(memoryId: string): Promise<IMemoryDetailResponse> {
-    const response = await axiosInstanceWithAuth.get(`${API_URL}/${memoryId}/detail`);
+    const response = await axiosInstanceWithAuth.get(
+      `${API_URL}/${memoryId}/detail`,
+    );
     return response.data.data;
   }
 
@@ -58,13 +60,14 @@ class _MemoryService {
   //   return response.data.data;
   // }
 
-  // /** 추억 삭제 */
-  // async deleteMyTravel(travelId: string) {
-  //   const response = await axiosInstanceWithAuth.delete(
-  //     `${API_URL}/${travelId}`,
-  //   );
-  //   return response.data.data;
-  // }
+  /** 추억 삭제 */
+  async deleteMemory(memoryId: number) {
+    const response = await axiosInstanceWithAuth.delete(
+      `${API_URL}/${memoryId}/detail`,
+      { data: { memoryId } },
+    );
+    return response.data.data;
+  }
 }
 
 const MemoryService = new _MemoryService();
