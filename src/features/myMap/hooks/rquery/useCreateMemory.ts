@@ -10,9 +10,9 @@ import MemoryService from '@/features/myMap/services/Memory.service';
 import { toast } from 'sonner';
 import { memoryKeys } from '@/features/myMap/hooks/rquery/queryKeys';
 
-export const useCreateMemory = () => {
+export const useCreateMemory = (mapType: string) => {
   const queryClient = useQueryClient();
-  const queryKey = memoryKeys.all;
+  const queryKey = memoryKeys.list(mapType);
 
   return useMutation({
     mutationFn: async (formData: FormData) => {

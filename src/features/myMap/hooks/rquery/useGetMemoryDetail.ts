@@ -9,14 +9,13 @@ import { useQuery } from '@tanstack/react-query';
 import { memoryKeys } from '@/features/myMap/hooks/rquery/queryKeys';
 import MemoryService from '@/features/myMap/services/Memory.service';
 
-export const useGetMemoryDetail = (mapId: string) => {
+export const useGetMemoryDetail = (mapId: string, isOpen: boolean) => {
   const queryKey = memoryKeys.detail(mapId);
-  const isMapId = Boolean(Number(mapId));
 
   const query = useQuery({
     queryKey,
     queryFn: async () => await MemoryService.getMemoryDetail(mapId),
-    enabled: isMapId,
+    enabled: !!mapId && isOpen,
     staleTime: 1000 * 60 * 5,
   });
 

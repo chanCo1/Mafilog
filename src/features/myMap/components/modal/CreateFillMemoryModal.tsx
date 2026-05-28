@@ -66,7 +66,7 @@ export default function CreateFillMemoryModal({
     selectedTravel.value ? selectedTravel.value.toString() : '',
   );
   const { mutateAsync: createMemory, isPending: isCreatePending } =
-    useCreateMemory();
+    useCreateMemory(selectedMapType);
 
   useEffect(() => {
     if (travelSchedule?.length) {
@@ -299,18 +299,14 @@ export default function CreateFillMemoryModal({
             setLoadSchedules={setLoadSchedules}
           />
         </FadeInOutStyled>
-        <FadeInOutStyled
-          isShow={currentStep === 2}
-        >
+        <FadeInOutStyled isShow={currentStep === 2}>
           <FillMemoryStep2
             selectedDate={selectedDate}
             setSeletedDate={setSeletedDate}
             disabled={!!selectedTravel.value}
           />
         </FadeInOutStyled>
-        <FadeInOutStyled
-          isShow={currentStep === 3}
-        >
+        <FadeInOutStyled isShow={currentStep === 3}>
           <FillMemoryStep3
             selectedImage={selectedImage}
             setSelectedImage={setSelectedImage}

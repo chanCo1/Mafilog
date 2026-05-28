@@ -19,22 +19,30 @@ import { Chip } from '@/shared/components/ui/Chip';
 import MemoryScheduleDay from '@/features/myMap/components/modal/fillMemory/MemoryScheduleDay';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { useDeleteMemory } from '@/features/myMap/hooks/rquery/useDeleteMemory';
 
 interface IFillMemoryDetailModal {
   isOpen: boolean;
   handleClose: () => void;
   selectedMapId: string | undefined;
+  selectedMapType: string | undefined;
 }
 
 export default function FillMemoryDetailModal({
   handleClose,
   isOpen,
   selectedMapId,
+  selectedMapType,
 }: IFillMemoryDetailModal) {
   const [selectedDay, setSelectedDay] = useState(1);
 
   const { openDialog } = useDialogStore();
-  const { data: memoryDetail } = useGetMemoryDetail(selectedMapId ?? '');
+  const { data: memoryDetail } = useGetMemoryDetail(
+    selectedMapId ?? '',
+    isOpen,
+  );
+  const { mutateAsync: deleteMemory, isPending: isDeletePending } =
+    useDeleteMemory(selectedMapType ?? '');
 
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
@@ -43,14 +51,16 @@ export default function FillMemoryDetailModal({
 
   /** 여행 삭제 */
   const handelDeleteMemory = () => {
+    if (!memoryDetail) return;
+
     openDialog({
       type: 'confirm',
       message: '추억을 삭제할까요?',
       okLabel: '삭제',
-      // onOk: async () => {
-      //   await deleteMyTravel(travelId);
-      //   router.push('/my-travel');
-      // },
+      onOk: async () => {
+        await deleteMemory({ memoryId: memoryDetail?.id });
+        onClickCloseBtn();
+      },
     });
   };
 
@@ -79,7 +89,12 @@ export default function FillMemoryDetailModal({
       handleClose={onClickCloseBtn}
       footer={
         <div className={cn('flex w-full justify-between gap-1')}>
-          <Button variant="redOutline" onClick={handelDeleteMemory}>
+          <Button
+            variant="redOutline"
+            onClick={handelDeleteMemory}
+            disabled={isDeletePending}
+            isLoading={isDeletePending}
+          >
             삭제
           </Button>
           <div className="flex gap-1">

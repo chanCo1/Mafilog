@@ -127,6 +127,7 @@ export default function MyMapPage() {
         isOpen={isOpenDetailModal}
         handleClose={() => setIsOpenDetailModal(false)}
         selectedMapId={selectedMapId}
+        selectedMapType={selectedMapType.value as string}
       />
     </div>
   );
