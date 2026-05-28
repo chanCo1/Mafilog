@@ -12,10 +12,11 @@ import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 interface IGoogleMap {
   places?: IPlaceList[];
   id: string;
+  mapId: string;
   isSingle?: boolean; // 마커 단일 사용
 }
 
-const GoogleMap = memo(({ places, id, isSingle }: IGoogleMap) => {
+const GoogleMap = memo(({ places, id, isSingle, mapId }: IGoogleMap) => {
   const map = useMap(id);
 
   const [currentPos, setCurrentPos] = useState({ lat: 37.5665, lng: 126.978 }); // 서울 기본
@@ -82,7 +83,7 @@ const GoogleMap = memo(({ places, id, isSingle }: IGoogleMap) => {
         id={id}
         defaultCenter={currentPos}
         defaultZoom={15}
-        mapId={id}
+        mapId={mapId}
         gestureHandling={'greedy'}
         disableDefaultUI={true}
         keyboardShortcuts={false}

@@ -54,7 +54,7 @@ export const convertTravelDateRange = (
   const fromDate = typeof from === 'string' ? new Date(from) : from;
   const toDate = typeof to === 'string' ? new Date(to) : to;
 
-  if (fromDate === toDate) {
+  if (fromDate.getTime() === toDate.getTime()) {
     return `${convertFormattedDate(fromDate)}(${getDay(fromDate)}) (${getTravelDay(fromDate, toDate)}일)`;
   }
 

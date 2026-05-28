@@ -108,13 +108,15 @@ export default function FillMemoryDetailModal({
           <span>
             {convertTravelDateRange(memoryDetail?.from, memoryDetail?.to)}
           </span>
-          {memoryDetail?.memo && <Card>{memoryDetail.memo}</Card>}
+          {memoryDetail?.memo && (
+            <Card className="whitespace-pre-wrap">{memoryDetail.memo}</Card>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">
           {memoryDetail && (
             <div className="scrollbar-hide flex shrink-0 gap-1 overflow-x-auto">
-              {memoryDetail?.schedules.map((_day, index) => (
+              {memoryDetail.schedules.map((_day, index) => (
                 <Chip
                   key={`${_day.day}-${index}`}
                   size="md"
@@ -126,10 +128,16 @@ export default function FillMemoryDetailModal({
               ))}
             </div>
           )}
-          <div className="h-50 overflow-hidden rounded-lg">
+          <div
+            className={cn(
+              'h-50 overflow-hidden rounded-lg',
+              getPlace.length ? 'block' : 'hidden',
+            )}
+          >
             <GoogleMap
               places={getPlace}
-              id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
+              id="memoryMap"
+              mapId={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
             />
           </div>
           <div className="flex flex-col gap-3">
@@ -141,6 +149,11 @@ export default function FillMemoryDetailModal({
               />
             ))}
           </div>
+          {!memoryDetail?.schedules.length && (
+            <span className="text-text-secondary">
+              추억과 함께한 일정이 없어요
+            </span>
+          )}
         </div>
       </div>
     </SideModal>

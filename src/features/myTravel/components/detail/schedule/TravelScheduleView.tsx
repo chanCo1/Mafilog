@@ -153,7 +153,7 @@ function TravelScheduleView() {
                   </Button>
                   <Button
                     // className="w-35 bg-linear-to-r from-secondary to-primary"
-                    className="w-35 bg-secondary"
+                    className="bg-secondary w-35"
                     variant="secondary"
                     size="sm"
                     onClick={() => setIsOpenAddPlaceModal(true)}
@@ -195,10 +195,11 @@ function TravelScheduleView() {
         }
         stautsArea={
           <div className="max-mobile:h-60 h-110 overflow-hidden rounded-lg">
-            {/* <GoogleMap
+            <GoogleMap
               places={getPlace}
-              id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
-            /> */}
+              id="scheduleMap"
+              mapId={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
+            />
           </div>
         }
       />
