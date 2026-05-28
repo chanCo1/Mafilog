@@ -47,6 +47,12 @@ export default function MyMapPage() {
     setIsFillMemoryModify(true);
   };
 
+  /** 추억 만들기 모달 핸들링 */
+  const handleCloseCreateMemoryModal = () => {
+    setIsOpenFillModal(false);
+    setIsFillMemoryModify(false);
+  }
+
   return (
     <div className="flex h-full flex-col gap-5">
       <PageHeader
@@ -130,7 +136,7 @@ export default function MyMapPage() {
 
       <CreateFillMemoryModal
         isOpen={isOpenFillModal}
-        handleClose={() => setIsOpenFillModal(false)}
+        handleClose={handleCloseCreateMemoryModal}
         selectedMapType={selectedMapType.value as string}
         selectedMapId={selectedMapId}
         selectedMemoryId={selectedMemoryId}

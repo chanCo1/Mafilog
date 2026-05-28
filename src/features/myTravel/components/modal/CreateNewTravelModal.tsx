@@ -239,7 +239,7 @@ export default function CreateNewTravelModal({
   /** 수정 시 상세 값 바인딩 */
   useEffect(() => {
     if (isOpen) {
-      if (isModify && travelDetail) {
+      if (isModify && travelDetail?.id) {
         setStepData(stepData.map((step) => ({ ...step, isComplete: true })));
 
         setTravelType(travelDetail.travelType);

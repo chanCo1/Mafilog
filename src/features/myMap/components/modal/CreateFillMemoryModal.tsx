@@ -6,7 +6,6 @@
  */
 
 import { useState, useEffect } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { CREATE_MEMORY_STEP_LIST } from '@/features/myMap/constants/myMap.constant';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { Button } from '@/shared/components/ui/Button';
@@ -20,7 +19,7 @@ import FillMemoryStep3 from '@/features/myMap/components/modal/fillMemory/FillMe
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { ILabelValue } from '@/shared/interfaces';
 import { toast } from 'sonner';
-import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interface';
+import { IMemoryScheduleResponse } from '@/features/myMap/interfaces/memory.interface';
 import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
 import { useCreateMemory } from '@/features/myMap/hooks/rquery/useCreateMemory';
 import { getHexCode } from '@/shared/lib/utils';
@@ -32,13 +31,13 @@ interface ICreateFillMemoryModal {
   isModify?: boolean;
   selectedMapId: string | undefined;
   selectedMapType: string;
-  selectedMemoryId: number
+  selectedMemoryId: number;
 }
 
 export default function CreateFillMemoryModal({
   isOpen,
   handleClose,
-  isModify = false,
+  isModify,
   selectedMapId,
   selectedMapType,
   selectedMemoryId,
@@ -59,7 +58,9 @@ export default function CreateFillMemoryModal({
   const [selectedImage, setSelectedImage] = useState<(File | string)[]>([]);
   const [memoryMemo, setMemoryMemo] = useState('');
 
-  const [loadSchedules, setLoadSchedules] = useState<IMemorySchedules[]>([]);
+  const [loadSchedules, setLoadSchedules] = useState<IMemoryScheduleResponse[]>(
+    [],
+  );
 
   const [mapColor, setMapColor] = useState(getHexCode());
 
@@ -71,13 +72,11 @@ export default function CreateFillMemoryModal({
   const { mutateAsync: createMemory, isPending: isCreatePending } =
     useCreateMemory(selectedMapType);
 
-  const { data: memoryDetail } = useGetMemoryDetail(
-    selectedMemoryId,
-  );
+  const { data: memoryDetail } = useGetMemoryDetail(selectedMemoryId);
 
   useEffect(() => {
     if (travelSchedule?.length) {
-      const scheduleWithRating: IMemorySchedules[] = travelSchedule.map(
+      const scheduleWithRating: IMemoryScheduleResponse[] = travelSchedule.map(
         (schedule) => ({
           ...schedule,
           scheduleList: schedule.scheduleList.map((list) => ({
@@ -179,19 +178,6 @@ export default function CreateFillMemoryModal({
     dataReset();
   };
 
-  /** 여행 삭제 */
-  const handelDeleteMemory = () => {
-    openDialog({
-      type: 'confirm',
-      message: '추억을 삭제할까요?',
-      okLabel: '삭제',
-      // onOk: async () => {
-      //   await deleteMyTravel(travelId);
-      //   router.push('/my-travel');
-      // },
-    });
-  };
-
   /** 데이터 초기화 */
   const dataReset = () => {
     if (isModify) return;
@@ -207,8 +193,8 @@ export default function CreateFillMemoryModal({
     setMemoryMemo('');
   };
 
+  /** 날짜 선택 완료 후 지웠을 경우 */
   useEffect(() => {
-    /** 날짜 선택 완료 후 지웠을 경우 */
     if (stepData[1].isComplete && !selectedDate) {
       setStepData((prev) =>
         prev.map((step, index) =>
@@ -218,72 +204,93 @@ export default function CreateFillMemoryModal({
     }
   }, [selectedDate]);
 
-  const isDisabled = !selectedDate || !memoryTitle;
+  /** 여행 불러왔을 경우 스텝2 체크완료 */
+  useEffect(() => {
+    if (selectedTravel.value && selectedDate) {
+      setStepData((prev) =>
+        prev.map((step, index) =>
+          index === 1 ? { ...step, isComplete: true } : step,
+        ),
+      );
+    }
+  }, [selectedTravel.value, selectedDate]);
+
+  /** 수정 시 초기값 대입 */
+  useEffect(() => {
+    if (isOpen) {
+      if (isModify && memoryDetail?.id) {
+        setStepData(stepData.map((step) => ({ ...step, isComplete: true })));
+
+        setSelectedTravel({
+          label: memoryDetail.scheduleTitle ?? '선택 안함',
+          value: memoryDetail.scheduleId as string ?? 0,
+        });
+        setSeletedDate({
+          from: new Date(memoryDetail.from),
+          to: new Date(memoryDetail.to),
+        });
+        setMemoryTitle(memoryDetail.title);
+        setSelectedImage(memoryDetail.imageUrl);
+        setMemoryMemo(memoryDetail.memo);
+
+        setLoadSchedules(memoryDetail.schedules);
+        setMapColor(memoryDetail.hexCode);
+      }
+    }
+  }, [isModify, memoryDetail, isOpen, selectedMemoryId]);
 
   return (
     <SideModal
       isOpen={isOpen}
-      title="추억 채우기"
+      title={isModify ? '추억 수정' : '추억 채우기'}
       handleClose={onClickCloseBtn}
       footer={
-        <div
-          className={cn(
-            'flex w-full gap-1',
-            isModify ? 'justify-between' : 'justify-end',
+        <div className="flex gap-1">
+          {currentStep === 1 && (
+            <>
+              <Button variant="gray" onClick={onClickCloseBtn}>
+                취소
+              </Button>
+              <Button
+                // disabled={!selectedCities.length}
+                onClick={handelNextStep}
+              >
+                다음
+              </Button>
+            </>
           )}
-        >
-          {isModify && (
-            <Button variant="redOutline" onClick={handelDeleteMemory}>
-              삭제
-            </Button>
+          {currentStep === 2 && (
+            <>
+              <Button
+                variant="gray"
+                onClick={handlePrevStep}
+                prefix={<ChevronLeft className="h-4 w-4" />}
+              >
+                이전
+              </Button>
+              <Button disabled={!selectedDate} onClick={handelNextStep}>
+                다음
+              </Button>
+            </>
           )}
-          <div className="flex gap-1">
-            {currentStep === 1 && (
-              <>
-                <Button variant="gray" onClick={onClickCloseBtn}>
-                  취소
-                </Button>
-                <Button
-                  // disabled={!selectedCities.length}
-                  onClick={handelNextStep}
-                >
-                  다음
-                </Button>
-              </>
-            )}
-            {currentStep === 2 && (
-              <>
-                <Button
-                  variant="gray"
-                  onClick={handlePrevStep}
-                  prefix={<ChevronLeft className="h-4 w-4" />}
-                >
-                  이전
-                </Button>
-                <Button disabled={!selectedDate} onClick={handelNextStep}>
-                  다음
-                </Button>
-              </>
-            )}
-            {currentStep === 3 && (
-              <>
-                <Button
-                  variant="gray"
-                  onClick={handlePrevStep}
-                  prefix={<ChevronLeft className="h-4 w-4" />}
-                >
-                  이전
-                </Button>
-                <Button
-                  disabled={isDisabled || isCreatePending}
-                  isLoading={isCreatePending}
-                  onClick={handelCreateNewMemory}
-                >
-                  추억 만들기
-                </Button>
-              </>
-            )}
-          </div>
+          {currentStep === 3 && (
+            <>
+              <Button
+                variant="gray"
+                onClick={handlePrevStep}
+                prefix={<ChevronLeft className="h-4 w-4" />}
+              >
+                이전
+              </Button>
+              <Button
+                disabled={!selectedDate || !memoryTitle || isCreatePending}
+                isLoading={isCreatePending}
+                onClick={handelCreateNewMemory}
+              >
+                추억 만들기
+              </Button>
+            </>
+          )}
         </div>
       }
     >
