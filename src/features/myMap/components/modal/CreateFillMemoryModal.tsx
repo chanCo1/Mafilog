@@ -5,7 +5,7 @@
  * @description: 추억채우기 모달 컴포넌트
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { CREATE_MEMORY_STEP_LIST } from '@/features/myMap/constants/myMap.constant';
 import FadeInOutStyled from '@/shared/components/FadeInOutStyled';
 import { Button } from '@/shared/components/ui/Button';
@@ -29,9 +29,11 @@ interface ICreateFillMemoryModal {
   isOpen: boolean;
   handleClose: () => void;
   isModify?: boolean;
-  selectedMapId: string | undefined;
   selectedMapType: string;
+  selectedMapId: string | undefined;
+  setSelectedMapId: Dispatch<SetStateAction<string | undefined>>;
   selectedMemoryId: number;
+  setSelectedMemoryId: Dispatch<SetStateAction<number>>;
 }
 
 export default function CreateFillMemoryModal({
@@ -39,8 +41,10 @@ export default function CreateFillMemoryModal({
   handleClose,
   isModify,
   selectedMapId,
+  setSelectedMapId,
   selectedMapType,
   selectedMemoryId,
+  setSelectedMemoryId,
 }: ICreateFillMemoryModal) {
   const [stepData, setStepData] = useState(CREATE_MEMORY_STEP_LIST);
   const [currentStep, setCurrentStep] = useState(1);
@@ -61,6 +65,7 @@ export default function CreateFillMemoryModal({
   const [loadSchedules, setLoadSchedules] = useState<IMemoryScheduleResponse[]>(
     [],
   );
+  console.log('loadSchedules >> ', loadSchedules)
 
   const [mapColor, setMapColor] = useState(getHexCode());
 
@@ -74,23 +79,26 @@ export default function CreateFillMemoryModal({
 
   const { data: memoryDetail } = useGetMemoryDetail(selectedMemoryId);
 
+  // 추억 등록시 (수정아닐 때) 일정 리스트 초기값
   useEffect(() => {
-    if (travelSchedule?.length) {
-      const scheduleWithRating: IMemoryScheduleResponse[] = travelSchedule.map(
-        (schedule) => ({
-          ...schedule,
-          scheduleList: schedule.scheduleList.map((list) => ({
-            ...list,
-            rating: 0,
-          })),
-        }),
-      );
-
-      setLoadSchedules(scheduleWithRating);
-    } else {
-      setLoadSchedules([]);
+    if (!isModify) {
+      if (travelSchedule?.length) {
+        const scheduleWithRating: IMemoryScheduleResponse[] = travelSchedule.map(
+          (schedule) => ({
+            ...schedule,
+            scheduleList: schedule.scheduleList.map((list) => ({
+              ...list,
+              rating: 0,
+            })),
+          }),
+        );
+  
+        setLoadSchedules(scheduleWithRating);
+      } else {
+        setLoadSchedules([]);
+      }
     }
-  }, [travelSchedule]);
+  }, [travelSchedule, isModify]);
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -122,8 +130,7 @@ export default function CreateFillMemoryModal({
       ),
       okLabel: '나가기',
       onOk: () => {
-        handleClose();
-        dataReset();
+        onClickClose();
       },
     });
   };
@@ -174,14 +181,18 @@ export default function CreateFillMemoryModal({
       await createMemory(formData);
     }
 
+    onClickClose();
+  };
+
+  const onClickClose = () => {
     handleClose();
     dataReset();
+    setSelectedMemoryId(0);
+    setSelectedMapId(undefined);
   };
 
   /** 데이터 초기화 */
   const dataReset = () => {
-    if (isModify) return;
-
     stepData.forEach((data) => {
       data.isComplete = false;
     });
@@ -191,6 +202,8 @@ export default function CreateFillMemoryModal({
     setMemoryTitle('');
     setSelectedImage([]);
     setMemoryMemo('');
+    setLoadSchedules([]);
+    setMapColor(getHexCode());
   };
 
   /** 날짜 선택 완료 후 지웠을 경우 */
@@ -223,7 +236,7 @@ export default function CreateFillMemoryModal({
 
         setSelectedTravel({
           label: memoryDetail.scheduleTitle ?? '선택 안함',
-          value: memoryDetail.scheduleId as string ?? 0,
+          value: (memoryDetail.scheduleId as string) ?? 0,
         });
         setSeletedDate({
           from: new Date(memoryDetail.from),

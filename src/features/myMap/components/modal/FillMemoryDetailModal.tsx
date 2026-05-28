@@ -5,7 +5,7 @@
  * @description: 추억 상세 모달
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, Dispatch, SetStateAction } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/Button';
 import { SideModal } from '@/shared/components/ui/SideModal';
@@ -25,6 +25,7 @@ interface IFillMemoryDetailModal {
   isOpen: boolean;
   handleClose: () => void;
   selectedMemoryId: number;
+  setSelectedMemoryId: Dispatch<SetStateAction<number>>;
   selectedMapType: string | undefined;
   handleUpdate: () => void;
 }
@@ -35,6 +36,7 @@ export default function FillMemoryDetailModal({
   selectedMemoryId,
   selectedMapType,
   handleUpdate,
+  setSelectedMemoryId,
 }: IFillMemoryDetailModal) {
   const [selectedDay, setSelectedDay] = useState(1);
 
@@ -46,6 +48,7 @@ export default function FillMemoryDetailModal({
   /** 닫기 버튼 클릭 */
   const onClickCloseBtn = () => {
     handleClose();
+    setSelectedMemoryId(0);
   };
 
   /** 여행 삭제 */

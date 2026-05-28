@@ -139,7 +139,9 @@ export default function MyMapPage() {
         handleClose={handleCloseCreateMemoryModal}
         selectedMapType={selectedMapType.value as string}
         selectedMapId={selectedMapId}
+        setSelectedMapId={setSelectedMapId}
         selectedMemoryId={selectedMemoryId}
+        setSelectedMemoryId={setSelectedMemoryId}
         isModify={isFillMemoryModify}
       />
 
@@ -147,6 +149,7 @@ export default function MyMapPage() {
         isOpen={isOpenDetailModal}
         handleClose={() => setIsOpenDetailModal(false)}
         selectedMemoryId={selectedMemoryId}
+        setSelectedMemoryId={setSelectedMemoryId}
         selectedMapType={selectedMapType.value as string}
         handleUpdate={handleUpdateMemoryDetail}
       />
