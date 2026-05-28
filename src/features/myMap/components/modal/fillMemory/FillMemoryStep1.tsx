@@ -5,23 +5,22 @@
  * @description: FillMemoryStep1 컴포넌트
  */
 
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import Selectbox from '@/shared/components/ui/Selectbox';
 import { Chip } from '@/shared/components/ui/Chip';
 import MemoryScheduleDay from '@/features/myMap/components/modal/fillMemory/MemoryScheduleDay';
 import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/timeline/useGetMyTimelineList';
 import { ILabelValue } from '@/shared/interfaces';
 import { DateRange } from 'react-day-picker';
-import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interface';
 import { IHandleUpdateSchedule } from '@/features/myMap/interfaces/memory.interface';
+import { IMemoryScheduleResponse } from '@/features/myMap/interfaces/memory.interface';
 
 interface IFillMemoryStep1 {
   selectedTravel: ILabelValue;
   setSelectedTravel: Dispatch<SetStateAction<ILabelValue>>;
   setSeletedDate: Dispatch<SetStateAction<DateRange | undefined>>;
-  loadSchedules: IMemorySchedules[];
-  setLoadSchedules: Dispatch<SetStateAction<IMemorySchedules[]>>;
+  loadSchedules: IMemoryScheduleResponse[];
+  setLoadSchedules: Dispatch<SetStateAction<IMemoryScheduleResponse[]>>;
 }
 
 export default function FillMemoryStep1({

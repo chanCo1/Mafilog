@@ -5,15 +5,13 @@
  * @description: MemoryScheduleDay 컴포넌트
  */
 
-import { cn } from '@/shared/lib/utils';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
 import MemoryScheduleTimeline from '@/features/myMap/components/modal/fillMemory/MemoryScheduleTimeline';
-import { IMemorySchedules } from '@/features/myTravel/interfaces/schedule.interface';
 import { IMemoryScheduleResponse } from '@/features/myMap/interfaces/memory.interface';
 import { IHandleUpdateSchedule } from '@/features/myMap/interfaces/memory.interface';
 
 interface IMemoryScheduleDay {
-  schedule: IMemorySchedules | IMemoryScheduleResponse;
+  schedule: IMemoryScheduleResponse;
   onUpdateSchedule?: ({
     day,
     key,

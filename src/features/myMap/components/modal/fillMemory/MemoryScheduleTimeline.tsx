@@ -20,8 +20,8 @@ import { IHandleUpdateSchedule } from '@/features/myMap/interfaces/memory.interf
 import { IMemoryScheduleList } from '@/features/myMap/interfaces/memory.interface';
 
 interface IMemoryScheduleTimeline {
-  timeLineData: IScheduleListWithRating | IMemoryScheduleList;
-  dailyAllSchedule: IScheduleListWithRating[] | IMemoryScheduleList[];
+  timeLineData: IMemoryScheduleList;
+  dailyAllSchedule: IMemoryScheduleList[];
   currentIndex: number;
   onUpdateSchedule?: ({
     day,
