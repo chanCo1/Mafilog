@@ -39,7 +39,7 @@ class _MemoryService {
   }
 
   /** 추억 상세 조회 */
-  async getMemoryDetail(memoryId: string): Promise<IMemoryDetailResponse> {
+  async getMemoryDetail(memoryId: number): Promise<IMemoryDetailResponse> {
     const response = await axiosInstanceWithAuth.get(
       `${API_URL}/${memoryId}/detail`,
     );

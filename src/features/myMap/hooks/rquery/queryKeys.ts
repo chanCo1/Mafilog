@@ -5,5 +5,5 @@ export const memoryKeys = {
   list: (mapType: string) => [...memoryKeys.listAll(), mapType] as const,
 
   detailAll: () => [...memoryKeys.all, 'detail'] as const,
-  detail: (mapId: string) => [...memoryKeys.detailAll(), mapId] as const,
+  detail: (memoryId: number) => [...memoryKeys.detailAll(), memoryId] as const,
 };
