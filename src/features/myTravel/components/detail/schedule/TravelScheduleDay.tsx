@@ -5,7 +5,6 @@
  * @description: TravelScheduleDay 컴포넌트, 일차 컴포넌트
  */
 
-import { useEffect, useState } from 'react';
 import TravelScheduleTimeline from '@/features/myTravel/components/detail/schedule/TravelScheduleTimeline';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
