@@ -17,7 +17,7 @@ const requestInterceptor = async (
     try {
       if (!cachedAccessToken) {
         const session = await getSession();
-        cachedAccessToken = (session as any)?.accessToken || null;
+        cachedAccessToken = session?.accessToken || null;
       }
 
       if (cachedAccessToken && config.headers) {
@@ -46,10 +46,12 @@ const responseErrorInterceptor = async (error: AxiosError) => {
   if (error.response?.status === 401) {
     cachedAccessToken = null;
 
-    await signOut({
-      redirect: true,
-      callbackUrl: '/login',
-    });
+    if (typeof window !== 'undefined') {
+      await signOut({
+        redirect: true,
+        callbackUrl: '/login',
+      });
+    }
 
     return Promise.reject(error);
   }
