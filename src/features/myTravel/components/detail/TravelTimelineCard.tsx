@@ -48,20 +48,24 @@ export default function TravelTimelineCard({
         isSelected={isSelected}
       >
         <div className="flex items-center justify-between gap-2">
-          {children}
-          <div className="flex items-center gap-2 shrink-0">
-            <Button
-              variant="redOutline"
-              size="xs"
-              onClick={onClickDelete}
-              isLoading={isLoading}
+          <div className="flex items-center gap-2">
+            <div
+              className="cursor-grab touch-none active:cursor-grabbing"
+              {...dragListeners}
+              onClick={(e) => e.stopPropagation()}
             >
-              삭제
-            </Button>
-            <div className='cursor-grab active:cursor-grabbing' {...dragListeners} onClick={(e) => e.stopPropagation()}>
-              <ChevronsUpDown className="h-5 w-5 text-text-secondary" />
+              <ChevronsUpDown className="text-text-secondary h-5 w-5" />
             </div>
+            {children}
           </div>
+          <Button
+            variant="redOutline"
+            size="xs"
+            onClick={onClickDelete}
+            isLoading={isLoading}
+          >
+            삭제
+          </Button>
         </div>
       </Card>
       {!isMemo && memo ? (

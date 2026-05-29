@@ -58,7 +58,8 @@ export default function TravelScheduleDay({
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 5,
+        tolerance: 5,
+        delay: 200,
       },
     }),
   );
