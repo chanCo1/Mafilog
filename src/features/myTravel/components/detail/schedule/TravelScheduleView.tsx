@@ -122,15 +122,17 @@ function TravelScheduleView() {
                     }
                     disabled={!selectedSchedules.length}
                   >
-                    {getTravelDayList(scheduleList).map((list) => (
-                      <span
-                        key={list.value}
-                        className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
-                        onClick={() => handleMoveSchedule(list.value)}
-                      >
-                        {list.label}
-                      </span>
-                    ))}
+                    <div className='flex flex-col'>
+                      {getTravelDayList(scheduleList).map((list) => (
+                        <span
+                          key={list.value}
+                          className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
+                          onClick={() => handleMoveSchedule(list.value)}
+                        >
+                          {list.label}
+                        </span>
+                      ))}
+                    </div>
                   </Dropdown>
                   <Button
                     variant="redOutline"

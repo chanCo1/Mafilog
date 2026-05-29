@@ -115,15 +115,17 @@ function TravelExpensesView() {
                       </Button>
                     }
                   >
-                    {getTravelDayList(expenseList).map((list, index) => (
-                      <span
-                        key={list.value}
-                        className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
-                        onClick={() => handelMoveExpense(list.value)}
-                      >
-                        {index === 0 ? '여행전' :list.label}
-                      </span>
-                    ))}
+                    <div className='flex flex-col'>
+                      {getTravelDayList(expenseList).map((list, index) => (
+                        <span
+                          key={list.value}
+                          className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
+                          onClick={() => handelMoveExpense(list.value)}
+                        >
+                          {index === 0 ? '여행전' :list.label}
+                        </span>
+                      ))}
+                    </div>
                   </Dropdown>
                   <Button
                     variant="redOutline"
