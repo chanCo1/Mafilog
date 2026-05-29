@@ -16,6 +16,7 @@ import {
   errorResponse,
 } from '@/shared/backend/utils/apiResponse';
 
+/** 프로필 수정 */
 export async function PATCH(request: Request) {
   const authValidate = await authGuard(request);
   if (!authValidate.isValid) return authValidate.errorResponse;
@@ -67,6 +68,7 @@ export async function PATCH(request: Request) {
 
     // 기존 이미지 삭제
     if (originImageUrl && originImageUrl !== imageUrl) {
+      // cloudinary 이미지일 때만 삭제
       if (originImageUrl.includes('cloudinary.com')) {
         deleteCloudinary(originImageUrl); 
       }

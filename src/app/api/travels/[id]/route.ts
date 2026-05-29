@@ -11,7 +11,10 @@ import {
   successResponse,
   errorResponse,
 } from '@/shared/backend/utils/apiResponse';
-import { uploadCloudinary } from '@/shared/backend/lib/cloudinary';
+import {
+  deleteCloudinary,
+  uploadCloudinary,
+} from '@/shared/backend/lib/cloudinary';
 import { IMemberList } from '@/shared/interfaces';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import { getTravelDayOfWeek } from '@/shared/lib/utils';
@@ -59,15 +62,15 @@ export async function PATCH(
   const travelId = Number(params.id);
   if (!travelId) return errorResponse('잘 못 된 접근입니다.', 403);
 
-  // 여행 존재 여부
-  const existTravel = await prisma.travel.findUnique({
+  // 기존 여행 추출
+  const extractTravel = await prisma.travel.findUnique({
     where: { id: travelId },
     include: {
       cities: true,
       member: true,
     },
   });
-  if (!existTravel || existTravel.userId !== currentUserId)
+  if (!extractTravel || extractTravel.userId !== currentUserId)
     return errorResponse('수정 권한이 없거나 존재하지 않는 여행입니다.', 403);
 
   try {
@@ -103,25 +106,25 @@ export async function PATCH(
       return errorResponse('해당 날짜에는 이미 등록된 여행이 있습니다.', 400);
 
     const files = formData.getAll('imageUrl');
-    const imageFiles = files.filter(
+    const newImageFile = files.filter(
       (entry) => typeof entry !== 'string',
     ) as File[];
-    const imageUrls = files.filter(
+    const originImageUrls = files.filter(
       (entry) => typeof entry === 'string',
     ) as string[];
 
     // 기존 데이터
     const originDbState = JSON.stringify({
-      title: existTravel.title,
-      travelType: existTravel.travelType,
-      travelPartner: existTravel.travelPartner,
-      travelPeriod: existTravel.travelPeriod,
-      from: existTravel.from.toISOString(),
-      to: existTravel.to.toISOString(),
-      travelStyles: existTravel.travelStyles,
-      cities: existTravel.cities.map((c) => c.id),
-      member: existTravel.member.map((m) => m.name),
-      imageUrl: existTravel.imageUrl,
+      title: extractTravel.title,
+      travelType: extractTravel.travelType,
+      travelPartner: extractTravel.travelPartner,
+      travelPeriod: extractTravel.travelPeriod,
+      from: extractTravel.from.toISOString(),
+      to: extractTravel.to.toISOString(),
+      travelStyles: extractTravel.travelStyles,
+      cities: extractTravel.cities.map((c) => c.id),
+      member: extractTravel.member.map((m) => m.name),
+      imageUrl: extractTravel.imageUrl,
     });
 
     // 변경 데이터
@@ -135,20 +138,28 @@ export async function PATCH(
       travelStyles,
       cities: cities.map((c: IPlaceList) => c.id),
       members: member.map((m: IMemberList) => m.name),
-      image: imageFiles.length > 0 ? 'new' : imageUrls[0] || null,
+      image: newImageFile.length > 0 ? 'new' : originImageUrls[0] || null,
     });
 
     if (originDbState === requestState) {
       return successResponse();
     }
 
-    let imageUrl = existTravel.imageUrl;
-    if (imageFiles.length > 0) {
-      const uploadedUrls = await uploadCloudinary({ files: imageFiles });
+    // 이미지 처리
+    let imageUrl = extractTravel.imageUrl;
+    if (newImageFile.length > 0) {
+      if (imageUrl) {
+        await deleteCloudinary(imageUrl);
+      }
+
+      const uploadedUrls = await uploadCloudinary({ files: newImageFile });
       imageUrl = uploadedUrls.length ? uploadedUrls[0] : null;
-    } else if (imageUrls.length > 0) {
-      imageUrl = imageUrls[0];
+    } else if (originImageUrls.length > 0) {
+      imageUrl = originImageUrls[0];
     } else {
+      if (imageUrl) {
+        await deleteCloudinary(imageUrl);
+      }
       imageUrl = null;
     }
 

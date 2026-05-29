@@ -80,20 +80,29 @@ export async function PATCH(
     const schedules = JSON.parse(formData.get('schedules') as string);
     const imageUrl = formData.getAll('imageUrl');
 
+    // 기존 이미지
     const originImageUrls = imageUrl.filter(
       (item) => typeof item === 'string',
     ) as string[];
 
     // 문자열로 오지 않으면 새 이미지
     const newFiles = imageUrl.filter(
-      (item) =>
-        typeof item !== 'string',
+      (item) => typeof item !== 'string',
     ) as File[];
 
     // 기존 추억 정보 조회
     const extractMemory = await prisma.memory.findUnique({
       where: { id: memoryId, userId: currentUserId },
-      select: { imageUrl: true },
+      include: {
+        schedules: {
+          orderBy: { day: 'asc' },
+          include: {
+            scheduleList: {
+              orderBy: { order: 'asc' },
+            },
+          },
+        },
+      },
     });
 
     if (!extractMemory) {
@@ -101,6 +110,67 @@ export async function PATCH(
         '수정할 추억을 찾을 수 없거나 권한이 없습니다.',
         404,
       );
+    }
+
+    // 이미지 변경사항 확인
+    const isImageChanged =
+      newFiles.length > 0 ||
+      JSON.stringify(extractMemory.imageUrl) !==
+        JSON.stringify(originImageUrls);
+
+    const originState = JSON.stringify({
+      title: extractMemory.title,
+      from: extractMemory.from.toISOString(),
+      to: extractMemory.to.toISOString(),
+      mapType: extractMemory.mapType,
+      mapId: extractMemory.mapId,
+      memo: extractMemory.memo || null,
+      hexCode: extractMemory.hexCode,
+      scheduleId: extractMemory.scheduleId || null,
+      scheduleTitle: extractMemory.scheduleTitle || null,
+      schedules: extractMemory.schedules.map((schedule) => ({
+        day: schedule.day,
+        date: schedule.date.toISOString(),
+        scheduleList: schedule.scheduleList.map((list) => ({
+          type: list.type,
+          day: list.day,
+          time: list.time || null,
+          memo: list.memo || null,
+          rating: list.rating || 0,
+          order: list.order,
+          place: list.place || null,
+        })),
+      })),
+    });
+
+    const requestState = JSON.stringify({
+      title,
+      from: new Date(from).toISOString(),
+      to: new Date(to).toISOString(),
+      mapType,
+      mapId,
+      memo: memo || null,
+      hexCode,
+      scheduleId: scheduleId || null,
+      scheduleTitle: scheduleTitle || null,
+      schedules: schedules.map((schedule: any) => ({
+        day: schedule.day,
+        date: new Date(schedule.date).toISOString(),
+        scheduleList: schedule.scheduleList.map((list: any) => ({
+          type: list.type,
+          day: list.day,
+          time: list.time || null,
+          memo: list.memo || null,
+          rating: list.rating || 0,
+          order: list.order,
+          place: list.place || null,
+        })),
+      })),
+    });
+
+    // 변경사항이 없으면 데이터베이스 업데이트 안함
+    if (!isImageChanged && originState === requestState) {
+      return successResponse();
     }
 
     // 삭제할 이미지 분류
