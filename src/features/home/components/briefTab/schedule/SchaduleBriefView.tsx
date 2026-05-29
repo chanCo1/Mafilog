@@ -40,6 +40,8 @@ function ScheduleBrief() {
           src="/schadule_map.png"
           alt="일정 간략소개 지도 이미지"
           fill
+          sizes='100%'
+          priority
           className="object-fill opacity-30"
         />
         <div className="absolute top-1/2 left-0 -translate-y-1/2 w-3/5">

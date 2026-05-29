@@ -158,6 +158,7 @@ export default function FileUpload({
                 src={previewImage[0]}
                 alt="대표 이미지 미리보기"
                 fill
+                sizes='100%'
                 className={cn('rounded-lg object-cover', className)}
               />
               <div className="absolute flex w-full justify-between p-2">

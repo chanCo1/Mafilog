@@ -16,13 +16,13 @@ import { getPlaceCategory } from '@/shared/lib/utils';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
-import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useDeleteSchedulePlace';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface ITravelScheduleTimeline {
-  timeLineData?: ISecheduleListResponse;
-  dailyAllSchedule?: ISecheduleListResponse[];
+  timeLineData?: IScheduleListResponse;
+  dailyAllSchedule?: IScheduleListResponse[];
   currentIndex?: number;
   selectMode?: boolean;
 }

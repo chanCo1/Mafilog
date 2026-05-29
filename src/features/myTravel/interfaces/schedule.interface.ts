@@ -11,6 +11,7 @@ export interface IPlaceList {
   lng: number;
   types: string[];
   timezone?: string;
+  placeId?: string;
 }
 
 /** 일정 리스트 조회 */
@@ -20,10 +21,10 @@ export interface IScheduleResponse {
   date: string;
   travelId: number;
   createAt: string;
-  scheduleList: ISecheduleListResponse[];
+  scheduleList: IScheduleListResponse[];
 }
 
-export interface ISecheduleListResponse {
+export interface IScheduleListResponse {
   id: number;
   type: SCHEDULE_TYPE;
   day: number;
@@ -50,4 +51,8 @@ export interface IUpdateSchedulePlaceRequest extends Pick<
   'memo' | 'day' | 'time'
 > {
   scheduleListId: number;
+}
+
+export interface IScheduleListWithRating extends IScheduleListResponse {
+  rating: number;
 }

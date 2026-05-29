@@ -16,17 +16,42 @@ import { ILabelValue } from '@/shared/interfaces';
 import AmchartMap from '@/shared/components/map/AmchartMap';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
 import CreateFillMemoryModal from '@/features/myMap/components/modal/CreateFillMemoryModal';
-
-interface IMyMapPage {}
+import { useGetMemoryList } from '@/features/myMap/hooks/rquery/useGetMemoryList';
+import FillMemoryDetailModal from '@/features/myMap/components/modal/FillMemoryDetailModal';
 
 export default function MyMapPage() {
-  const [selectedMap, setSelectedMap] = useState<ILabelValue>(
+  const [selectedMapType, setSelectedMapType] = useState<ILabelValue>(
     MAP_TRAVEL_TYPE_LIST[0],
   );
+  // 선택한 지도 아이디
+  const [selectedMapId, setSelectedMapId] = useState<string | undefined>(
+    undefined,
+  );
+  // 선택한 추억 id
+  const [selectedMemoryId, setSelectedMemoryId] = useState(0);
   const [isOpenFillModal, setIsOpenFillModal] = useState(false);
+  const [isOpenDetailModal, setIsOpenDetailModal] = useState(false);
+  const [isFillMemoryModify, setIsFillMemoryModify] = useState(false);
 
-  const isWorld = selectedMap.value === TRAVEL_TYPE.WORLD;
-  const isDomestic = selectedMap.value === TRAVEL_TYPE.DOMESTIC;
+  const isWorld = selectedMapType.value === TRAVEL_TYPE.WORLD;
+  const isDomestic = selectedMapType.value === TRAVEL_TYPE.DOMESTIC;
+
+  const { data: memoryList } = useGetMemoryList(
+    selectedMapType.value as string,
+  );
+
+  /** 추억 상세 모달에서 수정 클릭 시 */
+  const handleUpdateMemoryDetail = () => {
+    setIsOpenDetailModal(false);
+    setIsOpenFillModal(true);
+    setIsFillMemoryModify(true);
+  };
+
+  /** 추억 만들기 모달 핸들링 */
+  const handleCloseCreateMemoryModal = () => {
+    setIsOpenFillModal(false);
+    setIsFillMemoryModify(false);
+  }
 
   return (
     <div className="flex h-full flex-col gap-5">
@@ -40,36 +65,70 @@ export default function MyMapPage() {
           <Chip
             key={list.value}
             size="lg"
-            variant={selectedMap.value === list.value ? 'primary' : 'gray'}
-            onClick={() => setSelectedMap(list)}
+            variant={selectedMapType.value === list.value ? 'primary' : 'gray'}
+            onClick={() => setSelectedMapType(list)}
           >
             {list.label}
           </Chip>
         ))}
       </div>
 
-      <div className="h-full">
+      <div className={cn('h-full')}>
         {isWorld && (
-          <div className="flex h-full flex-col">
-            <span className="text-text-secondary text-center break-keep">
-              지도가 비어있어요. 나만의 세계 여행 지도를 채워보세요.
-            </span>
+          <div className="flex h-full flex-col gap-2">
+            <div className="flex justify-center text-center break-keep">
+              {memoryList?.length ? (
+                <div>
+                  벌써{' '}
+                  <span className="text-primary font-bold">
+                    {memoryList?.length}개의 나라
+                  </span>
+                  에 추억이 채워졌네요! 소중한 추억을 더 남겨보세요
+                </div>
+              ) : (
+                <span className="text-text-secondary">
+                  지도가 비어있어요. 나만의 세계 여행 지도를 채워보세요
+                </span>
+              )}
+            </div>
             <AmchartMap
               isOpenFillModal={isOpenFillModal}
-              setSelectedMap={setSelectedMap}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
+              isOpenDetailModal={isOpenDetailModal}
+              setIsOpenDetailModal={() => setIsOpenDetailModal(true)}
+              setSelectedMapType={setSelectedMapType}
+              setSelectedMapId={setSelectedMapId}
+              setSelectedMemoryId={setSelectedMemoryId}
+              memoryList={memoryList}
             />
           </div>
         )}
         {isDomestic && (
-          <div className="flex h-full flex-col">
-            <span className="text-text-secondary text-center break-keep">
-              아직 채워진 도시가 없어요. 소중한 첫 번째 추억을 남겨보세요.
-            </span>
+          <div className="flex h-full flex-col gap-2">
+            <div className="flex justify-center text-center break-keep">
+              {memoryList?.length ? (
+                <div className="">
+                  벌써{' '}
+                  <span className="text-primary font-bold">
+                    {memoryList?.length}개 도시
+                  </span>
+                  에 추억이 채워졌네요! 소중한 추억을 더 남겨보세요
+                </div>
+              ) : (
+                <span className="text-text-secondary">
+                  아직 채워진 도시가 없어요. 소중한 첫 번째 추억을 남겨보세요.
+                </span>
+              )}
+            </div>
             <AmchartMap
-              isOpenFillModal={isOpenFillModal}
               isDomestic
+              isOpenFillModal={isOpenFillModal}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
+              isOpenDetailModal={isOpenDetailModal}
+              setIsOpenDetailModal={() => setIsOpenDetailModal(true)}
+              setSelectedMapId={setSelectedMapId}
+              setSelectedMemoryId={setSelectedMemoryId}
+              memoryList={memoryList}
             />
           </div>
         )}
@@ -77,7 +136,22 @@ export default function MyMapPage() {
 
       <CreateFillMemoryModal
         isOpen={isOpenFillModal}
-        handleClose={() => setIsOpenFillModal(false)}
+        handleClose={handleCloseCreateMemoryModal}
+        selectedMapType={selectedMapType.value as string}
+        selectedMapId={selectedMapId}
+        setSelectedMapId={setSelectedMapId}
+        selectedMemoryId={selectedMemoryId}
+        setSelectedMemoryId={setSelectedMemoryId}
+        isModify={isFillMemoryModify}
+      />
+
+      <FillMemoryDetailModal
+        isOpen={isOpenDetailModal}
+        handleClose={() => setIsOpenDetailModal(false)}
+        selectedMemoryId={selectedMemoryId}
+        setSelectedMemoryId={setSelectedMemoryId}
+        selectedMapType={selectedMapType.value as string}
+        handleUpdate={handleUpdateMemoryDetail}
       />
     </div>
   );

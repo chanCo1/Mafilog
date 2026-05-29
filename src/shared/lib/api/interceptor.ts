@@ -17,7 +17,7 @@ const requestInterceptor = async (
     try {
       if (!cachedAccessToken) {
         const session = await getSession();
-        cachedAccessToken = (session as any)?.accessToken || null;
+        cachedAccessToken = session?.accessToken || null;
       }
 
       if (cachedAccessToken && config.headers) {
@@ -45,11 +45,13 @@ const responseErrorInterceptor = async (error: AxiosError) => {
   // 전역 에러 처리
   if (error.response?.status === 401) {
     cachedAccessToken = null;
-
-    await signOut({
-      redirect: true,
-      callbackUrl: '/login',
-    });
+    // TODO: 401 되면 알럿으로 알려줄지 고민..
+    if (typeof window !== 'undefined') {
+      await signOut({
+        redirect: true,
+        callbackUrl: '/login',
+      });
+    }
 
     return Promise.reject(error);
   }

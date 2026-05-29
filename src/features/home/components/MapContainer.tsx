@@ -19,7 +19,7 @@ import { useSession } from 'next-auth/react';
 // interface IMapContainer {}
 
 export default function MapContainer() {
-  const { data } = useSession();
+  const { data: userInfo } = useSession();
 
   const [selectedMap, setSelectedMap] = useState<ILabelValue>(
     MAP_TRAVEL_TYPE_LIST[0],
@@ -45,9 +45,9 @@ export default function MapContainer() {
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
-      {isWorld && <AmchartMap readonly />}
+      {isWorld && <AmchartMap readonly setSelectedMapType={setSelectedMap} />}
       {isDomestic && <AmchartMap isDomestic readonly />}
-      {data && (
+      {userInfo && (
         <div className="flex items-center justify-center font-bold">
           {isDomestic ? (
             <div>

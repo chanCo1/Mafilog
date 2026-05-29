@@ -39,6 +39,7 @@ export default function TravelListCard({
           alt="배경 이미지"
           fill
           priority
+          sizes='100%'
           className="z-0 rounded-lg object-cover"
         />
       )}

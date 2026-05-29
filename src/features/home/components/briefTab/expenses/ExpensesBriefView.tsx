@@ -41,6 +41,7 @@ function ExpensesBrief() {
           src="/expenses_chart.png"
           alt="가계부 차트 이미지"
           fill
+          sizes='100%'
           className="object-contain opacity-10"
         />
         <div className="absolute top-1/2 left-1/2 flex w-3/4 -translate-x-1/2 -translate-y-1/2 flex-col gap-1.5">

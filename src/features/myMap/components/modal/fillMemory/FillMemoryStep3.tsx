@@ -9,6 +9,7 @@ import { Dispatch, SetStateAction } from 'react';
 import FileUpload from '@/shared/components/ui/FileUpload';
 import { Input } from '@/shared/components/ui/Input';
 import { Textarea } from '@/shared/components/ui/Textarea';
+import ColorPicker from '@/shared/components/ui/ColorPicker';
 
 interface IFillMemoryStep3 {
   selectedImage: (File | string)[];
@@ -17,6 +18,8 @@ interface IFillMemoryStep3 {
   setMemoryTitle: Dispatch<SetStateAction<string>>;
   memoryMemo: string;
   setMemoryMemo: Dispatch<SetStateAction<string>>;
+  mapColor: string;
+  setMapColor: Dispatch<SetStateAction<string>>;
 }
 
 export default function FillMemoryStep3({
@@ -26,19 +29,27 @@ export default function FillMemoryStep3({
   setMemoryTitle,
   memoryMemo,
   setMemoryMemo,
+  mapColor,
+  setMapColor,
 }: IFillMemoryStep3) {
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
+      <div className="scrollbar-hide flex flex-1 flex-col gap-5 overflow-auto">
         <FileUpload
           label="대표 이미지"
-          description="필수는 아니에요."
+          description="필수는 아니에요"
           selectedImage={selectedImage}
           setSelectedImage={setSelectedImage}
           isMultiple
         />
+        <ColorPicker
+          label="채울 색상"
+          value={mapColor}
+          onChange={(color) => setMapColor(color)}
+        />
         <Input
           label="제목"
+          isRequired
           placeholder="추억 제목을 입력해주세요"
           description="최대 20자까지 입력가능해요"
           maxLength={20}

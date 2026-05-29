@@ -47,7 +47,7 @@ export default function BarChart({ data, dataLabel = '지출 (원)', labels }: I
     ],
   };
 
-  // 3. 차트 옵션 설정
+  // 차트 옵션 설정
   const options: ChartOptions<'bar'> = {
     indexAxis: 'y' as const,
     responsive: true,

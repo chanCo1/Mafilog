@@ -7,11 +7,11 @@
 
 import { useMemo } from 'react';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
-import { ISecheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface IuseTimelineDiscplayCount {
   type?: SCHEDULE_TYPE;
-  dailyAllSchedule?: ISecheduleListResponse[];
+  dailyAllSchedule?: IScheduleListResponse[];
   currentIndex?: number;
 }
 

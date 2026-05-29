@@ -45,14 +45,20 @@ export const convertFormattedDate = (
 };
 
 /** 여행 기간 포멧 노출 (YYYY.MM.DD ~ YYYY.MM.DD) */
-export const convertTravelDateRange = (from: Date, to: Date) => {
+export const convertTravelDateRange = (
+  from: Date | undefined | string,
+  to: Date | undefined | string,
+) => {
   if (!from || !to) return '';
 
-  if (from === to) {
-    return `${convertFormattedDate(from)}(${getDay(from)}) (${getTravelDay(from, to)}일)`;
+  const fromDate = typeof from === 'string' ? new Date(from) : from;
+  const toDate = typeof to === 'string' ? new Date(to) : to;
+
+  if (fromDate.getTime() === toDate.getTime()) {
+    return `${convertFormattedDate(fromDate)}(${getDay(fromDate)}) (${getTravelDay(fromDate, toDate)}일)`;
   }
 
-  return `${convertFormattedDate(from)}(${getDay(from)}) ~ ${convertFormattedDate(to)}(${getDay(to)}) (${getTravelDay(from, to)}일)`;
+  return `${convertFormattedDate(fromDate)}(${getDay(fromDate)}) ~ ${convertFormattedDate(toDate)}(${getDay(toDate)}) (${getTravelDay(fromDate, toDate)}일)`;
 };
 
 /** 무슨 요일인지 구하기 */
@@ -234,7 +240,7 @@ export const getTokenExpire = (day: number = 1) => {
 
 /** 헥스코드 구하기 */
 export const getHexCode = () => {
-  return `${Math.floor(Math.random() * 16777215)
+  return `#${Math.floor(Math.random() * 16777215)
     .toString(16)
     .padStart(6, '0')}`;
 };
