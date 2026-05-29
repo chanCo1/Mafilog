@@ -24,7 +24,10 @@ class _ScheduleService {
   }
 
   /** 일정 등록 */
-  async createTravelSchedulePlace(travelId: string, data: ISchedulePlaceRequest) {
+  async createTravelSchedulePlace(
+    travelId: string,
+    data: ISchedulePlaceRequest,
+  ) {
     const response = await axiosInstanceWithAuth.post(
       `${API_URL}/${travelId}/schedules`,
       data,
@@ -65,6 +68,18 @@ class _ScheduleService {
     const response = await axiosInstanceWithAuth.patch(
       `${API_URL}/${travelId}/schedules/bulk-move`,
       data,
+    );
+    return response.data.data;
+  }
+
+  /** 여행 일정 순서 이동 */
+  async updateMoveTravelScheduleList(
+    travelId: string,
+    orderedItems: { id: number; order: number }[],
+  ) {
+    const response = await axiosInstanceWithAuth.patch(
+      `${API_URL}/${travelId}/schedules/order`,
+      { orderedItems },
     );
     return response.data.data;
   }
