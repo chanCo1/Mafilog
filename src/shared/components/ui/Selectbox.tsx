@@ -5,18 +5,14 @@
  * @description: Selectbox 컴포넌트
  */
 
-import {
-  useState,
-  ReactNode,
-  useLayoutEffect,
-  InputHTMLAttributes,
-} from 'react';
+import { useState, ReactNode, InputHTMLAttributes } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/Input';
 import { ChevronDown } from 'lucide-react';
 import { ILabelValue } from '@/shared/interfaces';
 import { useOutsideClick } from '@/shared/hooks/useOutsideClick';
 import { useDropdownDirection } from '@/shared/hooks/useDropdownDirection';
+import VaulBottomSheet from '@/shared/components/ui/VaulBottomSheet';
 
 interface ISelectbox extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -74,6 +70,27 @@ export default function Selectbox({
     setIsOpen(false);
   };
 
+  const renderOptions = () => (
+    <>
+      {options.map((option, index) => (
+        <li
+          key={`${option.value}-${index}`}
+          className={cn(
+            'hover:bg-gray-1 cursor-pointer rounded-md p-1.5',
+            option.value === value?.value
+              ? 'text-text-primary font-bold'
+              : 'text-text-secondary',
+          )}
+          onMouseDown={() => {
+            onClickOption(option);
+          }}
+        >
+          {option.label} {addValueText ?? ''}
+        </li>
+      ))}
+    </>
+  );
+
   return (
     <div className={cn('relative', className)} ref={dropdownRef}>
       <Input
@@ -82,7 +99,12 @@ export default function Selectbox({
         placeholder={props.placeholder}
         prefix={prefix}
         suffix={
-          <ChevronDown className={cn('h-4 w-4 stroke-3 transition duration-200', isOpen ? 'rotate-180' : '')} />
+          <ChevronDown
+            className={cn(
+              'h-4 w-4 stroke-3 transition duration-200',
+              isOpen ? 'rotate-180' : '',
+            )}
+          />
         }
         isRequired={isRequired}
         description={description}
@@ -101,30 +123,20 @@ export default function Selectbox({
 
       {/* 셀렉트박스 */}
       {isOpen && options && (
-        <ul
-          className={cn(
-            'scrollbar-hide absolute z-50 flex max-h-45 w-full flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
-            direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
-          )}
-        >
-          {options.map((option, index) => (
-            <li
-              key={`${option.value}-${index}`}
-              className={cn(
-                'hover:bg-gray-1 cursor-pointer rounded-md p-1.5',
-                option.value === value?.value
-                  ? 'text-text-primary font-bold'
-                  : 'text-text-secondary',
-              )}
-              onMouseDown={() => {
-                onClickOption(option);
-              }}
-            >
-              {option.label} {addValueText ?? ''}
-            </li>
-          ))}
-        </ul>
+        <div className="max-mobile:hidden mobile:block">
+          <ul
+            className={cn(
+              'scrollbar-hide absolute z-50 flex max-h-45 w-full flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
+              direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
+            )}
+          >
+            {renderOptions()}
+          </ul>
+        </div>
       )}
+      <VaulBottomSheet isOpen={isOpen && window.innerWidth < 640}>
+        <ul>{renderOptions()}</ul>
+      </VaulBottomSheet>
     </div>
   );
 }
