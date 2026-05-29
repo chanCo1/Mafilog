@@ -25,6 +25,8 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from '@dnd-kit/sortable';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useUpdateMoveScheduleList } from '@/features/myTravel/hooks/rquery/schedule/useUpdateMoveScheduleList';
 
 interface ITravelScheduleDay {
   schedule: IScheduleResponse;
@@ -35,25 +37,23 @@ export default function TravelScheduleDay({
   schedule,
   selectMode,
 }: ITravelScheduleDay) {
+  const scheduleList = schedule.scheduleList;
+
   const { selectedSchedules, toggleDayAll } = useSelectSchedules();
+  const travelId = useGetTravelId();
+  const { mutateAsync: updateScheduleList } =
+    useUpdateMoveScheduleList(travelId);
 
   // 현재 일차의 list 아이템들이 모두 selectedSchedules에 포함되어 있는지 확인
   const isAllSelected =
-    schedule.scheduleList.length > 0 &&
-    schedule.scheduleList.every((item) =>
+    scheduleList.length > 0 &&
+    scheduleList.every((item) =>
       selectedSchedules.some((selected) => selected.id === item.id),
     );
 
   const handleAllCheck = (checked: boolean | ILabelValue[]) => {
-    toggleDayAll(schedule.scheduleList, !checked as boolean);
+    toggleDayAll(scheduleList, !checked as boolean);
   };
-
-  // 임시 state
-  const [items, setItems] = useState(schedule.scheduleList);
-
-  useEffect(() => {
-    setItems(schedule.scheduleList);
-  }, [schedule.scheduleList]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -64,31 +64,24 @@ export default function TravelScheduleDay({
   );
 
   /** 드래그 핸들링 */
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
     // 제자리에 놓았거나 유효하지 않은 곳에 놓으면 무시
     if (!over || active.id === over.id) return;
 
-    setItems((items) => {
-      const oldIndex = items.findIndex(
-        (item) => item.id.toString() === active.id,
-      );
-      const newIndex = items.findIndex(
-        (item) => item.id.toString() === over.id,
-      );
+    const oldIndex = scheduleList.findIndex(
+      (list) => list.id.toString() === active.id,
+    );
+    const newIndex = scheduleList.findIndex(
+      (list) => list.id.toString() === over.id,
+    );
 
-      // 배열 순서 변경
-      const newOrderedItems = arrayMove(items, oldIndex, newIndex);
-      console.log('newOrderedItems >> ', newOrderedItems)
+    const newOrderedItems = arrayMove(scheduleList, oldIndex, newIndex);
 
-      // api 전달
-      const updatePayload = newOrderedItems.map((item, index) => ({
-      id: item.id,
-      order: index,
-    }));
-
-      return newOrderedItems;
+    await updateScheduleList({
+      scheduleId: schedule.id,
+      newOrderedItems,
     });
   };
 
@@ -105,21 +98,21 @@ export default function TravelScheduleDay({
         </span>
       </div>
       <div className="flex flex-col">
-        {items.length ? (
+        {scheduleList.length ? (
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
           >
             <SortableContext
-              items={items.map((item) => item.id.toString())}
+              items={scheduleList.map((item) => item.id.toString())}
               strategy={verticalListSortingStrategy}
             >
-              {items.map((_data, index) => (
+              {scheduleList.map((_data, index) => (
                 <TravelScheduleTimeline
                   key={_data.id}
                   timeLineData={_data}
-                  dailyAllSchedule={items}
+                  dailyAllSchedule={scheduleList}
                   currentIndex={index}
                   selectMode={selectMode}
                 />
