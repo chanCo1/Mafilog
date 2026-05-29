@@ -24,6 +24,7 @@ import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule
 import { useCreateMemory } from '@/features/myMap/hooks/rquery/useCreateMemory';
 import { getHexCode } from '@/shared/lib/utils';
 import { useGetMemoryDetail } from '@/features/myMap/hooks/rquery/useGetMemoryDetail';
+import { useUpdateMemory } from '@/features/myMap/hooks/rquery/useUpdateMemory';
 
 interface ICreateFillMemoryModal {
   isOpen: boolean;
@@ -65,7 +66,6 @@ export default function CreateFillMemoryModal({
   const [loadSchedules, setLoadSchedules] = useState<IMemoryScheduleResponse[]>(
     [],
   );
-  console.log('loadSchedules >> ', loadSchedules)
 
   const [mapColor, setMapColor] = useState(getHexCode());
 
@@ -78,27 +78,37 @@ export default function CreateFillMemoryModal({
     useCreateMemory(selectedMapType);
 
   const { data: memoryDetail } = useGetMemoryDetail(selectedMemoryId);
+  const { mutateAsync: updateMemory, isPending: isUpdatePending } =
+    useUpdateMemory(selectedMapType, selectedMemoryId);
 
-  // 추억 등록시 (수정아닐 때) 일정 리스트 초기값
+  /** 추억 타임라인 초기값 대입 */
   useEffect(() => {
-    if (!isModify) {
-      if (travelSchedule?.length) {
-        const scheduleWithRating: IMemoryScheduleResponse[] = travelSchedule.map(
-          (schedule) => ({
-            ...schedule,
-            scheduleList: schedule.scheduleList.map((list) => ({
-              ...list,
-              rating: 0,
-            })),
-          }),
-        );
-  
-        setLoadSchedules(scheduleWithRating);
-      } else {
-        setLoadSchedules([]);
-      }
+    // 수정일 경우 
+    if (
+      isModify &&
+      memoryDetail &&
+      String(selectedTravel.value) === String(memoryDetail.scheduleId)
+    ) {
+      setLoadSchedules(memoryDetail.schedules);
+      return;
     }
-  }, [travelSchedule, isModify]);
+
+    // 수정이 아닌 등록일 경우
+    if (travelSchedule?.length) {
+      const scheduleWithRating: IMemoryScheduleResponse[] =
+        travelSchedule.map((schedule) => ({
+          ...schedule,
+          scheduleList: schedule.scheduleList.map((list) => ({
+            ...list,
+            rating: 0,
+          })),
+        }));
+
+      setLoadSchedules(scheduleWithRating);
+    } else {
+      setLoadSchedules([]);
+    }
+  }, [travelSchedule, isModify, memoryDetail, selectedTravel.value]);
 
   /** 다음 핸들링 */
   const handelNextStep = () => {
@@ -137,7 +147,7 @@ export default function CreateFillMemoryModal({
 
   /** 추억 저장 */
   const handelCreateNewMemory = async () => {
-    if (!selectedMapId) {
+    if (!isModify && !selectedMapId) {
       toast.error('지도가 선택되지 않았습니다');
       return;
     }
@@ -156,7 +166,16 @@ export default function CreateFillMemoryModal({
 
     const formData = new FormData();
 
-    formData.append('mapId', selectedMapId);
+    if (isModify) {
+      if (memoryDetail) {
+        formData.append('mapId', memoryDetail?.mapId);
+      }
+    } else {
+      if (selectedMapId) {
+        formData.append('mapId', selectedMapId);
+      }
+    }
+
     formData.append('mapType', selectedMapType);
     formData.append('title', memoryTitle);
     formData.append('from', selectedDate?.from?.toISOString() || '');
@@ -176,7 +195,7 @@ export default function CreateFillMemoryModal({
     });
 
     if (isModify) {
-      console.log('수정');
+      await updateMemory(formData);
     } else {
       await createMemory(formData);
     }
@@ -296,11 +315,16 @@ export default function CreateFillMemoryModal({
                 이전
               </Button>
               <Button
-                disabled={!selectedDate || !memoryTitle || isCreatePending}
-                isLoading={isCreatePending}
+                disabled={
+                  !selectedDate ||
+                  !memoryTitle ||
+                  isCreatePending ||
+                  isUpdatePending
+                }
+                isLoading={isCreatePending || isUpdatePending}
                 onClick={handelCreateNewMemory}
               >
-                추억 만들기
+                {isModify ? '수정하기' : '추억 만들기'}
               </Button>
             </>
           )}
