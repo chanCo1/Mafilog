@@ -13,6 +13,7 @@ import { ILabelValue } from '@/shared/interfaces';
 import { useOutsideClick } from '@/shared/hooks/useOutsideClick';
 import { useDropdownDirection } from '@/shared/hooks/useDropdownDirection';
 import VaulBottomSheet from '@/shared/components/ui/VaulBottomSheet';
+import { useDevice } from '@/shared/hooks/useDevice';
 
 interface ISelectbox extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -53,9 +54,9 @@ export default function Selectbox({
   const dropdownRef = useOutsideClick(() => setIsOpen(false));
 
   const direction = useDropdownDirection({ isOpen, ref: dropdownRef });
+  const { isMobile } = useDevice();
 
   const handleFocus = () => {
-    // handleBlur();
     setIsOpen(!isOpen);
   };
 
@@ -123,18 +124,17 @@ export default function Selectbox({
 
       {/* 셀렉트박스 */}
       {isOpen && options && (
-        <div className="max-mobile:hidden mobile:block">
-          <ul
-            className={cn(
-              'scrollbar-hide absolute z-50 flex max-h-45 w-full flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
-              direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
-            )}
-          >
-            {renderOptions()}
-          </ul>
-        </div>
+        <ul
+          className={cn(
+            'scrollbar-hide max-mobile:hidden mobile:block absolute z-50 flex max-h-45 w-full flex-col gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
+            direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
+          )}
+        >
+          {renderOptions()}
+        </ul>
       )}
-      <VaulBottomSheet isOpen={isOpen && window.innerWidth < 640}>
+      {/* 바텀 시트 */}
+      <VaulBottomSheet isOpen={isOpen && isMobile}>
         <ul>{renderOptions()}</ul>
       </VaulBottomSheet>
     </div>

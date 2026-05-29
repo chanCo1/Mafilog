@@ -14,7 +14,7 @@ interface IVaulBottomSheet {
   className?: string;
   title?: string;
   isOpen: boolean;
-  onOpenChange?: () => void;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export default function VaulBottomSheet({
@@ -27,10 +27,10 @@ export default function VaulBottomSheet({
   return (
     <Drawer.Root open={isOpen} onOpenChange={onOpenChange}>
       <Drawer.Portal>
-        <Drawer.Overlay className="fixed inset-0 z-50 bg-black/40" />
+        <Drawer.Overlay className="fixed inset-0 z-30 bg-black/40" />
         <Drawer.Content
           aria-describedby={undefined}
-          className="fixed right-0 bottom-0 left-0 z-50 mt-24 flex max-h-70 flex-col rounded-t-2xl bg-white outline-none"
+          className="fixed right-0 bottom-0 left-0 z-30 mt-24 flex max-h-70 flex-col rounded-t-2xl bg-white outline-none"
         >
           <div
             className={cn(
