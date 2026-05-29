@@ -49,7 +49,7 @@ function DialogEntity({ className }: IDialog) {
   return createPortal(
     <div
       className={cn(
-        'fixed z-100 flex h-full w-full items-center justify-center',
+        'fixed z-100 inset-0 flex h-full w-full items-center justify-center pointer-events-auto',
         isOpen ? 'visible opacity-100' : 'invisible opacity-0',
       )}
     >
@@ -59,7 +59,7 @@ function DialogEntity({ className }: IDialog) {
       />
       <div
         className={cn(
-          'ease justify-cetner absolute z-50 flex w-75 flex-col items-center gap-2.5 rounded-lg bg-white p-2.5 shadow-md transition duration-200',
+          'ease justify-cetner absolute flex w-75 flex-col items-center gap-2.5 rounded-lg bg-white p-2.5 shadow-md transition duration-200 z-50',
           isOpen ? 'visible opacity-100' : 'invisible opacity-0',
           options?.type === 'error' && 'border-state-error border-2',
           className,

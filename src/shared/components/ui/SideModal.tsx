@@ -13,7 +13,7 @@ import Dimmed from '@/shared/components/ui/Dimmed';
 import { ReturnButton } from '@/shared/components/ui/ReturnButton';
 
 const sideModalVariants = cva(
-  'h-dvh fixed top-0 right-0 z-50 transform bg-white transition-transform duration-800 ease p-4 flex flex-col gap-3 rounded-l-xl justify-between',
+  'h-dvh fixed top-0 right-0 z-20 transform bg-white transition-transform duration-800 ease p-4 flex flex-col gap-3 rounded-l-xl justify-between',
   {
     variants: {
       size: {

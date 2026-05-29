@@ -45,7 +45,7 @@ const responseErrorInterceptor = async (error: AxiosError) => {
   // 전역 에러 처리
   if (error.response?.status === 401) {
     cachedAccessToken = null;
-
+    // TODO: 401 되면 알럿으로 알려줄지 고민..
     if (typeof window !== 'undefined') {
       await signOut({
         redirect: true,
