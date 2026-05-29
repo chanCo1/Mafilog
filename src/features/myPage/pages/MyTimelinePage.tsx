@@ -15,6 +15,7 @@ import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.i
 import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/timeline/useGetMyTimelineList';
 import { useGetTimelineDashboard } from '@/features/myPage/hooks/rquery/timeline/useGetTimelineDashboard';
 import { convertComma } from '@/shared/lib/utils';
+import { useDevice } from '@/shared/hooks/useDevice';
 
 export default function MyTimelinePage() {
   const [selectedTimeline, setSelectedTimeline] =
@@ -22,9 +23,10 @@ export default function MyTimelinePage() {
 
   const { data: myTimelineList } = useGetMyTimelineList();
   const { data: timelineDashboard } = useGetTimelineDashboard();
+  const {isMobile} = useDevice();
 
   useEffect(() => {
-    if (window.innerWidth >= 639) {
+    if (!isMobile) {
       if (myTimelineList) {
         setSelectedTimeline(myTimelineList[0]);
       }

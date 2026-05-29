@@ -11,6 +11,7 @@ import TimelineCard from '@/features/myPage/components/timeline/TimelineCard';
 import TimelineStatisticModal from '@/features/myPage/components/timeline/modal/TimelineStatisticModal';
 import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/timeline/useGetMyTimelineList';
 import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
+import { useDevice } from '@/shared/hooks/useDevice';
 
 interface ITravelTimelineWrap {
   selectedTimeline: IMyTravelListResponse | null;
@@ -24,11 +25,12 @@ export default function TravelTimelineWrap({
   const { data: myTimelineList } = useGetMyTimelineList();
 
   const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
+  const { isMobile } = useDevice();
 
   const handleTimeline = (travel: IMyTravelListResponse) => {
     setSelectedTimeline(travel);
 
-    if (window.innerWidth >= 1023) return;
+    if (!isMobile) return;
     setIsOpenStatisticModal(true);
   };
 
