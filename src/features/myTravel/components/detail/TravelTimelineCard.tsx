@@ -22,6 +22,7 @@ interface ITravelTimelineCard {
   selectMode: boolean;
   isSelected: boolean;
   isLoading?: boolean;
+  dragListeners?: Record<string, any>;
 }
 
 export default function TravelTimelineCard({
@@ -35,6 +36,7 @@ export default function TravelTimelineCard({
   isMemo,
   isSelected,
   isLoading,
+  dragListeners,
 }: ITravelTimelineCard) {
   return (
     <div className={cn('felx flex-col', className)}>
@@ -56,7 +58,9 @@ export default function TravelTimelineCard({
             >
               삭제
             </Button>
-            <ChevronsUpDown className="h-5 w-5 text-text-secondary" />
+            <div className='cursor-grab active:cursor-grabbing' {...dragListeners} onClick={(e) => e.stopPropagation()}>
+              <ChevronsUpDown className="h-5 w-5 text-text-secondary" />
+            </div>
           </div>
         </div>
       </Card>

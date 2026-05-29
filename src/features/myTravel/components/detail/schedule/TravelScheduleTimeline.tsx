@@ -19,6 +19,8 @@ import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useDeleteSchedulePlace';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface ITravelScheduleTimeline {
   timeLineData?: IScheduleListResponse;
@@ -40,10 +42,8 @@ export default function TravelScheduleTimeline({
   });
 
   const travelId = useGetTravelId();
-  const { mutateAsync: deleteSchedule, isPending: isDeletePending } = useDeleteSchedulePlace(
-    travelId,
-    timeLineData?.type!,
-  );
+  const { mutateAsync: deleteSchedule, isPending: isDeletePending } =
+    useDeleteSchedulePlace(travelId, timeLineData?.type!);
   const { selectedSchedules, toggleSelect } = useSelectSchedules();
   const { openDialog } = useDialogStore();
 
@@ -52,6 +52,22 @@ export default function TravelScheduleTimeline({
   const isSelected = selectedSchedules.some(
     (schedule) => schedule.id === timeLineData?.id,
   );
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: timeLineData?.id.toString() || 'empty' });
+
+  const dragStyle = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 'auto',
+    opacity: isDragging ? 0.6 : 1,
+  };
 
   /** 일정 삭제 핸들러 */
   const handleDeleteSchedule = (e: MouseEvent<HTMLButtonElement>) => {
@@ -83,7 +99,7 @@ export default function TravelScheduleTimeline({
   const _place = timeLineData?.place;
 
   return (
-    <div className="flex w-full gap-3">
+    <div className="flex w-full gap-3" ref={setNodeRef} style={dragStyle}>
       <div className="flex flex-col items-center">
         <div className="shrink-0">
           {timeLineData?.type &&
@@ -108,6 +124,7 @@ export default function TravelScheduleTimeline({
                 selectMode={selectMode!}
                 isSelected={isSelected}
                 isLoading={isDeletePending}
+                dragListeners={{ ...attributes, ...listeners }}
               >
                 <div className="flex flex-col">
                   <span className="text-lg font-bold">
@@ -133,6 +150,7 @@ export default function TravelScheduleTimeline({
                 isMemo
                 isSelected={isSelected}
                 isLoading={isDeletePending}
+                dragListeners={{ ...attributes, ...listeners }}
               >
                 <span className="text-text-secondary">{timeLineData.memo}</span>
               </TravelTimelineCard>

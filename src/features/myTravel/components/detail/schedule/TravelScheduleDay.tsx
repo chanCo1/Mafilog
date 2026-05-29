@@ -5,12 +5,26 @@
  * @description: TravelScheduleDay 컴포넌트, 일차 컴포넌트
  */
 
+import { useEffect, useState } from 'react';
 import TravelScheduleTimeline from '@/features/myTravel/components/detail/schedule/TravelScheduleTimeline';
 import { convertFormattedDate, getDay } from '@/shared/lib/utils';
 import { Checkbox } from '@/shared/components/ui/Checkbox';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import { ILabelValue } from '@/shared/interfaces';
 import { IScheduleResponse } from '@/features/myTravel/interfaces/schedule.interface';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable';
 
 interface ITravelScheduleDay {
   schedule: IScheduleResponse;
@@ -34,6 +48,50 @@ export default function TravelScheduleDay({
     toggleDayAll(schedule.scheduleList, !checked as boolean);
   };
 
+  // 임시 state
+  const [items, setItems] = useState(schedule.scheduleList);
+
+  useEffect(() => {
+    setItems(schedule.scheduleList);
+  }, [schedule.scheduleList]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+  );
+
+  /** 드래그 핸들링 */
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    // 제자리에 놓았거나 유효하지 않은 곳에 놓으면 무시
+    if (!over || active.id === over.id) return;
+
+    setItems((items) => {
+      const oldIndex = items.findIndex(
+        (item) => item.id.toString() === active.id,
+      );
+      const newIndex = items.findIndex(
+        (item) => item.id.toString() === over.id,
+      );
+
+      // 배열 순서 변경
+      const newOrderedItems = arrayMove(items, oldIndex, newIndex);
+      console.log('newOrderedItems >> ', newOrderedItems)
+
+      // api 전달
+      const updatePayload = newOrderedItems.map((item, index) => ({
+      id: item.id,
+      order: index,
+    }));
+
+      return newOrderedItems;
+    });
+  };
+
   return (
     <div className="flex flex-col gap-2.5">
       <div className="flex items-center gap-1">
@@ -47,18 +105,27 @@ export default function TravelScheduleDay({
         </span>
       </div>
       <div className="flex flex-col">
-        {schedule.scheduleList.length ? (
-          <>
-            {schedule.scheduleList.map((_data, index) => (
-              <TravelScheduleTimeline
-                key={`${_data.place?.id}-${index}`}
-                timeLineData={_data}
-                dailyAllSchedule={schedule.scheduleList}
-                currentIndex={index}
-                selectMode={selectMode}
-              />
-            ))}
-          </>
+        {items.length ? (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={items.map((item) => item.id.toString())}
+              strategy={verticalListSortingStrategy}
+            >
+              {items.map((_data, index) => (
+                <TravelScheduleTimeline
+                  key={_data.id}
+                  timeLineData={_data}
+                  dailyAllSchedule={items}
+                  currentIndex={index}
+                  selectMode={selectMode}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
         ) : (
           <TravelScheduleTimeline />
         )}
