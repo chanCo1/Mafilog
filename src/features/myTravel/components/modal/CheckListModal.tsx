@@ -23,6 +23,7 @@ import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
 import { useCreateChecklist } from '@/features/myTravel/hooks/rquery/checklist/useCreateChecklist';
 import { useDeleteChecklist } from '@/features/myTravel/hooks/rquery/checklist/useDeleteChecklist';
 import { useUpdateChecklist } from '@/features/myTravel/hooks/rquery/checklist/useUpdateChecklist';
+import ChecklistSkeleton from '@/shared/components/skeleton/ChecklistSkeleton';
 
 interface ICheckListModal {
   isOpen: boolean;
@@ -38,7 +39,7 @@ export default function CheckListModal({
   const { mutate: deleteChecklistItem } = useDeleteChecklist(travelId);
   const { mutate: updateChecklistItem } = useUpdateChecklist(travelId);
 
-  const { data: checklist } = useGetChecklist(travelId, isOpen);
+  const { data: checklist, isLoading } = useGetChecklist(travelId, isOpen);
   const [editStatus, setEditStatus] = useState<
     Record<number, TChecklistStatusType>
   >({});
@@ -115,7 +116,7 @@ export default function CheckListModal({
               카테고리 추가
             </Button>
           </div>
-          {isOpenAddCategory ? (
+          {isOpenAddCategory && (
             <div className="flex justify-between gap-1">
               <Input
                 size="sm"
@@ -143,10 +144,12 @@ export default function CheckListModal({
                 취소
               </Button>
             </div>
-          ) : null}
+          )}
         </div>
         <div className="scrollbar-hide flex flex-1 flex-col gap-4 overflow-auto">
-          {filteredCheckList?.map((list, index) => {
+          {isLoading && <ChecklistSkeleton />}
+
+          {!isLoading && filteredCheckList?.map((list, index) => {
             const currentStatus = editStatus[list.id] || null;
 
             return (

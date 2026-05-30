@@ -35,7 +35,12 @@ interface ISkeleton
     VariantProps<typeof skeletonVariants> {}
 
 function SkeletonEntity({ className, shape, size, ...props }: ISkeleton) {
-  return <div className={cn(skeletonVariants({ shape, size }), className)} />;
+  return (
+    <div
+      className={cn(skeletonVariants({ shape, size }), className)}
+      {...props}
+    />
+  );
 }
 
 export const Skeleton = SkeletonEntity;
