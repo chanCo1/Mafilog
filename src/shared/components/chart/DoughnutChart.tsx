@@ -53,7 +53,7 @@ export default function DoughnutChart({
     ],
   };
 
-  // 3. 차트 옵션 설정
+  // 차트 옵션 설정
   const options: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,

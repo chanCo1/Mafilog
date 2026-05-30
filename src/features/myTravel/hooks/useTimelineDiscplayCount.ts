@@ -6,12 +6,12 @@
  */
 
 import { useMemo } from 'react';
-import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface IuseTimelineDiscplayCount {
   type?: SCHEDULE_TYPE;
-  dailyAllSchedule?: IScheduleList[];
+  dailyAllSchedule?: IScheduleListResponse[];
   currentIndex?: number;
 }
 

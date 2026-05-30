@@ -7,7 +7,7 @@
 
 'use client';
 
-import { forwardRef, useMemo } from 'react';
+import { useMemo } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';

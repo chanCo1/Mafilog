@@ -2,12 +2,11 @@
  * @file: TimePicker.tsx
  * @author: chad
  * @since: 2026.05.06 ~
- * @description: TimePicker 컴포넌트, 시간 선택
+ * @description: 시간 선택 컴포넌트
  */
 
 import {
   useState,
-  ReactNode,
   useLayoutEffect,
   InputHTMLAttributes,
   useRef,
@@ -18,6 +17,8 @@ import { Input } from '@/shared/components/ui/Input';
 import { ChevronDown, Clock } from 'lucide-react';
 import { useOutsideClick } from '@/shared/hooks/useOutsideClick';
 import { useDropdownDirection } from '@/shared/hooks/useDropdownDirection';
+import VaulBottomSheet from '@/shared/components/ui/VaulBottomSheet';
+import { useDevice } from '@/shared/hooks/useDevice';
 
 interface ITimePicker extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -52,12 +53,14 @@ export default function TimePicker({
   addValueText,
   ...props
 }: ITimePicker) {
+  const {isMobile} = useDevice();
+
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useOutsideClick(() => setIsOpen(false));
-  
+
   const hourRef = useRef<HTMLUListElement>(null);
   const minuteRef = useRef<HTMLUListElement>(null);
-  
+
   const direction = useDropdownDirection({ isOpen, ref: dropdownRef });
 
   const HOURS = Array.from({ length: 24 }, (_, i) =>
@@ -86,6 +89,7 @@ export default function TimePicker({
   };
 
   const handleBlur = () => {
+    if (isMobile) return;
     setIsOpen(false);
   };
 
@@ -103,6 +107,7 @@ export default function TimePicker({
     }
   }, [isOpen, value]);
 
+  /** 해당 선택 시간으로 자동 이동 */
   useEffect(() => {
     if (!isOpen || !selectedHour || !selectedMinute) return;
 
@@ -121,6 +126,44 @@ export default function TimePicker({
     return () => cancelAnimationFrame(scrollTimer);
   }, [isOpen]);
 
+  const renderOptions = () => (
+    <div className="flex max-h-50">
+      <ul ref={hourRef} className="scrollbar-hide flex-1 overflow-y-auto">
+        {HOURS.map((_hour) => (
+          <li
+            key={_hour}
+            className={cn(
+              'flex cursor-pointer items-center justify-center rounded-lg p-1',
+              selectedHour === _hour
+                ? 'text-text-primary is-selected font-bold'
+                : 'text-text-secondary hover:bg-gray-1',
+            )}
+            onClick={() => setSeletedHour(_hour)}
+          >
+            {_hour}시
+          </li>
+        ))}
+      </ul>
+      <span className="text-text-secondary flex items-center">:</span>
+      <ul ref={minuteRef} className="scrollbar-hide flex-1 overflow-y-auto">
+        {MINUTES.map((_minute) => (
+          <li
+            key={_minute}
+            className={cn(
+              'flex cursor-pointer items-center justify-center rounded-lg p-1',
+              selectedMinute === _minute
+                ? 'text-text-primary is-selected font-bold'
+                : 'text-text-secondary hover:bg-gray-1',
+            )}
+            onClick={() => handelMinuteClick(_minute)}
+          >
+            {_minute}분
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
   return (
     <div className={cn('relative', className)} ref={dropdownRef}>
       <Input
@@ -129,7 +172,12 @@ export default function TimePicker({
         placeholder={props.placeholder}
         prefix={<Clock size={16} />}
         suffix={
-          <ChevronDown className={cn('h-4 w-4 stroke-3 transition duration-200', isOpen ? 'rotate-180' : '')} />
+          <ChevronDown
+            className={cn(
+              'h-4 w-4 stroke-3 transition duration-200',
+              isOpen ? 'rotate-180' : '',
+            )}
+          />
         }
         isRequired={isRequired}
         description={description}
@@ -145,48 +193,21 @@ export default function TimePicker({
       />
 
       {/* 시간 드롭다운 */}
-      {isOpen && (
+      {isOpen && !isMobile && (
         <div
           className={cn(
-            'scrollbar-hide absolute z-50 flex max-h-50 w-full gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
+            'scrollbar-hide max-mobile:hidden mobile:block absolute z-50 w-full gap-1 overflow-auto rounded-lg bg-white p-2 shadow-lg',
             direction === 'down' ? 'top-full mt-1' : 'bottom-full mb-1',
           )}
         >
-          <ul ref={hourRef} className="scrollbar-hide flex-1 overflow-y-auto">
-            {HOURS.map((_hour) => (
-              <li
-                key={_hour}
-                className={cn(
-                  'flex cursor-pointer items-center justify-center rounded-lg p-1',
-                  selectedHour === _hour
-                    ? 'text-text-primary is-selected font-bold'
-                    : 'text-text-secondary hover:bg-gray-1',
-                )}
-                onClick={() => setSeletedHour(_hour)}
-              >
-                {_hour}시
-              </li>
-            ))}
-          </ul>
-          <span className="text-text-secondary flex items-center">:</span>
-          <ul ref={minuteRef} className="scrollbar-hide flex-1 overflow-y-auto">
-            {MINUTES.map((_minute) => (
-              <li
-                key={_minute}
-                className={cn(
-                  'flex cursor-pointer items-center justify-center rounded-lg p-1',
-                  selectedMinute === _minute
-                    ? 'text-text-primary is-selected font-bold'
-                    : 'text-text-secondary hover:bg-gray-1',
-                )}
-                onClick={() => handelMinuteClick(_minute)}
-              >
-                {_minute}분
-              </li>
-            ))}
-          </ul>
+          {renderOptions()}
         </div>
       )}
+
+      {/* 바텀 시트 */}
+      <VaulBottomSheet isOpen={isOpen && isMobile}>
+        {renderOptions()}
+      </VaulBottomSheet>
     </div>
   );
 }

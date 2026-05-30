@@ -7,8 +7,7 @@
  * @description: AmchartMap 컴포넌트
  */
 
-import { SetStateAction, useEffect, useRef, useState, Dispatch } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { SetStateAction, useEffect, useRef, Dispatch } from 'react';
 import * as am5 from '@amcharts/amcharts5';
 import * as am5map from '@amcharts/amcharts5/map';
 import am5geodata_worldLow from '@amcharts/amcharts5-geodata/worldLow';
@@ -17,29 +16,46 @@ import am5geodata_lang_ko from '@amcharts/amcharts5-geodata/lang/KO';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { ILabelValue } from '@/shared/interfaces';
 import { MAP_TRAVEL_TYPE_LIST } from '@/shared/constants';
+import { IMemoryListResponse } from '@/features/myMap/interfaces/memory.interface';
 
 interface IAmchartMap {
   isWheel?: boolean;
   isDomestic?: boolean;
   readonly?: boolean;
-  setSelectedMap?: Dispatch<SetStateAction<ILabelValue>>;
-  isOpenFillModal: boolean;
-  setIsOpenFillModal: () => void;
+  setSelectedMapType?: Dispatch<SetStateAction<ILabelValue>>;
+  setSelectedMapId?: Dispatch<SetStateAction<string | undefined>>;
+  isOpenFillModal?: boolean;
+  setIsOpenFillModal?: () => void;
+  isOpenDetailModal?: boolean;
+  setIsOpenDetailModal?: () => void;
+  memoryList?: IMemoryListResponse[] | undefined;
+  setSelectedMemoryId?: Dispatch<SetStateAction<number>>;
 }
 
 export default function AmchartMap({
   isWheel = true,
   isDomestic = false,
   readonly = false,
-  setSelectedMap,
+  setSelectedMapType,
+  setSelectedMapId,
   isOpenFillModal,
   setIsOpenFillModal,
+  isOpenDetailModal,
+  setIsOpenDetailModal,
+  setSelectedMemoryId,
+  memoryList,
 }: IAmchartMap) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<am5map.MapChart | null>(null);
   const activePolygonRef = useRef<am5map.MapPolygon | null>(null);
+  const polygonSeriesRef = useRef<am5map.MapPolygonSeries | null>(null);
+  const memoryListRef = useRef<IMemoryListResponse[] | undefined>(memoryList);
 
   const { openDialog } = useDialogStore();
+
+  useEffect(() => {
+    memoryListRef.current = memoryList;
+  }, [memoryList]);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -59,17 +75,13 @@ export default function AmchartMap({
 
     // = = = = = = = = = = = = = = = = = = 세계 지도 폴리곤  = = =  //
     const polygonSeries = _mapChart.series.push(
-      am5map.MapPolygonSeries.new(
-        root,
-        isDomestic
-          ? {}
-          : {
-              geoJSON: am5geodata_worldLow,
-              geodataNames: am5geodata_lang_ko,
-              exclude: ['AQ'],
-            },
-      ),
+      am5map.MapPolygonSeries.new(root, {
+        geoJSON: isDomestic ? undefined : am5geodata_worldLow,
+        geodataNames: isDomestic ? undefined : am5geodata_lang_ko,
+        exclude: ['AQ'],
+      }),
     );
+    polygonSeriesRef.current = polygonSeries;
 
     // 국내 지도일 경우 국내 geojson 가져오기
     if (isDomestic) {
@@ -80,71 +92,47 @@ export default function AmchartMap({
         });
     }
 
+    // 툴팁 생성
+    const tooltip = am5.Tooltip.new(root, {
+      getFillFromSprite: false,
+      autoTextColor: false,
+    });
+
+    tooltip.get('background')?.setAll({
+      fill: am5.color(0xfafbff),
+      stroke: am5.color(0x6f9dd3),
+      strokeWidth: 1,
+    });
+
+    polygonSeries.set('tooltip', tooltip);
+
     // 폴리곤 기본 색상
     polygonSeries.mapPolygons.template.setAll({
-      tooltipText: isDomestic ? '{korName}' : '{name}',
       interactive: true,
       fill: am5.color(0xd1d3dc),
       stroke: am5.color(0xffffff),
-      strokeWidth: 0.5,
-    });
-
-    // 폴리곤 호버 시
-    polygonSeries.mapPolygons.template.states.create('hover', {
-      fill: am5.color(0xadb9c9),
+      strokeWidth: 0.6,
     });
 
     // 폴리곤 선택 시
     polygonSeries.mapPolygons.template.states.create('active', {
-      fill: am5.color(0x8193ae),
+      fill: am5.color(0x6f9dd3),
     });
 
-    // // 각 지역별 이미지 패턴 매핑 (id: 이미지 경로)
-    // const countryImages: Record<string, string> = {
-    //   US: "/img/samm.jpg",
-    //   CA: "/img/keroppi.png",
-    // };
-
-    // polygonSeries.events.once("datavalidated", () => {
-    //   polygonSeries.mapPolygons.each((polygon) => {
-    //     const id = (polygon.dataItem?.dataContext as { id?: string })?.id;
-    //     if (id && countryImages[id]) {
-    //       polygon.set(
-    //         "fillPattern",
-    //         am5.PicturePattern.new(root, {
-    //           src: countryImages[id],
-    //           width: 100,
-    //           height: 100,
-    //           repetition: "repeat",
-    //         }),
-    //       );
-    //     }
-    //   });
-    // });
-
-    // // = = = = = = = = = = = = = = = = = = 지역명 넣기 = = = //
-    // const labelSeries = _mapChart.series.push(
-    //   am5map.MapPointSeries.new(root, {}),
-    // );
-
-    // labelSeries.bullets.push(function () {
-    //   return am5.Bullet.new(root, {
-    //     sprite: am5.Label.new(root, {
-    //       text: isDomestic ? '{korName}' : '{name}',
-    //       centerX: am5.p50,
-    //       centerY: am5.p50,
-    //       fontSize: 12,
-    //       fontWeight: '500',
-    //       fill: am5.color(0x333333),
-    //       populateText: true,
-    //     }),
-    //   });
-    // });
-
     // = = = = = = = = = = = = = = = = = = 폴리곤(지역) 클릭 활성화 = = = //
+    let isPolygonClicked = false;
     polygonSeries.mapPolygons.template.events.on('click', (event) => {
+      isPolygonClicked = true;
+
+      setTimeout(() => {
+        isPolygonClicked = false;
+      }, 100);
+
       const target = event.target;
       const dataItem = target.dataItem;
+
+      const isTouchDevice =
+        'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
       // 해당 폴리곤의 데이터가 있을 경우
       if (dataItem) {
@@ -156,44 +144,60 @@ export default function AmchartMap({
         };
 
         if (dataContext?.id === 'KR') {
-          setSelectedMap?.(MAP_TRAVEL_TYPE_LIST[1]);
+          setSelectedMapType?.(MAP_TRAVEL_TYPE_LIST[1]);
           return;
         }
 
-        // 이전 활성 폴리곤 해제
-        if (activePolygonRef.current && activePolygonRef.current !== target) {
-          activePolygonRef.current.set('active', false);
+        if (readonly || !memoryListRef.current) return;
+
+        if (isTouchDevice) {
+          if (activePolygonRef.current !== target) {
+            if (activePolygonRef.current) {
+              activePolygonRef.current.set('active', false);
+              activePolygonRef.current.hideTooltip();
+            }
+
+            target.set('active', true);
+            activePolygonRef.current = target;
+            return;
+          }
+        } else {
+          if (activePolygonRef.current && activePolygonRef.current !== target) {
+            activePolygonRef.current.set('active', false);
+          }
+          target.set('active', true);
+          activePolygonRef.current = target;
         }
 
-        // 현재 폴리곤 활성화
-        target.set('active', true);
-        activePolygonRef.current = target;
-
-        polygonSeries.zoomToDataItem(
-          dataItem as am5.DataItem<am5map.IMapPolygonSeriesDataItem>,
+        const memory = memoryListRef.current?.find(
+          (_memory) => _memory.mapId === dataContext?.id,
         );
-
-        if (readonly) return;
-
-        openDialog({
-          type: 'confirm',
-          message: (
-            <div>
-              <span className="font-bold">
-                {isDomestic ? dataContext.korName : dataContext.name}
-              </span>
-              에 추억을 남길까요?
-            </div>
-          ),
-          okLabel: '남기기',
-          onCancel: () => {
-            mapInstanceRef.current?.goHome();
-            target?.set('active', false);
-          },
-          onOk: () => {
-            setIsOpenFillModal();
-          },
-        });
+        if (memory) {
+          setIsOpenDetailModal?.();
+          // 상세 조회를 위한 추억 id 전달
+          setSelectedMemoryId?.(memory?.id);
+        } else {
+          openDialog({
+            type: 'confirm',
+            message: (
+              <div>
+                <span className="font-bold">
+                  {isDomestic ? dataContext.korName : dataContext.name}
+                </span>
+                에 추억을 남길까요?
+              </div>
+            ),
+            okLabel: '남기기',
+            onCancel: () => {
+              target?.set('active', false);
+            },
+            onOk: () => {
+              setIsOpenFillModal?.();
+              // 지도 채우기 위해 지도 아이디 전달
+              setSelectedMapId?.(dataContext?.id);
+            },
+          });
+        }
       }
     });
 
@@ -207,20 +211,20 @@ export default function AmchartMap({
     homeButton.set('visible', true);
 
     // 색상 변경
-    const pbtn = zoomControl.plusButton.get('background');
-    const mbtn = zoomControl.minusButton.get('background');
+    const plusbtn = zoomControl.plusButton.get('background');
+    const minusbtn = zoomControl.minusButton.get('background');
 
-    pbtn?.setAll({
+    plusbtn?.setAll({
       fill: am5.color(0x81d2e2),
     });
-    pbtn?.states.create('hover', {
+    plusbtn?.states.create('hover', {
       fill: am5.color(0x81d2e2),
       fillOpacity: 0.5,
     });
-    mbtn?.setAll({
+    minusbtn?.setAll({
       fill: am5.color(0x81d2e2),
     });
-    mbtn?.states.create('hover', {
+    minusbtn?.states.create('hover', {
       fill: am5.color(0x81d2e2),
       fillOpacity: 0.5,
     });
@@ -239,12 +243,105 @@ export default function AmchartMap({
       activePolygonRef.current?.set('active', false),
     );
 
+    // 외부 클릭시 해제
+    _mapChart.chartContainer.events.on('click', () => {
+      if (isPolygonClicked) return;
+
+      if (activePolygonRef.current) {
+        activePolygonRef.current.set('active', false);
+        activePolygonRef.current.hideTooltip();
+        activePolygonRef.current = null;
+      }
+    });
+
     mapInstanceRef.current = _mapChart;
 
     return () => {
       root.dispose();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const polygonSeries = polygonSeriesRef.current;
+
+    if (!polygonSeries) return;
+
+    polygonSeries.events.once('datavalidated', () => {
+      polygonSeries.mapPolygons.each((polygon) => {
+        const dataContext = polygon.dataItem?.dataContext as {
+          id: string;
+          korName: string;
+          name: string;
+        };
+        const id = dataContext?.id;
+
+        // 국내/해외 지역명
+        const regionName = isDomestic
+          ? dataContext?.korName
+          : dataContext?.name;
+
+        const memory = memoryList?.find((_memory) => _memory.mapId === id);
+
+        if (memory) {
+          const fillColor = memory.hexCode
+            ? am5.color(memory.hexCode)
+            : am5.color(0x6f9dd3);
+
+          polygon.setAll({
+            fill: fillColor,
+            fillOpacity: 1,
+          });
+
+          polygon.states.create('default', {
+            fill: fillColor,
+            fillOpacity: 1,
+          });
+
+          polygon.states.create('hover', {
+            fill: fillColor,
+            fillOpacity: 1,
+          });
+
+          // 사진이 있는 경우
+          if (memory.imageUrl.length) {
+            polygon.set(
+              'tooltipHTML',
+              tooltipBox(regionName, memory.imageUrl[0]),
+            );
+          } else {
+            polygon.set('tooltipHTML', tooltipBox(regionName));
+          }
+          // 사진이 없는 경우
+        } else {
+          polygon.setAll({
+            fill: am5.color(0xd1d3dc),
+            fillOpacity: 1,
+          });
+
+          polygon.states.create('default', {
+            fill: am5.color(0xd1d3dc),
+            fillOpacity: 1,
+          });
+
+          polygon.states.create('hover', {
+            fill: am5.color(0xadb9c9),
+          });
+
+          polygon.set('tooltipHTML', tooltipBox(regionName));
+        }
+
+        polygon.set('tooltipText', undefined);
+      });
+    });
+
+    if (polygonSeries.dataItems.length > 0) {
+      polygonSeries.events.dispatch('datavalidated', {
+        type: 'datavalidated',
+        target: polygonSeries,
+      });
+    }
+  }, [memoryList, isDomestic]);
 
   useEffect(() => {
     if (!isOpenFillModal) {
@@ -255,5 +352,33 @@ export default function AmchartMap({
     }
   }, [isOpenFillModal]);
 
-  return <div ref={mapRef} className="h-full w-full rounded-lg!" />;
+  useEffect(() => {
+    if (!isOpenDetailModal) {
+      if (activePolygonRef.current) {
+        activePolygonRef.current.set('active', false);
+        activePolygonRef.current = null;
+      }
+    }
+  }, [isOpenDetailModal]);
+
+  return (
+    <div ref={mapRef} className="h-full w-full overflow-hidden rounded-lg!" />
+  );
 }
+
+export const tooltipBox = (regionName: string, imageUrl?: string) => {
+  if (imageUrl) {
+    return `
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px;">
+        <img src="${imageUrl}" style="width: 150px; height: 100px; object-fit: fill; border-radius: 8px;" />
+        <span style="font-weight: 700; font-size: 14px; color: #676767;">${regionName}</span>
+      </div>
+    `;
+  }
+
+  return `
+    <div style="padding: 4px;">
+      <span style="font-weight: 700; font-size: 14px; color: #676767;">${regionName}</span>
+    </div>
+  `;
+};

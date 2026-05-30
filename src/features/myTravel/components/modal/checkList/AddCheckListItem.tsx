@@ -2,30 +2,39 @@
  * @file: AddCheckListItem.tsx
  * @author: chad
  * @since: 2026.05.05 ~
- * @description: 체크리스트 > 준비물 컴포넌트
+ * @description: 체크리스트 > 아이템 추가 컴포넌트
  */
 
 import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
-import { ICheckList } from '@/shared/interfaces/travelCheckListStore.interface';
 import { Input } from '@/shared/components/ui/Input';
-import { useTravelCheckListStore } from '@/shared/stores/useTravelCheckListStore';
+import { IChecklistResponse } from '@/features/myTravel/interfaces/checklist.interface';
+import { TChecklistStatusType } from '@/features/myTravel/types/checklist.type';
+import { useCreateChecklist } from '@/features/myTravel/hooks/rquery/checklist/useCreateChecklist';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface IAddCheckListItem {
-  list: ICheckList;
+  list: IChecklistResponse;
+  changeStatus: (id: number, status: TChecklistStatusType) => void;
 }
 
-export default function AddCheckListItem({ list }: IAddCheckListItem) {
-  const setChangeCategoryStatus = useTravelCheckListStore(
-    (state) => state.setChangeCategoryStatus,
-  );
-  const setAddItem = useTravelCheckListStore((state) => state.setAddItem);
-
+export default function AddCheckListItem({
+  list,
+  changeStatus,
+}: IAddCheckListItem) {
   const [addItemName, setAddItemName] = useState('');
+  const travelId = useGetTravelId();
+  const { mutate: addChecklistItem } = useCreateChecklist(travelId);
 
+  /** 체크리스트 아이템 추가 */
   const handleAddItem = () => {
-    setAddItem(list, addItemName);
-    setChangeCategoryStatus(list, null);
+    addChecklistItem({
+      travelId,
+      requestData: {
+        type: 'ITEM',
+        label: addItemName,
+        categoryId: list.id,
+      },
+    });
     setAddItemName('');
   };
 
@@ -34,6 +43,7 @@ export default function AddCheckListItem({ list }: IAddCheckListItem) {
       <Input
         size="sm"
         value={addItemName}
+        maxLength={15}
         onChange={(e) => setAddItemName(e.target.value)}
         onKeyDown={(e) => {
           if (e.nativeEvent.isComposing) return;
@@ -43,13 +53,14 @@ export default function AddCheckListItem({ list }: IAddCheckListItem) {
       <div className="flex shrink-0 gap-3">
         <div
           className="text-primary cursor-pointer font-bold"
+          // TODO: 아이템 추가 해야함
           onClick={handleAddItem}
         >
           추가
         </div>
         <div
           className="text-text-secondary cursor-pointer font-bold"
-          onClick={() => setChangeCategoryStatus(list, null)}
+          onClick={() => changeStatus(list.id, null)}
         >
           취소
         </div>

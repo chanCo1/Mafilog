@@ -5,17 +5,17 @@
  * @description: LocalInfoModal 컴포넌트, 현지 정보 모달
  */
 
-import { cn } from '@/shared/lib/utils';
 import { useEffect, useState } from 'react';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Chip } from '@/shared/components/ui/Chip';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import { Button } from '@/shared/components/ui/Button';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 import LocalCurrencyInfo from '@/features/myTravel/components/modal/localInfo/LocalCurrencyInfo';
 import LocalTimeInfo from '@/features/myTravel/components/modal/localInfo/LocalTimeInfo';
 import Separator from '@/shared/components/ui/Separator';
 import LocalWeatherInfo from '@/features/myTravel/components/modal/localInfo/LocalWeatherInfo';
+import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelDetail';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 
 interface ILocalInfoModal {
   isOpen: boolean;
@@ -26,12 +26,14 @@ export default function LocalInfoModal({
   handleClose,
   isOpen,
 }: ILocalInfoModal) {
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
+  const travelId = useGetTravelId();
+  const { data: travelInfo } = useGetMyTravelDetail(travelId);
+
   const [selectedCity, setSelectedCity] = useState<IPlaceList>();
 
   useEffect(() => {
     if (isOpen) {
-      setSelectedCity(travelInfo.cities[0]);
+      setSelectedCity(travelInfo?.cities[0]);
     }
   }, [isOpen]);
 
@@ -48,7 +50,7 @@ export default function LocalInfoModal({
     >
       <div className="flex flex-col gap-3">
         <div className="scrollbar-hide flex items-center gap-1 overflow-auto">
-          {travelInfo.cities.map((city) => (
+          {travelInfo?.cities.map((city) => (
             <Chip
               key={city.id}
               variant={
@@ -65,7 +67,7 @@ export default function LocalInfoModal({
           <Separator position="horizontal" />
           <LocalTimeInfo selectedCity={selectedCity} />
           <Separator position="horizontal" />
-          <LocalWeatherInfo selectedCity={selectedCity} />
+          {selectedCity && <LocalWeatherInfo selectedCity={selectedCity} />}
         </div>
       </div>
     </SideModal>

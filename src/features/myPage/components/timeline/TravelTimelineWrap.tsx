@@ -2,50 +2,62 @@
  * @file: TravelTimelineWrap.tsx
  * @author: chad
  * @since: 2026.05.14 ~
- * @description: TravelTimelineWrap 컴포넌트
+ * @description: 타임라인 리스트 컴포넌트
  */
 
-import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import TimelineCard from '@/features/myPage/components/timeline/TimelineCard';
 import TimelineStatisticModal from '@/features/myPage/components/timeline/modal/TimelineStatisticModal';
+import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
+import { useDevice } from '@/shared/hooks/useDevice';
 
-interface ITravelTimelineWrap {}
+interface ITravelTimelineWrap {
+  myTimelineList: IMyTravelListResponse[];
+  selectedTimeline: IMyTravelListResponse | null;
+  setSelectedTimeline: Dispatch<SetStateAction<IMyTravelListResponse | null>>;
+}
 
-export default function TravelTimelineWrap() {
-  const [selectedTimeline, setSelectedTimeline] = useState(1);
+export default function TravelTimelineWrap({
+  myTimelineList,
+  selectedTimeline,
+  setSelectedTimeline,
+}: ITravelTimelineWrap) {
   const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
+  const { isDesktop } = useDevice();
 
-  const handleTimeline = () => {
-    setSelectedTimeline(1);
+  const handleTimeline = (travel: IMyTravelListResponse) => {
+    setSelectedTimeline(travel);
 
-    if (window.innerWidth >= 1023) return;
+    if (isDesktop) return;
     setIsOpenStatisticModal(true);
   };
 
   return (
-    <div className="flex w-full gap-3">
-      <div className="flex flex-col items-center">
-        <div className="shrink-0">
-          {/* {timeLineData?.type &&
-            (timeLineData.type === SCHEDULE_TYPE.PLACE ? (
-              <CircledNumber number={displayCount} />
-            ) : (
-              <CategoryIcon variant="memo" />
-            ))}
-          {!timeLineData?.type && <CategoryIcon variant="plus" />} */}
-          <CategoryIcon variant="plane" />
+    <div className="flex flex-col">
+      {myTimelineList?.map((_list, index) => (
+        <div className="flex w-full gap-3" key={_list.id}>
+          <div className="flex flex-col items-center">
+            <div className="shrink-0">
+              <CategoryIcon
+                variant={_list.travelType === 'world' ? 'plane' : 'bus'}
+              />
+            </div>
+            <div className="border-border-primary w-px flex-1 border" />
+          </div>
+          <div className="w-full pb-3" onClick={() => handleTimeline(_list)}>
+            <TimelineCard
+              isSelected={_list.id === selectedTimeline?.id}
+              index={myTimelineList.length - index}
+              list={_list}
+            />
+          </div>
         </div>
-        <div className="border-border-primary w-px flex-1 border" />
-      </div>
-      <div className="w-full pb-3" onClick={() => handleTimeline()}>
-        <TimelineCard isSelected={true} />
-      </div>
-
+      ))}
       <TimelineStatisticModal
         isOpen={isOpenStatisticModal}
         handleClose={() => setIsOpenStatisticModal(false)}
+        selectedTimeline={selectedTimeline!}
       />
     </div>
   );

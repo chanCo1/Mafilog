@@ -34,8 +34,8 @@ interface IFileUpload {
   disabled?: boolean;
   maxSize?: number;
   accept?: string;
-  selectedImage: File[];
-  setSelectedImage: Dispatch<SetStateAction<File[]>>;
+  selectedImage: (File | string)[];
+  setSelectedImage: Dispatch<SetStateAction<(File | string)[]>>;
 }
 
 export default function FileUpload({
@@ -85,7 +85,9 @@ export default function FileUpload({
 
     // 기존 파일들의 고유 키 생성
     const existingKeys = new Set(
-      selectedImage.map((f) => `${f.name}-${f.size}-${f.lastModified}`),
+      selectedImage
+        .filter((file): file is File => file instanceof File)
+        .map((_file) => `${_file.name}-${_file.size}-${_file.lastModified}`),
     );
 
     // 기존과 중복되는지 필터링
@@ -111,17 +113,27 @@ export default function FileUpload({
 
   /** 이미지 선택에 따라 미리보기 이미지 생성/제거 */
   useEffect(() => {
-    const _previews = selectedImage.map((file) => URL.createObjectURL(file));
+    const objectUrlsToRevoke: string[] = [];
+
+    const _previews = selectedImage.map((item) => {
+      if (typeof item === 'string') {
+        return item;
+      }
+
+      const url = URL.createObjectURL(item);
+      objectUrlsToRevoke.push(url);
+      return url;
+    });
+
     setPreviewImage(_previews);
 
-    // 이전 URL들을 메모리에서 해제
     return () => {
-      _previews.forEach((url) => URL.revokeObjectURL(url));
+      objectUrlsToRevoke.forEach((url) => URL.revokeObjectURL(url));
     };
   }, [selectedImage]);
 
   return (
-    <div className={cn('flex flex-col gap-1', className)}>
+    <div className="flex flex-col gap-1">
       {label && (
         <div className="flex min-w-25 items-center gap-1">
           <span>{label}</span>
@@ -138,15 +150,16 @@ export default function FileUpload({
           disabled={disabled}
           className="hidden"
         />
-        <div className="relative h-40 w-full">
+        <div className={cn('relative h-50 w-full', className)}>
           {previewImage.length ? (
-            <div className="relative h-full">
+            <div className={cn('relative h-full')}>
               {/* 0번 인덱스를 대표 이미지로 지정 */}
               <Image
                 src={previewImage[0]}
                 alt="대표 이미지 미리보기"
                 fill
-                className="rounded-lg object-cover"
+                sizes='100%'
+                className={cn('rounded-lg object-cover', className)}
               />
               <div className="absolute flex w-full justify-between p-2">
                 <div className="bg-gray-8 rounded-md px-2 py-1 text-sm text-white">
@@ -161,7 +174,12 @@ export default function FileUpload({
               </div>
             </div>
           ) : (
-            <div className="border-border-primary flex h-full items-center justify-center rounded-lg border border-dashed">
+            <div
+              className={cn(
+                'border-border-primary flex h-full items-center justify-center rounded-lg border border-dashed',
+                className,
+              )}
+            >
               <span className="text-text-secondary text-sm">
                 이미지를 선택해주세요
               </span>
@@ -170,7 +188,7 @@ export default function FileUpload({
         </div>
         <Button disabled={isDisabled} onClick={onClickFileSelect}>
           <div className="flex flex-col items-center text-white">
-            <ImagePlus />
+            <ImagePlus size={20} />
             <span className="text-xs">{`${selectedImage.length}/${isMultiple ? '10' : '1'}`}</span>
           </div>
         </Button>

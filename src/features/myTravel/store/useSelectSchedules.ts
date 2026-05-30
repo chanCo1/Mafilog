@@ -1,13 +1,13 @@
 import { create } from 'zustand';
-import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
+import { IScheduleListResponse } from '@/features/myTravel/interfaces/schedule.interface';
 
 interface ISelectSchedules {
   /** 선택된 일정 리스트 */
-  selectedSchedules: IScheduleList[];
+  selectedSchedules: IScheduleListResponse[];
   /** 개별 선택/해제 */
-  toggleSelect: (item: IScheduleList) => void;
+  toggleSelect: (item: IScheduleListResponse) => void;
   /** 일차별 전체 선택/해제 */
-  toggleDayAll: (dayItems: IScheduleList[], isAllSelected: boolean) => void;
+  toggleDayAll: (dayItems: IScheduleListResponse[], isAllSelected: boolean) => void;
   /** 초기화 */
   clearSelectedSchedules: () => void;
 }

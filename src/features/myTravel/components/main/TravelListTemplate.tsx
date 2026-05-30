@@ -9,10 +9,11 @@ import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
 import { useRouter } from 'next/navigation';
+import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
 
 interface ITravelListTemplate {
   title: '진행중인' | '다가오는' | '지난';
-  list: any[];
+  list: IMyTravelListResponse[];
 }
 
 export default function TravelListTemplate({
@@ -30,14 +31,11 @@ export default function TravelListTemplate({
         <span className="font-bold">{list.length}</span>
       </div>
       <div className="mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 grid gap-4">
-        {list.map((travel, index) => (
+        {list.map((travel) => (
           <TravelListCard
-            key={`${travel.title}-${index}`}
-            name={travel.title}
-            from={travel.from}
-            to={travel.to}
-            cities={travel.cities}
-            onClick={() => router.push(`/my-travel/${index}`)}
+            key={`${travel.id}`}
+            travel={travel}
+            onClick={() => router.push(`/my-travel/${travel.id}`)}
           />
         ))}
       </div>

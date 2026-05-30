@@ -13,19 +13,35 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/shared/lib/queryClient';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Dialog } from '@/shared/components/ui/Dialog';
+import { SessionProvider } from 'next-auth/react';
+import { Session } from 'next-auth';
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+interface IProviders {
+  children: React.ReactNode;
+  session: Session | null;
+}
+
+export default function Providers({ children, session }: IProviders) {
   return (
     <QueryClientProvider client={queryClient}>
-      <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY || ''}>
-        <Toast />
-        <Dialog />
-        {children}
-        {/* 개발 환경에서만 React Query Devtools 표시 */}
-        {process.env.NODE_ENV === 'development' && (
-          <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-left" />
-        )}
-      </APIProvider>
+      <SessionProvider
+        session={session}
+        refetchInterval={0}
+        refetchOnWindowFocus={false}
+      >
+        <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY || ''}>
+          <Toast />
+          <Dialog />
+          {children}
+          {/* 개발 환경에서만 React Query Devtools 표시 */}
+          {process.env.NODE_ENV === 'development' && (
+            <ReactQueryDevtools
+              initialIsOpen={false}
+              buttonPosition="top-left"
+            />
+          )}
+        </APIProvider>
+      </SessionProvider>
     </QueryClientProvider>
   );
 }

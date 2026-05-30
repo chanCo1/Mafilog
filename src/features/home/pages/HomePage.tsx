@@ -7,7 +7,7 @@
  * @description: HomePage 컴포넌트
  */
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 import { LogoText } from '@/shared/components/ui/LogoText';
@@ -18,6 +18,7 @@ import MapContainer from '@/features/home/components/MapContainer';
 import UpcomingContainer from '@/features/home/components/UpcomingContainer';
 import { useRouter } from 'next/navigation';
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
+import ProgressTravelCard from '@/features/home/components/ProgressTravelCard';
 
 export default function HomePage() {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function HomePage() {
   /** 마운트시 한번만 호출 */
   useEffect(() => {
     fetchCountires();
-  }, []);
+  }, [fetchCountires]);
 
   return (
     <>
@@ -70,6 +71,7 @@ export default function HomePage() {
         <UpcomingContainer />
         <MapContainer />
       </div>
+      <ProgressTravelCard />
     </>
   );
 }

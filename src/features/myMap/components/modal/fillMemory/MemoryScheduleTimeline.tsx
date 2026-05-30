@@ -12,31 +12,40 @@ import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { Card } from '@/shared/components/ui/Card';
 import { Textarea } from '@/shared/components/ui/Textarea';
-import { IScheduleList } from '@/shared/interfaces/travelScheduleStore.interface';
 import { useTimelineDiscplayCount } from '@/features/myTravel/hooks/useTimelineDiscplayCount';
 import { getPlaceCategory } from '@/shared/lib/utils';
 import RatingStar from '@/shared/components/ui/RatingStar';
+import { IScheduleListWithRating } from '@/features/myTravel/interfaces/schedule.interface';
+import { IHandleUpdateSchedule } from '@/features/myMap/interfaces/memory.interface';
+import { IMemoryScheduleList } from '@/features/myMap/interfaces/memory.interface';
 
 interface IMemoryScheduleTimeline {
-  timeLineData: IScheduleList;
-  dailyAllSchedule: IScheduleList[];
+  timeLineData: IMemoryScheduleList;
+  dailyAllSchedule: IMemoryScheduleList[];
   currentIndex: number;
+  onUpdateSchedule?: ({
+    day,
+    key,
+    listId,
+    value,
+  }: IHandleUpdateSchedule) => void;
+  readonly?: boolean;
 }
 
 export default function MemoryScheduleTimeline({
   timeLineData,
   currentIndex,
   dailyAllSchedule,
+  onUpdateSchedule,
+  readonly,
 }: IMemoryScheduleTimeline) {
   const displayCount = useTimelineDiscplayCount({
     currentIndex,
-    dailyAllSchedule,
+    dailyAllSchedule: dailyAllSchedule as IScheduleListWithRating[],
     type: timeLineData?.type,
   });
 
   const _place = timeLineData?.place;
-
-  const [rating, setRating] = useState(0);
 
   return (
     <div className="flex w-full gap-3">
@@ -54,21 +63,46 @@ export default function MemoryScheduleTimeline({
         <Card>
           {timeLineData.type === SCHEDULE_TYPE.PLACE ? (
             <div className="flex flex-col gap-1">
-              <div className='flex flex-col'>
+              <div className="flex flex-col">
                 <span className="text-lg font-bold">
                   {timeLineData.place?.name}
                 </span>
                 {_place && (
                   <span className="text-text-secondary text-sm">
                     {<>{getPlaceCategory(_place.types)}</>}
-                    {_place.country.name && (
-                      <>&nbsp;&#8226;&nbsp;{_place.country.name}</>
+                    {_place.countryName && (
+                      <>&nbsp;&#8226;&nbsp;{_place.countryName}</>
                     )}
                   </span>
                 )}
               </div>
-              <RatingStar value={rating} onChange={setRating} />
-              <Textarea />
+              <RatingStar
+                value={timeLineData.rating}
+                onChange={(newRating) =>
+                  onUpdateSchedule?.({
+                    day: timeLineData.day,
+                    key: 'rating',
+                    value: newRating,
+                    listId: timeLineData.id,
+                  })
+                }
+                readonly={readonly}
+              />
+              {(!readonly || timeLineData.memo) && (
+                <Textarea
+                  value={timeLineData.memo || ''}
+                  onChange={(e) =>
+                    onUpdateSchedule?.({
+                      day: timeLineData.day,
+                      key: 'memo',
+                      value: e.target.value,
+                      listId: timeLineData.id,
+                    })
+                  }
+                  variant={readonly ? 'none' : 'default'}
+                  readonly={readonly}
+                />
+              )}
             </div>
           ) : (
             <span className="text-text-secondary">{timeLineData.memo}</span>

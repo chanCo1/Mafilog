@@ -2,33 +2,40 @@
  * @file: TravelScheduleView.tsx
  * @author: chad
  * @since: 2026.04.29 ~
- * @description: TravelScheduleView 컴포넌트, 여행 일정탭 하위 내용
+ * @description: 여행 일정 뷰
  */
 
 import { useMemo, useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import TravelDetailTemplate from '@/features/myTravel/components/detail/TravelDetailTemplate';
 import { Button } from '@/shared/components/ui/Button';
 import TravelScheduleDay from '@/features/myTravel/components/detail/schedule/TravelScheduleDay';
 import { Chip } from '@/shared/components/ui/Chip';
 import GoogleMap from '@/shared/components/map/GoogleMap';
 import AddPlaceModal from '@/features/myTravel/components/modal/AddPlaceModal';
-import { useTravelInfoStore } from '@/shared/stores/useTravelInfoStore';
 import AddMemoModal from '@/features/myTravel/components/modal/AddMemoModal';
 import { useSelectSchedules } from '@/features/myTravel/store/useSelectSchedules';
 import Dropdown from '@/shared/components/ui/Dropdown';
-import useTravelDaysList from '@/features/myTravel/hooks/useTravelDaysList';
-import { useTravelScheduleStore } from '@/shared/stores/useTravelScheduleStore';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
 
+import { useGetTravelSchedules } from '@/features/myTravel/hooks/rquery/schedule/useGetTravelSchedules';
+import { getTravelDayList } from '@/shared/lib/utils';
+import { SCHEDULE_TYPE } from '@/shared/types/Enum';
+import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/schedule/useDeleteSchedulePlace';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useUpdateBulkScheduleDate } from '@/features/myTravel/hooks/rquery/schedule/useUpdateBulkScheduleDate';
+
 function TravelScheduleView() {
-  const schedules = useTravelScheduleStore((state) => state.schedules);
-  const travelInfo = useTravelInfoStore((state) => state.travelInfo);
-  const { clearSelectedSchedules } = useSelectSchedules();
-  const travelDaysList = useTravelDaysList({
-    from: travelInfo.from,
-    to: travelInfo.to,
-  });
+  const travelId = useGetTravelId();
+  const { data: scheduleList } = useGetTravelSchedules(travelId);
+  const { mutateAsync: deleteSchedule, isPending: isDeletePending } =
+    useDeleteSchedulePlace(travelId);
+  const { mutateAsync: moveSchedule, isPending: isMovePending } =
+    useUpdateBulkScheduleDate(travelId);
+
+  const { selectedSchedules, clearSelectedSchedules } = useSelectSchedules();
+
+  const { openDialog } = useDialogStore();
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState(1);
@@ -47,17 +54,49 @@ function TravelScheduleView() {
     }
   };
 
+  /** 선택 삭제 */
+  const handleDeleteSchedule = () => {
+    const deleteIds = selectedSchedules.map((selected) => selected.id);
+
+    openDialog({
+      message: `${deleteIds.length}개 장소(메모)를 삭제할까요?`,
+      type: 'confirm',
+      okLabel: '삭제',
+      onOk: async () => {
+        await deleteSchedule({ travelId, deleteIds });
+        clearSelectedSchedules();
+      },
+    });
+  };
+
+  /** 선택 이동 */
+  const handleMoveSchedule = (targetDay: number) => {
+    const moveIds = selectedSchedules.map((selected) => selected.id);
+
+    openDialog({
+      message: `${moveIds.length}개 장소(메모)를 이동할까요?`,
+      type: 'confirm',
+      okLabel: '이동',
+      onOk: async () => {
+        await moveSchedule({ travelId, data: { moveIds, targetDay } });
+        clearSelectedSchedules();
+      },
+    });
+  };
+
   const getPlace = useMemo(() => {
-    const targetDay = schedules.find((s) => s.day === selectedDay);
+    const targetDay = scheduleList?.find((s) => s.day === selectedDay);
 
     if (!targetDay) return [];
 
-    const places = targetDay.list
-      .filter((item) => item.type === 'place' && !!item.place)
+    const places = targetDay.scheduleList
+      .filter((item) => item.type === SCHEDULE_TYPE.PLACE && !!item.place)
       .map((item) => item.place as IPlaceList);
 
     return places.length > 0 ? places : [];
-  }, [schedules, selectedDay]);
+  }, [scheduleList, selectedDay]);
+
+  if (!scheduleList?.length) return;
 
   return (
     <>
@@ -72,22 +111,36 @@ function TravelScheduleView() {
                 <>
                   <Dropdown
                     trigger={
-                      <Button variant="gray" size="sm">
+                      <Button
+                        variant="gray"
+                        size="sm"
+                        disabled={!selectedSchedules.length || isMovePending}
+                        isLoading={isMovePending}
+                      >
                         선택 날짜 이동
                       </Button>
                     }
+                    disabled={!selectedSchedules.length}
                   >
-                    {travelDaysList.map((list) => (
-                      <span
-                        key={list.value}
-                        className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
-                        onClick={() => console.log(list)}
-                      >
-                        {list.label}
-                      </span>
-                    ))}
+                    <div className='flex flex-col'>
+                      {getTravelDayList(scheduleList).map((list) => (
+                        <span
+                          key={list.value}
+                          className="hover:bg-gray-1 text-text-secondary cursor-pointer rounded-md p-1.5"
+                          onClick={() => handleMoveSchedule(list.value)}
+                        >
+                          {list.label}
+                        </span>
+                      ))}
+                    </div>
                   </Dropdown>
-                  <Button variant="redOutline" size="sm">
+                  <Button
+                    variant="redOutline"
+                    size="sm"
+                    disabled={!selectedSchedules.length || isDeletePending}
+                    isLoading={isDeletePending}
+                    onClick={handleDeleteSchedule}
+                  >
                     선택 삭제
                   </Button>
                 </>
@@ -101,8 +154,8 @@ function TravelScheduleView() {
                     메모 추가
                   </Button>
                   <Button
-                    className="w-35"
                     // className="w-35 bg-linear-to-r from-secondary to-primary"
+                    className="bg-secondary w-35"
                     variant="secondary"
                     size="sm"
                     onClick={() => setIsOpenAddPlaceModal(true)}
@@ -116,13 +169,11 @@ function TravelScheduleView() {
         }
         dayTimelines={
           <>
-            {schedules.map((_day, index) => {
+            {scheduleList?.map((schedule, index) => {
               return (
                 <TravelScheduleDay
-                  key={`${_day.day}-${index}`}
-                  day={_day.day}
-                  date={_day.date}
-                  list={_day.list}
+                  key={`${schedule.day}-${index}`}
+                  schedule={schedule}
                   selectMode={selectModifyMode}
                 />
               );
@@ -131,7 +182,7 @@ function TravelScheduleView() {
         }
         dayButtons={
           <>
-            {schedules.map((_day, index) => (
+            {scheduleList?.map((_day, index) => (
               <Chip
                 key={`${_day.day}-${index}`}
                 size="md"
@@ -148,7 +199,8 @@ function TravelScheduleView() {
           <div className="max-mobile:h-60 h-110 overflow-hidden rounded-lg">
             {/* <GoogleMap
               places={getPlace}
-              id={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
+              id="scheduleMap"
+              mapId={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
             /> */}
           </div>
         }
@@ -156,10 +208,12 @@ function TravelScheduleView() {
       <AddPlaceModal
         isOpen={isOpenAddPlaceModel}
         handleClose={() => setIsOpenAddPlaceModal(false)}
+        scheduleList={scheduleList}
       />
       <AddMemoModal
         isOpen={isOpenAddMemoModel}
         handleClose={() => setIsOpenAddMemoModal(false)}
+        scheduleList={scheduleList}
       />
     </>
   );

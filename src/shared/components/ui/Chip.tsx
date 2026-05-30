@@ -44,14 +44,17 @@ interface IChip
   suffix?: React.ReactNode;
 }
 
-function ChipEntity(
-  { className, prefix, suffix, variant, size, ...props }: IChip,
-  ref: React.ForwardedRef<HTMLButtonElement>,
-) {
+function ChipEntity({
+  className,
+  prefix,
+  suffix,
+  variant,
+  size,
+  ...props
+}: IChip) {
   return (
     <button
       className={cn(chipVariants({ variant, size }), className)}
-      ref={ref}
       {...props}
     >
       {/* prefix 노출 */}
@@ -64,4 +67,4 @@ function ChipEntity(
   );
 }
 
-export const Chip = React.forwardRef(ChipEntity);
+export const Chip = ChipEntity;

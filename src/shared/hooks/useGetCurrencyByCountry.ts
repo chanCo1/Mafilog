@@ -21,7 +21,13 @@ export const useGetCurrencyByCountry = (
   const { currencyData } = useFetchCurrency();
 
   const getCurrency = useMemo(() => {
-    if (!isMounted || !countryCode || !countryData[countryCode] || !currencyData) return;
+    if (
+      !isMounted ||
+      !countryCode ||
+      !countryData[countryCode] ||
+      !currencyData
+    )
+      return;
 
     /** 국가코드로 특정 나라 정보 추출 */
     const _contry = countryData[countryCode];
@@ -31,6 +37,12 @@ export const useGetCurrencyByCountry = (
 
     /** 통화 표 */
     const symbol = _contry.currency[currencyCode].symbol;
+
+    /** 국가 이모지 */
+    const countryEmoji = _contry.flagEmoji;
+
+    /** 통화 이름 */
+    const currencyName = _contry.currency[currencyCode].name.split(' ').pop();
 
     /** 1원당 환율 금액(라이브러리에서 주는 대로) */
     const currencyAmount = currencyData[currencyCode];
@@ -48,6 +60,8 @@ export const useGetCurrencyByCountry = (
       currencyCode, // 해당 통화 코드
       symbol, // 통화표
       country: _contry,
+      countryEmoji,
+      currencyName,
     };
   }, [countryCode, isMounted, currencyData]);
 

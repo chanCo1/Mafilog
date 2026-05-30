@@ -7,37 +7,52 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { useMemo } from 'react';
 import { EXPENSE_CATEGORY_LIST } from '@/features/myTravel/constants/expense.constant';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import DoughnutChart from '@/shared/components/chart/DoughnutChart';
 import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';
 import { convertComma, getPercent, convertCategory } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
+import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
+import StatisticsSkeleton from '@/shared/components/skeleton/StatisticsSkeleton';
 
 interface ITimelineStatistic {
-  title: string;
+  selectedTimeline: IMyTravelListResponse;
 }
 
 export default function TimelineStatistic({
-  title,
+  selectedTimeline,
 }: ITimelineStatistic) {
+  const { data: expenseList, isLoading } = useGetTravelExpenses(
+    selectedTimeline?.id.toString(),
+  );
+  console.log('is >>> ', isLoading)
+
+  const {
+    getAllTotalMySpend,
+    getCategoryMySpend,
+    getCategoryMySpendByCurrency,
+  } = useCalcExpense(expenseList ?? []);
+
   const getChartData = useMemo(() => {
     const labels: string[] = [];
-    const data: number[] = [10, 20, 30, 20, 20, 0];
+    const data: number[] = [];
     const backgroundColor: string[] = [];
 
     const categoryExpense: Record<string, number> = {};
 
     EXPENSE_CATEGORY_LIST.forEach((list) => {
       labels.push(list.label);
-      // data.push(
-      //   getPercent({
-      //     numer: categorySpend(list.value),
-      //     deno: totalSpend(),
-      //   }),
-      // );
+      data.push(
+        getPercent({
+          numer: getCategoryMySpend(list.value),
+          deno: getAllTotalMySpend,
+        }),
+      );
 
       switch (list.value) {
         case EXPENSES_CATEGORY_TYPE.BUS:
@@ -60,79 +75,91 @@ export default function TimelineStatistic({
           break;
       }
 
-      // categoryExpense[list.value] = categorySpend(list.value);
+      categoryExpense[list.value] = getCategoryMySpend(list.value);
     });
 
-    // const mostCategory = Object.keys(categoryExpense).reduce(
-    //   (a, b) => (categoryExpense[a] > categoryExpense[b] ? a : b),
-    //   '0',
-    // );
+    const mostCategory = Object.keys(categoryExpense).reduce(
+      (a, b) => (categoryExpense[a] > categoryExpense[b] ? a : b),
+      '0',
+    );
 
     return {
       labels,
       data,
-      // mostCategory,
+      mostCategory,
       backgroundColor,
     };
-  }, []);
+  }, [expenseList]);
 
   return (
     <div className="desktop:sticky desktop:top-13 flex flex-col gap-3">
       <div className="flex flex-col gap-1">
-        <p className="font-bold text-lg">{title ?? 'faefqefqef'}</p>
-        <span className="text-state-error text-xxl font-bold">
-          {convertComma(99999)}원
-        </span>
-      </div>
-      <div>
-        <DoughnutChart
-          backgroundColor={getChartData.backgroundColor}
-          data={getChartData.data}
-          labels={getChartData.labels}
-        />
-        <div className="flex items-baseline justify-center">
-          <span className="font-bold">
-            {/* {convertCategory(
-              getChartData.mostCategory as EXPENSES_CATEGORY_TYPE,
-            )} */}
-            {convertCategory('bus')}
+        <p className="text-lg font-bold">{selectedTimeline?.title}</p>
+        {getAllTotalMySpend ? (
+          <span className="text-state-error text-xxl font-bold">
+            {convertComma(getAllTotalMySpend)}원
           </span>
-          <span className="text-sm">에 가장 많이 지출했어요</span>
-        </div>
+        ) : null}
       </div>
-      {EXPENSE_CATEGORY_LIST.map((list, index) => (
-        <Card key={`${list.value}-${index}`}>
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-1">
-              <CategoryIcon variant={list.value} circled="none" size="sm" />
-              <p className="font-bold">{list.label}</p>
-              <span className="text-text-secondary">
-                {
-                  /* {getPercent({
-                  numer: categorySpend(list.value),
-                  deno: totalSpend(),
-                })} */ 0
-                }
-                %
+
+      {isLoading && <StatisticsSkeleton />}
+
+      {!isLoading && getAllTotalMySpend ? (
+        <>
+          <div>
+            <DoughnutChart
+              backgroundColor={getChartData.backgroundColor}
+              data={getChartData.data}
+              labels={getChartData.labels}
+            />
+            <div className="flex items-baseline justify-center">
+              <span className="font-bold">
+                {convertCategory(
+                  getChartData.mostCategory as EXPENSES_CATEGORY_TYPE,
+                )}
               </span>
-            </div>
-            <div className="flex flex-col items-end">
-              <p className="text-state-error text-lg font-bold">
-                {/* {convertComma(categorySpend(list.value))}원 */}
-                {0}원
-              </p>
-              {/* {categorySpendByCurrency(list.value).map((currency, index) => (
-                <CurrencySpend
-                  key={`${currency.currency}-${index}`}
-                  currency={currency.currency}
-                  spend={currency.spend}
-                  calcExchangeRate={currency.calcSpend}
-                />
-              ))} */}
+              <span className="text-sm">에 가장 많이 지출했어요</span>
             </div>
           </div>
-        </Card>
-      ))}
+          {EXPENSE_CATEGORY_LIST.map((list, index) => (
+            <Card key={`${list.value}-${index}`}>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-1">
+                  <CategoryIcon variant={list.value} circled="none" size="sm" />
+                  <p className="font-bold">{list.label}</p>
+                  <span className="text-text-secondary">
+                    {getPercent({
+                      numer: getCategoryMySpend(list.value),
+                      deno: getAllTotalMySpend,
+                    })}
+                    %
+                  </span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <p className="text-state-error text-lg font-bold">
+                    {convertComma(getCategoryMySpend(list.value))}원
+                  </p>
+                  {getCategoryMySpendByCurrency(list.value).map(
+                    (currency, index) => (
+                      <CurrencySpend
+                        key={`${currency.currency}-${index}`}
+                        currency={currency.currency}
+                        currencyCountry={currency.currencyCountry}
+                        spend={currency.spend}
+                        calcExchangeRate={currency.calcSpend}
+                      />
+                    ),
+                  )}
+                </div>
+              </div>
+            </Card>
+          ))}
+        </>
+      ) : (
+        <div className="text-text-secondary pt-6 text-center">
+          <span>아직 지출 내역이 없어요</span>
+        </div>
+      )}
     </div>
   );
 }

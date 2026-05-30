@@ -2,14 +2,17 @@
  * @file: TravelExpensesSpendCard.tsx
  * @author: chad
  * @since: 2026.04.29 ~
- * @description: TravelExpensesSpendCard 컴포넌트, 지출 내역 노출 카드
+ * @description: 지출 내역 노출 카드
  */
 
 import { Card } from '@/shared/components/ui/Card';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { useMemo } from 'react';
 import { convertComma } from '@/shared/lib/utils';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
+import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 
 const ALL_DAY = 'all'; // 모든날
 
@@ -22,27 +25,27 @@ export default function TravelExpensesSpendCard({
   selectedDay,
   isMySpend,
 }: ITravelExpensesSpendCard) {
+  const travelId = useGetTravelId();
+  const { data: expenseList } = useGetTravelExpenses(travelId);
   const {
     getDailyAllSpend,
-    getAllTotalSpend,
     getDailyMySpend,
+    getAllTotalSpend,
     getAllTotalMySpend,
-    // getAllTotalSpendByCurrency,
-    // getDailyAllSpendByCurrency,
-    // getAllTotalMySpendByCurrency,
-    // getDailyMySpendByCurrency,
-  } = useTravelExpenseStore();
+  } = useCalcExpense(expenseList ?? []);
+
+  const { countryData } = useCountriesDataStore();
 
   /** 일정별 지출 */
   const dailySpend =
     selectedDay === ALL_DAY
-      ? getAllTotalSpend()
+      ? getAllTotalSpend
       : getDailyAllSpend(selectedDay as number);
 
   /** 일정별 내 지출 */
   const mySpend =
     selectedDay === ALL_DAY
-      ? getAllTotalMySpend()
+      ? getAllTotalMySpend
       : getDailyMySpend(selectedDay as number);
 
   // /** 모든날 통화별 지출 */
@@ -101,7 +104,9 @@ export default function TravelExpensesSpendCard({
           )} */}
         </div>
         <div className="flex items-baseline justify-between font-bold">
-          <span className="max-mobile:text-sm">KRW</span>
+          <span className="font-bold">
+            {countryData['KR'].currency['KRW'].symbol}
+          </span>
           <span className="text-state-error max-mobile:text-lg text-xl">
             {convertComma(isMySpend ? mySpend : dailySpend)}원
           </span>

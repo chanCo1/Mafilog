@@ -3,6 +3,8 @@ import { Akaya_Telivigala } from 'next/font/google';
 import '@/shared/styles/globals.css';
 import DefaultLayout from '@/shared/components/layout/DefaultLayout';
 import Providers from '@/shared/components/Providers';
+import { auth } from '@/app/api/[...nextauth]/route';
+
 
 /** 로고용 폰트 */
 const fontAkaya = Akaya_Telivigala({
@@ -35,15 +37,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="ko" className={fontAkaya.variable}>
       <body className="flex flex-col">
-        <Providers>
+        <Providers session={session}>
           <DefaultLayout>{children}</DefaultLayout>
         </Providers>
       </body>

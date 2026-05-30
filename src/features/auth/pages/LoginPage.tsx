@@ -16,15 +16,15 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, loginSchemaType } from '@/features/auth/schema/login.schema';
+import {
+  loginSchema,
+  loginSchemaType,
+} from '@/features/auth/schema/login.schema';
 import { toast } from 'sonner';
-import { useAuthManagerStore } from '@/shared/stores/useAuthManagerStore';
-
-interface ILoginPage {}
+import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuthManagerStore();
   const {
     register,
     handleSubmit,
@@ -38,13 +38,38 @@ export default function LoginPage() {
     },
   });
 
-  const [saveEmail, setSaveEmail] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  /** 로그인 */
-  const onSubmit = () => {
-    login();
-    router.push('/');
-    toast.success('로그인에 성공했어요');
+  /** 로그인 요청 */
+  const onSubmit = async (value: loginSchemaType) => {
+    setIsLoading(true);
+
+    try {
+      const result = await signIn('credentials', {
+        email: value.email,
+        password: value.password,
+        redirect: false,
+        rememberMe: rememberMe ? 'true' : 'false',
+      });
+
+      if (result.error) {
+        toast.error('이메일 또는 비밀번호를 확인해주세요');
+        return;
+      }
+
+      router.push('/');
+      toast.success('로그인에 성공했어요');
+    } catch (error: any) {
+      toast.error('로그인 도중 문제가 발생하였습니다');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  /** 카카오 로그인 */
+  const handleSocialLogin = (social: 'google' | 'kakao' | 'naver') => {
+    signIn(social, { redirectTo: '/' });
   };
 
   return (
@@ -57,6 +82,7 @@ export default function LoginPage() {
             placeholder="이메일을 입력해주세요"
             errorMsg={errors.email?.message}
             description="example@example.com"
+            disabled={isLoading}
             {...register('email')}
           />
           <Input
@@ -67,15 +93,22 @@ export default function LoginPage() {
             errorMsg={errors.password?.message}
             description="영문 + 숫자 + 특수문자 조합"
             isPassword
+            disabled={isLoading}
             {...register('password')}
           />
         </div>
         <Checkbox
-          checkboxLabel="이메일 저장"
-          value={saveEmail}
-          onChange={(v) => setSaveEmail(v as boolean)}
+          checkboxLabel="로그인 유지"
+          value={rememberMe}
+          onChange={(value) => setRememberMe(value as boolean)}
         />
-        <Button type="submit" className="w-full" size="lg">
+        <Button
+          type="submit"
+          className="w-full"
+          size="lg"
+          isLoading={isLoading}
+          disabled={isLoading}
+        >
           로그인
         </Button>
       </form>
@@ -85,27 +118,28 @@ export default function LoginPage() {
           SNS 계정으로 로그인 / 회원가입
         </span>
         <div className="flex gap-4">
-          <Image
+          {/* <Image
             src={'/google.jpeg'}
             alt="구글 소셜 로그인 이미지"
             width={36}
             height={36}
             className="cursor-pointer rounded-full object-contain"
-          />
+          /> */}
           <Image
-            src={'/kakao.png'}
-            alt="구글 소셜 로그인 이미지"
-            width={36}
-            height={36}
-            className="cursor-pointer rounded-full object-contain"
+            src={'/kakao_login_large_wide.png'}
+            alt="카카오 소셜 로그인 이미지"
+            width='300'
+            height='100'
+            className="cursor-pointer object-contain"
+            onClick={() => handleSocialLogin('kakao')}
           />
-          <Image
+          {/* <Image
             src={'/naver.png'}
-            alt="구글 소셜 로그인 이미지"
+            alt="네이버 소셜 로그인 이미지"
             width={36}
             height={36}
             className="cursor-pointer rounded-full object-contain"
-          />
+          /> */}
         </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-1">

@@ -28,3 +28,22 @@ export const MYPAGE_LIST = [
     path: '/my-page/my-timeline',
   },
 ];
+
+/** 동물 이모지 */
+export const ANIMAL_EMOJI = [
+  '🐶',
+  '🐰',
+  '🐻‍❄️',
+  '🐹',
+  '🐱',
+  '🐼',
+  '🦊',
+  '🐻',
+  '🐯',
+  '🙊',
+  '🐷',
+  '🐨',
+  '🦁',
+  '🐮',
+  '🐸',
+];

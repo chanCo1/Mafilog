@@ -9,13 +9,15 @@ import { useState } from 'react';
 import { Chip } from '@/shared/components/ui/Chip';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
-import { useTravelExpenseStore } from '@/shared/stores/useTravelExpenseStore';
 import { convertComma } from '@/shared/lib/utils';
 import { Toggle } from '@/shared/components/ui/Toggle';
 import { EXPENSE_STATISTIC_LIST } from '@/features/myTravel/constants/expense.constant';
 import { STATISTIC_TAB } from '@/shared/types/expenseEnum';
 import CategoryStatistic from '@/features/myTravel/components/modal/statistic/CategoryStatistic';
 import ScheduleStatistic from '@/features/myTravel/components/modal/statistic/ScheduleStatistic';
+import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
+import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
+import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 
 interface IExpenseStatisticModal {
   isOpen: boolean;
@@ -31,7 +33,11 @@ export default function ExpenseStatisticModal({
     EXPENSE_STATISTIC_LIST[0],
   );
 
-  const { getAllTotalSpend, getAllTotalMySpend } = useTravelExpenseStore();
+  const travelId = useGetTravelId();
+  const { data: expenseList } = useGetTravelExpenses(travelId);
+  const { getAllTotalMySpend, getAllTotalSpend } = useCalcExpense(
+    expenseList ?? [],
+  );
 
   const totalSpend = isShowMySpend ? getAllTotalMySpend : getAllTotalSpend;
 
@@ -51,7 +57,7 @@ export default function ExpenseStatisticModal({
           <div className="flex flex-col gap-1">
             <p className="font-bold">여행 총 지출</p>
             <span className="text-state-error text-xxl font-bold">
-              {convertComma(totalSpend())}원
+              {convertComma(totalSpend)}원
             </span>
           </div>
           <Toggle

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { IExpenseList } from '@/shared/interfaces/travelExpenseStore.interface';
+import { IExpenseList } from '@/features/myTravel/interfaces/expense.interface';
+
 interface ISelectExpenses {
   /** 선택된 일정 리스트 */
   selectedExpenses: IExpenseList[];

@@ -5,7 +5,6 @@
  * @description: Separator 컴포넌트, 구분선
  */
 
-import { forwardRef } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -38,5 +37,3 @@ export default function Separator({ className, position, ...props }: ISeparator)
     </div>
   );
 }
-
-// export const Separator = forwardRef(SeparatorEntity);

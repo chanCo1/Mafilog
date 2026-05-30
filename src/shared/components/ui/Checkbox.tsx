@@ -42,6 +42,7 @@ interface ICheckbox
   onChange: (value: ILabelValue[] | boolean) => void;
   isUserIcon?: boolean;
   checkboxLabel?: string;
+  isCheckList?: boolean;
 }
 
 function CheckboxEntity(
@@ -60,9 +61,9 @@ function CheckboxEntity(
     value,
     onChange,
     isUserIcon,
+    isCheckList = false,
     ...props
-  }: ICheckbox,
-  ref: React.ForwardedRef<HTMLInputElement>,
+  }: ICheckbox
 ) {
   /** 체크박스 클릭 */
   const onClickMultipleCheckbox = (_checkedOption: ILabelValue) => {
@@ -91,7 +92,6 @@ function CheckboxEntity(
         labelPosition === 'top' ? 'flex-col' : '',
         disabled && 'opacity-50',
       )}
-      ref={ref}
     >
       {/* 라벨 */}
       {label && (
@@ -125,6 +125,7 @@ function CheckboxEntity(
                 isUserIcon={isUserIcon}
                 label={option.label}
                 onClick={() => onClickMultipleCheckbox(option)}
+                isCheckList={isCheckList}
                 {...props}
               />
             );
@@ -141,6 +142,7 @@ function CheckboxEntity(
             isUserIcon={isUserIcon}
             label={checkboxLabel}
             onClick={() => onClickSingleCheckbox(!value)}
+            isCheckList={isCheckList}
             {...props}
           />
         )}
@@ -161,7 +163,7 @@ function CheckboxEntity(
   );
 }
 
-export const Checkbox = React.forwardRef(CheckboxEntity);
+export const Checkbox = CheckboxEntity;
 
 /** 싱글 체크박스 컴포넌트 */
 interface ISingleCheckbox extends React.HTMLAttributes<HTMLDivElement> {
@@ -170,14 +172,16 @@ interface ISingleCheckbox extends React.HTMLAttributes<HTMLDivElement> {
   // onChange?: () => void;
   isUserIcon?: boolean;
   isChecked?: boolean;
+  isCheckList?: boolean;
   label?: string;
-  value: boolean
+  value: boolean;
 }
 const SingleCheckbox = ({
   className,
   disabled,
   isUserIcon,
   isChecked,
+  isCheckList = false,
   label,
   value,
   ...props
@@ -202,7 +206,15 @@ const SingleCheckbox = ({
         </>
       )}
       {label && (
-        <span className={cn(value ? 'text-text-secondary line-through' : 'text-text-primary')}>{label}</span>
+        <span
+          className={cn(
+            value && isCheckList
+              ? 'text-text-secondary line-through'
+              : 'text-text-primary',
+          )}
+        >
+          {label}
+        </span>
       )}
     </div>
   );

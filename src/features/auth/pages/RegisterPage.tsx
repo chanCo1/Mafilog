@@ -4,7 +4,7 @@
  * @file: RegisterPage.tsx
  * @author: chad
  * @since: 2026.04.23 ~
- * @description: RegisterPage 컴포넌트, 회원가입 페이지
+ * @description: 회원가입 페이지
  */
 
 import { Input } from '@/shared/components/ui/Input';
@@ -18,6 +18,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import AuthService from '@/features/auth/services/Auth.Service';
+import { IRegisterRequest } from '@/features/auth/interfaces/register.interface';
+import { useDialogStore } from '@/shared/stores/useDialogStore';
+import { toast } from 'sonner';
 
 export default function RegisterPage() {
   const {
@@ -35,16 +39,47 @@ export default function RegisterPage() {
     },
   });
 
+  const { openDialog } = useDialogStore();
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
 
-  /** 회원가입 */
-  const onSubmit = (value: TRegisterSchema) => {
-    console.log(value);
+  /** 회원가입 api 요청 */
+  const postAccountRegister = async (data: IRegisterRequest) => {
     setIsLoading(true);
 
-    setTimeout(() => setIsLoading(false), 5000);
+    try {
+      await AuthService.postRegister(data);
+    } catch (error: any) {
+      const erorrData = error.response.data;
+
+      openDialog({
+        type: 'error',
+        message: erorrData.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  /** 회원가입 */
+  const onSubmit = async (value: TRegisterSchema) => {
+    setIsLoading(true);
+
+    try {
+      await AuthService.postRegister(value);
+      toast.success('회원가입을 완료했어요');
+      router.push('/login');
+    } catch (error: any) {
+      const erorrData = error.response.data;
+
+      openDialog({
+        type: 'error',
+        message: erorrData.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -65,10 +100,11 @@ export default function RegisterPage() {
             placeholder="이름(아이디)을 입력해주세요"
             errorMsg={errors.name?.message}
             description="한글, 영문, 숫자, 최대 10글자 입력 가능"
+            maxLength={10}
             {...register('name')}
           />
           <Input
-            type='password'
+            type="password"
             label="비밀번호"
             isRequired
             placeholder="비밀번호를 입력해주세요"
@@ -78,7 +114,7 @@ export default function RegisterPage() {
             {...register('password')}
           />
           <Input
-            type='password'
+            type="password"
             label="비밀번호 확인"
             isRequired
             placeholder="비밀번호를 다시 입력해주세요"

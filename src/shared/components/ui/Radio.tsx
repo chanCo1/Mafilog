@@ -68,7 +68,6 @@ function RadioEntity(
     id,
     ...props
   }: IRadio,
-  ref: React.ForwardedRef<HTMLInputElement>,
 ) {
   /** 라디오 클릭 */
   const onClickRadio = (value: ILabelValue) => {
@@ -165,4 +164,4 @@ function RadioEntity(
   );
 }
 
-export const Radio = React.forwardRef(RadioEntity);
+export const Radio = RadioEntity;

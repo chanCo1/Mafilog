@@ -2,37 +2,37 @@
  * @file: TravelStatus.tsx
  * @author: chad
  * @since: 2026.04.28 ~
- * @description: TravelStatus 컴포넌트, 여행 상태
+ * @description: 여행 상세 페이지에서 보여줄 여행 상태
  */
 
 import { useMemo } from 'react';
-import { cn } from '@/shared/lib/utils';
-import { calcDDay } from '@/shared/lib/utils';
+import { cn, calcDDay, getTravelStatus } from '@/shared/lib/utils';
 import { TRAVEL_STATUS_LIST } from '@/features/myTravel/constants';
 import { TRAVEL_STATUS } from '@/shared/types/Enum';
 import { getTravelCurrentDay, getTravelDay } from '@/shared/lib/utils';
 
 interface ITravelStatus {
-  status: string;
   from: Date;
   to: Date;
 }
-// TODO: 날짜로 상태값 구할지 status로 구할지 확인할것
-export default function TravelStatus({ status, from, to }: ITravelStatus) {
+
+export default function TravelStatus({ from, to }: ITravelStatus) {
   /** 상태 라벨 */
   const getStatusLabel = useMemo(() => {
-    const _status = TRAVEL_STATUS_LIST.find((list) => list.value === status);
+    const _status = TRAVEL_STATUS_LIST.find(
+      (list) => list.value === getTravelStatus(from, to),
+    );
 
     if (_status?.value === TRAVEL_STATUS.PROGRESS) {
       return _status?.label;
     } else {
       return `${_status?.label} 여행`;
     }
-  }, [status]);
+  }, [getTravelStatus(from, to)]);
 
   /** 상태 색상 */
   const getStatusColor = useMemo(() => {
-    switch (status) {
+    switch (getTravelStatus(from, to)) {
       case TRAVEL_STATUS.PROGRESS:
         return 'text-state-info';
       case TRAVEL_STATUS.UPCOMING:
@@ -42,11 +42,11 @@ export default function TravelStatus({ status, from, to }: ITravelStatus) {
       default:
         return 'text-text-priamry';
     }
-  }, [status]);
+  }, [getTravelStatus(from, to)]);
 
   /** 상태에 따른 추가 문구 */
   const getStatusBadge = useMemo(() => {
-    switch (status) {
+    switch (getTravelStatus(from, to)) {
       case TRAVEL_STATUS.PROGRESS:
         return getTravelCurrentDay(from, to) === getTravelDay(from, to)
           ? '마지막 날'
@@ -58,7 +58,7 @@ export default function TravelStatus({ status, from, to }: ITravelStatus) {
       default:
         return '';
     }
-  }, [status]);
+  }, [from, to]);
 
   return (
     <div className="flex gap-0.5 font-bold">
