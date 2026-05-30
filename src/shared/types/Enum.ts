@@ -1,4 +1,4 @@
-/** 일정 타입 */
+/** 일정 타입. */
 export const SCHEDULE_TYPE = {
   /** 장소 */
   PLACE: 'place',
