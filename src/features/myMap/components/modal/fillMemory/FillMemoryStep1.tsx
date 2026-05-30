@@ -48,7 +48,7 @@ export default function FillMemoryStep1({
     const _timelineList = timelineList?.map((list) => ({
       label: list.title,
       value: list.id,
-    }));
+    })) || [];
 
     return [{ label: '선택 안함', value: 0 }, ..._timelineList];
   }, [timelineList]);
@@ -59,7 +59,7 @@ export default function FillMemoryStep1({
 
   /** 여행 선택 핸들링 */
   const handleSelectedTravel = (selected: ILabelValue) => {
-    const finedTimeline = timelineList.find(
+    const finedTimeline = timelineList?.find(
       (list) => list.id === selected.value,
     );
 
