@@ -44,24 +44,6 @@ export default function RegisterPage() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  /** 회원가입 api 요청 */
-  const postAccountRegister = async (data: IRegisterRequest) => {
-    setIsLoading(true);
-
-    try {
-      await AuthService.postRegister(data);
-    } catch (error: any) {
-      const erorrData = error.response.data;
-
-      openDialog({
-        type: 'error',
-        message: erorrData.message,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   /** 회원가입 */
   const onSubmit = async (value: TRegisterSchema) => {
     setIsLoading(true);

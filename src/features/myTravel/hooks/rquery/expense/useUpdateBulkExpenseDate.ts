@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import ExpenseService from '@/features/myTravel/services/Expense.service';
 import { travelExpensesKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
+import { AxiosError } from 'axios';
 
 interface IUseUpdateBulkExpenseDate {
   travelId: string;
@@ -32,8 +33,10 @@ export const useUpdateBulkExpenseDate = (travelId: string) => {
       toast.success('지출을 이동했어요');
     },
 
-    onError: (error: any) => {
-      const errorMessage = error.response?.data.message;
+    onError: (error) => {
+      const axiosError = error as AxiosError<{ message: string }>;
+
+      const errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage || '지출을 이동하는 중 오류가 발생했습니다.');
     },
   });

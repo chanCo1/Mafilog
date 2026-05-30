@@ -7,7 +7,6 @@
 
 import { useMemo } from 'react';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
-import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { ICON_TYPE } from '@/shared/types/Enum';
 import { EXPENSES_CATEGORY_TYPE } from '@/shared/types/expenseEnum';

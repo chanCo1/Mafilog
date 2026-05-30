@@ -13,6 +13,7 @@ import {
   IScheduleResponse,
   IScheduleListResponse,
 } from '@/features/myTravel/interfaces/schedule.interface';
+import { AxiosError } from 'axios';
 
 interface IUseUpdateMoveScheduleList {
   scheduleId: number;
@@ -56,11 +57,12 @@ export const useUpdateMoveScheduleList = (travelId: string) => {
     },
 
     onError: (
-      error: any,
+      error,
       data,
       context,
     ) => {
-      const errorMessage = error.response?.data.message;
+      const axiosError = error as AxiosError<{ message: string }>;
+      const errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage || '수정 중 오류가 발생했습니다.');
 
       if (context?.previousData) {

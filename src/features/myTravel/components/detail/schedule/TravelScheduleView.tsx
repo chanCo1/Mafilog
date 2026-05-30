@@ -197,11 +197,11 @@ function TravelScheduleView() {
         }
         stautsArea={
           <div className="max-mobile:h-60 h-110 overflow-hidden rounded-lg">
-            {/* <GoogleMap
+            <GoogleMap
               places={getPlace}
               id="scheduleMap"
               mapId={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
-            /> */}
+            />
           </div>
         }
       />

@@ -5,8 +5,6 @@
  * @description: MemoryScheduleTimeline 컴포넌트
  */
 
-import { useState } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';

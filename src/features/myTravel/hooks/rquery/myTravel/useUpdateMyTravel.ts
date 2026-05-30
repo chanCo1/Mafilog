@@ -14,6 +14,7 @@ import {
   travelExpensesKeys,
   travelScheduleKeys,
 } from '@/features/myTravel/hooks/rquery/queryKeys';
+import { AxiosError } from 'axios';
 
 export const useUpdateMyTravel = (travelId: string) => {
   const queryClient = useQueryClient();
@@ -38,8 +39,9 @@ export const useUpdateMyTravel = (travelId: string) => {
       toast.success('여행 정보가 수정되었어요');
     },
 
-    onError: (error: any) => {
-      const errorMessage = error.response?.data.message;
+    onError: (error) => {
+      const axiosError = error as AxiosError<{ message: string }>;
+      const errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage || '수정하는 중 오류가 발생했습니다.');
     },
   });

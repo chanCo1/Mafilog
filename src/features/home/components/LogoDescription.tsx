@@ -6,7 +6,6 @@
  */
 
 import React from 'react';
-import { cn } from '@/shared/lib/utils';
 
 interface ILogoDescription {
   title: string;

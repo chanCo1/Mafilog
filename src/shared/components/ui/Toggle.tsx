@@ -50,7 +50,7 @@ function ToggleEntity({
   label,
   labelPosition = 'left',
   disabled,
-  description,
+  // description,
   className,
   color,
   size,

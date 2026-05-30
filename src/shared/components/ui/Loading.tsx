@@ -5,7 +5,6 @@
  * @description: Loading 컴포넌트
  */
 
-import { LegacyRef } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { Plane } from 'lucide-react';

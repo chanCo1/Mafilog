@@ -15,7 +15,7 @@ interface IGetWeather {
   lng: number;
 }
 
-type PrecipType = 'rain' | 'snow' | 'freezingrain' | 'ice';
+// type PrecipType = 'rain' | 'snow' | 'freezingrain' | 'ice';
 
 export const useGetWeather = ({ lat, lng }: IGetWeather) => {
   const travelId = useGetTravelId();

@@ -10,6 +10,7 @@ import Credentials from 'next-auth/providers/credentials';
 import AuthService from '@/features/auth/services/Auth.Service';
 import { getTokenExpire } from '@/shared/lib/utils';
 import Kakao from 'next-auth/providers/kakao';
+import { AxiosError } from 'axios';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -50,8 +51,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             hexCode: _userInfo.user.hexCode,
             rememberMe,
           };
-        } catch (error: any) {
-        const serverMessage = error.response?.data?.message;
+        } catch (error) {
+          const axiosError = error as AxiosError<{ message: string }>;
+
+          const serverMessage = axiosError.response?.data?.message;
           console.log(`${serverMessage || '인증 실패'}`);
 
           throw new Error(serverMessage);
@@ -61,7 +64,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   secret: process.env.AUTH_SECRET,
   session: { strategy: 'jwt', maxAge: 1 * 24 * 60 * 60 },
-  pages: { 
+  pages: {
     signIn: '/login',
     error: '/login',
   },
@@ -82,7 +85,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         if (account?.provider === 'kakao') {
           try {
-            const kakaoEmail = user.email || `kakao_${account.providerAccountId}@k`;
+            const kakaoEmail =
+              user.email || `kakao_${account.providerAccountId}@k`;
 
             const response = await AuthService.postSocialLogin({
               provider: 'kakao',

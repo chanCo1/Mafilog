@@ -5,7 +5,6 @@
  * @description: TravelListTemplate 컴포넌트, 내 여행 리스트 템플릿
  */
 
-import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
 import { useRouter } from 'next/navigation';

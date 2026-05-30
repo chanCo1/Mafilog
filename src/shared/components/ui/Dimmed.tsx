@@ -12,7 +12,7 @@ interface IDimmed extends React.HTMLAttributes<HTMLDivElement> {
   // children?: React.ReactNode;
 }
 
-export default function Dimmed({ className, children, ...props }: IDimmed) {
+export default function Dimmed({ className, ...props }: IDimmed) {
   return (
     <div
       className={cn(

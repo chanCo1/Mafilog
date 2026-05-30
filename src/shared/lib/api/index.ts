@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { setInterceptors } from '@/shared/lib/api/interceptor';
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api`;

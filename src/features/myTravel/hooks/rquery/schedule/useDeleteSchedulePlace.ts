@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import ScheduleService from '@/features/myTravel/services/Schedule.service';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { travelScheduleKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
+import { AxiosError } from 'axios';
 
 interface IUseDeleteSchedulePlace {
   travelId: string;
@@ -46,8 +47,9 @@ export const useDeleteSchedulePlace = (
       }
     },
 
-    onError: (error: any) => {
-      const errorMessage = error.response?.data.message;
+    onError: (error) => {
+      const axiosError = error as AxiosError<{ message: string }>;
+      const errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage || '일정을 삭제하는 중 오류가 발생했습니다.');
     },
   });

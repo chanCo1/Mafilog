@@ -12,10 +12,8 @@ import { ILabelValue } from '@/shared/interfaces';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import {
   Circle,
-  CircleCheck,
   CircleCheckBig,
   User,
-  UserCheck,
 } from 'lucide-react';
 
 const radioVariants = cva('flex gap-1 cursor-pointer items-center w-fit', {
@@ -99,6 +97,7 @@ function RadioEntity(
         labelPosition === 'top' ? 'flex-col' : '',
         disabled && 'opacity-50',
       )}
+      {...props}
     >
       {/* 라벨 */}
       {label && (

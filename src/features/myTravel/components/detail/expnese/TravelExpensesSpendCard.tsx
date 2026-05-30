@@ -8,7 +8,6 @@
 import { Card } from '@/shared/components/ui/Card';
 import { useMemo } from 'react';
 import { convertComma } from '@/shared/lib/utils';
-import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
 import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
