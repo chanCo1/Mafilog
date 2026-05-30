@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { IUpdateSchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.interface';
 import ScheduleService from '@/features/myTravel/services/Schedule.service';
 import { travelScheduleKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
+import { AxiosError } from 'axios';
 
 interface IUseUpdateSchedulePlace {
   travelId: string;
@@ -34,8 +35,9 @@ export const useUpdateSchedulePlace = (
       toast.success('수정되었어요');
     },
 
-    onError: (error: any) => {
-      const errorMessage = error.response?.data.message;
+    onError: (error) => {
+      const axiosError = error as AxiosError<{ message: string }>;
+      const errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage || '장소를 수정하는 중 오류가 발생했습니다.');
     },
   });

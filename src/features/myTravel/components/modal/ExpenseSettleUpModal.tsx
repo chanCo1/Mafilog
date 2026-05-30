@@ -8,7 +8,7 @@
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
 import { convertComma } from '@/shared/lib/utils';
-import { User, MoveRight } from 'lucide-react';
+import { MoveRight } from 'lucide-react';
 import MyExpenseWrap from '@/features/myTravel/components/modal/ExpenseSettlement/MyExpenseWrap';
 import Separator from '@/shared/components/ui/Separator';
 import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';

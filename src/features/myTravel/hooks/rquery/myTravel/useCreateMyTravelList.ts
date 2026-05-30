@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 import { toast } from 'sonner';
 import { myTravelListKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
+import { AxiosError } from 'axios';
 
 export const useCreateMyTravelList = () => {
   const queryClient = useQueryClient();
@@ -27,8 +28,9 @@ export const useCreateMyTravelList = () => {
       toast.success('새 여행을 만들었어요');
     },
 
-    onError: (error: any) => {
-      const errorMessage = error.response?.data.message;
+    onError: (error) => {
+      const axiosError = error as AxiosError<{ message: string }>;
+      const errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage || '여행을 생성하는 중 오류가 발생했습니다.');
     },
   });

@@ -146,11 +146,11 @@ export default function FillMemoryDetailModal({
               getPlace.length ? 'block' : 'hidden',
             )}
           >
-            {/* <GoogleMap
+            <GoogleMap
               places={getPlace}
               id="memoryMap"
               mapId={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
-            /> */}
+            />
           </div>
           <div className="flex flex-col gap-3">
             {filteredSchedule?.map((schedule, index) => (

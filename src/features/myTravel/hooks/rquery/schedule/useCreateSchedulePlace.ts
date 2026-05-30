@@ -11,6 +11,7 @@ import { ISchedulePlaceRequest } from '@/features/myTravel/interfaces/schedule.i
 import ScheduleService from '@/features/myTravel/services/Schedule.service';
 import { SCHEDULE_TYPE } from '@/shared/types/Enum';
 import { travelScheduleKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
+import { AxiosError } from 'axios';
 
 interface IUseCreateSchedulePlace {
   travelId: string;
@@ -40,8 +41,9 @@ export const useCreateSchedulePlace = (
       );
     },
 
-    onError: (error: any) => {
-      const errorMessage = error.response?.data.message;
+    onError: (error) => {
+      const axiosError = error as AxiosError<{ message: string }>;
+      const errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage || '장소를 추가하는 중 오류가 발생했습니다.');
     },
   });

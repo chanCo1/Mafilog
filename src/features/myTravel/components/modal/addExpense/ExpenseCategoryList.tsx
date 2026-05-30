@@ -5,7 +5,7 @@
  * @description: 지출내역 카테고리 컴포넌트
  */
 
-import { useState, HTMLAttributes, SetStateAction, Dispatch } from 'react';
+import { HTMLAttributes, SetStateAction, Dispatch } from 'react';
 import { cn } from '@/shared/lib/utils';
 import RequireDot from '@/shared/components/ui/RequireDot';
 import { Card } from '@/shared/components/ui/Card';

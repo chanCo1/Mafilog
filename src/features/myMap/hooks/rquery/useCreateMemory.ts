@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MemoryService from '@/features/myMap/services/Memory.service';
 import { toast } from 'sonner';
 import { memoryKeys } from '@/features/myMap/hooks/rquery/queryKeys';
+import { AxiosError } from 'axios';
 
 export const useCreateMemory = (mapType: string) => {
   const queryClient = useQueryClient();
@@ -27,8 +28,10 @@ export const useCreateMemory = (mapType: string) => {
       toast.success('새 추억을 만들었어요');
     },
 
-    onError: (error: any) => {
-      const errorMessage = error.response?.data.message;
+    onError: (error) => {
+      const axiosError = error as AxiosError<{ message: string }>;
+
+      const errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage || '추억을 생성하는 중 오류가 발생했습니다.');
     },
   });

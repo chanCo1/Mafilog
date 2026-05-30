@@ -5,7 +5,6 @@
  * @description: Step 컴포넌트
  */
 
-import { useState } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';
 import { ChevronRight } from 'lucide-react';

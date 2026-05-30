@@ -10,7 +10,7 @@ import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import { ILabelValue } from '@/shared/interfaces';
 import RequireDot from '@/shared/components/ui/RequireDot';
-import { Square, SquareCheckBig, User, UserCheck } from 'lucide-react';
+import { Square, SquareCheckBig, User } from 'lucide-react';
 
 const checkboxVariants = cva('flex gap-1 cursor-pointer items-center w-fit', {
   variants: {

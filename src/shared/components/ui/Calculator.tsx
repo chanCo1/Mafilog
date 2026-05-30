@@ -163,7 +163,8 @@ export default function Calculator({
         lastValidResult.current = calculated;
         return roundDecimal(calculated);
       }
-    } catch (error: any) {
+    } catch (error) {
+      console.log(error);
       return lastValidResult.current;
     }
 

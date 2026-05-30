@@ -5,7 +5,6 @@
  * @description: ScheduleCard 컴포넌트
  */
 
-import { useMemo } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { CircledNumber } from '@/shared/components/ui/CircledNumber';

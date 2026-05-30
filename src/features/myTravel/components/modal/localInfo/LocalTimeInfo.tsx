@@ -5,12 +5,9 @@
  * @description: LocalTimeInfo 컴포넌트, 현지 시차 정보
  */
 
-import { useMemo, useState } from 'react';
-import { cn } from '@/shared/lib/utils';
+import { useMemo } from 'react';
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
-import { convertFormattedDate } from '@/shared/lib/utils';
 import { useGetDiffTime } from '@/features/myTravel/hooks/useGetDiffTime';
-import Separator from '@/shared/components/ui/Separator';
 
 interface ILocalTimeInfo {
   selectedCity: IPlaceList | undefined;

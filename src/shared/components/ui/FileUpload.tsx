@@ -41,13 +41,11 @@ interface IFileUpload {
 export default function FileUpload({
   className,
   description,
-  errorMsg,
   isRequired,
   label,
-  labelPosition,
   isMultiple,
   disabled,
-  maxSize = 10, // 기본 10MB
+  // maxSize = 10, // 기본 10MB
   accept = 'image/jpeg,image/jpg,image/png,image/gif',
   selectedImage,
   setSelectedImage,
