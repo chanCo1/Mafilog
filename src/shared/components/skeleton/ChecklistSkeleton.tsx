@@ -12,11 +12,11 @@ export default function ChecklistSkeleton() {
     <div className="flex flex-col gap-5">
       {Array.from({ length: 4 }).map((_, index) => (
         <div key={index} className="flex flex-col gap-2">
-          <Skeleton style={{ width: '30%' }} />
-          <Skeleton style={{ width: '60%' }} />
-          <Skeleton style={{ width: '60%' }} />
-          <Skeleton style={{ width: '60%' }} />
-          <Skeleton style={{ width: '60%' }} />
+          <Skeleton className='w-2/6' />
+          <Skeleton className='w-3/5' />
+          <Skeleton className='w-3/5' />
+          <Skeleton className='w-3/5' />
+          <Skeleton className='w-3/5' />
           <Skeleton shape='circle' style={{ width: '25px' }}  />
         </div>
       ))}

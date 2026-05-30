@@ -15,7 +15,7 @@ import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNew
 import TravelListTemplate from '@/features/myTravel/components/main/TravelListTemplate';
 import { useGetMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelList';
 import { useSession } from 'next-auth/react';
-import CardSkeleton from '@/shared/components/skeleton/CardSkeleton';
+import CardSkeleton from '@/shared/components/skeleton/CardGridSkeleton';
 
 export default function MyTravelMainPage() {
   const { data: userInfo } = useSession();

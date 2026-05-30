@@ -14,7 +14,7 @@ import { useSession } from 'next-auth/react';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
 import { useGetMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelList';
-import CardSkeleton from '@/shared/components/skeleton/CardSkeleton';
+import CardSkeleton from '@/shared/components/skeleton/CardGridSkeleton';
 
 export default function UpcomingContainer() {
   const [isOpenCreateNewModal, setIsOpenCretateNewModal] = useState(false);

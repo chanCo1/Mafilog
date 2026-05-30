@@ -6,26 +6,28 @@
  */
 
 import { Skeleton } from '@/shared/components/skeleton/Skeleton';
+import ScheduleSkeleton from '@/shared/components/skeleton/ScheduleSkeleton';
 
 export default function TravelDetailSkeleton() {
   return (
     <div className='flex flex-col gap-5'>
       <div className="flex flex-col gap-1">
-        <Skeleton style={{ width: '60px' }} />
-        <Skeleton style={{ width: '80px' }} />
-        <Skeleton style={{ width: '240px' }} size='md' />
-        <Skeleton style={{ width: '300px' }} />
+        <Skeleton className='w-15' />
+        <Skeleton className='w-20' />
+        <Skeleton className='w-60' size='md' />
+        <Skeleton className='w-75' />
       </div>
       <div className='flex items-baseline justify-between'>
         <div className='flex gap-2'>
-          <Skeleton style={{ width: '60px' }} shape='circle' size='md' />
-          <Skeleton style={{ width: '60px' }} shape='circle' size='md' />
+          <Skeleton className='w-15' shape='circle' size='md' />
+          <Skeleton className='w-15' shape='circle' size='md' />
         </div>
         <div className='flex gap-2'>
-          <Skeleton style={{ width: '70px' }} />
-          <Skeleton style={{ width: '70px' }} />
+          <Skeleton className='w-18' />
+          <Skeleton className='w-18' />
         </div>
       </div>
+      <ScheduleSkeleton />
     </div>
   );
 }

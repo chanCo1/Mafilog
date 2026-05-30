@@ -15,7 +15,6 @@ import { FallbackProps } from 'react-error-boundary';
 export default function Error({ error, resetErrorBoundary }: FallbackProps) {
   const router = useRouter();
 
-  // 💡 401 에러(인증 만료)인지 확인
   const isUnauthorized =
     (error as Error).message.includes('401') ||
     (error as any).response?.status === 401;
