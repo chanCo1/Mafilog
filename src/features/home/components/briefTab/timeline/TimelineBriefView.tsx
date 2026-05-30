@@ -6,7 +6,6 @@
  */
 
 import { memo } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import Image from 'next/image';
 import { IntroduceList } from '@/features/home/components/briefTab/IntroduceList';

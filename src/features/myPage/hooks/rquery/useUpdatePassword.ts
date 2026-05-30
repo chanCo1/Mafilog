@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import UserService from '@/features/myPage/services/User.service';
 import { toast } from 'sonner';
 import { TPasswordSchema } from '@/features/myPage/schema/profile.schema';
+import { AxiosError } from 'axios';
 
 export const useUpdatePassword = () => {
   return useMutation({
@@ -22,7 +23,9 @@ export const useUpdatePassword = () => {
       toast.success('비밀번호를 변경했어요');
     },
     onError: (error: any) => {
-      const errorMsg = error.response?.data?.message;
+      const axiosError = error as AxiosError<{ message: string }>;
+      
+      const errorMsg = axiosError.response?.data?.message;
       toast.error(errorMsg || '프로필 변경에 실패했습니다.');
     },
   });

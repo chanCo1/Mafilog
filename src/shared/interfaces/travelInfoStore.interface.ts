@@ -1,5 +1,5 @@
 import { IPlaceList } from '@/features/myTravel/interfaces/schedule.interface';
-import { ILabelValue, IMemberList } from '@/shared/interfaces';
+import { IMemberList } from '@/shared/interfaces';
 import {
   TRAVEL_STATUS,
   TRAVEL_PARTNER,

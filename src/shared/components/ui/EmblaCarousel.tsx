@@ -7,7 +7,7 @@
 
 'use client';
 
-import { useState, useCallback, ReactNode } from 'react';
+import { useCallback, ReactNode } from 'react';
 import { cn } from '@/shared/lib/utils';
 import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';

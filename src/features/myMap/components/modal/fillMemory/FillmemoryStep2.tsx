@@ -5,7 +5,7 @@
  * @description: 추억채우기 날짜 선택 모달
  */
 
-import { useMemo, Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { Input } from '@/shared/components/ui/Input';
 import { Calendar } from 'lucide-react';
 import DatePicker from '@/shared/components/ui/DatePicker';

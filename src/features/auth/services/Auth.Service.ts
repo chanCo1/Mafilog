@@ -10,7 +10,7 @@ import {
   ILoginRequest,
   ISocialLoginRequest,
 } from '@/features/auth/interfaces/register.interface';
-import { axiosInstance, axiosInstanceWithAuth } from '@/shared/lib/api';
+import { axiosInstance } from '@/shared/lib/api';
 
 const API_URL = '/auth';
 

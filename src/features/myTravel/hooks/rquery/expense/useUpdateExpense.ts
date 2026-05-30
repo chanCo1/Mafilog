@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { IExpenseRequest } from '@/features/myTravel/interfaces/expense.interface';
 import ExpenseService from '@/features/myTravel/services/Expense.service';
 import { travelExpensesKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
+import { AxiosError } from 'axios';
 
 interface IUseUpdateExpense {
   travelId: string;
@@ -35,8 +36,9 @@ export const useUpdateExpense = (
       toast.success('지출을 수정했어요');
     },
 
-    onError: (error: any) => {
-      const errorMessage = error.response?.data.message;
+    onError: (error) => {
+      const axiosError = error as AxiosError<{ message: string }>;
+      const errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage || '지출을 수정하는 중 오류가 발생했습니다.');
     },
   });

@@ -50,7 +50,7 @@ export default function TimePicker({
   variant = 'outline',
   value,
   onChange,
-  addValueText,
+  // addValueText,
   ...props
 }: ITimePicker) {
   const {isMobile} = useDevice();

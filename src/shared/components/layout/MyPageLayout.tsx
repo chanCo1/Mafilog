@@ -7,7 +7,7 @@
 
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { MYPAGE_LIST } from '@/shared/constants';
 import PageHeader from '@/shared/components/ui/PageHeader';
 import { Card } from '@/shared/components/ui/Card';

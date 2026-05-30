@@ -6,7 +6,6 @@
  */
 
 import { memo } from 'react';
-import { cn } from '@/shared/lib/utils';
 import { Card } from '@/shared/components/ui/Card';
 import { EXPNESES_INTRODUCE_LIST } from '@/features/home/constants';
 import Image from 'next/image';

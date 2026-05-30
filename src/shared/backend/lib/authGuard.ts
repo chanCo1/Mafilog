@@ -9,7 +9,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/app/api/[...nextauth]/route';
 
 export async function authGuard(request: Request) {
-  const authorization = request.headers.get('Authorization');
+  // const authorization = request.headers.get('Authorization');
 
   /** 토큰의 존재 여부 */
   // if (!authorization || !authorization.startsWith('Bearer ')) {
