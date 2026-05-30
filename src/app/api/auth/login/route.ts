@@ -6,7 +6,7 @@
  */
 
 import { prisma } from '@/shared/lib/prisma';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import {
   successResponse,

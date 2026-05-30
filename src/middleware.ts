@@ -27,11 +27,11 @@ export default auth((req) => {
 
 export const config = {
   matcher: [
-    '/my-map/:path*',
-    '/my-page/:path*',
-    '/my-travel/:path*',
-    '/login',
-    '/register',
-    // '/((?!_next/static|_next/image|favicon.ico).*)',
+    // '/my-map/:path*',
+    // '/my-page/:path*',
+    // '/my-travel/:path*',
+    // '/login',
+    // '/register',
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 };
