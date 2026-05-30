@@ -5,6 +5,8 @@
  * @description: ErrorBoundary에서 에러 발생 시 보여줄 공통 컴포넌트
  */
 
+'use client';
+
 import { AlertCircle, RefreshCcw, Home } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { useRouter } from 'next/navigation';
