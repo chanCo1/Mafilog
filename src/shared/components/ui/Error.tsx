@@ -1,5 +1,5 @@
 /**
- * @file: ErrorBoundary.tsx
+ * @file: Error.tsx
  * @author: chad
  * @since: 2026.05.30 ~
  * @description: ErrorBoundary에서 에러 발생 시 보여줄 공통 컴포넌트
@@ -8,21 +8,15 @@
 import { AlertCircle, RefreshCcw, Home } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { useRouter } from 'next/navigation';
+import { FallbackProps } from 'react-error-boundary';
 
-interface IErrorBoundary {
-  error: Error;
-  resetErrorBoundary: () => void;
-}
-
-export default function ErrorBoundary({
-  error,
-  resetErrorBoundary,
-}: IErrorBoundary) {
+export default function Error({ error, resetErrorBoundary }: FallbackProps) {
   const router = useRouter();
 
   // 💡 401 에러(인증 만료)인지 확인
   const isUnauthorized =
-    error.message.includes('401') || (error as any).response?.status === 401;
+    (error as Error).message.includes('401') ||
+    (error as any).response?.status === 401;
 
   return (
     <div className="flex h-full min-h-75 w-full flex-col items-center justify-center rounded-lg p-6 text-center">
