@@ -7,7 +7,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { convertTravelStyle } from '@/shared/lib/utils';
 import PageHeader from '@/shared/components/ui/PageHeader';
 import TravelStatus from '@/features/myTravel/components/detail/TravelStatus';
@@ -31,6 +31,9 @@ import { useGetMyTravelDetail } from '@/features/myTravel/hooks/rquery/myTravel/
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { ReturnButton } from '@/shared/components/ui/ReturnButton';
 import { useSearchParams } from 'next/navigation';
+import ScheduleSkeleton from '@/shared/components/skeleton/ScheduleSkeleton';
+import Error from '@/shared/components/ui/Error';
+import { ErrorBoundary } from 'react-error-boundary';
 
 export default function MyTravelDetailPage() {
   const travelId = useGetTravelId();
@@ -49,8 +52,6 @@ export default function MyTravelDetailPage() {
   const [isOpenCheckListModal, setIsOpenCheckListModal] = useState(false);
   const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
   const [isOpenSettelUpModal, setIsOpenSettelUpModal] = useState(false);
-
-  if (!myTravelDatail) return;
 
   return (
     <div className="flex flex-col gap-5">
@@ -147,10 +148,18 @@ export default function MyTravelDetailPage() {
       </div>
       <div className="relative">
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.SCHEDULE}>
-          <TravelScheduleView />
+          <ErrorBoundary fallbackRender={Error}>
+            <Suspense fallback={<ScheduleSkeleton />}>
+              <TravelScheduleView />
+            </Suspense>
+          </ErrorBoundary>
         </FadeInOutStyled>
         <FadeInOutStyled isShow={selectedTab === TRAVEL_TAB.EXPENSES}>
-          <TravelExpensesView />
+          <ErrorBoundary fallbackRender={Error}>
+            <Suspense fallback={<ScheduleSkeleton />}>
+              <TravelExpensesView />
+            </Suspense>
+          </ErrorBoundary>
         </FadeInOutStyled>
       </div>
 

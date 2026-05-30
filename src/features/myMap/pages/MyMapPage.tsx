@@ -18,8 +18,11 @@ import { TRAVEL_TYPE } from '@/shared/types/Enum';
 import CreateFillMemoryModal from '@/features/myMap/components/modal/CreateFillMemoryModal';
 import { useGetMemoryList } from '@/features/myMap/hooks/rquery/useGetMemoryList';
 import FillMemoryDetailModal from '@/features/myMap/components/modal/FillMemoryDetailModal';
+import { useSession } from 'next-auth/react';
 
 export default function MyMapPage() {
+  const { data: userInfo } = useSession();
+
   const [selectedMapType, setSelectedMapType] = useState<ILabelValue>(
     MAP_TRAVEL_TYPE_LIST[0],
   );
@@ -38,6 +41,7 @@ export default function MyMapPage() {
 
   const { data: memoryList } = useGetMemoryList(
     selectedMapType.value as string,
+    userInfo,
   );
 
   /** 추억 상세 모달에서 수정 클릭 시 */
@@ -51,7 +55,7 @@ export default function MyMapPage() {
   const handleCloseCreateMemoryModal = () => {
     setIsOpenFillModal(false);
     setIsFillMemoryModify(false);
-  }
+  };
 
   return (
     <div className="flex h-full flex-col gap-5">

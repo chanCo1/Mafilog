@@ -5,17 +5,22 @@
  * @description: 내 여행 상세 조회
  */
 
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import MyTravelService from '@/features/myTravel/services/MyTravel.service';
 import { myTravelDetailKeys } from '@/features/myTravel/hooks/rquery/queryKeys';
+import { IMyTravelDetailResponse } from '@/features/myTravel/interfaces/myTravel.interface';
 
 export const useGetMyTravelDetail = (travelId: string) => {
   const queryKey = myTravelDetailKeys.detail(travelId);
 
-  const query = useQuery({
+  const query = useSuspenseQuery({
     queryKey,
-    queryFn: async () => await MyTravelService.getMyTravelDetail(travelId),
-    enabled: !!travelId,
+    queryFn: async () => {
+      if (!travelId) return {} as IMyTravelDetailResponse;
+
+      return await MyTravelService.getMyTravelDetail(travelId);
+    },
+    // enabled: !!travelId,
   });
 
   return {

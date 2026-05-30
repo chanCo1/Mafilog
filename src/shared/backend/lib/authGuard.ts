@@ -12,21 +12,21 @@ export async function authGuard(request: Request) {
   const authorization = request.headers.get('Authorization');
 
   /** 토큰의 존재 여부 */
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    return {
-      isValid: false,
-      errorResponse: NextResponse.json(
-        { error: '토큰이 누락되었거나 올바르지 않은 형식입니다.' },
-        { status: 401 },
-      ),
-    };
-  }
+  // if (!authorization || !authorization.startsWith('Bearer ')) {
+  //   return {
+  //     isValid: false,
+  //     errorResponse: NextResponse.json(
+  //       { error: '토큰이 누락되었거나 올바르지 않은 형식입니다.' },
+  //       { status: 401 },
+  //     ),
+  //   };
+  // }
 
-  const token = authorization.split(' ')[1];
+  // const token = authorization.split(' ')[1];
   const session = await auth();
 
   /** 토큰의 만료 여부 */
-  if (!session || !session.user || session.accessToken !== token) {
+  if (!session || !session.user) {
     return {
       isValid: false,
       errorResponse: NextResponse.json(

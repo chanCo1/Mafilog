@@ -31,6 +31,7 @@ export interface IScheduleListResponse {
   place: IPlaceList;
   time: string;
   memo: string;
+  order?: number;
   scheduleId: number;
   schedulePlaceId: string;
 }

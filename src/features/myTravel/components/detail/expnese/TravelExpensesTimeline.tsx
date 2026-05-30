@@ -18,6 +18,8 @@ import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModa
 import { useCountriesDataStore } from '@/shared/stores/useCountriesDataStore';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useDeleteExpense } from '@/features/myTravel/hooks/rquery/expense/useDeleteExpense';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface ITravelExpensesTimeline {
   expense?: IExpenseList;
@@ -42,6 +44,22 @@ export default function TravelExpensesTimeline({
     (_expense) => _expense.id === expense?.id,
   );
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: expense?.id.toString() || 'empty' });
+
+  const dragStyle = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 'auto',
+    opacity: isDragging ? 0.6 : 1,
+  };
+
   /** 지출 삭제 핸들러 */
   const handleDeleteExpense = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -59,6 +77,7 @@ export default function TravelExpensesTimeline({
     });
   };
 
+  /** 카드 클릭 */
   const onClickCard = () => {
     if (selectMode && expense) {
       toggleSelect(expense); // 선택 모드일 땐 토글만
@@ -87,7 +106,7 @@ export default function TravelExpensesTimeline({
   }, [expense?.spenderType, expense?.spender]);
 
   return (
-    <div className="flex w-full gap-3">
+    <div className="flex w-full gap-3" ref={setNodeRef} style={dragStyle}>
       <div className="flex flex-col items-center justify-center pb-2.5">
         <div className="shrink-0">
           <CategoryIcon
@@ -105,6 +124,7 @@ export default function TravelExpensesTimeline({
             selectMode={selectMode!}
             isSelected={isSelected}
             isLoading={isDeletePending}
+            dragListeners={{ ...attributes, ...listeners }}
           >
             <div className="flex flex-col">
               <div className="flex items-baseline gap-1">

@@ -14,12 +14,15 @@ import { useSession } from 'next-auth/react';
 import CreateNewTravelModal from '@/features/myTravel/components/modal/CreateNewTravelModal';
 import TravelListCard from '@/features/myTravel/components/main/TravelListCard';
 import { useGetMyTravelList } from '@/features/myTravel/hooks/rquery/myTravel/useGetMyTravelList';
+import CardSkeleton from '@/shared/components/skeleton/CardGridSkeleton';
 
 export default function UpcomingContainer() {
   const [isOpenCreateNewModal, setIsOpenCretateNewModal] = useState(false);
 
   const { data: userInfo } = useSession();
-  const { data: travelList } = useGetMyTravelList(userInfo?.user?.id);
+  const { data: travelList, isLoading } = useGetMyTravelList(
+    userInfo?.user?.id,
+  );
 
   const router = useRouter();
 
@@ -33,17 +36,23 @@ export default function UpcomingContainer() {
               여행 만들기
             </Button>
           </div>
-          {travelList?.upcoming.length ? (
-            <div className="mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 grid gap-4">
-              {travelList?.upcoming.map((travel) => (
-                <TravelListCard
-                  key={`${travel.id}`}
-                  travel={travel}
-                  onClick={() => router.push(`/my-travel/${travel.id}`)}
-                />
-              ))}
-            </div>
-          ) : (
+          {isLoading && <CardSkeleton />}
+
+          {!isLoading &&
+            travelList?.upcoming &&
+            travelList.upcoming.length > 0 && (
+              <div className="mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 grid gap-4">
+                {travelList?.upcoming.map((travel) => (
+                  <TravelListCard
+                    key={`${travel.id}`}
+                    travel={travel}
+                    onClick={() => router.push(`/my-travel/${travel.id}`)}
+                  />
+                ))}
+              </div>
+            )}
+
+          {!isLoading && travelList?.upcoming.length === 0 && (
             <p className="text-text-secondary">
               다가오는 여행이 없어요! 다음 여행지는 어디인가요?
             </p>

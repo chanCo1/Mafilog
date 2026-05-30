@@ -148,6 +148,8 @@ export default function AmchartMap({
           return;
         }
 
+        if (readonly || !memoryListRef.current) return;
+
         if (isTouchDevice) {
           if (activePolygonRef.current !== target) {
             if (activePolygonRef.current) {
@@ -166,8 +168,6 @@ export default function AmchartMap({
           target.set('active', true);
           activePolygonRef.current = target;
         }
-
-        if (readonly || !memoryListRef.current) return;
 
         const memory = memoryListRef.current?.find(
           (_memory) => _memory.mapId === dataContext?.id,
@@ -259,6 +259,7 @@ export default function AmchartMap({
     return () => {
       root.dispose();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -268,7 +269,11 @@ export default function AmchartMap({
 
     polygonSeries.events.once('datavalidated', () => {
       polygonSeries.mapPolygons.each((polygon) => {
-        const dataContext = polygon.dataItem?.dataContext as any;
+        const dataContext = polygon.dataItem?.dataContext as {
+          id: string;
+          korName: string;
+          name: string;
+        };
         const id = dataContext?.id;
 
         // 국내/해외 지역명
@@ -331,7 +336,7 @@ export default function AmchartMap({
     });
 
     if (polygonSeries.dataItems.length > 0) {
-      polygonSeries.events.dispatch('datavalidated' as any, {
+      polygonSeries.events.dispatch('datavalidated', {
         type: 'datavalidated',
         target: polygonSeries,
       });

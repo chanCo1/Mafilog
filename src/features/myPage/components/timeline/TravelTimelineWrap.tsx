@@ -9,28 +9,27 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import TimelineCard from '@/features/myPage/components/timeline/TimelineCard';
 import TimelineStatisticModal from '@/features/myPage/components/timeline/modal/TimelineStatisticModal';
-import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/timeline/useGetMyTimelineList';
 import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.interface';
 import { useDevice } from '@/shared/hooks/useDevice';
 
 interface ITravelTimelineWrap {
+  myTimelineList: IMyTravelListResponse[];
   selectedTimeline: IMyTravelListResponse | null;
   setSelectedTimeline: Dispatch<SetStateAction<IMyTravelListResponse | null>>;
 }
 
 export default function TravelTimelineWrap({
+  myTimelineList,
   selectedTimeline,
   setSelectedTimeline,
 }: ITravelTimelineWrap) {
-  const { data: myTimelineList } = useGetMyTimelineList();
-
   const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
-  const { isMobile } = useDevice();
+  const { isDesktop } = useDevice();
 
   const handleTimeline = (travel: IMyTravelListResponse) => {
     setSelectedTimeline(travel);
 
-    if (!isMobile) return;
+    if (isDesktop) return;
     setIsOpenStatisticModal(true);
   };
 

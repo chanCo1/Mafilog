@@ -8,14 +8,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { memoryKeys } from '@/features/myMap/hooks/rquery/queryKeys';
 import MemoryService from '@/features/myMap/services/Memory.service';
+import { Session } from 'next-auth';
 
-export const useGetMemoryList = (mapType: string) => {
+export const useGetMemoryList = (mapType: string, userInfo: Session | null) => {
   const queryKey = memoryKeys.list(mapType);
 
   const query = useQuery({
     queryKey,
     queryFn: async () => await MemoryService.getMemoryList({ mapType }),
-    enabled: !!mapType,
+    enabled: !!mapType && !!userInfo,
     staleTime: 1000 * 60 * 5,
   });
 

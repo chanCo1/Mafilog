@@ -14,6 +14,20 @@ import { IExpenseResponse } from '@/features/myTravel/interfaces/expense.interfa
 import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable';
+import { useUpdateMoveExpenseList } from '@/features/myTravel/hooks/rquery/expense/useUpdateMoveExpenseList';
 
 interface ITravelExpensesDay {
   expense: IExpenseResponse;
@@ -24,21 +38,57 @@ export default function TravelExpensesDay({
   expense,
   selectMode,
 }: ITravelExpensesDay) {
+  const expenseList = expense.expenseList;
+
   const travelId = useGetTravelId();
-  const { data: expenseList } = useGetTravelExpenses(travelId);
-  const { getDailyAllSpend } = useCalcExpense(expenseList ?? []);
+  /** 모든 일정의 지출 리스트 */
+  const { data: expenseAllList } = useGetTravelExpenses(travelId);
+  const { getDailyAllSpend } = useCalcExpense(expenseAllList ?? []);
+  const { mutateAsync: updateExpenseList } =
+      useUpdateMoveExpenseList(travelId);
 
   const { selectedExpenses, toggleDayAll } = useSelectExpenses();
 
   // 현재 일차의 list 아이템들이 모두 selectedSchedules에 포함되어 있는지 확인
   const isAllSelected =
-    expense.expenseList.length > 0 &&
-    expense.expenseList.every((item) =>
+    expenseList.length > 0 &&
+    expenseList.every((item) =>
       selectedExpenses.some((selected) => selected.id === item.id),
     );
 
   const handleAllCheck = (checked: boolean | ILabelValue[]) => {
-    toggleDayAll(expense.expenseList, !checked as boolean);
+    toggleDayAll(expenseList, !checked as boolean);
+  };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        tolerance: 5,
+        delay: 200,
+      },
+    }),
+  );
+
+  /** 드래그 핸들링 */
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    // 제자리에 놓았거나 유효하지 않은 곳에 놓으면 무시
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = expenseList.findIndex(
+      (list) => list.id.toString() === active.id,
+    );
+    const newIndex = expenseList.findIndex(
+      (list) => list.id.toString() === over.id,
+    );
+
+    const newOrderedItems = arrayMove(expenseList, oldIndex, newIndex);
+
+    await updateExpenseList({
+      expenseId: expense.id,
+      newOrderedItems,
+    });
   };
 
   return (
@@ -66,16 +116,25 @@ export default function TravelExpensesDay({
         </div>
       </div>
       <div className="flex flex-col">
-        {expense.expenseList.length ? (
-          <>
-            {expense.expenseList.map((_data, index) => (
-              <TravelExpensesTimeline
-                key={`${_data?.id}-${index}`}
-                expense={_data}
-                selectMode={selectMode}
-              />
-            ))}
-          </>
+        {expenseList.length ? (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <SortableContext
+              items={expenseList.map((item) => item.id.toString())}
+              strategy={verticalListSortingStrategy}
+            >
+              {expenseList.map((_data) => (
+                <TravelExpensesTimeline
+                  key={_data.id}
+                  expense={_data}
+                  selectMode={selectMode}
+                />
+              ))}
+            </SortableContext>
+          </DndContext>
         ) : (
           <TravelExpensesTimeline />
         )}

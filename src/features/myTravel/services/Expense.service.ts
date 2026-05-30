@@ -53,7 +53,7 @@ class _ExpenseService {
     return response.data.data;
   }
 
-  // /** 일정 선택 이동 */
+  /** 지출 선택 이동 */
   async updateBulkTravelExpenseDate(
     travelId: string,
     data: { moveIds: number[]; targetDay: number },
@@ -61,6 +61,18 @@ class _ExpenseService {
     const response = await axiosInstanceWithAuth.patch(
       `${API_URL}/${travelId}/expenses/bulk-move`,
       data,
+    );
+    return response.data.data;
+  }
+
+  /** 지출 순서 이동 */
+  async updateMoveTravelExpenseList(
+    travelId: string,
+    orderedItems: { id: number; order: number }[],
+  ) {
+    const response = await axiosInstanceWithAuth.patch(
+      `${API_URL}/${travelId}/expenses/order`,
+      { orderedItems },
     );
     return response.data.data;
   }

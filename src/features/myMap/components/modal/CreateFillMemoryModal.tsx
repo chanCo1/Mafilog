@@ -29,7 +29,7 @@ import { useUpdateMemory } from '@/features/myMap/hooks/rquery/useUpdateMemory';
 interface ICreateFillMemoryModal {
   isOpen: boolean;
   handleClose: () => void;
-  isModify?: boolean;
+  isModify: boolean;
   selectedMapType: string;
   selectedMapId: string | undefined;
   setSelectedMapId: Dispatch<SetStateAction<string | undefined>>;
@@ -348,6 +348,7 @@ export default function CreateFillMemoryModal({
             setSeletedDate={setSeletedDate}
             loadSchedules={loadSchedules}
             setLoadSchedules={setLoadSchedules}
+            isModify={isModify}
           />
         </FadeInOutStyled>
         <FadeInOutStyled isShow={currentStep === 2}>
