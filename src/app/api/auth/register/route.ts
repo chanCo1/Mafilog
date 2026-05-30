@@ -6,7 +6,7 @@
  */
 
 import { prisma } from '@/shared/lib/prisma';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { getHexCode } from '@/shared/lib/utils';
 import {
   successResponse,
