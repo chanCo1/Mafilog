@@ -18,6 +18,7 @@ import { IMyTravelListResponse } from '@/features/myTravel/interfaces/myTravel.i
 import { useGetTravelExpenses } from '@/features/myTravel/hooks/rquery/expense/useGetTravelExpense';
 import { useCalcExpense } from '@/features/myTravel/hooks/useCalcExpense';
 import CurrencySpend from '@/features/myTravel/components/detail/expnese/CurrencySpend';
+import StatisticsSkeleton from '@/shared/components/skeleton/StatisticsSkeleton';
 
 interface ITimelineStatistic {
   selectedTimeline: IMyTravelListResponse;
@@ -26,9 +27,11 @@ interface ITimelineStatistic {
 export default function TimelineStatistic({
   selectedTimeline,
 }: ITimelineStatistic) {
-  const { data: expenseList } = useGetTravelExpenses(
+  const { data: expenseList, isLoading } = useGetTravelExpenses(
     selectedTimeline?.id.toString(),
   );
+  console.log('is >>> ', isLoading)
+
   const {
     getAllTotalMySpend,
     getCategoryMySpend,
@@ -99,7 +102,9 @@ export default function TimelineStatistic({
         ) : null}
       </div>
 
-      {getAllTotalMySpend ? (
+      {isLoading && <StatisticsSkeleton />}
+
+      {!isLoading && getAllTotalMySpend ? (
         <>
           <div>
             <DoughnutChart

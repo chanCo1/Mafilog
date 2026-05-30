@@ -215,12 +215,12 @@ export default function AddPlaceModal({
           }
         />
         <div className="max-mobile:h-40 h-60 overflow-hidden rounded-lg">
-          <GoogleMap
+          {/* <GoogleMap
             places={clickedPlace}
             id="placeMap"
             mapId={process.env.NEXT_PUBLIC_GOOGLE_MAP_ID as string}
             isSingle
-          />
+          /> */}
         </div>
         <div className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-auto">
           {placeList.length ? (

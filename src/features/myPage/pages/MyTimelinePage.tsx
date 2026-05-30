@@ -16,22 +16,24 @@ import { useGetMyTimelineList } from '@/features/myPage/hooks/rquery/timeline/us
 import { useGetTimelineDashboard } from '@/features/myPage/hooks/rquery/timeline/useGetTimelineDashboard';
 import { convertComma } from '@/shared/lib/utils';
 import { useDevice } from '@/shared/hooks/useDevice';
+import TimeLineListSkeleton from '@/shared/components/skeleton/TimeLineListSkeleton';
+import StatisticsSkeleton from '@/shared/components/skeleton/StatisticsSkeleton';
 
 export default function MyTimelinePage() {
   const [selectedTimeline, setSelectedTimeline] =
     useState<IMyTravelListResponse | null>(null);
 
-  const { data: myTimelineList } = useGetMyTimelineList();
+  const { data: myTimelineList, isLoading } = useGetMyTimelineList();
   const { data: timelineDashboard } = useGetTimelineDashboard();
-  const {isMobile} = useDevice();
+  const { isMobile, isDesktop, isTablet } = useDevice();
 
   useEffect(() => {
-    if (!isMobile) {
+    if (!isMobile && (isTablet || isDesktop)) {
       if (myTimelineList) {
         setSelectedTimeline(myTimelineList[0]);
       }
     }
-  }, [myTimelineList]);
+  }, [isMobile, isDesktop, isTablet, myTimelineList]);
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -70,20 +72,30 @@ export default function MyTimelinePage() {
         </TravelAccDataCard>
       </div>
 
-      {myTimelineList?.length ? (
+      {isLoading && (
+        <div className="max-desktop:grid-cols-1 grid grid-cols-2 gap-2">
+          <TimeLineListSkeleton />
+          {isDesktop && <StatisticsSkeleton />}
+        </div>
+      )}
+
+      {!isLoading && myTimelineList && myTimelineList.length > 0 && (
         <div className="max-desktop:grid-cols-1 grid grid-cols-2 gap-2">
           <TravelTimelineWrap
+            myTimelineList={myTimelineList}
             selectedTimeline={selectedTimeline}
             setSelectedTimeline={setSelectedTimeline}
           />
-          {selectedTimeline && (
-            <div className="max-desktop:hidden">
+          {isDesktop && selectedTimeline && (
+            <div>
               <TimelineStatistic selectedTimeline={selectedTimeline} />
             </div>
           )}
         </div>
-      ) : (
-        <div className="text-center pt-6">
+      )}
+
+      {!isLoading && !myTimelineList?.length && (
+        <div className="pt-6 text-center">
           <span className="text-text-secondary">
             아직 다녀온 여행 없어요. 타임라인을 완성해 보세요!
           </span>
