@@ -50,8 +50,6 @@ export default function MyTravelDetailPage() {
   const [isOpenStatisticModal, setIsOpenStatisticModal] = useState(false);
   const [isOpenSettelUpModal, setIsOpenSettelUpModal] = useState(false);
 
-  if (!myTravelDatail) return;
-
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-1">
