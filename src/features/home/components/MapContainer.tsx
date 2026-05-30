@@ -15,8 +15,7 @@ import { MAP_TRAVEL_TYPE_LIST } from '@/shared/constants';
 import { ILabelValue } from '@/shared/interfaces';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
 import { useSession } from 'next-auth/react';
-
-// interface IMapContainer {}
+import { useGetMemoryList } from '@/features/myMap/hooks/rquery/useGetMemoryList';
 
 export default function MapContainer() {
   const { data: userInfo } = useSession();
@@ -24,6 +23,8 @@ export default function MapContainer() {
   const [selectedMap, setSelectedMap] = useState<ILabelValue>(
     MAP_TRAVEL_TYPE_LIST[0],
   );
+
+  const { data: memoryList } = useGetMemoryList(selectedMap.value as string);
 
   const isWorld = selectedMap.value === TRAVEL_TYPE.WORLD;
   const isDomestic = selectedMap.value === TRAVEL_TYPE.DOMESTIC;
@@ -45,18 +46,24 @@ export default function MapContainer() {
           onChange={(value) => setSelectedMap(value)}
         />
       </div>
-      {isWorld && <AmchartMap readonly setSelectedMapType={setSelectedMap} />}
-      {isDomestic && <AmchartMap isDomestic readonly />}
+      {isWorld && (
+        <AmchartMap
+          setSelectedMapType={setSelectedMap}
+          memoryList={memoryList}
+          readonly
+        />
+      )}
+      {isDomestic && <AmchartMap isDomestic memoryList={memoryList} readonly />}
       {userInfo && (
         <div className="flex items-center justify-center font-bold">
           {isDomestic ? (
             <div>
-              국내 <span className="text-primary">{0}개 도시</span>가 추억으로
+              국내 <span className="text-primary">{memoryList?.length}개 도시</span>가 추억으로
               채워졌어요
             </div>
           ) : (
             <div>
-              해외 <span className="text-primary">{0}개국</span>이 추억으로
+              해외 <span className="text-primary">{memoryList?.length}개국</span>이 추억으로
               채워졌어요
             </div>
           )}

@@ -148,6 +148,8 @@ export default function AmchartMap({
           return;
         }
 
+        if (readonly || !memoryListRef.current) return;
+
         if (isTouchDevice) {
           if (activePolygonRef.current !== target) {
             if (activePolygonRef.current) {
@@ -166,8 +168,6 @@ export default function AmchartMap({
           target.set('active', true);
           activePolygonRef.current = target;
         }
-
-        if (readonly || !memoryListRef.current) return;
 
         const memory = memoryListRef.current?.find(
           (_memory) => _memory.mapId === dataContext?.id,
@@ -259,6 +259,7 @@ export default function AmchartMap({
     return () => {
       root.dispose();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
