@@ -21,6 +21,7 @@ export const useGetMyTravelDetail = (travelId: string) => {
       return await MyTravelService.getMyTravelDetail(travelId);
     },
     // enabled: !!travelId,
+    staleTime: 1000 * 60 * 60 * 1,
   });
 
   return {
