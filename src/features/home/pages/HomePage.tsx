@@ -7,8 +7,8 @@
  * @description: HomePage 컴포넌트
  */
 
-import React, { useEffect } from 'react';
-import { cn, getTravelStatus } from '@/shared/lib/utils';
+import { useEffect } from 'react';
+import { cn } from '@/shared/lib/utils';
 import { DEFAULT_LAYOUT_CLASSNAME } from '@/shared/constants';
 import { LogoText } from '@/shared/components/ui/LogoText';
 import LogoDescription from '@/features/home/components/LogoDescription';

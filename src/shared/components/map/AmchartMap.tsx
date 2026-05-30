@@ -269,7 +269,11 @@ export default function AmchartMap({
 
     polygonSeries.events.once('datavalidated', () => {
       polygonSeries.mapPolygons.each((polygon) => {
-        const dataContext = polygon.dataItem?.dataContext as any;
+        const dataContext = polygon.dataItem?.dataContext as {
+          id: string;
+          korName: string;
+          name: string;
+        };
         const id = dataContext?.id;
 
         // 국내/해외 지역명
@@ -332,7 +336,7 @@ export default function AmchartMap({
     });
 
     if (polygonSeries.dataItems.length > 0) {
-      polygonSeries.events.dispatch('datavalidated' as any, {
+      polygonSeries.events.dispatch('datavalidated', {
         type: 'datavalidated',
         target: polygonSeries,
       });

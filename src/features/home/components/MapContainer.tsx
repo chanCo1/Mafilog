@@ -24,7 +24,10 @@ export default function MapContainer() {
     MAP_TRAVEL_TYPE_LIST[0],
   );
 
-  const { data: memoryList } = useGetMemoryList(selectedMap.value as string);
+  const { data: memoryList } = useGetMemoryList(
+    selectedMap.value as string,
+    userInfo,
+  );
 
   const isWorld = selectedMap.value === TRAVEL_TYPE.WORLD;
   const isDomestic = selectedMap.value === TRAVEL_TYPE.DOMESTIC;
@@ -58,13 +61,15 @@ export default function MapContainer() {
         <div className="flex items-center justify-center font-bold">
           {isDomestic ? (
             <div>
-              국내 <span className="text-primary">{memoryList?.length}개 도시</span>가 추억으로
-              채워졌어요
+              국내{' '}
+              <span className="text-primary">{memoryList?.length}개 도시</span>
+              가 추억으로 채워졌어요
             </div>
           ) : (
             <div>
-              해외 <span className="text-primary">{memoryList?.length}개국</span>이 추억으로
-              채워졌어요
+              해외{' '}
+              <span className="text-primary">{memoryList?.length}개국</span>이
+              추억으로 채워졌어요
             </div>
           )}
         </div>
