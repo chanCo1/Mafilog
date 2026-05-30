@@ -7,12 +7,16 @@
 
 import { Skeleton } from '@/shared/components/skeleton/Skeleton';
 
-export default function CardSkeleton() {
+interface ICardSkeleton {
+  cardCount?: number;
+}
+
+export default function CardSkeleton({ cardCount = 3 }: ICardSkeleton) {
   return (
-    <div className='grid grid-cols-3 gap-4'>
-      <Skeleton size='xxxl' />
-      <Skeleton size='xxxl' />
-      <Skeleton size='xxxl' />
+    <div className="grid grid-cols-3 gap-4 w-full">
+      {Array.from({ length: cardCount }).map((_, index) => (
+        <Skeleton key={index} size="xxxl" />
+      ))}
     </div>
   );
 }

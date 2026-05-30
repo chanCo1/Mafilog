@@ -100,6 +100,7 @@ export default function RegisterPage() {
             placeholder="이름(아이디)을 입력해주세요"
             errorMsg={errors.name?.message}
             description="한글, 영문, 숫자, 최대 10글자 입력 가능"
+            maxLength={10}
             {...register('name')}
           />
           <Input
