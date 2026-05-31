@@ -181,7 +181,7 @@ export default function AddPlaceModal({
         </>
       }
     >
-      <div className="flex h-full flex-col gap-2">
+      <div className="flex h-full flex-col gap-5">
         <Selectbox
           label="여행 일정 선택"
           options={travelDayList}
