@@ -5,7 +5,6 @@ import DefaultLayout from '@/shared/components/layout/DefaultLayout';
 import Providers from '@/shared/components/Providers';
 import { auth } from '@/app/api/[...nextauth]/route';
 
-
 /** 로고용 폰트 */
 const fontAkaya = Akaya_Telivigala({
   subsets: ['latin'],
@@ -24,6 +23,18 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: '매필로그: Mafilog',
   description: '지도에 색칠하듯 기록하기 쉬운 여행',
+  metadataBase: new URL('https://mafilog-app.vercel.app'),
+  openGraph: {
+    title: '매필로그: Mafilog',
+    description: '지도에 색칠하듯 기록하기 쉬운 여행',
+    images: [
+      {
+        url: '/mafilog_thumbnail.png',
+        width: 1200,
+        height: 630,
+      },
+    ],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
