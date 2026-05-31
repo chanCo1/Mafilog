@@ -130,7 +130,8 @@ export default function LoginPage() {
             alt="카카오 소셜 로그인 이미지"
             width='300'
             height='100'
-            className="cursor-pointer object-contain"
+            priority
+            className="cursor-pointer object-contain w-auto h-auto"
             onClick={() => handleSocialLogin('kakao')}
           />
           {/* <Image

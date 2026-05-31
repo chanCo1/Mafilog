@@ -91,7 +91,7 @@ export default function MyMapPage() {
                 </div>
               ) : (
                 <span className="text-text-secondary">
-                  지도가 비어있어요. 나만의 세계 여행 지도를 채워보세요
+                  지도가 비어있어요 나만의 세계 여행 지도를 채워보세요
                 </span>
               )}
             </div>
@@ -120,7 +120,7 @@ export default function MyMapPage() {
                 </div>
               ) : (
                 <span className="text-text-secondary">
-                  아직 채워진 도시가 없어요. 소중한 첫 번째 추억을 남겨보세요.
+                  아직 채워진 도시가 없어요 소중한 첫 번째 추억을 남겨보세요
                 </span>
               )}
             </div>

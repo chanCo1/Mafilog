@@ -30,7 +30,6 @@ export default function TimelineStatistic({
   const { data: expenseList, isLoading } = useGetTravelExpenses(
     selectedTimeline?.id.toString(),
   );
-  console.log('is >>> ', isLoading)
 
   const {
     getAllTotalMySpend,
