@@ -19,11 +19,11 @@ interface IGetDiffTime {
 }
 
 export const useGetDiffTime = ({ targetTimeZone }: IGetDiffTime) => {
-  if (!targetTimeZone) return;
-
-  const day = dayjs();
-
+  
   const getTime = useMemo(() => {
+    const day = dayjs();
+    if (!targetTimeZone) return null;
+
     const seoulTime = day.tz('Asia/Seoul');
     const targetTime = day.tz(targetTimeZone);
 

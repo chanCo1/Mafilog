@@ -6,7 +6,12 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { cn, roundDecimal, getTravelDayList } from '@/shared/lib/utils';
+import {
+  cn,
+  roundDecimal,
+  getTravelDayList,
+  getTravelCurrentDay,
+} from '@/shared/lib/utils';
 import { Chip } from '@/shared/components/ui/Chip';
 import { SideModal } from '@/shared/components/ui/SideModal';
 import { Button } from '@/shared/components/ui/Button';
@@ -39,6 +44,7 @@ import { useDeleteExpense } from '@/features/myTravel/hooks/rquery/expense/useDe
 import { useUpdateExpense } from '@/features/myTravel/hooks/rquery/expense/useUpdateExpense';
 import { useRouter } from 'next/navigation';
 import { TRAVEL_TAB } from '@/shared/types/Enum';
+import { format } from 'date-fns';
 
 interface IAddExpenseModal {
   isModify?: boolean;
@@ -96,7 +102,7 @@ export default function AddExpenseModal({
   /** 계산 수식 */
   const [calcFormula, setCalcFormula] = useState('');
 
-  const currentTravelId = useGetTravelId() || travelId as string;
+  const currentTravelId = useGetTravelId() || (travelId as string);
   const { data: travelInfo } = useGetMyTravelDetail(currentTravelId);
   const { data: expenseList } = useGetTravelExpenses(currentTravelId);
   const { mutateAsync: deleteExpense, isPending: isDeletePending } =
@@ -163,7 +169,7 @@ export default function AddExpenseModal({
 
     onClickCloseBtn();
     if (travelId) {
-      router.push(`/my-travel/${travelId}?tab=${TRAVEL_TAB.EXPENSES}`)
+      router.push(`/my-travel/${travelId}?tab=${TRAVEL_TAB.EXPENSES}`);
     }
   };
 
@@ -194,19 +200,24 @@ export default function AddExpenseModal({
 
   /** 지출 추가 모달 리셋 */
   const resetData = useCallback(() => {
+    const currentTravelDay = travelDayList.find(
+      (list) =>
+        list.value === getTravelCurrentDay(travelInfo.from, travelInfo.to),
+    );
+
     if (travelInfo) {
       setExpenseName('');
       setSelectedSpenderType(SPENDER_TYPE_LIST[0].value);
       setSelectedPaymentType(PAYMENT_TYPE_LIST[0].value);
       setSelectedCategory(EXPENSE_CATEGORY_LIST[2].value);
-      setSelectedTime('');
+      setSelectedTime(format(new Date(), 'HH:mm'));
       setInputMemo('');
       setCurrencyCode({ label: '', value: '' });
       setExchangeRateAmount(0);
       setExpenseAmount(0);
       setCalcExchangeAmount(0);
       setCalcFormula('');
-      setSelectedDay(travelDayList?.[0]);
+      setSelectedDay(currentTravelDay ?? travelDayList?.[0]);
       setSelectPayer({
         label: travelInfo.member[0].name,
         value: travelInfo.member[0].userId,
@@ -261,7 +272,7 @@ export default function AddExpenseModal({
 
   /** 초기값 대입 */
   useEffect(() => {
-    if (!isOpen) return;``
+    if (!isOpen) return;
 
     if (isModify && expense) {
       setExpenseName(expense.name);

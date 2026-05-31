@@ -117,16 +117,12 @@ export default function CreateNewTravelStep3({
             return (
               <div key={`${member}-${index}`}>
                 {member.id === editMemberId ? (
-                  <>
-                    <InlineInput
-                      onSubmit={(name) =>
-                        handleUpdateMember(member.id, name)
-                      }
-                      submitText="수정"
-                      defaultValue={member.name}
-                      onCancel={() => setEditMembeId('')}
-                    />
-                  </>
+                  <InlineInput
+                    onSubmit={(name) => handleUpdateMember(member.id, name)}
+                    submitText="수정"
+                    defaultValue={member.name}
+                    onCancel={() => setEditMembeId('')}
+                  />
                 ) : (
                   <div className="flex items-center gap-1">
                     <div className="flex items-center gap-1">

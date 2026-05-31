@@ -149,90 +149,95 @@ export default function CheckListModal({
         <div className="scrollbar-hide flex flex-1 flex-col gap-4 overflow-auto">
           {isLoading && <ChecklistSkeleton />}
 
-          {!isLoading && filteredCheckList?.map((list, index) => {
-            const currentStatus = editStatus[list.id] || null;
+          {!isLoading &&
+            filteredCheckList?.map((list, index) => {
+              const currentStatus = editStatus[list.id] || null;
 
-            return (
-              <div key={index} className="flex flex-col gap-1">
-                <div className="flex items-center justify-between">
-                  {currentStatus === 'editCategory' ? (
-                    <EditCategoryName
-                      target={list}
-                      changeStatus={changeStatus}
-                    />
-                  ) : (
-                    <p className="font-bold">{list.label}</p>
-                  )}
-                  {currentStatus !== 'editCategory' && (
-                    <Dropdown
-                      trigger={
-                        <EllipsisVertical className="h-4 w-4 cursor-pointer" />
-                      }
-                    >
-                      <CategoryDropdown
-                        list={list}
+              return (
+                <div key={index} className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    {currentStatus === 'editCategory' ? (
+                      <EditCategoryName
+                        target={list}
                         changeStatus={changeStatus}
                       />
-                    </Dropdown>
-                  )}
-                </div>
-                <div className="flex flex-col gap-3">
-                  {list.items.map((item, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <Checkbox
-                        value={item.isChecked}
-                        checkboxLabel={item.label}
-                        isCheckList={item.isChecked}
-                        onChange={() =>
-                          updateChecklistItem({
-                            travelId,
-                            requestData: {
-                              type: 'ITEM',
-                              categoryId: list.id,
-                              itemId: item.id,
-                              isChecked: !item.isChecked,
-                            },
-                          })
-                        }
-                      />
-                      <div
-                        className="text-state-error cursor-pointer text-sm font-bold"
-                        onClick={() =>
-                          deleteChecklistItem({
-                            travelId,
-                            requestData: {
-                              type: 'ITEM',
-                              categoryId: list.id,
-                              itemId: item.id,
-                            },
-                          })
+                    ) : (
+                      <p className="font-bold">{list.label}</p>
+                    )}
+                    {currentStatus !== 'editCategory' && (
+                      <Dropdown
+                        trigger={
+                          <EllipsisVertical className="h-4 w-4 cursor-pointer" />
                         }
                       >
-                        삭제
-                      </div>
-                    </div>
-                  ))}
-                  <div className="flex items-center gap-1">
-                    <CategoryIcon
-                      variant="plus"
-                      size="sm"
-                      circled={currentStatus === 'addItem' ? 'none' : 'outline'}
-                      className={
-                        currentStatus === 'addItem' ? 'none' : 'cursor-pointer'
-                      }
-                      onClick={() => changeStatus(list.id, 'addItem')}
-                    />
-                    {currentStatus === 'addItem' && (
-                      <AddCheckListItem
-                        list={list}
-                        changeStatus={changeStatus}
-                      />
+                        <CategoryDropdown
+                          list={list}
+                          changeStatus={changeStatus}
+                        />
+                      </Dropdown>
                     )}
                   </div>
+                  <div className="flex flex-col gap-3">
+                    {list.items.map((item, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <Checkbox
+                          value={item.isChecked}
+                          checkboxLabel={item.label}
+                          isCheckList={item.isChecked}
+                          onChange={() =>
+                            updateChecklistItem({
+                              travelId,
+                              requestData: {
+                                type: 'ITEM',
+                                categoryId: list.id,
+                                itemId: item.id,
+                                isChecked: !item.isChecked,
+                              },
+                            })
+                          }
+                        />
+                        <div
+                          className="text-state-error cursor-pointer text-sm font-bold"
+                          onClick={() =>
+                            deleteChecklistItem({
+                              travelId,
+                              requestData: {
+                                type: 'ITEM',
+                                categoryId: list.id,
+                                itemId: item.id,
+                              },
+                            })
+                          }
+                        >
+                          삭제
+                        </div>
+                      </div>
+                    ))}
+                    <div className="flex items-center gap-1">
+                      <CategoryIcon
+                        variant="plus"
+                        size="sm"
+                        circled={
+                          currentStatus === 'addItem' ? 'none' : 'outline'
+                        }
+                        className={
+                          currentStatus === 'addItem'
+                            ? 'none'
+                            : 'cursor-pointer'
+                        }
+                        onClick={() => changeStatus(list.id, 'addItem')}
+                      />
+                      {currentStatus === 'addItem' && (
+                        <AddCheckListItem
+                          list={list}
+                          changeStatus={changeStatus}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       </div>
     </SideModal>
