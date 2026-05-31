@@ -20,7 +20,7 @@ function ExpensesBrief() {
       <div className="flex w-2/5 flex-col gap-4 p-4 bg-white rounded-md max-mobile:w-full">
         <div>
           <p className="text-xl font-bold break-keep">
-            쉽고 간편하게 지출내역을 <br /> 확인할 수 있습니다
+            쉽고 간편하게 지출내역을 <br /> 확인할 수 있어요
           </p>
           <p className="text-text-secondary break-keep">
             지출 내역만 입력해도 통계부터 정산금액까지 한번에 확인
@@ -41,7 +41,7 @@ function ExpensesBrief() {
           alt="가계부 차트 이미지"
           fill
           sizes='100%'
-          className="object-contain opacity-10"
+          className="object-fill opacity-10"
         />
         <div className="absolute top-1/2 left-1/2 flex w-3/4 -translate-x-1/2 -translate-y-1/2 flex-col gap-1.5">
           {EXPENSES_MOCK_DATA.map((data, index) => (

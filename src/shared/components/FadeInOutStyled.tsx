@@ -23,10 +23,10 @@ export default function FadeInOutStyled({
   return (
     <div
       className={cn(
-        'w-full transition-all duration-500 ease-in-out',
+        'w-full transition-all duration-300 ease-in-out h-full',
         isShow
           ? 'visible relative translate-y-0 opacity-100 z-10'
-          : 'invisible absolute top-0 left-0 h-0 overflow-hidden pointer-events-none translate-y-4 opacity-0',
+          : 'invisible absolute top-0 left-0 overflow-hidden pointer-events-none translate-y-4 opacity-0',
         clasName,
       )}
     >

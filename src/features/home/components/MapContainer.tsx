@@ -20,8 +20,13 @@ import { useGetMemoryList } from '@/features/myMap/hooks/rquery/useGetMemoryList
 export default function MapContainer() {
   const { data: userInfo } = useSession();
 
+  const mapStyeleOptions = MAP_TRAVEL_TYPE_LIST.map((list) => ({
+    ...list,
+    label: list.value === TRAVEL_TYPE.WORLD ? '세계' : (list.label as string),
+  }));
+
   const [selectedMap, setSelectedMap] = useState<ILabelValue>(
-    MAP_TRAVEL_TYPE_LIST[0],
+    mapStyeleOptions[0],
   );
 
   const { data: memoryList } = useGetMemoryList(
@@ -39,11 +44,11 @@ export default function MapContainer() {
         isDomestic ? 'max-mobile:h-80' : 'max-mobile:h-60',
       )}
     >
-      <p className="text-xl font-bold">채워진 추억들</p>
+      {userInfo && <p className="text-xl font-bold">채워진 추억들</p>}
       <div className="w-25">
         <Selectbox
           variant="none"
-          options={MAP_TRAVEL_TYPE_LIST}
+          options={mapStyeleOptions}
           value={selectedMap}
           addValueText="지도"
           onChange={(value) => setSelectedMap(value)}
@@ -62,14 +67,18 @@ export default function MapContainer() {
           {isDomestic ? (
             <div>
               국내{' '}
-              <span className="text-primary">{memoryList?.length}개 도시</span>
+              <span className="text-primary">
+                {memoryList?.length || 0}개 도시
+              </span>
               가 추억으로 채워졌어요
             </div>
           ) : (
             <div>
               해외{' '}
-              <span className="text-primary">{memoryList?.length}개국</span>이
-              추억으로 채워졌어요
+              <span className="text-primary">
+                {memoryList?.length || 0}개국
+              </span>
+              이 추억으로 채워졌어요
             </div>
           )}
         </div>
