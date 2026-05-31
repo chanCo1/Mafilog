@@ -53,7 +53,6 @@ export default function AddCheckListItem({
       <div className="flex shrink-0 gap-3">
         <div
           className="text-primary cursor-pointer font-bold"
-          // TODO: 아이템 추가 해야함
           onClick={handleAddItem}
         >
           추가

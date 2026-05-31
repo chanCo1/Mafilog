@@ -107,7 +107,7 @@ export default function CreateNewTravelStep1({
   };
 
   return (
-    <div className="flex h-full flex-col gap-3">
+    <div className="flex h-full flex-col gap-5">
       <div className="flex flex-col gap-1">
         <div className='flex items-center gap-1'>
           <span>어디로 가는 여행인가요?</span>
