@@ -62,13 +62,13 @@ export default function MapContainer() {
           {isDomestic ? (
             <div>
               국내{' '}
-              <span className="text-primary">{memoryList?.length}개 도시</span>
+              <span className="text-primary">{memoryList?.length || 0}개 도시</span>
               가 추억으로 채워졌어요
             </div>
           ) : (
             <div>
               해외{' '}
-              <span className="text-primary">{memoryList?.length}개국</span>이
+              <span className="text-primary">{memoryList?.length || 0}개국</span>이
               추억으로 채워졌어요
             </div>
           )}

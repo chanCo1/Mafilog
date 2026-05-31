@@ -13,7 +13,7 @@ interface ICardSkeleton {
 
 export default function CardSkeleton({ cardCount = 3 }: ICardSkeleton) {
   return (
-    <div className="grid grid-cols-3 gap-4 w-full">
+    <div className="grid mobile:grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4 w-full">
       {Array.from({ length: cardCount }).map((_, index) => (
         <Skeleton key={index} size="xxxl" />
       ))}
