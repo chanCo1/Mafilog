@@ -72,7 +72,8 @@ export default function CreateNewTravelModal({
   const { data: travelDetail } = useGetMyTravelDetail(travelId);
   const { mutateAsync: updateTravelDetail, isPending: isUpdatePending } =
     useUpdateMyTravel(travelId);
-  const { mutateAsync: deleteMyTravel } = useDeleteMyTravel();
+  const { mutateAsync: deleteMyTravel, isPending: isDeletePending } =
+    useDeleteMyTravel();
 
   const router = useRouter();
 
@@ -285,7 +286,12 @@ export default function CreateNewTravelModal({
           )}
         >
           {isModify && (
-            <Button variant="redOutline" onClick={handelDeleteTravel}>
+            <Button
+              variant="redOutline"
+              onClick={handelDeleteTravel}
+              disabled={isDeletePending}
+              isLoading={isDeletePending}
+            >
               삭제
             </Button>
           )}
