@@ -15,9 +15,9 @@ interface ILocalTimeInfo {
 
 export default function LocalTimeInfo({ selectedCity }: ILocalTimeInfo) {
   const getTime = useGetDiffTime({ targetTimeZone: selectedCity?.timezone });
-  if (!getTime) return null;
-
+  
   const diffTimeMsg = useMemo(() => {
+    if (!getTime) return null;
     if (getTime?.diffHours === undefined) return '';
 
     if (getTime.diffHours > 0) {

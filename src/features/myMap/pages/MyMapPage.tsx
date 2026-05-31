@@ -87,11 +87,11 @@ export default function MyMapPage() {
                   <span className="text-primary font-bold">
                     {memoryList?.length}개의 나라
                   </span>
-                  에 추억이 채워졌네요! 소중한 추억을 더 남겨보세요
+                  에 추억이 채워졌네요! 추억을 더 채워보세요
                 </div>
               ) : (
                 <span className="text-text-secondary">
-                  지도가 비어있어요 나만의 세계 여행 지도를 채워보세요
+                  지도가 비어있어요 나만의 세계 여행 추억을 채워보세요
                 </span>
               )}
             </div>
@@ -116,7 +116,7 @@ export default function MyMapPage() {
                   <span className="text-primary font-bold">
                     {memoryList?.length}개 도시
                   </span>
-                  에 추억이 채워졌네요! 소중한 추억을 더 남겨보세요
+                  에 추억이 채워졌네요! 지도를 더 채워보세요
                 </div>
               ) : (
                 <span className="text-text-secondary">

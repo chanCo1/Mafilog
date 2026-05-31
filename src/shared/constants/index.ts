@@ -15,7 +15,7 @@ export type MAP_TRAVEL_TYPE_LIST =
 
 /** 사진 업로드 수 */
 export const SINGLE_COUNT = 1;
-export const MULTIPLE_COUNT = 10;
+export const MULTIPLE_COUNT = 5;
 
 /** 사이드바 마이페이지 리스트 */
 export const MYPAGE_LIST = [
