@@ -59,7 +59,7 @@ export default function FileUpload({
     }
 
     return disabled || selectedImage.length === SINGLE_COUNT;
-  }, [selectedImage]);
+  }, [selectedImage, isMultiple, disabled]);
 
   /** 파일업로드 인풋 클릭 */
   const onClickFileSelect = () => {
@@ -75,7 +75,7 @@ export default function FileUpload({
       _targetFiles.length > MULTIPLE_COUNT ||
       selectedImage.length + _targetFiles.length > MULTIPLE_COUNT
     ) {
-      toast.error('이미지는 10개까지 선택할 수 있습니다');
+      toast.error('이미지는 5개까지 선택할 수 있습니다');
       return;
     }
 
@@ -187,7 +187,7 @@ export default function FileUpload({
         <Button disabled={isDisabled} onClick={onClickFileSelect}>
           <div className="flex flex-col items-center text-white">
             <ImagePlus size={20} />
-            <span className="text-xs">{`${selectedImage.length}/${isMultiple ? '10' : '1'}`}</span>
+            <span className="text-xs">{`${selectedImage.length}/${isMultiple ? '5' : '1'}`}</span>
           </div>
         </Button>
       </div>

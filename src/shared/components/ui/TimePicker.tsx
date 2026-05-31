@@ -19,6 +19,7 @@ import { useOutsideClick } from '@/shared/hooks/useOutsideClick';
 import { useDropdownDirection } from '@/shared/hooks/useDropdownDirection';
 import VaulBottomSheet from '@/shared/components/ui/VaulBottomSheet';
 import { useDevice } from '@/shared/hooks/useDevice';
+import { format } from 'date-fns';
 
 interface ITimePicker extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -53,7 +54,7 @@ export default function TimePicker({
   // addValueText,
   ...props
 }: ITimePicker) {
-  const {isMobile} = useDevice();
+  const { isMobile } = useDevice();
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useOutsideClick(() => setIsOpen(false));
@@ -66,8 +67,8 @@ export default function TimePicker({
   const HOURS = Array.from({ length: 24 }, (_, i) =>
     i.toString().padStart(2, '0'),
   );
-  const MINUTES = Array.from({ length: 12 }, (_, i) =>
-    (i * 5).toString().padStart(2, '0'),
+  const MINUTES = Array.from({ length: 60 }, (_, i) =>
+    (i * 1).toString().padStart(2, '0'),
   );
 
   const [selectedHour, setSeletedHour] = useState('');
@@ -101,8 +102,8 @@ export default function TimePicker({
         setSeletedHour(hour);
         setSeletedMinute(minute);
       } else {
-        setSeletedHour('');
-        setSeletedMinute('');
+        setSeletedHour(format(new Date(), 'HH'));
+        setSeletedMinute(format(new Date(), 'mm'));
       }
     }
   }, [isOpen, value]);
@@ -124,10 +125,10 @@ export default function TimePicker({
     });
 
     return () => cancelAnimationFrame(scrollTimer);
-  }, [isOpen]);
+  }, [isOpen, selectedHour, selectedMinute]);
 
   const renderOptions = () => (
-    <div className="flex max-h-50">
+    <div className="flex max-h-60">
       <ul ref={hourRef} className="scrollbar-hide flex-1 overflow-y-auto">
         {HOURS.map((_hour) => (
           <li
