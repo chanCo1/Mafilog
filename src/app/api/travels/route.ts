@@ -22,7 +22,7 @@ export async function POST(request: Request) {
   const authValidate = await authGuard(request);
   if (!authValidate.isValid) return authValidate.errorResponse;
 
-  const session = authValidate.session;
+  const currentUserId = authValidate.session?.user?.id;
 
   try {
     const formData = await request.formData();
@@ -40,11 +40,12 @@ export async function POST(request: Request) {
 
     const files = formData.getAll('imageUrl') as File[];
 
-    const currentUserId = session?.user?.id;
     const uploadedUrls = await uploadCloudinary({ files });
     const imageUrl = uploadedUrls.length ? uploadedUrls[0] : null;
     const fromDate = new Date(from);
     const toDate = new Date(to);
+
+    const travelDays = getTravelDayOfWeek(fromDate, toDate);
 
     // 겹치는 날짜 있는지 DB 조회
     const travelConflict = await prisma.travel.findFirst({
@@ -60,103 +61,83 @@ export async function POST(request: Request) {
     if (travelConflict)
       return errorResponse('해당 날짜에는 이미 등록된 여행이 있습니다.', 400);
 
-    await prisma.$transaction(async (tx) => {
-      // 여행 테이블에 저장
-      const newTravel = await tx.travel.create({
-        data: {
-          title,
-          from: new Date(from),
-          to: new Date(to),
-          travelType,
-          travelPartner,
-          travelPeriod,
-          travelStyles,
-          imageUrl: imageUrl || null,
-          user: {
-            connect: { id: currentUserId },
+    await prisma.$transaction(
+      async (tx) => {
+        // 여행 테이블에 저장
+        const newTravel = await tx.travel.create({
+          data: {
+            title,
+            from: fromDate,
+            to: toDate,
+            travelType,
+            travelPartner,
+            travelPeriod,
+            travelStyles,
+            imageUrl: imageUrl || null,
+            user: {
+              connect: { id: currentUserId },
+            },
           },
-        },
-      });
+        });
 
-      // 도시 테이블에 저장
-      if (cities && cities.length > 0) {
-        await Promise.all(
-          cities.map((city: IPlaceList) =>
-            tx.travelCity.create({
-              data: {
-                id: city.id,
-                name: city.name,
-                address: city.address,
-                timezone: city.timezone || null,
-                types: city.types,
-                lat: city.lat,
-                lng: city.lng,
-                countryName: city.countryName ?? '',
-                countryCode: city.countryCode ?? '',
-                travelId: newTravel.id,
-              },
-            }),
-          ),
-        );
-      }
+        // 도시 테이블에 저장
+        if (cities?.length > 0) {
+          await tx.travelCity.createMany({
+            data: cities.map((city: IPlaceList) => ({
+              id: city.id,
+              name: city.name,
+              address: city.address,
+              timezone: city.timezone || null,
+              types: city.types,
+              lat: city.lat,
+              lng: city.lng,
+              countryName: city.countryName ?? '',
+              countryCode: city.countryCode ?? '',
+              travelId: newTravel.id,
+            })),
+          });
+        }
 
-      // 멤버 테이블에 저장
-      if (member && member.length > 0) {
-        await Promise.all(
-          member.map((member: IMemberList) => {
-            return tx.travelMember.create({
-              data: {
-                name: member.name,
-                travelId: newTravel.id,
-                userId: member.id,
-              },
-            });
-          }),
-        );
-      }
+        // 멤버 테이블에 저장
+        if (member?.length > 0) {
+          await tx.travelMember.createMany({
+            data: member.map((m: IMemberList) => ({
+              name: m.name,
+              travelId: newTravel.id,
+              userId: m.id,
+            })),
+          });
+        }
 
-      // 스케줄 테이블에 기간별 저장
-      await Promise.all(
-        getTravelDayOfWeek(fromDate, toDate).map((_day) => {
-          return tx.travelSchedule.create({
-            data: {
+        // 스케줄 테이블에 기간별 저장
+        await tx.travelSchedule.createMany({
+          data: travelDays.map((_day) => ({
+            day: _day.day,
+            date: _day.date,
+            travelId: newTravel.id,
+          })),
+        });
+
+        // 가계부 테이블에 기간별 저장
+        await tx.travelExpense.createMany({
+          data: [
+            { day: 0, date: null, travelId: newTravel.id },
+            ...travelDays.map((_day) => ({
               day: _day.day,
               date: _day.date,
               travelId: newTravel.id,
-            },
-          });
-        }),
-      );
+            })),
+          ],
+        });
 
-      // 가계부 테이블에 기간별 저장
-      const expneseDays = [
-        { day: 0, date: null },
-        ...getTravelDayOfWeek(fromDate, toDate),
-      ];
-      await Promise.all(
-        expneseDays.map((_day) => {
-          return tx.travelExpense.create({
-            data: {
-              day: _day.day,
-              date: _day.date,
-              travelId: newTravel.id,
-            },
-          });
-        }),
-      );
-
-      // 체크리스트 테이블에 목업 데이터 저장
-      await Promise.all(
-        CHECKLIST_MOCK_DATA.map(async (category) => {
+        // 체크리스트 테이블에 목업 데이터 저장
+        for (const category of CHECKLIST_MOCK_DATA) {
           const newCategory = await tx.checklistCategory.create({
-            data: {
-              label: category.label,
-              travelId: newTravel.id,
-            },
+            data: { label: category.label, travelId: newTravel.id },
           });
 
           // 하위 아이템 저장
-          if (category.list && category.list.length > 0) {
+          if (category.list?.length > 0) {
             await tx.checklistItem.createMany({
               data: category.list.map((item) => ({
                 label: item,
@@ -165,9 +146,10 @@ export async function POST(request: Request) {
               })),
             });
           }
-        }),
-      );
-    });
+        }
+      },
+      { timeout: 100000 },
+    );
 
     return successResponse();
   } catch (error) {
@@ -179,15 +161,14 @@ export async function POST(request: Request) {
 /** 내 여행 리스트 조회 */
 export async function GET(request: Request) {
   const authValidate = await authGuard(request);
-
   if (!authValidate.isValid) return authValidate.errorResponse;
 
-  const session = authValidate.session;
+  const currentUserId = authValidate.session?.user?.id;
 
   try {
     const myTravelList = await prisma.travel.findMany({
       where: {
-        userId: session?.user?.id,
+        userId: currentUserId,
       },
       include: {
         cities: true,
