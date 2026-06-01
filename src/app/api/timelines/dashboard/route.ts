@@ -44,6 +44,14 @@ export async function GET(request: Request) {
         member: {
           userId: currentUserId,
         },
+        expenseList: {
+          travelExpense: {
+            travel: {
+              userId: currentUserId,
+              to: { lt: new Date() },
+            },
+          },
+        },
       },
       _sum: {
         calcExchangeAmount: true,

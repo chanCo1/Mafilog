@@ -13,6 +13,7 @@ import {
   ReactNode,
   InputHTMLAttributes,
   ForwardedRef,
+  FocusEvent
 } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
@@ -77,7 +78,7 @@ function InputEntity(
   const [isFocused, setIsFocused] = useState(false);
   const [passwordType, setPassowrdType] = useState('password');
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
     if (props.disabled || props.readOnly) return;
 
     setIsFocused(true);
@@ -87,13 +88,13 @@ function InputEntity(
     }
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     if (props.disabled || props.readOnly) return;
 
     setIsFocused(false);
 
-    if (props.onFocus) {
-      props.onFocus(e);
+    if (props.onBlur) {
+      props.onBlur(e);
     }
   };
 

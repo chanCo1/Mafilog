@@ -228,7 +228,7 @@ export default function Calculator({
         </div>
       </Card>
 
-      <div className="grid grid-cols-5 gap-1 px-2 py-1">
+      <div className="grid grid-cols-5 gap-1">
         <CalcNumberArea number="1" onClick={() => handleClickNumber('1')} />
         <CalcNumberArea number="2" onClick={() => handleClickNumber('2')} />
         <CalcNumberArea number="3" onClick={() => handleClickNumber('3')} />

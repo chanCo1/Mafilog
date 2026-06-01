@@ -5,7 +5,7 @@
  * @description: Textarea 컴포넌트
  */
 
-import React from 'react';
+import { useState, FocusEvent } from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 import RequireDot from '@/shared/components/ui/RequireDot';
@@ -54,10 +54,22 @@ function TextareaEntity({
   readonly,
   ...props
 }: ITextarea) {
-  const [isFocused, setIsFocused] = React.useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+  const handleFocus = (e: FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(true);
+
+    if (props.onFocus) {
+      props.onFocus(e);
+    }
+  };
+  const handleBlur = (e: FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(false);
+
+    if (props.onBlur) {
+      props.onBlur(e);
+    }
+  };
 
   return (
     <div className="flex flex-col bg-white">
@@ -80,7 +92,7 @@ function TextareaEntity({
         >
           <textarea
             className={cn(
-              'w-full resize-none outline-none focus:ring-0 scrollbar-hide',
+              'scrollbar-hide w-full resize-none outline-none focus:ring-0',
               readonly ? 'h-10' : 'h-20',
             )}
             {...props}

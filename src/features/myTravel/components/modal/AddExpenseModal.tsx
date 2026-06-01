@@ -45,6 +45,7 @@ import { useUpdateExpense } from '@/features/myTravel/hooks/rquery/expense/useUp
 import { useRouter } from 'next/navigation';
 import { TRAVEL_TAB } from '@/shared/types/Enum';
 import { format } from 'date-fns';
+import { useDevice } from '@/shared/hooks/useDevice';
 
 interface IAddExpenseModal {
   isModify?: boolean;
@@ -61,6 +62,10 @@ export default function AddExpenseModal({
   expense,
   travelId,
 }: IAddExpenseModal) {
+  const { isMobile } = useDevice();
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  console.log(isInputFocused);
+
   /** 지출 명 */
   const [expenseName, setExpenseName] = useState('');
   /** 지출 방식 */
@@ -345,6 +350,8 @@ export default function AddExpenseModal({
     }
   };
 
+  const isShowCalculator = !isMobile || (isMobile && !isInputFocused);
+
   return (
     <SideModal
       isOpen={isOpen}
@@ -422,6 +429,8 @@ export default function AddExpenseModal({
             isRequired
             value={expenseName}
             onChange={(e) => setExpenseName(e.target.value)}
+            onFocus={() => setIsInputFocused(true)}
+            onBlur={() => setIsInputFocused(false)}
           />
 
           <ExpenseCategoryList
@@ -459,17 +468,22 @@ export default function AddExpenseModal({
 
           <Textarea
             label="메모"
-            onChange={(e) => setInputMemo(e.target.value)}
             value={inputMemo}
+            onFocus={() => setIsInputFocused(true)}
+            onBlur={() => setIsInputFocused(false)}
+            onChange={(e) => setInputMemo(e.target.value)}
           />
         </div>
-        <Calculator
-          travelId={currentTravelId}
-          onChangeValue={handleCalcChange}
-          defaultValue={calculatorDefaultValue}
-          isModify={isModify}
-          isOpen={isOpen}
-        />
+        {/* 모바일에서 지출명 클릭 시  */}
+        {isShowCalculator && (
+          <Calculator
+            travelId={currentTravelId}
+            onChangeValue={handleCalcChange}
+            defaultValue={calculatorDefaultValue}
+            isModify={isModify}
+            isOpen={isOpen}
+          />
+        )}
       </div>
     </SideModal>
   );
