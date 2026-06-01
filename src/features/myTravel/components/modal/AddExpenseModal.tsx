@@ -350,6 +350,32 @@ export default function AddExpenseModal({
     }
   };
 
+  /** 모바일에서 인풋 클릭 시 키보드 노출 관련 사이즈 조절 */
+  useEffect(() => {
+  if (!isMobile || !window.visualViewport) return;
+
+  const handleResize = () => {
+    if (!window.visualViewport) return;
+
+    // 현재 뷰포트 높이와 전체 화면 높이를 비교
+    const currentHeight = window.visualViewport.height;
+    const totalHeight = window.innerHeight;
+
+    if (currentHeight > totalHeight * 0.9) {
+      setIsInputFocused(false);
+      
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+    }
+  };
+
+  window.visualViewport.addEventListener('resize', handleResize);
+  return () => {
+    window.visualViewport?.removeEventListener('resize', handleResize);
+  };
+}, [isMobile]);
+
   const isShowCalculator = !isMobile || (isMobile && !isInputFocused);
 
   return (
