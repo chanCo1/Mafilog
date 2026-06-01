@@ -25,7 +25,7 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
 
   /** 내 지출 가져오기 */
   const getMySpendList = (_list: IExpenseList[]) => {
-    let mySpendedList: ISpender[] = [];
+    const mySpendedList: ISpender[] = [];
     _list.forEach((list) => {
       const findMySpend = list.spender.find(
         (spender) => spender.member.userId === userInfo?.user?.id,
@@ -183,7 +183,7 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
   /** 카테고리별 지출 총액 */
   const getCategorySpend = useCallback(
     (category: EXPENSES_CATEGORY_TYPE) => {
-      let catergoryItems: IExpenseList[] = [];
+      const catergoryItems: IExpenseList[] = [];
       expenses.forEach((expense) =>
         expense.expenseList.forEach((list) => {
           if (list.category === category) {
@@ -205,7 +205,7 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
   /** 카테고리별 내 지출 총액 */
   const getCategoryMySpend = useCallback(
     (category: EXPENSES_CATEGORY_TYPE) => {
-      let catergoryItems: IExpenseList[] = [];
+      const catergoryItems: IExpenseList[] = [];
       expenses.forEach((expense) =>
         expense.expenseList.forEach((list) => {
           if (list.category === category) {
@@ -229,7 +229,7 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
   /** 카테고리별, 통화 별 총 지출 */
   const getCategorySpendByCurrency = useCallback(
     (category: EXPENSES_CATEGORY_TYPE) => {
-      let catergoryItems: IExpenseList[] = [];
+      const catergoryItems: IExpenseList[] = [];
       expenses.forEach((expense) =>
         expense.expenseList.forEach((list) => {
           if (list.category === category) {
@@ -286,7 +286,7 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
   /** 카테고리별, 통화별 내 지출 */
   const getCategoryMySpendByCurrency = useCallback(
     (category: EXPENSES_CATEGORY_TYPE) => {
-      let catergoryItems: IExpenseList[] = [];
+      const catergoryItems: IExpenseList[] = [];
       expenses.forEach((expense) =>
         expense.expenseList.forEach((list) => {
           if (list.category === category) {
