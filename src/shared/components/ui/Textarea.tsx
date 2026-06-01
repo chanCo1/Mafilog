@@ -57,6 +57,7 @@ function TextareaEntity({
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = (e: FocusEvent<HTMLTextAreaElement>) => {
+    if (props.disabled || props.readOnly) return;
     setIsFocused(true);
 
     if (props.onFocus) {
@@ -64,6 +65,7 @@ function TextareaEntity({
     }
   };
   const handleBlur = (e: FocusEvent<HTMLTextAreaElement>) => {
+    if (props.disabled || props.readOnly) return;
     setIsFocused(false);
 
     if (props.onBlur) {
