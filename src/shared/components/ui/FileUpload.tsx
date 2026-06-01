@@ -45,11 +45,13 @@ export default function FileUpload({
   label,
   isMultiple,
   disabled,
-  // maxSize = 10, // 기본 10MB
+  maxSize = 4.5, // 기본 4.5MB
   accept = 'image/jpeg,image/jpg,image/png,image/gif',
   selectedImage,
   setSelectedImage,
 }: IFileUpload) {
+  const maxMb = 1024 * 1024 * maxSize;
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewImage, setPreviewImage] = useState<string[]>([]);
 
@@ -71,6 +73,7 @@ export default function FileUpload({
   const handleSelectFile = (e: ChangeEvent<HTMLInputElement>) => {
     const _targetFiles = e.target.files;
     if (!_targetFiles || isDisabled) return;
+
     if (
       _targetFiles.length > MULTIPLE_COUNT ||
       selectedImage.length + _targetFiles.length > MULTIPLE_COUNT
@@ -81,6 +84,15 @@ export default function FileUpload({
 
     const _selectedImages = Array.from(_targetFiles || []);
 
+    // 4.5MB 이상은 제외
+    const invalidFiles = _selectedImages.filter((image) => image.size <= maxMb);
+    const rejectedFile = _selectedImages.filter((image) => image.size > maxMb);
+
+    if (rejectedFile.length)
+      toast.error(
+        `${maxSize}MB 이상인 ${rejectedFile.length}개 파일은 업로드할 수 없습니다`,
+      );
+
     // 기존 파일들의 고유 키 생성
     const existingKeys = new Set(
       selectedImage
@@ -89,7 +101,7 @@ export default function FileUpload({
     );
 
     // 기존과 중복되는지 필터링
-    const newFiles = _selectedImages.filter((f) => {
+    const newFiles = invalidFiles.filter((f) => {
       const key = `${f.name}-${f.size}-${f.lastModified}`;
       return !existingKeys.has(key);
     });
@@ -156,7 +168,7 @@ export default function FileUpload({
                 src={previewImage[0]}
                 alt="대표 이미지 미리보기"
                 fill
-                sizes='100%'
+                sizes="100%"
                 className={cn('rounded-lg object-cover', className)}
               />
               <div className="absolute flex w-full justify-between p-2">
