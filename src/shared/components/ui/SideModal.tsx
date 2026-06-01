@@ -99,7 +99,6 @@ function SideModalEntity({
         // onClick={handleClose}
       />
       <div
-        aria-hidden={!isOpen}
         className={cn(
           sideModalVariants({ size }),
           'max-mobile:w-full max-mobile:rounded-l-none',
