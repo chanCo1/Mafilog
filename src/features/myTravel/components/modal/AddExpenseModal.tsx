@@ -64,7 +64,6 @@ export default function AddExpenseModal({
 }: IAddExpenseModal) {
   const { isMobile } = useDevice();
   const [isInputFocused, setIsInputFocused] = useState(false);
-  console.log(isInputFocused);
 
   /** 지출 명 */
   const [expenseName, setExpenseName] = useState('');
