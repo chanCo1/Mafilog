@@ -45,46 +45,44 @@ function SideModalEntity({
   footer,
 }: ISideModal) {
   const [isMounted, setIsMounted] = useState(false);
-  // const [isRender, setIsRender] = useState(false); // DOM에 존재 여부
-  // const [isVisible, setIsVisible] = useState(false); // 슬라이드 애니메이션 여부
+  const [isVisible, setIsVisible] = useState(false);
 
   // useEffect(() => {
   //   // SSR 에러 방지
-  //   if (isOpen) {
-  //     setIsRender(true);
-  //     // 첫 번째 프레임: DOM 생성 인식
-  //     requestAnimationFrame(() => {
-  //       // 두 번째 프레임: 스타일 변경 인식 (애니메이션 보장)
-  //       requestAnimationFrame(() => {
-  //         setIsVisible(true);
-  //       });
-  //     });
-
+  //   setIsMounted(true);
+  //   if (isOpen)
+  //     // 뒷 화면 스크롤 제거
   //     document.body.style.overflow = 'hidden';
-  //   } else {
-  //     setIsVisible(false);
+  //   else document.body.style.overflow = 'unset';
 
-  //     const timer = setTimeout(() => {
-  //       setIsRender(false);
-  //     }, 800);
-
+  //   return () => {
   //     document.body.style.overflow = 'unset';
-  //     return () => clearTimeout(timer);
-  //   }
+  //   };
   // }, [isOpen]);
 
   useEffect(() => {
-    // SSR 에러 방지
     setIsMounted(true);
-    if (isOpen)
-      // 뒷 화면 스크롤 제거
-      document.body.style.overflow = 'hidden';
-    else document.body.style.overflow = 'unset';
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+
+    if (isOpen) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsVisible(true);
+        });
+      });
+    } else {
+      setIsVisible(false);
+    }
+
+    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
 
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, isMounted]);
 
   if (!isMounted) return null;
   // if (!isRender) return null;
@@ -93,8 +91,8 @@ function SideModalEntity({
     <>
       <Dimmed
         className={cn(
-          isOpen ? 'visible opacity-100' : 'invisible opacity-0',
-          // isVisible ? 'visible opacity-100' : 'invisible opacity-0',
+          // isOpen ? 'visible opacity-100' : 'invisible opacity-0',
+          isVisible ? 'visible opacity-100' : 'invisible opacity-0',
         )}
         // onClick={handleClose}
       />
@@ -102,15 +100,17 @@ function SideModalEntity({
         className={cn(
           sideModalVariants({ size }),
           'max-mobile:w-full max-mobile:rounded-l-none',
-          `${isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
-          // `${isVisible ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
+          // `${isOpen ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
+          `${isVisible ? 'translate-x-0 shadow-2xl' : 'translate-x-full'}`,
         )}
       >
         <div className="item-center flex justify-between">
           <span className="text-lg font-bold">{title}</span>
           <ReturnButton size="lg" onClick={handleClose} />
         </div>
-        <div className="min-h-0 flex-1">{children}</div>
+        <div className={cn('min-h-0 flex-1', !isVisible && 'invisible')}>
+          {children}
+        </div>
         <div className="border-border-secondary flex items-center justify-end gap-1 border-t pt-2">
           {/* 커스텀 푸터 */}
           {footer}

@@ -15,6 +15,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Dialog } from '@/shared/components/ui/Dialog';
 import { SessionProvider } from 'next-auth/react';
 import { Session } from 'next-auth';
+import GlobalAddPlaceModal from '@/features/myTravel/components/modal/GlobalAddPlaceModal';
 
 interface IProviders {
   children: React.ReactNode;
@@ -32,6 +33,7 @@ export default function Providers({ children, session }: IProviders) {
         <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_API_KEY || ''}>
           <Toast />
           <Dialog />
+          <GlobalAddPlaceModal />
           {children}
           {/* 개발 환경에서만 React Query Devtools 표시 */}
           {process.env.NODE_ENV === 'development' && (
