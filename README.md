@@ -94,52 +94,63 @@ mafilog/
 ### 주요 기능
 
 `메인페이지`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/28cda7f4-714a-4603-9a90-2e3354febf6e" />
 - 간략한 서비스 소개와 함께 `Amchart5`를 활용한 지도 미리보기를 볼 수 있습니다.
 - 로그인 후 진행중인 여행이 있을 경우 오른쪽 하단에 여행 카드가 노출됩니다.
 
 `회원가입`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/16344614-2683-498d-ba57-c451c5605afe" />
 - `React-Hook-Form` 과 `Zod`를 활용해 인풋 밸리데이션을 구현하였습니다.
 
 `로그인`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/069549c8-edf9-4edf-9215-234079171a9e" />
 - 로그인 시 사용자 인증은 `NextAuth`를 사용하였습니다. 사용한 이유는 사용자 세션을 관리하고 보안적으로 유지하며, 간단한 설정으로 소셜 로그인 기능을 쉽게 구현할 수 있기 때문입니다.
 
 `여행 만들기`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/33c3eb23-f9f5-4476-b917-6b7507141a3a" />
 - 지역 검색은 `GooglePlacesApi`를 사용하였고, 매필로그 서비스에서는 전세계 도시 검색 부분과 장소 검색 두 부분으로 나뉘어져 있기 때문에 도시 검색시에는 검색 데이터에서 분류가 city인 데이터만 필터해서 데이터를 가져옵니다
 
 `일정 만들기`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/ece88e33-9b9a-4f41-a954-9efe8e4a5232" />
 - 장소 검색도 `GooglePlacesApi`를 사용하였고, 광범위하게 검색되는 내용에서 `TRANSPORT`, `FOOD`, `SHOPPING`, `TOUR`, `HOUSE`, `ETC`로 구분점을 나누어 api에서 주는 구분외에 자체적으로 카테고리를 생성하여 분류합니다.
 
 `체크리스트 & 현지 정보`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/86cd4f98-9b6e-4a74-9e36-5ffcf9fa134a" />
 - 체크리스트 처럼 생성과 수정(체크)가 자주 일어나는 경우 `react-query`의 `useMutation`을 적용하여 낙관적 업데이트(UI에 먼저 변경사항 반영하고 api 요청은 후 처리)를 적용하였습니다.
 - 현지 정보에 보여지는 환율은 `exchangerate-api`를 활용했습니다. 여행하는 국가의 국가코드로 구분하여 환율 정보를 가져옵니다.
 - 날씨는 `visualcrossing-api`를 사용했고, 이 또한 국가코드로 구분하여 가져와 노출합니다.
 
 `지출 내역 추가`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/4ba21be5-8807-4e20-a8d9-4efc1a6fd57a" />
 - 기본적으로 금액관련 계산은 백엔드에서 처리하는게 데이터 무결성에 맞는 방식이지만, 프론트엔드 포트폴리오 성격에 맞게 데이터베이스에는 지출 금액(환율 계산된 금액 포함)만 저장하고 해당 금액들을 불러와 프론트에서 계산을 처리합니다.
 - 계산 로직은 hook으로 따로 분리하여 여러곳에 사용할 수 있게 하였습니다.
 - 프론트에서 계산하면 지출내역 추가할 때 마다 따로 API를 호출할 필요없이 바로 계산되어 사용자가 볼 수 있다는 장점이 있지만, 프론트에서 계산하면 단순 View의 역할을 하기 때문에 데이터베이스에 따로 금액이 저장되지 않아 추후 지출내역 엑셀 다운로드나 데이터 무결성 등의 기능이 제한된다는 점이 있습니다.
 
 `지출 통계 & 정산`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/1eca5f34-12fd-425d-af4c-3c7dce48ab39" />
 - 통계 표시는 `chart.js`를 활용하였고, 해당 지출내역에 대한 합(일정별, 카테고리별)을 프론트에서 계산하여 보여줍니다.
 - 내 지출 보기는 지출자가 로그인한 사용자의 id와 같은 값을 필터하여 지출내역 합산을 보여줍니다.
 
 `추억(지도) 채우기`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/049766be-fe03-404e-9490-7fb654bfefd6" />
 - `Amchart`에서 세계지도는 국가별로 구분되어 사용할 수 있지만, 국내 지도는 행정구역별로 구분해서 제공하기 때문에 시,군,구로 자세히 나뉘어져 있는 `geoJson`을 구해 라이브러리 json 성격에 맞춰 재가공하여 사용하였습니다.
 
 `프로필 및 비밀번호 변경`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/0a5383df-185b-4752-8097-264064ca3ae4" />
 - 데이터베이스에 이미지 채로 저장하면 용량을 많이 차지하기 때문에 이미지 저장은 `cloudinary`를 활용하였습니다. 데이터베이스에는 cloudinary에 저장된 이미지 url만 텍스트로 저장합니다.
 
 `여행 타임라인`
+<br />
 <img width="500" height="300" alt="Image" src="https://github.com/user-attachments/assets/fc17ec23-1d85-4307-bdb9-5bb1132de7f2" />
 - 페이지 진입 시에 타임라인 리스트를 호출하고, 리스트를 클릭할 때 해당 여행에 대한 상세 정보를 불러와 지출 내역을 보여줍니다.
 - 타임라인에 노출되는 금액 관련 모두 프론트에 있는 계산 훅을 재사용합니다.
