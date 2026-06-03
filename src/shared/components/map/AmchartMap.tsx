@@ -27,7 +27,7 @@ interface IAmchartMap {
   isOpenFillModal?: boolean;
   setIsOpenFillModal?: () => void;
   isOpenDetailModal?: boolean;
-  setIsOpenDetailModal?: () => void;
+  setIsOpenDetailModal?: (memoryId: number) => void;
   memoryList?: IMemoryListResponse[] | undefined;
   setSelectedMemoryId?: Dispatch<SetStateAction<number>>;
 }
@@ -173,9 +173,11 @@ export default function AmchartMap({
           (_memory) => _memory.mapId === dataContext?.id,
         );
         if (memory) {
-          setIsOpenDetailModal?.();
-          // 상세 조회를 위한 추억 id 전달
+          // setIsOpenDetailModal?.();
+          // // 상세 조회를 위한 추억 id 전달
           setSelectedMemoryId?.(memory?.id);
+
+          setIsOpenDetailModal?.(memory.id);
         } else {
           openDialog({
             type: 'confirm',

@@ -17,8 +17,9 @@ import AmchartMap from '@/shared/components/map/AmchartMap';
 import { TRAVEL_TYPE } from '@/shared/types/Enum';
 import CreateFillMemoryModal from '@/features/myMap/components/modal/CreateFillMemoryModal';
 import { useGetMemoryList } from '@/features/myMap/hooks/rquery/useGetMemoryList';
-import FillMemoryDetailModal from '@/features/myMap/components/modal/FillMemoryDetailModal';
+// import FillMemoryDetailModal from '@/features/myMap/components/modal/FillMemoryDetailModal';
 import { useSession } from 'next-auth/react';
+import { useMemoryDetailStore } from '@/shared/stores/useMemoryDetailStore';
 
 export default function MyMapPage() {
   const { data: userInfo } = useSession();
@@ -33,7 +34,7 @@ export default function MyMapPage() {
   // 선택한 추억 id
   const [selectedMemoryId, setSelectedMemoryId] = useState(0);
   const [isOpenFillModal, setIsOpenFillModal] = useState(false);
-  const [isOpenDetailModal, setIsOpenDetailModal] = useState(false);
+  // const [isOpenDetailModal, setIsOpenDetailModal] = useState(false);
   const [isFillMemoryModify, setIsFillMemoryModify] = useState(false);
 
   const isWorld = selectedMapType.value === TRAVEL_TYPE.WORLD;
@@ -44,12 +45,26 @@ export default function MyMapPage() {
     userInfo,
   );
 
-  /** 추억 상세 모달에서 수정 클릭 시 */
-  const handleUpdateMemoryDetail = () => {
-    setIsOpenDetailModal(false);
-    setIsOpenFillModal(true);
-    setIsFillMemoryModify(true);
+  const {
+    open: openDetailModal,
+    isOpen: isOpenDetailModal,
+    close: closeDetailModal,
+  } = useMemoryDetailStore();
+
+  const handleOpenDetailModal = (memoryId: number) => {
+    openDetailModal(memoryId, selectedMapType.value as string, () => {
+      closeDetailModal();
+      setIsOpenFillModal(true);
+      setIsFillMemoryModify(true);
+    });
   };
+
+  // /** 추억 상세 모달에서 수정 클릭 시 */
+  // const handleUpdateMemoryDetail = () => {
+  //   setIsOpenDetailModal(false);
+  //   setIsOpenFillModal(true);
+  //   setIsFillMemoryModify(true);
+  // };
 
   /** 추억 만들기 모달 핸들링 */
   const handleCloseCreateMemoryModal = () => {
@@ -99,7 +114,7 @@ export default function MyMapPage() {
               isOpenFillModal={isOpenFillModal}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
               isOpenDetailModal={isOpenDetailModal}
-              setIsOpenDetailModal={() => setIsOpenDetailModal(true)}
+              setIsOpenDetailModal={handleOpenDetailModal}
               setSelectedMapType={setSelectedMapType}
               setSelectedMapId={setSelectedMapId}
               setSelectedMemoryId={setSelectedMemoryId}
@@ -129,7 +144,7 @@ export default function MyMapPage() {
               isOpenFillModal={isOpenFillModal}
               setIsOpenFillModal={() => setIsOpenFillModal(true)}
               isOpenDetailModal={isOpenDetailModal}
-              setIsOpenDetailModal={() => setIsOpenDetailModal(true)}
+              setIsOpenDetailModal={handleOpenDetailModal}
               setSelectedMapId={setSelectedMapId}
               setSelectedMemoryId={setSelectedMemoryId}
               memoryList={memoryList}
@@ -149,14 +164,14 @@ export default function MyMapPage() {
         isModify={isFillMemoryModify}
       />
 
-      <FillMemoryDetailModal
+      {/* <FillMemoryDetailModal
         isOpen={isOpenDetailModal}
         handleClose={() => setIsOpenDetailModal(false)}
         selectedMemoryId={selectedMemoryId}
         setSelectedMemoryId={setSelectedMemoryId}
         selectedMapType={selectedMapType.value as string}
         handleUpdate={handleUpdateMemoryDetail}
-      />
+      /> */}
     </div>
   );
 }
