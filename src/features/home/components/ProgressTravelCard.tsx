@@ -41,9 +41,9 @@ export default function ProgressTravelCard() {
     <>
       {travelList?.progress.length ? (
         <div className="max-mobile:bottom-6 max-mobile:left-0 max-mobile:flex max-mobile:w-full max-mobile:justify-center max-mobile:px-2 fixed right-10 bottom-10 z-2">
-          <div className="from-secondary to-primary flex gap-2 rounded-lg bg-linear-to-r p-3 text-white shadow-lg">
+          <div className="from-secondary to-primary flex gap-2 rounded-lg bg-linear-to-r p-3 text-white shadow-md">
             <div
-              className="flex cursor-pointer flex-col gap-1 font-bold"
+              className="flex cursor-pointer flex-col gap-1 font-bold min-w-50"
               onClick={goProgressTravel}
             >
               <div className="font-lg pb-1">

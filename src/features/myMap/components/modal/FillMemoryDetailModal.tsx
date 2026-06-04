@@ -25,9 +25,9 @@ interface IFillMemoryDetailModal {
   isOpen: boolean;
   handleClose: () => void;
   selectedMemoryId: number;
-  setSelectedMemoryId: Dispatch<SetStateAction<number>>;
+  setSelectedMemoryId: (id: number) => void;
   selectedMapType: string | undefined;
-  handleUpdate: () => void;
+  handleUpdate: (() => void) | undefined;
 }
 
 export default function FillMemoryDetailModal({

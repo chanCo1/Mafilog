@@ -24,6 +24,7 @@ import { useDeleteSchedulePlace } from '@/features/myTravel/hooks/rquery/schedul
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import { useGetTravelId } from '@/features/myTravel/hooks/useGetTravelId';
 import { useUpdateBulkScheduleDate } from '@/features/myTravel/hooks/rquery/schedule/useUpdateBulkScheduleDate';
+import { useAddPlaceModalStore } from '@/shared/stores/useAddPlaceModalStore';
 
 function TravelScheduleView() {
   const travelId = useGetTravelId();
@@ -36,6 +37,7 @@ function TravelScheduleView() {
   const { selectedSchedules, clearSelectedSchedules } = useSelectSchedules();
 
   const { openDialog } = useDialogStore();
+  const { open: openAddPlaceModal } = useAddPlaceModalStore();
 
   /** 일정 선택 */
   const [selectedDay, setSelectedDay] = useState(1);
@@ -122,7 +124,7 @@ function TravelScheduleView() {
                     }
                     disabled={!selectedSchedules.length}
                   >
-                    <div className='flex flex-col'>
+                    <div className="flex flex-col">
                       {getTravelDayList(scheduleList).map((list) => (
                         <span
                           key={list.value}
@@ -158,7 +160,7 @@ function TravelScheduleView() {
                     className="bg-secondary w-35"
                     variant="secondary"
                     size="sm"
-                    onClick={() => setIsOpenAddPlaceModal(true)}
+                    onClick={() => openAddPlaceModal(scheduleList)}
                   >
                     장소 추가
                   </Button>
@@ -205,11 +207,11 @@ function TravelScheduleView() {
           </div>
         }
       />
-      <AddPlaceModal
+      {/* <AddPlaceModal
         isOpen={isOpenAddPlaceModel}
         handleClose={() => setIsOpenAddPlaceModal(false)}
         scheduleList={scheduleList}
-      />
+      /> */}
       <AddMemoModal
         isOpen={isOpenAddMemoModel}
         handleClose={() => setIsOpenAddMemoModal(false)}
