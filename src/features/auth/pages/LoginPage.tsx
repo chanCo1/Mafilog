@@ -58,7 +58,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/');
+      router.replace('/');
       toast.success('로그인에 성공했어요');
     } catch (error) {
       toast.error('로그인 도중 문제가 발생하였습니다');
