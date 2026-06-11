@@ -180,7 +180,7 @@ export const convertTravelStyle = (style: TRAVEL_STYLE) => {
 
 /** 장소 카테고리 가져오기 */
 export const getPlaceCategory = (types: IPlaceList['types']) => {
-  if (!types) return '';
+  if (!types) return '기타';
 
   const findCategory = Object.entries(PLACE_CATEGORY_TYPE).find(
     ([key, value]) => {
@@ -249,7 +249,7 @@ export const getHexCode = () => {
 /** 장소/지출 카테고리 한글로 변환 */
 export const convertCategory = (category: EXPENSES_CATEGORY_TYPE) => {
   switch (category.toLocaleLowerCase()) {
-    case EXPENSES_CATEGORY_TYPE.BUS:
+    case EXPENSES_CATEGORY_TYPE.TRANSFORT:
       return '교통';
     case EXPENSES_CATEGORY_TYPE.TOUR:
       return '관광';

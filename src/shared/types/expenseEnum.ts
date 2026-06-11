@@ -1,6 +1,7 @@
 /** 가계부 지출 카테고리 타입 */
 export const EXPENSES_CATEGORY_TYPE = {
   /** 교통 */
+  TRANSFORT: 'transport',
   BUS: 'bus',
   /** 음식 */
   FOOD: 'food',
