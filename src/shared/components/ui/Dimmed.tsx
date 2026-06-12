@@ -16,7 +16,7 @@ export default function Dimmed({ className, ...props }: IDimmed) {
   return (
     <div
       className={cn(
-        'fixed inset-0 z-10 bg-[rgba(0,0,0,0.5)] transition-opacity duration-300 ease',
+        'fixed inset-0 z-15 bg-[rgba(0,0,0,0.5)] transition-opacity duration-300 ease',
         className,
       )}
       {...props}

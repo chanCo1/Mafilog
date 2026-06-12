@@ -56,7 +56,7 @@ export default function TravelExpensesTimeline({
   const dragStyle = {
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 50 : 'auto',
+    zIndex: isDragging ? 1 : 'auto',
     opacity: isDragging ? 0.6 : 1,
   };
 
