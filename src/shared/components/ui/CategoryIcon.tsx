@@ -33,6 +33,7 @@ const categoryIconVariants = cva(
         plus: '',
         plane: '',
         bus: 'border-secondary text-secondary',
+        transport: 'border-secondary text-secondary',
         food: 'border-state-warning text-state-warning',
         shopping: 'border-state-success text-state-success',
         tour: 'border-state-error text-state-error',
