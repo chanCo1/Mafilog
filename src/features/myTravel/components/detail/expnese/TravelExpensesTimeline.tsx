@@ -11,7 +11,7 @@ import { Card } from '@/shared/components/ui/Card';
 import { CategoryIcon } from '@/shared/components/ui/CategoryIcon';
 import { IExpenseList } from '@/features/myTravel/interfaces/expense.interface';
 import TravelTimelineCard from '@/features/myTravel/components/detail/TravelTimelineCard';
-import { EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
+import { EXPENSES_CATEGORY_TYPE, EXPENSES_SPENDER_TYPE } from '@/shared/types/expenseEnum';
 import { useSelectExpenses } from '@/features/myTravel/store/useSelectExpenses';
 import { useDialogStore } from '@/shared/stores/useDialogStore';
 import AddExpenseModal from '@/features/myTravel/components/modal/AddExpenseModal';
@@ -56,7 +56,7 @@ export default function TravelExpensesTimeline({
   const dragStyle = {
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 50 : 'auto',
+    zIndex: isDragging ? 1 : 'auto',
     opacity: isDragging ? 0.6 : 1,
   };
 

@@ -34,7 +34,7 @@ export const PLACE_CATEGORY_TYPE = {
   /** 관광명소 */
   TOUR: ['tourist_attraction', 'park', 'garden'],
   /** 숙박시설 */
-  HOUSE: ['lodging', 'hotel'],
+  HOUSE: ['lodging', 'hotel', 'guest_house', 'hostel'],
   /** 기타 */
   ETC: [''],
 } as const;

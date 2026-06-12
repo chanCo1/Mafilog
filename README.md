@@ -15,6 +15,10 @@
 **서비스 배포**: [Mafilog:매필로그 서비스 페이지](https://mafilog-app.vercel.app)  
 **기획**: [Mafilog 기획 피그마](https://www.figma.com/design/RibAatqQvdD7BsXfOgzggs/Mafilog?node-id=0-1&p=f)
 
+### 테스트 계정
+ID: test@test.com  
+PW: 123qwe!@#
+
 ## 포트폴리오 소개
 
 ### 개발 기간

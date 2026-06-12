@@ -18,7 +18,7 @@ export default function DefaultLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="fixed top-0 z-10 w-full">
+      <header className="fixed top-0 z-11 w-full">
         <Header />
       </header>
       <div className={cn(DEFAULT_LAYOUT_CLASSNAME, 'w-full flex-1 mt-10 px-3 py-7')}>
