@@ -149,12 +149,12 @@ export default function ExpenseSettleUpModal({
                 getTotalPaymentAmountByMember(travelInfo.member[0]?.userId),
               )}
             />
-            <MyExpenseWrap
+            {/* <MyExpenseWrap
               name="총 지출 금액"
               amount={convertComma(
                 getTotalSpendAmountByMember(travelInfo.member[0]?.userId),
               )}
-            />
+            /> */}
             <MyExpenseWrap
               name="받을 금액"
               amount={convertComma(
