@@ -581,7 +581,7 @@ export const useCalcExpense = (expenses: IExpenseResponse[]) => {
   /** 내 순수 지출 구하기 */
   const getMyNetExpense = useCallback(
     (id: string) => {
-      const totalPayment = getTotalSpendAmountByMember(id);
+      const totalPayment = getTotalPaymentAmountByMember(id);
       const receiveAmount = getMyReceiveAmount(id);
 
       const calcAmount = totalPayment - receiveAmount;
