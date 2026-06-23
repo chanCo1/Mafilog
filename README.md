@@ -13,8 +13,8 @@
 > - 또한, 내 여행 일정과 함께 지도를 색칠하고 기록하여 추억을 채울 수 있습니다. 지도를 색칠하면서 여행도하고 성취감도 얻을 수 있습니다.
 > - 내가 지금까지 여행을 다니면서 어디에, 며칠동안, 지출한 금액이 얼마인지 궁금할 때는 타임라인으로 지금까지 여행했던 도시와 지출내역을 확인할 수 있습니다.
 
-**서비스 배포**: [Mafilog:매필로그 서비스 페이지](https://mafilog-app.vercel.app)  
-**기획**: [Mafilog 기획 피그마](https://www.figma.com/design/RibAatqQvdD7BsXfOgzggs/Mafilog?node-id=0-1&p=f)
+**서비스 배포**: <a href="https://mafilog-app.vercel.app" target="_blank">Mafilog:매필로그 서비스 페이지</a>  
+**기획**: <a href="https://www.figma.com/design/RibAatqQvdD7BsXfOgzggs/Mafilog?node-id=0-1&p=f" target="_blank">Mafilog 기획 피그마</a>
 
 ### 테스트 계정
 ID: test@test.com  
@@ -28,7 +28,7 @@ PW: 123qwe!@#
 개발: 2026년 4월 19일 ~ 2026년 5월 31일 (약 6주)
 
 ### 프로젝트 참여 인원
-`박찬우` (1명, 개인 프로젝트) [chanCo](https://github.com/chanCo1)
+`박찬우` (1명, 개인 프로젝트) <a href="https://github.com/chanCo1" target="_blank">chanCo</a>
 
 ### 기술 스택
 
