@@ -9,7 +9,7 @@ import React from 'react';
 import { cn } from '@/shared/lib/utils';
 import { cva, VariantProps } from 'class-variance-authority';
 
-const logoVariants = cva('font-akaya', {
+const logoVariants = cva('', {
   variants: {
     color: {
       primary: '!text-primary',
@@ -24,10 +24,15 @@ const logoVariants = cva('font-akaya', {
       lg: 'text-lg',
       md: 'text-md',
     },
+    font: {
+      default: 'font-akaya',
+      none: '',
+    },
   },
   defaultVariants: {
     color: 'primary',
     size: 'h3',
+    font: 'default',
   },
 });
 
@@ -38,9 +43,12 @@ interface ILogoText
   className?: string;
 }
 
-function LogoTextEntity({ className, color, size, ...props }: ILogoText) {
+function LogoTextEntity({ className, color, size, font, ...props }: ILogoText) {
   return (
-    <div className={cn(logoVariants({ size, color }), className)} {...props}>
+    <div
+      className={cn(logoVariants({ size, color, font }), className)}
+      {...props}
+    >
       Mafilog
     </div>
   );
